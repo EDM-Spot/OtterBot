@@ -7,7 +7,7 @@
 // However it's, like, super ultra useful for troubleshooting and doing stuff
 // you don't want to put in a command.
 const Command = require("../base/Command.js");
-const { isNil } = require('lodash');
+const { isNil } = require("lodash");
 
 class Eval extends Command {
   constructor(client) {
@@ -27,8 +27,8 @@ class Eval extends Command {
       const evaled = eval(code);
       const clean = await this.client.clean(this.client, evaled);
       console.log(clean);
-      if(isNil(evaled)){
-        message.channel.send(`\`\`\`js\nCommand Executed!\n\`\`\``);
+      if (isNil(evaled)) {
+        message.channel.send("```js\nCommand Executed!\n```");
       }
       else
       {

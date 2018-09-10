@@ -1,5 +1,5 @@
-const Command = require('./Command');
+const Command = require("./Command");
 
 module.exports = {
-	Command,
+  Command,
 };

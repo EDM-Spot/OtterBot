@@ -22,7 +22,7 @@ class Conf extends Command {
 
   async run(message, [action, key, ...value], level) { // eslint-disable-line no-unused-vars
     
-  // Retrieve Default Values from the default settings in the bot.
+    // Retrieve Default Values from the default settings in the bot.
     const defaults = this.client.settings.get("default");
   
     // Adding a new key adds it to every guild (it will be visible to all of them)
@@ -63,7 +63,7 @@ class Conf extends Command {
       // If they respond with y or yes, continue.
       if (["y", "yes"].includes(response)) {
 
-      // We delete the default `key` here.
+        // We delete the default `key` here.
         delete defaults[key];
         this.client.settings.set("default", defaults);
       

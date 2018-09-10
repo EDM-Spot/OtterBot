@@ -40,7 +40,7 @@ const settings = new Enmap({name: "settings", cloneLevel: "deep"});
       .replace("{{oauthSecret}}", "process.env.SECRET")
       .replace("{{sessionSecret}}", "process.env.SESSION_SECRET");
     console.log("REMEMBER TO PLACE THE TOKEN, SECRET AND SESSION_SECRET IN YOUR .ENV FILE!!!");
-    console.log("Details: https://anidiots.guide/other-guides/hosting-on-glitch")
+    console.log("Details: https://anidiots.guide/other-guides/hosting-on-glitch");
     fs.writeFileSync("./config.js", baseConfig);
     console.log("Configuration has been written, enjoy!");
     return;

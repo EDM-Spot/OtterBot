@@ -1,12 +1,12 @@
-const { isObject, isNil } = require('lodash');
+const { isNil } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, platform) {
-	const event = {
-		name: bot.plug.events.MODERATE_MUTE,
-		platform,
-		run: async (data) => {
-			if (isNil(data)) return;
+  const event = {
+    name: bot.plug.events.MODERATE_MUTE,
+    platform,
+    run: async (data) => {
+      if (isNil(data)) return;
       if (data.moderator.id === bot.plug.getSelf().id) return;
 
       const embed = new Discord.RichEmbed()
@@ -21,18 +21,18 @@ module.exports = function Event(bot, platform) {
         //.addField("This is a field title, it can hold 256 characters")
         .addField("ID", data.user.id, true)
         .addField("Type", "Mute", true)
-        .addField("Time", data.duration, true)
+        .addField("Time", data.duration, true);
       //.addBlankField(true);
 
-      bot.channels.get('487985043776733185').send({embed});
-		},
-		init() {
-			bot.plug.on(this.name, this.run);
-		},
-		kill() {
-			bot.plug.removeListener(this.name, this.run);
-		},
-	};
+      bot.channels.get("487985043776733185").send({embed});
+    },
+    init() {
+      bot.plug.on(this.name, this.run);
+    },
+    kill() {
+      bot.plug.removeListener(this.name, this.run);
+    },
+  };
 
-	bot.events.register(event);
+  bot.events.register(event);
 };

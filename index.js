@@ -47,9 +47,9 @@ class Bot extends Discord.Client {
     this.plug = new PlugAPI({
       email: this.config.plug.email,
       password: this.config.plug.password
-    }, function (err, bot) {
+    }, function(err, bot) { // eslint-disable-line no-unused-vars
       if (err) {
-          console.log('Error initializing PlugAPI: ' + err);
+        console.log("Error initializing PlugAPI: " + err);
       }
     });
 	
@@ -213,7 +213,7 @@ class Bot extends Discord.Client {
     } catch (e) {
       return false;
     }
-  };
+  }
 }
 
 // This is your client. Some people call it `bot`, some people call it `self`,
@@ -229,7 +229,7 @@ const init = async () => {
   plugModuleManager(client).then(() => {
     client.events.init();
     client.plug.connect(client.config.plug.room);
-	  console.info('[!] Connected! [!]');
+    console.info("[!] Connected! [!]");
   });
   
   // Here we load **commands** into memory, as a collection, so they're accessible

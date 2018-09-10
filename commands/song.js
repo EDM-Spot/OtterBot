@@ -13,7 +13,7 @@ class Song extends Command {
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
       const currentMedia = this.client.plug.getMedia();
-      const msg = await message.reply('**Current Song Playing:** https://youtu.be/' + currentMedia.cid);
+      await message.reply("**Current Song Playing:** https://youtu.be/" + currentMedia.cid);
     } catch (e) {
       console.log(e);
     }

@@ -36,7 +36,7 @@ require("moment-duration-format");
 // (so that when you come back to the page, it still remembers you're logged in).
 const passport = require("passport");
 const session = require("express-session");
-const MemoryStore = require("memorystore")(session)
+const MemoryStore = require("memorystore")(session);
 const Strategy = require("passport-discord").Strategy;
 
 // Helmet is specifically a security plugin that enables some specific, useful 
@@ -154,7 +154,7 @@ module.exports = (client) => {
   // then throws the user to the Discord OAuth2 login page.
   app.get("/login", (req, res, next) => {
     if (req.session.backURL) {
-      req.session.backURL = req.session.backURL;
+      //req.session.backURL = req.session.backURL;
     } else if (req.headers.referer) {
       const parsed = url.parse(req.headers.referer);
       if (parsed.hostname === app.locals.domain) {

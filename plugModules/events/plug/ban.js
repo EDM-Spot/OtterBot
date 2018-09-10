@@ -1,14 +1,14 @@
-const { isObject, isNil } = require('lodash');
+const { isNil } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, platform) {
-	const event = {
-		name: bot.plug.events.MODERATE_BAN,
-		platform,
-		run: async (data) => {
-			if (isNil(data)) return;
+  const event = {
+    name: bot.plug.events.MODERATE_BAN,
+    platform,
+    run: async (data) => {
+      if (isNil(data)) return;
       const userDB = await bot.db.models.users.findOne({ where: { username: data.user }});
-			const userID = userDB.get('id');
+      const userID = userDB.get("id");
       
       if (data.moderator.id === bot.plug.getSelf().id) return;
 
@@ -24,20 +24,20 @@ module.exports = function Event(bot, platform) {
         //.addField("This is a field title, it can hold 256 characters")
         .addField("ID", userID, true)
         .addField("Type", "Ban", true)
-        .addField("Time", data.duration, true)
+        .addField("Time", data.duration, true);
       //.addBlankField(true);
 
-      bot.channels.get('487985043776733185').send({embed});
+      bot.channels.get("487985043776733185").send({embed});
       
-			await bot.redis.removeDisconnection(userID);
-		},
-		init() {
-			bot.plug.on(this.name, this.run);
-		},
-		kill() {
-			bot.plug.removeListener(this.name, this.run);
-		},
-	};
+      await bot.redis.removeDisconnection(userID);
+    },
+    init() {
+      bot.plug.on(this.name, this.run);
+    },
+    kill() {
+      bot.plug.removeListener(this.name, this.run);
+    },
+  };
 
-	bot.events.register(event);
+  bot.events.register(event);
 };
