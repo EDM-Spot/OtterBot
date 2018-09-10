@@ -103,7 +103,7 @@ module.exports = function Command(bot) {
 
           await bot.plug.sendChat(bot.utils.replace(lang.roulette.info, {
             duration,
-            price: price === 0 ? lang.roulette.free : `${price} props${price > 1 ? "s" : ""}`,
+            price: price === 0 ? lang.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
           }), duration * 1e3);
           return true;
         }
