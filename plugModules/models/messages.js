@@ -1,40 +1,42 @@
-module.exports = function (bot, sequelize, default_options) {
-	const Messages = bot.db.define("messages", {
+module.exports = async function Model(bot, sequelize) {
+	const Messages = bot.db.define('messages', {
 		index: {
 			type: sequelize.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
-			allowNull: false
+			allowNull: false,
 		},
 		id: {
 			type: sequelize.INTEGER,
-			allowNull: false
+			allowNull: false,
 		},
 		username: {
 			type: sequelize.STRING,
-			allowNull: false
+			allowNull: false,
 		},
 		message: {
 			type: sequelize.STRING,
-			allowNull: false
+			allowNull: false,
 		},
 		cid: {
 			type: sequelize.STRING,
-			allowNull: false
+			allowNull: false,
 		},
 		command: {
 			type: sequelize.BOOLEAN,
 			defaultValue: false,
-			allowNull: false
+			allowNull: false,
 		},
 		deleted_by: {
 			type: sequelize.INTEGER,
 			defaultValue: null,
-			allowNull: true
-		}
-	}, default_options);
+			allowNull: true,
+		},
+	});
 
-	Messages.sync();
+	await Messages.sync();
+
+	bot.db.models.messages = Messages;
 
 	return Messages;
 };

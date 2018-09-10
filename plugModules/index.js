@@ -1,23 +1,20 @@
-module.exports = function (bot) {
-	let miniplug = require("./miniplug");
-	let utils    = require("./utils");
-	let events   = require("./events");
-	let commands = require("./commands");
-	let models   = require("./models");
-	let web      = require("./web");
+const PlugCommands = require('./commands');
+const Classes = require('./classes');
+const Events = require('./events');
+const Models = require('./models');
+const Utils = require('./utils');
 
-	miniplug(bot.miniplug, bot.plug);
-	bot.utils    = new utils(bot);
-	bot.events   = new events(bot, ["plug"]);
-	bot.commands = new commands(bot);
-	bot.models   = new models(bot, bot.sequelize);
-	bot.web      = new web(bot);
+module.exports = function ModuleManager(bot) {
+	bot.Classes = Classes;
+	bot.utils = new Utils(bot);
+	bot.events = new Events(bot, ['plug']);
+	bot.plugCommands = new PlugCommands(bot);
+	bot.models = new Models(bot, bot.sequelize);
 
 	return Promise.all([
 		bot.utils.processor,
-		bot.models.processor,
+		bot.db.models.processor,
 		bot.events.processor,
-		bot.commands.processor,
-		bot.web.processor
+		bot.plugCommands.processor,
 	]);
 };

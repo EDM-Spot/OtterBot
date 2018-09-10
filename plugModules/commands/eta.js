@@ -1,44 +1,37 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("eta", filename, [], 0, true, {type: "per_user", duration: 180}, function (raw_data, command) {
-		let waitlist = bot.plug.waitlist();
-		let dj = bot.plug.dj();
+const { isObject } = require('lodash');
 
-		if (dj && dj.id === raw_data.uid)
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				message: bot.lang.commands.eta.isdj
-			})).delay(1e4).call("delete");
-		else if (!waitlist.contains(raw_data.uid))
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				message: bot.lang.commands.eta.notinlist
-			})).delay(1e4).call("delete");
-		else {
-			let position = waitlist.positionOf(raw_data.uid);
-			if (position === 0)
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.lang.commands.eta.isnext
-				})).delay(3e4).call("delete");
-			else {
-				let hours = Math.floor((position * 4) / 60);
-				let minutes = (position * 4) % 60;
-				let readable = `${hours ? `${hours}h${minutes ? `${minutes}m` : ""}` : `${minutes}m`}`;
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['eta'],
+		minimumPermission: 0,
+		cooldownType: 'perUser',
+		cooldownDuration: 180,
+		parameters: '',
+		description: 'Calculates the ETA (Estimated Time of Arrival) for the user to DJ.',
+		async execute(rawData, command, lang) {
+			const dj = bot.plug.getDJ();
 
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.utils.replace(bot.lang.commands.eta.result, {
-						eta: readable
-					})
-				})).delay(6e4).call("delete");
+			if (isObject(dj) && dj.id === rawData.raw.uid) {
+				this.reply(lang.eta.isPlaying, {}, 6e4);
+				return true;
+			} else if (bot.plug.getWaitListPosition(rawData.raw.uid) === -1) {
+				this.reply(lang.eta.notInWaitList, {}, 6e4);
+				return false;
 			}
-		}
-	}, {
-		parameters: "",
-		description: "Calculates the ETA (Estimated Time of Arrival) for the user to DJ."
+
+			const position = bot.plug.getWaitListPosition(rawData.raw.uid);
+
+			if (position === 1) {
+				this.reply(lang.eta.isNext, {}, 6e4);
+				return true;
+			}
+
+			const hours = Math.floor((position * 4) / 60);
+			const minutes = (position * 4) % 60;
+			const readable = `${hours ? `${hours}h${minutes ? `${minutes}m` : ''}` : `${minutes}m`}`;
+
+			this.reply(lang.eta.result, { eta: readable }, 6e4);
+			return true;
+		},
 	});
 };

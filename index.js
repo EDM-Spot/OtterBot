@@ -5,14 +5,19 @@ if (Number(process.version.slice(1).split(".")[0]) < 8) throw new Error("Node 8.
 
 // Load up the discord.js library
 const Discord = require("discord.js");
+// Load up the plugAPI library
+const PlugAPI = require("plugapi");
 // We also load the rest of the things we need in this file:
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
 const klaw = require("klaw");
 const path = require("path");
+const Redis = require("ioredis");
+const Sequelize = require("sequelize");
+const plugModuleManager = require("./plugModules");
 
-class GuideBot extends Discord.Client {
+class Bot extends Discord.Client {
   constructor(options) {
     super(options);
 
@@ -20,7 +25,34 @@ class GuideBot extends Discord.Client {
     this.config = require("./config.js");
     // client.config.token contains the bot's token
     // client.config.prefix contains the message prefix
+	
+    this.sequelize = Sequelize;
+    this.moment = require("moment");
 
+    this.lang = require("./plugModules/data/lang.json");
+
+    this.models = {};
+
+    this.Redis = new Redis(this.config.db.redis);
+    this.db = new Sequelize(Object.assign(this.config.db.sequelize, {
+      logging: false,
+      operatorsAliases: false,
+      define: {
+        timestamps: true,
+        underscored: true,
+      },
+    }));
+
+    //Connect to plug
+    this.plug = new PlugAPI({
+      email: this.config.plug.email,
+      password: this.config.plug.password
+    }, function (err, bot) {
+      if (err) {
+          console.log('Error initializing PlugAPI: ' + err);
+      }
+    });
+	
     // Aliases and commands are put in collections where they can be read from,
     // catalogued, listed, etc.
     this.commands = new Discord.Collection();
@@ -187,13 +219,19 @@ class GuideBot extends Discord.Client {
 // This is your client. Some people call it `bot`, some people call it `self`,
 // some might call it `cootchie`. Either way, when you see `client.something`,
 // or `bot.something`, this is what we're refering to. Your client.
-const client = new GuideBot();
+const client = new Bot();
 
 // We're doing real fancy node 8 async/await stuff here, and to do that
 // we need to wrap stuff in an anonymous function. It's annoying but it works.
 
 const init = async () => {
-
+  // Load Plug Modules
+  plugModuleManager(client).then(() => {
+    client.events.init();
+    client.plug.connect(client.config.plug.room);
+	  console.info('[!] Connected! [!]');
+  });
+  
   // Here we load **commands** into memory, as a collection, so they're accessible
   // here and everywhere else.
   klaw("./commands").on("data", (item) => {
@@ -222,14 +260,14 @@ const init = async () => {
 
   // Here we login the client.
   client.login(client.config.token);
-
+  
   // End top-level async/await function.
 };
 
 init();
 
 client.on("disconnect", () => client.logger.warn("Bot is disconnecting..."))
-  .on("reconnect", () => client.logger.log("Bot reconnecting...", "log"))
+  .on("reconnecting", () => client.logger.log("Bot reconnecting...", "log"))
   .on("error", e => client.logger.error(e))
   .on("warn", info => client.logger.warn(info));
 

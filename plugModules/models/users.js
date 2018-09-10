@@ -1,32 +1,47 @@
-module.exports = function (bot, sequelize, default_options) {
-	const Users = bot.db.define("users", {
+module.exports = async function Model(bot, sequelize) {
+	const Users = bot.db.define('users', {
 		id: {
 			type: sequelize.INTEGER,
 			primaryKey: true,
 			allowNull: false,
-			unique: true
+			unique: true,
+		},
+		username: {
+			type: sequelize.STRING,
+			allowNull: false,
+		},
+		last_seen: {
+      type: sequelize.DATE,
+      allowNull: false,
+      defaultValue: sequelize.NOW,
+    },
+		wl_position: {
+			type: sequelize.INTEGER,
+			allowNull: false,
+      defaultValue: -1,
 		},
 		props: {
 			type: sequelize.REAL,
 			allowNull: false,
 			defaultValue: 0,
 			validate: {
-				min: 0
-			}
+				min: 0,
+			},
 		},
 		points: {
 			type: sequelize.INTEGER,
 			allowNull: false,
-			defaultValue: 0
+			defaultValue: 0,
 		},
-		afk_message: {
-			type: sequelize.STRING,
-			defaultValue: null,
-			allowNull: true
-		}
-	}, default_options);
+		discord: {
+			type: sequelize.INTEGER,
+			allowNull: true,
+		},
+	});
 
-	Users.sync();
+	await Users.sync();
+
+	bot.db.models.users = Users;
 
 	return Users;
 };

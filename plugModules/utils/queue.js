@@ -1,115 +1,137 @@
-module.exports = function (bot) {
-	const util = {
-		name: "queue",
-		function: function () {
+const { each, isObject, get } = require('lodash');
+
+module.exports = function Util(bot) {
+	class Queue {
+		constructor() {
 			this.users = [];
+			this.shouldUnlock = true;
 
-			this.add = function (info) {
-				if (this.users.map(u => u.user.id).includes(info.user.id))
-					return this.update(info);
-				else {
-					this.users.push(info);
-					return this.run();
+			bot.plug.on(bot.plug.events.DJ_LIST_UPDATE, this.run);
+		}
+		add(user, position) {
+			if (this.users.map(u => u.user.id).includes(user.id)) {
+				return this.update(user, position);
+			}
+      
+			this.users.push({ user, position });
+      
+			return this.run();
+		}
+		update(user, position) {
+			each(this.users, (queueUser) => {
+				if (queueUser.user.id === user.id) {
+					queueUser.position = position;
 				}
-			};
+			});
+      
+			return this.run();
+		}
+		remove(user) {
+			each(this.users, (queueUser, index) => {
+        if (queueUser.user.id === user.id) {
+          this.users.splice(index, 1);
+        }
+			});
 
-			this.update = function (info) {
-				for (let i = 0; i < this.users.length; i++)
-					if (this.users[i].user.id === info.user.id)
-						this.users[i].position = info.position;
-
-				return this.run();
-			};
-
-			this.remove = function (user) {
-				if (typeof user === "object")
-					user = user.id;
-
-				for (let i = 0; i < this.users.length; i++)
-					if (this.users[i].user.id === user)
-						this.users.splice(i, 1);
-
-				return this.run();
-			};
-
-			this.run = async function () {
-				let waitlist = bot.plug.waitlist();
-				let dj = bot.plug.dj();
-
-				if (!this.users.length) return;
-
-				let next = this.users.shift();
-
-				if (waitlist.length === 50 && !waitlist.contains(next.user.id)) {
-					if (!bot.plug.isLocked()) {
-						try {
-							await bot.plug.setLock(true);
-							this.shouldUnlock = true;
-							return this.users.push(next);
-						} catch (err) {
-							console.error(err);
-						}
-					}
+			return this.run();
+		}
+		async run() {
+			const waitlist = bot.plug.getWaitList();
+			const dj = bot.plug.getDJ();
+      
+			if (this.users === undefined) {
+				if (this.shouldUnlock) {
+					await bot.plug.moderateLockBooth(false, false);
+					this.shouldUnlock = false;
 				}
 
-				if (dj && dj.id === next.user.id)
-					return this.users.push(next);
-				else if (waitlist.positionOf(next.user.id) === -1) {
+				return;
+			}
+
+			const next = this.users.shift();
+
+      if (next === undefined) return;
+      
+			if (waitlist.length === 50 && bot.plug.getWaitListPosition(next.user.id) === -1) {
+				if (!bot.plug.isLocked()) {
 					try {
-						await next.user.add();
+						await bot.plug.moderateLockBooth(true, false);
+						this.shouldUnlock = true;
 					} catch (err) {
-						if (err.response && err.response.body) {
-							switch (err.response.body.status) {
-								case "noValidPlaylist":
-									next.user.chat(bot.lang.queue.noValidPlaylist).delay(6e4).call("delete");
-									return;
-								case "roomMismatch":
-									bot.plug.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id })).delay(6e4).call("delete");
-									return;
-								case "forbidden":
-									if (err.response.body.data.includes("waitlistBan")) {
-										await bot.db.models.cooldowns.destroy({ where: { command: "roulette@start" }});
-										next.user.chat(bot.lang.queue.waitlistBan).delay(6e4).call("delete");
-									}
-									return;
-								default:
-									return;
-							}
-						}
+						console.error(err);
 					}
 
-					if (next.position < waitlist.length) {
-						try {
-							await next.user.move(next.position);
-						} catch (err) {
-							console.error(err);
-							return this.users.push(next);
+					this.users.push(next);
+					return;
+				}
+			}
+
+			if (isObject(dj) && dj.id === next.user.id) {
+				this.users.push(next);
+				return;
+			} else if (bot.plug.getWaitListPosition(next.user.id) === -1) {
+				try {
+          if (next.user.id !== bot.plug.getSelf().id){
+					  //await next.user.addToWaitList();
+            await bot.plug.moderateAddDJ(next.user.id, function () {
+              if (next.position < waitlist.length && next.position !== bot.plug.getWaitListPosition(next.user.id)) {
+                bot.plug.moderateMoveDJ(next.user.id, next.position);
+              }
+            });
+          }
+				} catch (err) {
+					if (get(err, 'response.body.status')) {
+						switch (get(err, 'response.body.status')) {
+							case 'noValidPlaylist':
+								await bot.plug.sendChat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist, 6e4);
+								return;
+							case 'roomMismatch':
+								await bot.plug.sendChat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id }), 6e4);
+								return;
+							// to-do: handle wait list banned users
+							default:
+								console.error(err);
+								return;
 						}
 					}
-				} else {
+				}
+        
+				if (next.position < waitlist.length) {
 					try {
-						await next.user.move(next.position);
+            //await next.user.moveInWaitList(next.position);
+            await bot.plug.moderateMoveDJ(next.user.id, next.position);
 					} catch (err) {
-						return this.users.push(next);
+						console.error(err);
+            console.log(next);
+						this.users.push(next);
+						return;
 					}
-
-					if (bot.utils.queue.shouldUnlock) {
-						await bot.plug.setLock(false);
-						bot.utils.queue.shouldUnlock = false;
-					}
+				}
+			} else {
+				console.log('isinlist');
+				try {
+					//await next.user.moveInWaitList(next.position);
+            //await next.user.moveInWaitList(next.position);
+          await bot.plug.moderateMoveDJ(next.user.id, next.position);
+				} catch (err) {
+          						console.error(err);
+            console.log(next);
+					this.users.push(next);
+					return;
 				}
 
 				if (this.shouldUnlock) {
-					await bot.plug.setLock(false);
+					await bot.plug.moderateLockBooth(false, false);
 					this.shouldUnlock = false;
 				}
-			};
+			}
 
-			bot.plug.on("waitlistUpdate", waitlist => bot.utils.queue.run(waitlist));
+			if (this.shouldUnlock) {
+				await bot.plug.moderateLockBooth(false, false);
+				this.shouldUnlock = false;
+			}
 		}
-	};
+	}
 
-	util.function = new util.function();
-
-	bot.utils.register(util);
+	bot.queue = new Queue();
 };

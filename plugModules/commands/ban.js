@@ -1,56 +1,67 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("ban", filename, ["permaban"], 2000, true, {type: "none", duration: 1}, async function (raw_data, command) {
-		if (!command.args.length)
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				message: bot.lang.commands.moderation.nouser
-			})).delay(6e4).call("delete");
-		else if (command.args.join(" ").charAt(0) !== "@")
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				message: bot.lang.commands.moderation.invaliduser
-			})).delay(6e4).call("delete");
-		else {
-			let username = command.args.join(" ").substr(1);
-			let user = bot.plug.users().filter(u => u.username.toLowerCase() === username.toLowerCase())[0] || bot.plug.users().filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
+const { isObject, isNil } = require('lodash');
+const { ROOM_ROLE, GLOBAL_ROLES } = require('plugapi');
+const Discord = require("discord.js");
 
-			if (!user)
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.lang.commands.moderation.usernotfound
-				})).delay(6e4).call("delete");
-			else if (user.id === raw_data.uid)
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.utils.replace(bot.lang.commands.moderation.onSelf, {
-						command: `!${command.name}`
-					})
-				})).delay(3e4).call("delete");
-			else if (user.role || user.gRole >= 2500)
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.lang.commands.moderation.onStaff
-				})).delay(3e4).call("delete");
-			else {
-				await user.ban("f", 1);
-				return await bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.utils.replace(bot.lang.commands.moderation.effective, {
-						mod: raw_data.un,
-						command: `!${command.name}`,
-						user: user.username
-					})
-				}));
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['ban', 'permaban'],
+		minimumPermission: 2000,
+		cooldownType: 'none',
+		cooldownDuration: 0,
+		parameters: '<@username> reason',
+		description: 'Permanently bans the specified user from the community.',
+		async execute(rawData, { args, name }, lang) {
+			if (!rawData.mentions.length || rawData.mentions.length >= 2) {
+				this.reply(lang.invalidUser, {}, 6e4);
+				return false;
 			}
-		}
-	}, {
-		parameters: "<@username>",
-		description: "Permanently bans the specified user from the community."
+      return;
+			const user = rawData.mentions[0];
+      
+			if (!isObject(user)) {
+				this.reply(lang.userNotFound, {}, 6e4);
+				return false;
+			} else if (user.id === rawData.raw.uid) {
+				this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
+				return false;
+			} else if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) {
+				this.reply(lang.moderation.onStaff, {}, 6e4);
+				return false;
+			}
+
+      const reason = rawData.args.slice(1).join(' ');
+
+      if(isNil(reason)){
+				this.reply(lang.moderation.needReason, {}, 6e4);
+				return false;
+      }
+
+      const embed = new Discord.RichEmbed()
+        //.setTitle("Title")
+        .setAuthor(user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
+        .setColor(0xFF00FF)
+        //.setDescription("This is the main body of text, it can hold 2048 characters.")
+        .setFooter("By " + rawData.user.username)
+        //.setImage("http://i.imgur.com/yVpymuV.png")
+        //.setThumbnail("http://i.imgur.com/p2qNFag.png")
+        .setTimestamp()
+        //.addField("This is a field title, it can hold 256 characters")
+        .addField("ID", user.id, true)
+        .addField("Type", "Ban", true)
+        .addField("Time", "Permanent", true)
+        .addField("Reason", reason, false)
+      //.addBlankField(true);
+
+      bot.channels.get('485173444330258454').send({embed});
+      bot.channels.get('486637288923725824').send({embed});
+      
+			await bot.plug.moderateBanUser(user.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, bot.plug.BAN.PERMA);
+			this.reply(lang.moderation.effective, {
+				mod: rawData.raw.un,
+				command: `!${name}`,
+				user: user.username,
+			});
+			return true;
+		},
 	});
 };

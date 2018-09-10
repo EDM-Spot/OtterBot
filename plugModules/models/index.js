@@ -1,30 +1,30 @@
-const fs = require("fs-extra");
+const { each } = require('lodash');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs-extra'));
 
-const default_options = {
-	timestamps: true,
-	underscored: true
-};
+module.exports = function ModelsManager(bot, Sequelize) {
+	this.loadModels = function LoadModels() {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const fileNames = await fs.readdir(__dirname);
+				fileNames.splice(fileNames.indexOf('index.js'), 1);
 
-module.exports = function (bot, sequelize) {
-	this.load_models = function () {
-		return new Promise ((resolve, reject) => {
-			return fs.readdir(__dirname, function (err, files) {
-				if (err) return reject(err);
-				files.splice(files.indexOf("index.js"), 1);
+				const modules = [];
 
-				let modules = [];
+				each(fileNames, (name) => {
+					/* eslint-disable global-require */
+					/* eslint-disable import/no-dynamic-require */
+					const Module = require(`${__dirname}/${name}`)(bot, Sequelize);
 
-				for (let i = 0; i < files.length; i++) {
-					let module = require(`${__dirname}/${files[i]}`);
-						module = new module(bot, sequelize, default_options);
+					modules.push(Module);
+				});
 
-					modules.push(module);
-				}
-
-				return resolve (modules);
-			});
+				return resolve(modules);
+			} catch (err) {
+				return reject(err);
+			}
 		});
 	};
 
-	this.processor = this.load_models();
+	this.processor = this.loadModels();
 };

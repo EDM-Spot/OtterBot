@@ -1,146 +1,125 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("roulette", filename, ["roullete"], 2000, true, {type: "none", duration: 1}, function (raw_data, command) {
-		if (!command.args.length)
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				message: bot.lang.commands.roulette.noargs
-			})).delay(6e4).call("delete");
-		else {
-			let parameters = ["check", "start", "end"];
-			let parameter = command.args.shift().toLowerCase();
+const { isNil, isObject, isNaN } = require('lodash');
+const { ROOM_ROLE, GLOBAL_ROLES } = require('plugapi');
 
-			if (!parameters.includes(parameter))
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.lang.commands.roulette.invalidarg
-				})).delay(6e4).call("delete");
-			else {
-				switch (parameter) {
-					case "check":
-						if (bot.utils.roulette.check())
-							return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-								command: command.name,
-								user: raw_data.un,
-								message: bot.lang.commands.roulette.started
-							})).delay(6e4).call("delete");
-						else {
-							return bot.db.models.cooldowns.findOne({
-								where: {
-									command: "roulette@start"
-								}
-							}).then(instance => {
-								if (instance !== null && typeof instance !== "undefined")
-									return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-										command: command.name,
-										user: raw_data.un,
-										message: bot.utils.replace(bot.lang.commands.roulette.incooldown, {
-											how_long: Math.floor((+new Date() - +new Date(instance.get("created_at"))) / 6e4),
-											minutes_left: Math.ceil(((+new Date(instance.get("created_at")) + 36e5) - +new Date()) / 6e4)
-										})
-									})).delay(6e4).call("delete");
-								else
-									return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-										command: command.name,
-										user: raw_data.un,
-										message: bot.lang.commands.roulette.nomorecooldown
-									})).delay(6e4).call("delete");
-							}).catch(console.error);
-						}
-						break;
-					case "start":
-						if (!bot.utils.roulette.check())
-							return bot.utils.roulette.check(true).then(instance => {
-								if (instance !== null && typeof instance !== "undefined")
-									return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-										command: command.name,
-										user: raw_data.un,
-										message: bot.utils.replace(bot.lang.commands.roulette.incooldown, {
-											how_long: Math.floor((+new Date() - +new Date(instance.get("created_at"))) / 6e4),
-											minutes_left: Math.ceil(((+new Date(instance.get("created_at")) + 36e5) - +new Date()) / 6e4)
-										})
-									})).delay(6e4).call("delete");
-								else {
-									let waitlist = bot.plug.waitlist();
-
-									/*if (waitlist.length <= 14)
-										return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-											command: command.name,
-											user: raw_data.un,
-											message: bot.lang.commands.roulette.nowaitlist
-										}));*/
-
-									let duration = 60;
-
-									if (command.args.length) {
-										let specified_duration = parseInt(command.args.shift());
-
-										if (isNaN(specified_duration) || (!isNaN(specified_duration) && specified_duration < 0))
-											return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-												command: command.name,
-												user: raw_data.un,
-												message: bot.lang.commands.roulette.invalidduration
-											})).delay(6e4).call("delete");
-										else
-											duration = specified_duration;
-									}
-
-									let price = 1;
-
-									if (command.args.length) {
-										let specified_price = parseInt(command.args.shift());
-
-										if (isNaN(specified_price) || (!isNaN(specified_price) && specified_price < 0))
-											return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-												command: command.name,
-												user: raw_data.un,
-												message: bot.lang.commands.roulette.invalidprice
-											})).delay(6e4).call("delete");
-										else
-											price = specified_price;
-									}
-
-									return bot.utils.roulette.start(raw_data.uid, duration, price).then(started => {
-										return bot.plug.chat(bot.lang.commands.roulette.starting).then(message => {
-											bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.info, {
-												duration: duration,
-												price: price === 0 ? "free" : `${price} prop${price > 1 ? "s" : ""}`
-											})).delay(duration * 1e3).call("delete");
-										});
-									}).catch(err => {
-										return bot.plug.chat(bot.lang.commands.roulette.error).delay(6e4).call("delete");
-									});
-								}
-							}).catch(console.error);
-						else
-							return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-								command: command.name,
-								user: raw_data.un,
-								message: bot.lang.commands.roulette.started
-							})).delay(6e4).call("delete");
-						break;
-					case "end":
-						if (!bot.utils.roulette.check())
-							return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-								command: command.name,
-								user: raw_data.un,
-								message: bot.lang.commands.roulette.notstarted
-							})).delay(6e4).call("delete");
-						else {
-							if (bot.utils.roulette.end())
-								return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-									command: command.name,
-									user: raw_data.un,
-									message: bot.lang.commands.roulette.stopped
-								})).delay(6e4).call("delete");
-						}
-						break;
-				}
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['roulette', 'roulete', 'roullete', 'roullette'],
+		minimumPermission: 2000,
+		cooldownType: 'none',
+		cooldownDuration: 0,
+		parameters: '<check|end|start [duration] [price]>',
+		description: 'Roulette management command, can check if a roulette can be ran, can end or start a roulette (with specified duration or price, both defaulting to 60 and 1 respectively).',
+		async execute(rawData, { args }, lang) {
+			if (!args.length) {
+				this.reply(lang.roulette.noParams, {}, 6e4);
+				return false;
 			}
-		}
-	}, {
-		parameters: "<check|end|start [duration] [price]>",
-		description: "Roulette management command, can check if a roulette can be ran, can end or start a roulette (with specified duration or price, both defaulting to 60 and 1 respectively)."
+
+			const params = ['check', 'start', 'end', 'reset'];
+			const param = `${args.shift()}`.toLowerCase();
+
+			if (!params.includes(param)) {
+				this.reply(lang.roulette.invalidParam, {}, 6e4);
+				return false;
+			}
+
+			switch (param) {
+				case 'check': {
+					if (await bot.roulette.check()) {
+						this.reply(lang.roulette.started, {}, 6e4);
+						return true;
+					}
+
+					const cooldown = await bot.redis.getCommandOnCoolDown('plug', 'roulette@start', 'perUse');
+
+          if (cooldown == -2) {
+						this.reply(lang.roulette.outOfCooldown, {}, 6e4);
+						return true;
+					}
+
+					this.reply(lang.roulette.onCooldown, {
+						elapsed: Math.floor((3600 - cooldown) / 60),
+						remaining: Math.ceil(cooldown / 60),
+					});
+					return true;
+				}
+				case 'reset': {
+					const user = bot.plug.getUser(rawData.raw.uid);
+
+					if (!isObject(user) || await bot.utils.getRole(user) <= ROOM_ROLE.MANAGER) return false;
+
+					await bot.redis.removeCommandFromCoolDown('plug', 'roulette@start', 'perUse');
+					this.reply(lang.roulette.reset, {}, 6e4);
+					return true;
+				}
+				case 'start': {
+					if (await bot.roulette.check()) {
+						this.reply(lang.roulette.started, {}, 6e4);
+						return true;
+					}
+
+					const cooldown = await bot.redis.getCommandOnCoolDown('plug', 'roulette@start', 'perUse');
+
+					if (cooldown != -2) {
+						this.reply(lang.roulette.onCooldown, {
+							elapsed: Math.floor((3600 - cooldown) / 60),
+							remaining: Math.ceil(cooldown / 60),
+						});
+						return true;
+					}
+
+					let duration = 60;
+
+					if (args.length) {
+						const specifiedDuration = parseInt(args.shift(), 10);
+
+						if (isNaN(specifiedDuration) || specifiedDuration < 10 || specifiedDuration > 120) {
+							this.reply(lang.roulette.invalidDuration, {}, 6e4);
+							return false;
+						}
+
+						duration = specifiedDuration;
+					}
+
+					let price = 1;
+
+					if (args.length) {
+						const specifiedPrice = parseInt(args.shift(), 10);
+
+            //if (specifiedPrice === 0) {
+              //   specifiedPrice = 1;
+            //}
+
+            if (isNaN(specifiedPrice) && specifiedPrice <= 100) {
+							this.reply(lang.roulette.invalidPrice, {}, 6e4);
+							return false;
+						}
+
+						price = specifiedPrice;
+					}
+
+					await bot.roulette.start(duration, price);
+					this.reply(lang.roulette.starting, {}, duration * 1e3);
+
+					await bot.plug.sendChat(bot.utils.replace(lang.roulette.info, {
+						duration,
+						price: price === 0 ? lang.roulette.free : `${price} props${price > 1 ? 's' : ''}`,
+					}), duration * 1e3);
+					return true;
+				}
+				case 'end': {
+					if (!await bot.roulette.check()) {
+						this.reply(lang.roulette.notStarted, {}, 6e4);
+						return false;
+					}
+
+					bot.roulette.end();
+					this.reply(lang.roulette.stopped, {}, 6e4);
+					return true;
+				}
+				default:
+					return false;
+			}
+		},
 	});
 };

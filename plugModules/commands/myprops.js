@@ -1,40 +1,38 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("myprops", filename, [], 0, true, {type: "per_user", duration: 30}, function (raw_data, command) {
-		if (!command.args.length)
-			return bot.db.models.users.findOrCreate({
-				where: {
-					id: raw_data.uid
-				},
-				defaults: {
-					id: raw_data.uid
-				}
-			}).then((instances, created) => {
-				if (!instances.length) return;
+const { isNil } = require('lodash');
 
-				let instance = instances.shift();
+module.exports = function Command(bot) {
+    bot.plugCommands.register({
+        names: ['myprops'],
+        minimumPermission: 0,
+        cooldownType: 'none',
+        cooldownDuration: 3600,
+        parameters: '[given]',
+        description: 'Checks how many props the user has and their ranking, or how many the user has given.',
+        async execute(rawData, { args }, lang) {
+            const id = rawData.raw.uid;
 
-				let props = instance.toJSON().props;
+            if (args.length && `${args.shift()}`.toLowerCase() === 'given') {
+                const props = await bot.db.models.props.count({ where: { id } });
 
-				return raw_data.reply(props ? bot.utils.replace(bot.lang.commands.myprops.result, {
-					props: props,
-					plural: props > 1 ? "s" : ""
-				}) : bot.lang.commands.myprops.noprops).delay(6e4).call("delete");
-			}).catch(console.error);
-		else {
-			if (command.args.shift().toLowerCase() === "given")
-				return bot.db.models.props.count({
-					where: {
-						id: raw_data.uid
-					}
-				}).then(props_given => {
-					return raw_data.reply(props_given ? bot.utils.replace(bot.lang.commands.myprops.given, {
-						props: props_given,
-						plural: props_given > 1 ? "s" : ""
-					}) : bot.lang.commands.myprops.nonegiven).delay(6e4).call("delete");
-				}).catch(console.error);
-		}
-	}, {
-		parameters: "[given]",
-		description: "Checks how many props the user has, or how many the user has given."
+                this.reply(lang.myprops[props ? 'given' : 'noneGiven'], { props, plural: props > 1 ? 's' : '' }, 6e4);
+                return true;
+            }
+
+            const inst = await bot.db.query("SELECT x.* FROM(SELECT id, props, ROW_NUMBER() OVER(ORDER BY props DESC) as rank FROM users) x WHERE x.id = '" + id + "'");
+
+
+			if (isNil(inst)) return false;
+
+            const rank = bot.utils.numberWithCommas(inst[0][0].rank);
+            const props = bot.utils.numberWithCommas(inst[0][0].props);
+
+            if (props <= 0) {
+                this.reply(lang.myprops.noProps, {}, 6e4);
+                return true;
+            }
+
+			this.reply(lang.myprops.result, { rank, props }, 6e4);
+			return true;
+		},
 	});
 };

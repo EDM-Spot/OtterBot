@@ -1,54 +1,51 @@
-module.exports = function (bot, filename, platform) {
+const { each, isNil } = require('lodash');
+
+module.exports = function Event(bot, platform) {
 	const event = {
-		name: "waitlistUpdate",
-		platform: platform,
-		_filename: filename,
+		name: bot.plug.events.DJ_LIST_UPDATE,
+		platform,
 		previous: undefined,
-		checkForLeave: function (id) {
-			return new Promise ((resolve, reject) => {
-				function run (user) {
+		checkForLeave(id) {
+			return new Promise((resolve, reject) => {
+				function run(user) {
 					if (user.id === id) resolve();
 				}
 
-				bot.plug.on("userLeave", run);
+				bot.plug.on(bot.plug.events.USER_LEAVE, run);
 
 				setTimeout(() => {
-					bot.plug.removeListener("userLeave", run); reject();
-				}, 2e3);
+					bot.plug.removeListener(bot.plug.events.USER_LEAVE, run); reject();
+				}, 3e3);
 			});
 		},
-		run: function (waitlist) {
-			let previous = event.previous;
-			
-			if (previous.length <= waitlist.length) {
-				event.previous = bot.plug.waitlist();
-				return;
-			}
+		run(newWaitList) {
+			const previousWaitList = event.previous;
 
-			if (previous.length > waitlist.length) {
-				for (let i = 0; i < previous.length; i++) {
-					if (i !== waitlist.length && !waitlist.contains(previous[i])) {
-						event.checkForLeave(previous[i].id).then(() => {
-							return bot.db.models.disconnections.upsert({
-								id: previous[i].id,
-								position: i
-							});
+			if (previousWaitList.length > newWaitList.length) {
+				each(previousWaitList, (user, position) => {
+					if (position !== newWaitList.length && bot.plug.getWaitListPosition(user.id) === -1) {
+						event.checkForLeave(user.id).then(async () => {
+							const latestDisconnection = await bot.redis.findDisconnection(user.id);
+
+							if (isNil(latestDisconnection) || position < latestDisconnection) {
+								await bot.redis.registerDisconnection(user.id, position + 1);
+							}
 						}).catch(() => {});
 					}
-				}
+				});
 			}
 
-			// always at the end to keep a consistent "previous" waitlist
-			event.previous = bot.plug.waitlist();
+			// always at the end to keep a consistent 'previous' waitlist
+			event.previous = bot.plug.getWaitList();
 		},
-		init: function () {
-			this.previous = bot.plug.waitlist();
+		init() {
+			this.previous = bot.plug.getWaitList();
 
 			bot.plug.on(this.name, this.run);
 		},
-		kill: function () {
+		kill() {
 			bot.plug.removeListener(this.name, this.run);
-		}
+		},
 	};
 
 	bot.events.register(event);

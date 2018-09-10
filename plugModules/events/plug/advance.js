@@ -1,85 +1,176 @@
-module.exports = function (bot, filename, platform) {
+const { Op } = require('sequelize');
+const {
+	isObject, isNaN, isNil, get, keys,
+} = require('lodash');
+const Discord = require("discord.js");
+
+var savedMessageID;
+var savedMessage;
+
+module.exports = function Event(bot, filename, platform) {
 	const event = {
-		name: "advance",
-		platform: platform,
+		name: bot.plug.events.ADVANCE,
+		platform,
 		_filename: filename,
 		run: async (data) => {
-			if (!data || !data.media) return;
+			if (!isObject(data) || !isObject(data.media)) return;
 
-			let dj = bot.plug.dj();
-			
-			if (dj && data.media.duration >= 390) {
-				await bot.utils.lockskip(dj);
-				dj.chat(bot.lang.exceedstimeguard);
+			const dj = bot.plug.getDJ();
+      
+			clearTimeout(bot.autoSkipTimeout);
+
+			let songAuthor = null;
+			let songTitle = null;
+      
+			// AutoSkip Yt/Sc songs
+/*             if (get(data, 'media.format', 2) === 1) {
+                const YouTubeMediaID = data.media.cid;
+                let YouTubeMediaData;
+
+                YouTubeMediaData = await bot.youtube.getMedia(YouTubeMediaID);
+
+                const { snippet } = YouTubeMediaData;
+                const fullTitle = get(YouTubeMediaData, 'snippet.title');
+
+                songAuthor = fullTitle.split(' - ')[0].trim();
+                songTitle = fullTitle.split(' - ')[1].trim();
+            } else {
+                const SoundCloudMediaID = data.media.cid;
+                let SoundCloudMediaData;
+
+                SoundCloudMediaData = await bot.soundcloud.getTrack(SoundCloudMediaID);
+
+                if (!isNil(SoundCloudMediaData)) {
+                    const fullTitle = SoundCloudMediaData.title;
+
+                    songAuthor = fullTitle.split(' - ')[0].trim();
+                    songTitle = fullTitle.split(' - ')[1].trim();
+                }
+            } */
+
+			if (isNil(songAuthor) || isNil(songTitle)) {
+				songAuthor = data.media.author;
+				songTitle = data.media.title;
 			}
 
-			try {
-				// reset any DC spots when they start DJing
-				await bot.db.models.disconnections.destroy({ where: { id: dj.id } });
-				// get history for the latest play
-				let history = await bot.plug.getRoomHistory();
-				// if plug reset the history or its a brand new room it won't have history
-				if (!history.length) return;
+      if(!isNil(bot.user)){
+        bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
+          type: 'LISTENING'
+        }).catch(function(error) {
+          console.log(error);
+        });
+      }
 
-				let latest = history.shift();
+			if (isObject(dj) && data.media.duration >= 390) {
+				await bot.plug.sendChat(`@${dj.username} ` + bot.lang.exceedstimeguard);
+				await bot.utils.lockskip(dj);
+			}
+
+			const savedCID = data.media.cid;
+
+			setTimeout(async () => {
+				const currentMedia = bot.plug.getMedia();
+
+				if (savedCID === get(currentMedia, 'cid')) {
+					await bot.plug.sendChat(bot.lang.stuckSkip);
+					await bot.plug.moderateForceSkip();
+				}
+			}, (data.media.duration + 5) * 1e3);
+
+			try {
+				// get history for the latest play
+
+        const lastPlay = data.lastPlay; //await bot.plug.getHistory();
+
+				// if plug reset the history or its a brand new room it won't have history
+				if (isNil(lastPlay.media)) return;
+
+        //const [lastPlay] = history;
+        
 				// save how much XP they got for their play
-				let score = Object.keys(bot.utils.points.votes).length + 1;
-				let ids = Object.keys(bot.utils.points.votes).map(k => parseInt(k)).filter(i => !isNaN(i));
+				const score = keys(bot.points.votes).length + 1;
+				const ids = keys(bot.points.votes).map(k => parseInt(k, 10)).filter(i => !isNaN(i));
 
 				// empty the XP counter
-				bot.utils.points.votes = {};
+        bot.points.votes = {};
+
+				// reset any DC spots when they start DJing
+				await bot.redis.removeDisconnection(lastPlay.dj.id);
 
 				// keep track of played media in the room
-				await bot.db.models.plays.create({
-					cid: latest.media.cid,
-					format: latest.media.format,
-					woots: latest.score.positive,
-					grabs: latest.score.grabs,
-					mehs: latest.score.negative,
-					dj: latest.user.id,
-					skipped: latest.score.skipped ? true : false,
-					title: `${latest.media.author} - ${latest.media.title}`
+        await bot.db.models.plays.create({
+					cid: lastPlay.media.cid,
+					format: lastPlay.media.format,
+					woots: lastPlay.score.positive,
+					grabs: lastPlay.score.grabs,
+					mehs: lastPlay.score.negative,
+					dj: lastPlay.dj.id,
+					skipped: lastPlay.score.skipped > 0,
+					title: `${lastPlay.media.author} - ${lastPlay.media.title}`,
 				});
 
 				// count how many props were given while that media played
-				let props = await bot.db.models.props.count({ where: { historyID: latest.id, dj: latest.user.id } });
+				const props = await bot.db.models.props.count({
+					where: { historyID: `'${lastPlay.media.id}'`, dj: lastPlay.dj.id },
+				});
 
-				// award users that voted their XP
-				await bot.db.models.users.increment("points", { by: 1, where: { id: { $in: ids } } });
-				
 				// get an user object for the last DJ
-				let instance = await bot.db.models.users.findOrCreate({ where: { id: latest.user.id }, defaults: { id: latest.user.id } });
-				// since Sequelize return an array for findOrCreate (which in bluebird would be handled with .spread)
-				// we use the array instead and just grab the instance out of it as it is always the first element
-				instance = instance[0];
+				const [instance] = await bot.db.models.users.findOrCreate({
+					where: { id: lastPlay.dj.id }, defaults: { id: lastPlay.dj.id, username: lastPlay.dj.username },
+				});
+        
+				const woots = lastPlay.score.positive;
+				const grabs = lastPlay.score.grabs;
+				const mehs = lastPlay.score.negative;
 
+        if(!isNil(savedMessageID)){
+          if (lastPlay.score.skipped === 1) {
+            bot.channels.get('486125808553820160').fetchMessage(savedMessageID)
+              .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + ' Skipped!'));
+          } else {
+          bot.channels.get('486125808553820160').fetchMessage(savedMessageID)
+              .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + ' <:plugWoot:486538570715103252> ' + woots + ' ' + '<:plugMeh:486538601044115478> ' + mehs + ' ' + '<:plugGrab:486538625270677505> ' + grabs + '\n'));
+          }
+        }
+        
+        bot.channels.get('486125808553820160').send('**' + dj.username + ' (' + dj.id + ')** is now Playing: ' + `${data.media.author} - ${data.media.title}`).then(m => {
+          savedMessageID = m.id;
+          savedMessage = m.content;
+        });
+        
 				// if they weren't skipped they deserve XP equivalent to the votes
-				if (!latest.score.skipped) {
-					let dj_instance = await instance.increment("points", {by: score});
-					bot.utils.points.afterIncrement(dj_instance);
-				}
+                if (!lastPlay.score.skipped) {
+                    const previousScore = instance.get('points');
+                    await instance.increment('points', { by: score });
+                    if (previousScore < 10000) {
+                        bot.points.incrementHook(instance);
+                    }
 
-				// if no props were given, we done here
-				if (!props) return;
+                    // award users that voted their XP
+                    await bot.db.models.users.increment('points', { by: 1, where: { id: { [Op.in]: ids } } });
 
-				// otherwise, give them the props
-				await instance.increment("props", {by: props});
+                    // if no props were given, we done here
+                    if (!props) return;
 
-				return bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
-					user: latest.user.username,
-					props: props,
-					plural: props > 1 ? "s" : ""
-				})).delay(data.media.duration * 1e3).call("delete");
+                    // otherwise, give them the props
+                    await instance.increment('props', { by: props });
+
+                    await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
+                        props,
+                        user: lastPlay.dj.username,
+                        plural: props > 1 ? 's' : '',
+                    }), data.media.duration * 1e3);
+                }
 			} catch (err) {
 				console.error(err);
 			}
 		},
-		init: function () {
+		init() {
 			bot.plug.on(this.name, this.run);
 		},
-		kill: function () {
+		kill() {
 			bot.plug.removeListener(this.name, this.run);
-		}
+		},
 	};
 
 	bot.events.register(event);

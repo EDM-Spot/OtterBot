@@ -1,108 +1,95 @@
-const got = require("got");
+const { isObject, isNil, has } = require('lodash');
 
-module.exports = function (bot, filename) {
-	bot.commands.register("plays", filename, ["lastplayed", "history"], 0, true, {type: "per_user", duration: 5}, function (raw_data, command) {
-		if (!command.args.length) {
-			let current_media = bot.plug.historyEntry();
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['plays', 'lastplayed', 'history'],
+		minimumPermission: 0,
+		cooldownType: 'perUser',
+		cooldownDuration: 10,
+		parameters: '[YouTube Link|SoundCloud Link]',
+		description: 'Checks the specified link, or the current media, for the last time it was played in the community.',
+		async execute(rawData, { args }, lang) {
+			if (!args.length) {
+				const currentMedia = bot.plug.getMedia();
 
-			if (!current_media || !current_media.media)
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.lang.commands.plays.nosongplaying
-				})).delay(6e4).call("delete");
-			else {
-				return bot.db.models.plays.findOne({
+				if (!isObject(currentMedia)) {
+					this.reply(lang.plays.nothingPlaying, {}, 6e4);
+					return false;
+				}
+console.log(`'${currentMedia.cid}'`);
+				const instance = await bot.db.models.plays.findOne({
 					where: {
-						cid: current_media.media.cid,
-						format: current_media.media.format
+						cid: `'${currentMedia.cid}'`,
+						format: currentMedia.format,
 					},
-					order: [["created_at", "DESC"]]
-				}).then(instance => {
-					if (instance === null || typeof instance === "undefined")
-						return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-							command: command.name,
-							user: raw_data.un,
-							message: bot.lang.commands.plays.currentnever
-						})).delay(6e4).call("delete");
+					order: [['created_at', 'DESC']],
+				});
 
-					instance = instance.toJSON();
+				if (isNil(instance)) {
+					this.reply(lang.plays.neverPlayed, { which: lang.plays.current }, 6e4);
+					return true;
+				}
 
-					return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-						command: command.name,
-						user: raw_data.un,
-						message: bot.utils.replace(bot.lang.commands.plays.currentlastwas, {
-							how_long_ago: bot.moment(instance.created_at).fromNow()
-						})
-					})).delay(6e4).call("delete");
-				}).catch(console.error);
+				this.reply(lang.plays.lastPlayWas, {
+					which: lang.plays.specified,
+					time: bot.moment(instance.get('created_at')).fromNow(),
+				}, 6e4);
+				return true;
 			}
-		} else {
-			let link = command.args.shift();
 
-			if (bot.youtube.getMediaID(link))
-				return bot.db.models.plays.findOne({
+			const link = args.shift();
+      const cid = bot.youtube.getMediaID(link);
+
+			if (!isNil(cid)) {
+				const instance = await bot.db.models.plays.findOne({
 					where: {
-						cid: bot.youtube.getMediaID(link),
-						format: 1
+						cid: cid,
+						format: 1,
 					},
-					order: [["created_at", "DESC"]]
-				}).then(instance => {
-					if (instance === null || typeof instance === "undefined")
-						return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-							command: command.name,
-							user: raw_data.un,
-							message: bot.lang.commands.plays.never
-						})).delay(6e4).call("delete");
+					order: [['created_at', 'DESC']],
+				});
 
-					instance = instance.toJSON();
+				if (isNil(instance)) {
+					this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
+					return true;
+				}
 
-					return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-						command: command.name,
-						user: raw_data.un,
-						message: bot.utils.replace(bot.lang.commands.plays.lastwas, {
-							how_long_ago: bot.moment(instance.created_at).fromNow()
-						})
-					})).delay(6e4).call("delete");
-				}).catch(console.error);
-			else if (link.includes("soundcloud"))
-				return got(`https://api.soundcloud.com/resolve?url=${link}&client_id=${bot.config.soundcloud_key}`, {json: true}).then(response => {
-					if (typeof response.body === "object" && typeof response.body.id === "number")
-						return bot.db.models.plays.findOne({
-							where: {
-								cid: `${response.body.id}`,
-								format: 2
-							},
-							order: [["created_at", "DESC"]]
-						}).then(instance => {
-							if (instance === null || typeof instance === "undefined")
-								return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-									command: command.name,
-									user: raw_data.un,
-									message: bot.lang.commands.plays.never
-								})).delay(6e4).call("delete");
+				this.reply(lang.plays.lastPlayWas, {
+					which: lang.plays.specified,
+					time: await bot.moment(instance.get('created_at')).fromNow(),
+				}, 6e4);
+				return true;
+			} else if (link.includes('soundcloud.com')) {
+				const soundcloudMedia = await bot.soundcloud.resolve(link);
 
-							instance = instance.toJSON();
+				if (isNil(soundcloudMedia)) return false;
 
-							return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-								command: command.name,
-								user: raw_data.un,
-								message: bot.utils.replace(bot.lang.commands.plays.lastwas, {
-									how_long_ago: bot.moment(instance.created_at).fromNow()
-								})
-							})).delay(6e4).call("delete");
-						}).catch(console.error);
-				}).catch(console.error);
-			else {
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.lang.commands.plays.invalidlink
-				})).delay(6e4).call("delete");
+				if (isObject(soundcloudMedia) && has(soundcloudMedia, 'id')) {
+					const instance = await bot.db.models.plays.findOne({
+						where: {
+							cid: `'${soundcloudMedia.id}'`,
+							format: 2,
+						},
+						order: [['created_at', 'DESC']],
+					});
+
+					if (isNil(instance)) {
+						this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
+						return true;
+					}
+
+					this.reply(lang.plays.lastPlayWas, {
+						which: lang.plays.specified,
+						time: bot.moment(instance.get('created_at')).fromNow(),
+					}, 6e4);
+					return true;
+				}
+
+				return false;
 			}
-		}
-	}, {
-		parameters: "[youtube link|soundcloud link]",
-		description: "Checks the specified link, or the current media, for the last time it was played in the community."
+
+			this.reply(lang.plays.invalidLink, {}, 6e4);
+			return false;
+		},
 	});
 };

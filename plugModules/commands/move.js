@@ -1,68 +1,57 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("move", filename, [], 2000, true, {type: "none", duration: 1}, function (raw_data, command) {
-		if (!command.args.length)
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				message: bot.lang.commands.move.nouser
-			})).delay(3e4).call("delete");
-		else {
-			let position = parseInt(command.args.pop());
+const { isObject, isNaN } = require('lodash');
 
-			if (isNaN(position) || position < 1 || 50 < position)
-				return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-					command: command.name,
-					user: raw_data.un,
-					message: bot.lang.commands.move.invalidposition
-				})).delay(3e4).call("delete");
-			else {
-				if (!command.args.length || command.args.join(" ").charAt(0) !== "@")
-					return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-						command: command.name,
-						user: raw_data.un,
-						message: bot.lang.commands.move.invaliduser
-					})).delay(3e4).call("delete");
-				else {
-					let username = command.args.join(" ").substr(1);
-					let user = bot.plug.users().filter(u => u.username.toLowerCase() === username.toLowerCase())[0] || bot.plug.users().filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
-
-					if (!user)
-						return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-							command: command.name,
-							user: raw_data.un,
-							message: bot.lang.commands.move.usernotfound
-						})).delay(3e4).call("delete");
-					else {
-						let waitlist = bot.plug.waitlist();
-
-						position = position - 1;
-						
-						bot.utils.queue.add({user, position});
-						if (waitlist.length === 50) {
-							return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-								command: command.name,
-								user: raw_data.un,
-								message: bot.utils.replace(bot.lang.commands.move.addwhenpossible, {
-									user: user.username,
-									position: position + 1
-								})
-							}));
-						} else {
-							return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-								command: command.name,
-								user: raw_data.un,
-								message: bot.utils.replace(bot.lang.commands.move.addnow, {
-									user: user.username,
-									position: position + 1
-								})
-							}));
-						}
-					}
-				}
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['move'],
+		minimumPermission: 2000,
+		cooldownType: 'none',
+		cooldownDuration: 0,
+		parameters: '<@username> <1-50>',
+		description: 'Moves the specified user to the specified waitlist position.',
+		async execute(rawData, { args }, lang) {
+			if (!args.length || args.join(' ').charAt(0) !== '@') {
+				this.reply(lang.invalidUser, {}, 6e4);
+				return false;
 			}
-		}
-	}, {
-		parameters: "<@username> <1-50>",
-		description: "Moves the specified user to the specified waitlist position."
+
+			const position = parseInt(args.pop(), 10);
+
+			if (isNaN(position) || position < 1 || position > 50) {
+				this.reply(lang.move.invalidPosition, {}, 6e4);
+				return false;
+			}
+
+			if (!args.length || args.join(' ').charAt(0) !== '@') {
+				this.reply(lang.invalidUser, {}, 6e4);
+				return false;
+			}
+
+			const username = args.join(' ').substr(1);
+			const users = bot.plug.getUsers();
+			const user = users.filter(u => u.username.toLowerCase() === username.toLowerCase())[0] ||
+				users.filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
+
+			if (!isObject(user)) {
+				this.reply(lang.userNotFound, {}, 6e4);
+				return false;
+			}
+
+			const dj = bot.plug.getDJ();
+
+			if (isObject(dj) && dj.id === user.id) {
+				this.reply(lang.moderation.isPlaying, {}, 6e4);
+				return false;
+			}
+
+			const waitlist = bot.plug.getWaitList();
+
+			bot.queue.add(user, position);
+			this.reply(lang.move.willMove, {
+				user: user.username,
+				position: position,
+				when: waitlist.length === 50 ? lang.move.whenPossible : lang.move.now,
+			}, 6e4);
+			return true;
+		},
 	});
 };

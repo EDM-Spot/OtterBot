@@ -9,6 +9,11 @@ const config = {
     "domain": {{domain}},
     "port": {{port}}
   },
+  "plug" : {
+    "email": {{email}},
+    "password": {{password}},
+    "room": {{room}}
+  },
   defaultSettings: {{defaultSettings}},
   permLevels: [
     { level: 0,

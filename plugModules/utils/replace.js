@@ -1,16 +1,20 @@
-module.exports = function (bot) {
-	const util = {
-		name: "replace",
-		function: (input, object) => {
-			if (typeof input === "undefined" || input === null) return "missing string";
-			if (typeof object !== "object") return input;
-			let keys = Object.keys(object);
+const {
+	isNil, isObject, keys, each
+} = require('lodash');
 
-			for (let i = 0; i < keys.length; i++)
-				input = input.replace(new RegExp(`%%${keys[i].toUpperCase()}%%`, "g"), object[keys[i]]);
+module.exports = function Util(bot) {
+	const util = {
+		name: 'replace',
+		function: (input, object) => {
+			if (isNil(input)) return 'MISSING STRING';
+			if (!isObject(object)) return input;
+
+			each(keys(object), (key) => {
+				input = input.replace(new RegExp(`%%${key.toUpperCase()}%%`, 'g'), object[key]);
+			});
 
 			return input;
-		}
+		},
 	};
 
 	bot.utils.register(util);

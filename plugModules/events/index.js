@@ -1,60 +1,46 @@
-const fs = require("fs-extra");
+const { keys, each } = require('lodash');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs-extra'));
 
-module.exports = function (bot, platforms) {
-	this.register = function (event) {
-		event.id = `event:${event.platform}:${event.name.toLowerCase()}`;		
+module.exports = function EventsManager(bot, platforms) {
+	this.register = function RegisterEvent(event) {
+		event.id = `event:${event.platform}:${event.name.toLowerCase()}`;
 
 		this[event.id] = event;
 	};
 
-	this.init = function () {
-		let keys = Object.keys(this).filter(key => {
-			return key.includes("event:");
-		});
-		for (let i = 0; i < keys.length; i++)
-			this[keys[i]].init();
+	this.init = function InitializeEvents() {
+		keys(this).filter(a => a.includes('event:')).map(a => this[a].init());
 	};
 
-	this.kill = function () {
-		let keys = Object.keys(this).filter(key => {
-			return key.includes("event:");
-		});
-		for (let i = 0; i < keys.length; i++)
-			this[keys[i]].kill();
+	this.kill = function TerminateEvents() {
+		keys(this).filter(a => a.includes('event:')).map(a => this[a].kill());
 	};
 
-	this.get_loaded = function () {
-		let keys = Object.keys(this);
-		let array = [];
-
-		keys = keys.filter(a => {
-			return a.includes("event:");
-		});
-
-		for (let i = 0; i < keys.length; i++)
-			array.push(this[keys[i]]);
-
-		return array;
+	this.getLoaded = function GetEventsHandler() {
+		return keys(this).filter(a => a.includes('event:')).map(a => this[a]);
 	};
 
-	this.load_platform_events = function (platform) {
-		return new Promise ((resolve, reject) => {
-			fs.readdir(`${__dirname}/${platform}`, function (err, files) {
-				if (err) return reject(err);
+	this.loadPlatformEvents = function LoadPlatformEventsHandler(platform) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const fileNames = await fs.readdir(`${__dirname}/${platform}`);
+				const modules = [];
 
-				let modules = [];
+				each(fileNames, (name) => {
+					/* eslint-disable global-require */
+					/* eslint-disable import/no-dynamic-require */
+					const Module = require(`${__dirname}/${platform}/${name}`)(bot, platform);
 
-				for (let i = 0; i < files.length; i++) {
-					let module = require(`${__dirname}/${platform}/${files[i]}`);
-						module = new module(bot, files[i], platform);
-
-						modules.push(module);
-				}
+					modules.push(Module);
+				});
 
 				return resolve(modules);
-			});
+			} catch (err) {
+				return reject(err);
+			}
 		});
 	};
 
-	this.processor = Promise.all(platforms.map(p => this.load_platform_events(p)));
+	this.processor = Promise.all(platforms.map(this.loadPlatformEvents));
 };

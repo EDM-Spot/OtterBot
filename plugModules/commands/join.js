@@ -1,49 +1,44 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("join", filename, ["joinroulette", "roulettejoin", "enter", "jjoin"], 0, true, {type: "per_user", duration: 10}, function (raw_data, command) {
-		let dj = bot.plug.dj();
-		let waitlist = bot.plug.waitlist();
+const { isObject } = require('lodash');
 
-		if (!bot.utils.roulette.check())
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				messagE: bot.lang.commands.join.noroulette
-			})).delay(1e4).call("delete");
-		else if (dj && dj.id === raw_data.uid)
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				messagE: bot.lang.commands.join.isthedj
-			})).delay(1e4).call("delete");
-		else if (waitlist.contains(raw_data.uid) && waitlist.positionOf(raw_data.uid) <= 4)
-			return bot.plug.chat(bot.utils.replace(bot.lang.commands.default, {
-				command: command.name,
-				user: raw_data.un,
-				messagE: bot.lang.commands.join.closetodj
-			})).delay(1e4).call("delete");
-		else if (bot.utils.roulette.players.includes(raw_data.uid)) return;
-		else {
-			return bot.db.models.users.findOrCreate({
-				where: {
-					id: raw_data.uid
-				},
-				defaults: {
-					id: raw_data.uid
-				}
-			}).then((instances, created) => {
-				if (!instances.length) return;
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['join', 'joinn', 'jjoin', 'joinroulette', 'roulettejoin', 'enter'],
+		minimumPermission: 0,
+		cooldownType: 'perUser',
+		cooldownDuration: 60,
+		deleteInstantly: true,
+		parameters: '',
+		description: 'Joins the roulette, if there is one active. This may also charge the user in props if the roulette had a set price.',
+		async execute(rawData, command, lang) {
+			const dj = bot.plug.getDJ();
 
-				let instance = instances.shift();
+			if (!await bot.roulette.check()) {
+				this.reply(lang.join.noRoulette, {}, 6e4);
+				return true;
+			} else if (isObject(dj) && dj.id === rawData.raw.uid) {
+				this.reply(lang.join.isPlaying, {}, 6e4);
+				return true;
+			} else if (bot.plug.getWaitListPosition(rawData.raw.uid) <= 4) {
+				this.reply(lang.join.closeToPlaying, {}, 6e4);
+				return true;
+			}
 
-				let props = instance.toJSON().props;
+			const { uid: id } = rawData.raw;
 
-				if (props < bot.utils.roulette.price)
-					return raw_data.reply(bot.lang.commands.join.noprops).delay(1e4).call("delete");
-				else return instance.decrement("props", {by: bot.utils.roulette.price}).then(() => bot.utils.roulette.add(raw_data.uid)).catch(console.error);
-			}).catch(console.error);
-		}
-	}, {
-		parameters: "",
-		description: "Joins the roulette, if there is one active. This may also charge the user in props if the roulette had a set price."
+			if (bot.roulette.players.includes(rawData.raw.uid)) return true;
+
+			const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
+
+			const props = inst.get('props');
+
+			if (props < bot.roulette.price) {
+				this.reply(lang.join.noProps, {}, 6e4);
+				return true;
+			}
+
+			await inst.decrement('props', { by: bot.roulette.price });
+			bot.roulette.add(rawData.raw.uid);
+			return true;
+		},
 	});
 };

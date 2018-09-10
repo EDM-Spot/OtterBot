@@ -1,10 +1,22 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("hello", filename, [], 1000, true, {type: "per_use", duration: 60}, function (raw_data, command) {
-		return !Math.floor(Math.random() * 50) ? raw_data.reply("hello...").delay(4500).then(() => {
-			return bot.plug.chat("... it's me...");
-		}) : bot.plug.chat(`Hi There, @${raw_data.un}`);
-	}, {
-		parameters: "",
-		description: "Hello..."
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['hello'],
+		minimumPermission: 1000,
+		cooldownType: 'perUse',
+		cooldownDuration: 60,
+		parameters: '',
+		description: 'Hello...',
+		async execute(rawData) {
+			const lucky = !Math.floor(Math.random() * 50);
+
+			if (lucky) {
+				await this.reply('hello...').delay(4500);
+				await bot.plug.sendChat('... it\'s me...');
+				return true;
+			}
+
+			await bot.plug.sendChat(`Hi There, @${rawData.raw.un}`);
+			return true;
+		},
 	});
 };

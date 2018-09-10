@@ -1,114 +1,119 @@
-module.exports = function (bot) {
-	const util = {
-		name: "roulette",
-		function: function () {
+const { each } = require('lodash');
+
+module.exports = function Util(bot) {
+	class RouletteUtil {
+		constructor() {
 			this.running = false;
 			this.price = undefined;
+			this.duration = undefined;
+			this.players = [];
+		}
+		async start(duration, price) {
+			this.running = true;
+			this.duration = duration;
+			this.price = price;
+
+			await bot.redis.placeCommandOnCooldown('plug', 'roulette@start', 'perUse', 1, 3600);
+
+			this.timeout = setTimeout(async () => {
+				await this.sort();
+			}, duration * 1e3);
+		}
+		end() {
+			this.running = false;
+			this.price = undefined;
+			this.duration = undefined;
 			this.players = [];
 
-			// prototypes
-			this.start = function (id, duration, price) {
-				return new Promise ((resolve, reject) => {
-					this.running = true;
-					this.duration = duration;
-					this.price = price;
+			clearTimeout(this.timeout);
 
-					return bot.db.models.cooldowns.create({
-						id: id,
-						command: "roulette@start",
-						length: 36e5,
-						type: "per_use"
-					}).then(() => {
-						this.timeout = setTimeout(() => this.sort(), duration * 1e3);
-
-						return resolve();
-					}).catch(reject);
-				});
-			};
-
-			this.end = function () {
-				this.running = false;
-				this.price = undefined;
-				this.players = [];
-
-				clearTimeout(this.timeout);
-
-				return true;
-			};
-
-			this.check = function (cooldown) {
-				return cooldown ? bot.db.models.cooldowns.findOne({
-					where: {
-						command: "roulette@start"
-					}
-				}) : this.running;
-			};
-
-			this.add = function (id) {
-				if (!this.players.includes(id)) return this.players.push(id);
-			};
-
-			this.multiplier = function (players, isIn) {
-				// multipler for users outside the waitlist
-				let outside = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
-				// multipler for users inside the waitlist
-				let inside = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3];
-
-				return isIn ? (inside[players] || 2) : (outside[players] || 3);
-			};
-
-			this.position = function (current, length) {
-				// the highest position you can go to is 5
-				// users outside the list have a chance to get at least pos 35
-				return current !== -1 ? Math.min(Math.floor(Math.random() * Math.min(Math.max(length, length - 10), 34)) + 4, length - 1) : Math.floor(Math.random() * Math.min(length, 34)) + 4;
-			};
-
-			this.winner = function (players) {
-				let winner = players[Math.floor(Math.random() * players.length)];
-				let user = bot.plug.user(winner);
-				let waitlist = bot.plug.waitlist();
-
-				if (!players.length && this.end())
-					return bot.plug.chat(bot.lang.roulette.somethingwrong);
-
-				let position = this.position(waitlist.positionOf(winner), waitlist.length);
-				if (!user || typeof user.username !== "string" || !user.username.length)
-					return this.winner(players.filter(player => player !== winner));
-				else {
-					return bot.plug.chat(bot.utils.replace(bot.lang.roulette.winner, {
-						winner: user.username,
-						position: position + 1
-					})).then(message => {
-						this.end();
-						return bot.utils.queue.add({user, position});
-					}).catch(console.error);
-				}
-			};
-
-			this.sort = function () {
-				if (!this.players.length && this.end())
-					return bot.plug.chat(bot.lang.roulette.noplayers);
-
-				this.running = false;
-
-				let altered_odds = [];
-				let waitlist = bot.plug.waitlist();
-
-				for (let i = 0; i < this.players.length; i++) {
-					if (!bot.plug.user(this.players[i])) continue;
-					if (waitlist.positionOf(this.players[i]) === -1)
-						altered_odds.push(...Array(this.multiplier(this.players.length, false)).fill(this.players[i]));
-					else
-						altered_odds.push(...Array(this.multiplier(this.players.length, true)).fill(this.players[i]));
-				}
-
-				return this.winner(altered_odds);
-			};
-
+			return true;
 		}
-	};
+		async check(cooldown) {
+			if (cooldown) {
+				return bot.redis.getCommandOnCoolDown('plug', 'roulette@start', 'perUse');
+			}
 
-	util.function = new util.function();
+			return this.running;
+		}
+		add(id) {
+			if (!this.players.includes(id)) {
+				this.players.push(id);
+				return true;
+			}
 
-	bot.utils.register(util);
+			return false;
+		}
+		static position(currentPosition, waitlistLength) {
+			// the highest position you can go to is 5
+			// users outside the list have a chance to get at least pos 35
+			return currentPosition !== -1 ?
+				Math.floor(Math.random() * (currentPosition - 5)) + 4 :
+				Math.floor(Math.random() * Math.min(waitlistLength, 34)) + 4;
+		}
+		async multiplier(players, isIn) {
+			// multipler for users outside the waitlist
+			const outside = [
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+				3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+			];
+			// multipler for users inside the waitlist
+			const inside = [
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+				3, 3, 3, 3, 3,
+			];
+
+			return isIn ? (inside[players] || 2) : (outside[players] || 3);
+		}
+		async winner(players) {
+			const winner = players[Math.floor(Math.random() * players.length)];
+			const user = bot.plug.getUser(winner);
+			const waitlist = bot.plug.getWaitList();
+
+			if (!players.length && this.end()) {
+				await bot.plug.sendChat(bot.lang.roulette.somethingwrong);
+				return;
+			}
+
+			const position = this.constructor.position(bot.plug.getWaitListPosition(winner), waitlist.length);
+
+			if (!user || typeof user.username !== 'string' || !user.username.length) {
+				this.winner(players.filter(player => player !== winner));
+				return;
+			}
+
+			await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.winner, {
+				winner: user.username,
+				position: position + 1,
+			}));
+			this.end();
+			user.moveInWaitList(position + 1);
+		}
+		async sort() {
+			if (!this.players.length && this.end()) {
+				return bot.plug.sendChat(bot.lang.roulette.noplayers);
+			}
+
+			this.running = false;
+
+			const alteredOdds = [];
+			const waitlist = bot.plug.getWaitList();
+
+			each(this.players, (player) => {
+				if (bot.plug.getUser(player)) {
+					if (bot.plug.getWaitListPosition(player) === -1) {
+						alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
+					} else {
+						alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
+					}
+				}
+			});
+
+			return this.winner(alteredOdds);
+		}
+	}
+
+	bot.roulette = new RouletteUtil();
 };

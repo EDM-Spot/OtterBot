@@ -1,24 +1,39 @@
-module.exports = function (bot, filename) {
-	bot.commands.register("props", filename, [], 0, true, {type: "per_user", duration: 60}, function (raw_data, command) {
-		let current_media = bot.plug.historyEntry();
+const { isObject } = require('lodash');
 
-		if (!current_media)
-			return raw_data.reply(bot.lang.commands.props.nodj).delay(1e4).call("delete");
-		else if (current_media.dj && current_media.dj.id === raw_data.uid)
-			return raw_data.reply(bot.lang.commands.props.propself).delay(1e4).call("delete");
-		else return bot.db.models.props.findOrCreate({
-			where: {
-				identifier: `historyID-${current_media.id}:dj-${current_media.dj.id}:user-${raw_data.uid}`
-			},
-			defaults: {
-				id: raw_data.uid,
-				dj: current_media.dj.id,
-				historyID: current_media.id,
-				identifier: `historyID-${current_media.id}:dj-${current_media.dj.id}:user-${raw_data.uid}`
+function generateIdentifier(currentMedia, dj, rawData) {
+	return `historyID-${currentMedia.id}:dj-${dj.id}:user-${rawData.raw.uid}`;
+}
+
+module.exports = function Command(bot) {
+	bot.plugCommands.register({
+		names: ['props'],
+		minimumPermission: 0,
+		cooldownType: 'perUser',
+		cooldownDuration: 60,
+		parameters: '',
+		description: 'Gives props to the current DJ.',
+		async execute(rawData, command, lang) {
+			const currentMedia = bot.plug.getMedia();
+			const dj = bot.plug.getDJ();
+
+			if (!isObject(currentMedia)) {
+				this.reply(lang.props.nothingPlaying, {}, 6e4);
+				return false;
+			} else if (isObject(dj) && dj.id === rawData.raw.uid) {
+				this.reply(lang.props.propSelf, {}, 6e4);
+				return true;
 			}
-		}).catch(console.error);
-	}, {
-		parameters: "",
-		description: "Gives props to the current DJ."
+      
+			await bot.db.models.props.findOrCreate({
+				where: { identifier: generateIdentifier(currentMedia, dj, rawData) },
+				defaults: {
+					id: rawData.raw.uid,
+					dj: dj.id,
+					historyID: `'${currentMedia.id}'`,
+					identifier: generateIdentifier(currentMedia, dj, rawData),
+				},
+			});
+			return true;
+		},
 	});
 };

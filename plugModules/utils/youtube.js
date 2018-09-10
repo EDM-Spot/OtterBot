@@ -1,46 +1,61 @@
-const got = require("got");
-const qs = require("qs");
+const { isObject, get, merge } = require('lodash');
+const request = require('request');
 
-module.exports = function (bot) {
-	
-	const youtube = {};
-
-	youtube.req = options => {
-		return new Promise ((resolve, reject) => {
-			let opts = {
-				method: ["GET", "POST", "PUT", "PATCH", "HEAD", "DELETE"].includes(options.method) ? options.method : "GET",
+module.exports = function Util(bot) {
+	class YouTube {
+		constructor(key) {
+			this.baseURL = 'https://www.googleapis.com/youtube/v3';
+			this.ytrestrictURL = 'http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=';
+			this.shortlinkRegex = /youtu\.be\//g;
+			this.linkRegex = /watch\?/g;
+			this.key = key;
+		}
+		req(method, endpoint, body = {}, opts = {}) {
+			const options = merge(opts, {
 				json: true,
-				body: options.body
-			};
+				query: {
+					key: this.key,
+				},
+			});
 
-			options.params.part = options.parts.join(",");
-			options.params.key = bot.config.youtube_key;
+			if (Array.isArray(get(options, 'query.part'))) {
+				options.query.part = options.query.part.join(',');
+			}
 
-			let querystring = qs.stringify(options.params);
+			if (['POST', 'PUT'].includes(method.toUpperCase()) && isObject(body)) {
+				options.body = body;
+			}
 
-			got(`https://www.googleapis.com/youtube/v3${options.endpoint}?${querystring}`, opts).then(response => {
-				let body;
+			return request[method.toLowerCase()](this.baseURL + endpoint, options).then(res => res.body)
+				.catch((err) => {
+					console.error('[!] YouTube Util Error');
+					console.error(err);
+				});
+		}
+		getMediaID(link) {
+			if (this.shortlinkRegex.test(link)) {
+				return link.split(this.shortlinkRegex)[1].split('?')[0];
+			} else if (this.linkRegex.test(link)) {
+				return link.split('v=')[1].split('&')[0];
+			}
 
-				try {
-					body = typeof response.body === "object" ? response.body : JSON.parse(response.body);
-				} catch (e) {
-					return reject(e);
+			return undefined;
+		}
+		getMedia(id) {
+			return this.req('GET', '/videos', null, {
+				query: {
+					part: ['snippet', 'contentDetails', 'statistics', 'status'],
+					id,
+				},
+			}).then((res) => {
+				if (isObject(get(res, 'items[0]'))) {
+					return get(res, 'items[0]', {});
 				}
 
-				return resolve(body);
-			}).catch(reject);
-		});
-	};
+				throw Error(`[!] Unexpected YouTube Response\n${JSON.stringify(res, null, 4)}`);
+			});
+		}
+	}
 
-	youtube.getMedia = id => {
-		return new Promise ((resolve, reject) => {
-			return youtube.req({endpoint: `/videos`, parts: ["snippet", "contentDetails", "statistics", "status"], params: {id: id}}).then(response => {
-				if (typeof response !== "object" || !Array.isArray(response.items) || !response.items.length) return reject();
-				return resolve(response.items.shift());
-			}).catch(reject);
-		});
-	};
-	youtube.getMediaID = link => link.includes("youtu.be/") ? link.split("youtu.be/")[1].split("?")[0] : link.includes("watch?") ? link.split("v=")[1].split("&")[0] : undefined;
-
-	bot.youtube = youtube;
+	bot.youtube = new YouTube(bot.config.youtube);
 };

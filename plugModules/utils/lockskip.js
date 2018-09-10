@@ -1,64 +1,94 @@
-module.exports = function (bot) {
+const { isObject } = require('lodash');
+
+module.exports = function Util(bot) {
 	const util = {
-		name: "lockskip",
-		function: user => {
-			return new Promise ((resolve, reject) => {
-				let should_cycle = bot.plug.booth().shouldCycle;
-				let wait_list = bot.plug.waitlist();
+		name: 'lockskip',
+		function: user => new Promise((resolve, reject) => {
+			const shouldCycle = false;
+			const waitList = bot.plug.getWaitList();
+			const historyEntry = bot.plug.getMedia();
+			const dj = bot.plug.getDJ();
 
-				let lock_skip = {
-					position: 2,
-					with_cycle: async () => {
-						await bot.plug.enableCycle();
-						await user.skip(bot.plug.historyEntry().id);
-						await user.move(lock_skip.position);
-						await bot.plug.disableCycle();
-						return resolve();
-					},
-					without_cycle: async () => {
-						await user.skip(bot.plug.historyEntry().id);
-						await user.move(lock_skip.position);
-						return resolve();
-					},
-					adding_dj: async () => {
-						await user.skip(bot.plug.historyEntry().id);
-						await user.add();
-						await user.move(lock_skip.position);
-						return resolve();
-					},
-					only_skip: async () => {
-						await user.skip(bot.plug.historyEntry().id);
-						return resolve();
-					},
-					skip_only_add: async () => {
-						await user.skip(bot.plug.historyEntry().id);
-						await user.add();
-						return resolve();
-					},
-					run: () => {
-						try {
-							if (!wait_list.length && should_cycle)
-								return lock_skip.only_skip();
-							else if (!should_cycle && (!wait_list.length || (wait_list.length - 1) <= lock_skip.position))
-								return lock_skip.skip_only_add();
-							else if (!should_cycle && (wait_list.length >= 4 && wait_list.length <= 45))
-								return lock_skip.adding_dj();
-							else if (should_cycle && (wait_list.length >= 4 && wait_list.length <= 45))
-								return lock_skip.without_cycle();
-							else if (!should_cycle)
-								return lock_skip.with_cycle();
-							else
-								return lock_skip.without_cycle();
-						} catch (err) {
-							console.error(err);
-							return reject(err);
+			const lockSkip = {
+				position: 3,
+				withCycle: async () => {
+          console.log("withCycle");
+					await bot.plug.changeDJCycle(true);
+					await bot.plug.moderateForceSkip(function () {
+            //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
+            bot.plug.moderateAddDJ(user.id, function () {
+                bot.plug.moderateMoveDJ(user.id, lockSkip.position);
+            });
+          });
+					//await user.moveInWaitList(lockSkip.position);
+					await bot.plug.changeDJCycle(false);
+					return resolve();
+				},
+				withoutCycle: async () => {
+          console.log("withoutCycle");
+					await bot.plug.moderateForceSkip(function () {
+            //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
+            bot.plug.moderateAddDJ(user.id, function () {
+                bot.plug.moderateMoveDJ(user.id, lockSkip.position);
+            });
+          });
+					//await user.moveInWaitList(lockSkip.position);
+					return resolve();
+				},
+				addingDJ: async () => {
+          console.log("addingDJ");
+					await bot.plug.moderateForceSkip(function () {
+            //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
+            bot.plug.moderateAddDJ(user.id, function () {
+                bot.plug.moderateMoveDJ(user.id, lockSkip.position);
+            });
+          });
+					//await user.addToWaitList();
+					//await user.moveInWaitList(lockSkip.position);
+					return resolve();
+				},
+				onlySkip: async () => {
+          console.log("onlySkip");
+					await bot.plug.moderateForceSkip();
+					return resolve();
+				},
+				skipOnlyAdd: async () => {
+          console.log("skipOnlyAdd");
+					await bot.plug.moderateForceSkip(function () {
+            bot.plug.moderateAddDJ(user.id);
+          });
+					//await user.addToWaitList();
+					return resolve();
+				},
+				run: function RunLockSkip() {
+					try {
+            console.log(!waitList.length);
+            console.log(this.position);
+						if (!isObject(dj) || !isObject(historyEntry)) {
+							return Promise.reject(new Error('[!] No DJ or Media playing.'));
+						} else if (!waitList.length && shouldCycle) {
+							return this.onlySkip();
+						} else if (!shouldCycle && waitList.length < this.position) {
+							return this.skipOnlyAdd();
+						} else if (!shouldCycle && (waitList.length >= 4 && waitList.length <= 45)) {
+							return this.addingDJ();
+						} else if (shouldCycle && (waitList.length >= 4 && waitList.length <= 45)) {
+							return this.withoutCycle();
+						} else if (!shouldCycle) {
+							return this.withCycle();
 						}
-					}
-				};
 
-				return lock_skip.run();
-			});
-		}
+						return this.withoutCycle();
+					} catch (err) {
+						console.error('[!] LockSkip Error');
+						console.error(err);
+						return reject(err);
+					}
+				},
+			};
+
+			return lockSkip.run();
+		}),
 	};
 
 	bot.utils.register(util);

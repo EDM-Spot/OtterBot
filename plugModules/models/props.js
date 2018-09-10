@@ -1,31 +1,33 @@
-module.exports = function (bot, sequelize, default_options) {
-	const Props = bot.db.define("props", {
+module.exports = async function Model(bot, sequelize) {
+	const Props = bot.db.define('props', {
 		index: {
 			type: sequelize.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
-			allowNull: false
+			allowNull: false,
 		},
 		id: {
 			type: sequelize.INTEGER,
-			allowNull: false
+			allowNull: false,
 		},
 		dj: {
 			type: sequelize.INTEGER,
-			allowNull: false
+			allowNull: false,
 		},
 		historyID: {
 			type: sequelize.STRING,
-			allowNull: false
+			allowNull: false,
 		},
 		identifier: {
 			type: sequelize.STRING,
 			allowNull: false,
-			unique: true
-		}
-	}, default_options);
+			unique: true,
+		},
+	});
 
-	Props.sync();
+	await Props.sync();
+
+	bot.db.models.props = Props;
 
 	return Props;
 };

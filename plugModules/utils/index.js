@@ -1,29 +1,34 @@
-const fs = require("fs-extra");
+const { each } = require('lodash');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs-extra'));
 
-module.exports = function (bot) {
-	this.register = function (util) {
+module.exports = function UtilsManager(bot) {
+	this.register = function RegisterUtil(util) {
 		this[util.name] = util.function;
 	};
 
-	this.load_utils = function () {
-		return new Promise ((resolve, reject) => {
-			return fs.readdir(__dirname, (err, files) => {
-				if (err) return reject(err);
-				files.splice(files.indexOf("index.js"), 1);
+	this.loadUtils = function LoadUtils() {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const fileNames = await fs.readdir(__dirname);
+				fileNames.splice(fileNames.indexOf('index.js'), 1);
 
-				let modules = [];
+				const modules = [];
 
-				for (let i = 0; i < files.length; i++) {
-					let module = require(`${__dirname}/${files[i]}`);
-					module = new module(bot, files[i]);
+				each(fileNames, (name) => {
+					/* eslint-disable global-require */
+					/* eslint-disable import/no-dynamic-require */
+					const Module = require(`${__dirname}/${name}`)(bot);
 
-					modules.push(module);
-				}
+					modules.push(Module);
+				});
 
 				return resolve(modules);
-			});
+			} catch (err) {
+				return reject(err);
+			}
 		});
 	};
 
-	this.processor = this.load_utils();
+	this.processor = this.loadUtils();
 };

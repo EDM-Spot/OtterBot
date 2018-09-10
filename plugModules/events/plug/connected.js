@@ -1,18 +1,36 @@
-module.exports = function (bot, filename, platform) {
+module.exports = function Event(bot, filename, platform) {
 	const event = {
-		name: "connected",
-		platform: platform,
+		name: 'connected',
+		platform,
 		_filename: filename,
 		run: async () => {
-			await bot.plug.join(bot.config.plug.room);
-			return bot.plug.chat(bot.lang.startup);
+      await bot.plug.sendChat(bot.lang.startup);
+
+			const user = bot.plug.getUsers();
+      for(var i = 0; i < user.lenght; i++){
+        const userDB = await bot.db.models.users.findOrCreate({
+            where: { id: user[i].id }, defaults: { id: user[i].id, username: user[i].username },
+        });
+        
+        await bot.db.models.users.update(
+          { username: user[i].username },
+          { where: { id: user[i].id }, defaults: { id: user[i].id },
+        });
+      }
+      
+      console.info('[!] Plug Connected!');
+      
+			(function repeat() {
+        bot.plug.sendChat('Join our Discord https://discord.gg/GETaTWm');
+        setTimeout(repeat, 3600000);
+      })();
 		},
-		init: function () {
+		init() {
 			bot.plug.on(this.name, this.run);
 		},
-		kill: function () {
+		kill() {
 			bot.plug.removeListener(this.name, this.run);
-		}
+		},
 	};
 
 	bot.events.register(event);
