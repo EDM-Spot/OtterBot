@@ -4,12 +4,12 @@ const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["ban", "permaban"],
+    names: ["mute"],
     minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,
-    parameters: "<@username> [hour|h|d|day|p|perma] reason",
-    description: "Permanently bans the specified user from the community.",
+    parameters: "<@username> [15|s|short|30|m|medium|45|l|long] reason",
+    description: "Mutes the specified user for the specified duration, or defaults to 15 minutes.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.mentions.length || rawData.mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
@@ -35,20 +35,23 @@ module.exports = function Command(bot) {
       let reason;
 
       switch (durationArgs) {
-        case "hour":
-        case "h":
-          apiDuration = bot.plug.BAN.HOUR;
+        case "15":
+        case "s":
+        case "short":
+          apiDuration = bot.plug.MUTE.SHORT;
           break;
-        case "day":
-        case "d":
-          apiDuration = bot.plug.BAN.DAY;
+        case "30":
+        case "m":
+        case "medium":
+          apiDuration = bot.plug.MUTE.MEDIUM;
           break;
-        case "perma":
-        case "p":
-          apiDuration = bot.plug.BAN.PERMA;
+        case "45":
+        case "l":
+        case "long":
+          apiDuration = bot.plug.MUTE.LONG;
           break;
         default:
-          apiDuration = bot.plug.BAN.HOUR;
+          apiDuration = bot.plug.MUTE.SHORT;
           timeSelected = false;
           break;
       }
@@ -77,15 +80,31 @@ module.exports = function Command(bot) {
         .setTimestamp()
         //.addField("This is a field title, it can hold 256 characters")
         .addField("ID", user.id, true)
-        .addField("Type", "Ban", true)
-        .addField("Time", "Permanent", true)
+        .addField("Type", "Mute", true)
+        .addField("Time", apiDuration, true)
         .addField("Reason", reason, false);
       //.addBlankField(true);
 
       bot.channels.get("485173444330258454").send({embed});
       bot.channels.get("486637288923725824").send({embed});
       
-      await bot.plug.moderateBanUser(user.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, apiDuration);
+      if (user.role < ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR) {
+        const { role } = user;
+        
+        await bot.moderateSetRole(user.id, ROOM_ROLE.NONE);
+        await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, apiDuration);
+        await bot.moderateSetRole(user.id, role);
+        
+        this.reply(lang.moderation.effective, {
+          mod: rawData.raw.un,
+          command: `!${name}`,
+          user: user.username,
+        });
+        
+        return true;
+      }
+
+      await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, apiDuration);
       this.reply(lang.moderation.effective, {
         mod: rawData.raw.un,
         command: `!${name}`,
