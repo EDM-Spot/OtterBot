@@ -15,7 +15,7 @@ module.exports = function Event(bot, filename, platform) {
       if (!isObject(data) || !isObject(data.media)) return;
 
       const dj = bot.plug.getDJ();
-      
+
       clearTimeout(bot.autoSkipTimeout);
 
       let songAuthor = null;
@@ -69,6 +69,7 @@ module.exports = function Event(bot, filename, platform) {
 
         // reset any DC spots when they start DJing
         await bot.redis.removeDisconnection(lastPlay.dj.id);
+        await bot.redis.removeGivePosition(lastPlay.dj.id);
 
         // keep track of played media in the room
         await bot.db.models.plays.create({

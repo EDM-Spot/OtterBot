@@ -4,6 +4,7 @@ module.exports = function Event(bot, platform) {
     platform,
     run: async (user) => {
       bot.queue.remove(user);
+      await bot.redis.removeGivePosition(user.id);
     },
     init() {
       bot.plug.on(this.name, this.run);

@@ -21,6 +21,10 @@ module.exports = function Util(bot) {
       // ex: disconnection:3703511
       return `disconnection:${userID}`;
     }
+    static generateGivePositionKey(toUserID) {
+      // ex: givePosition:3703511
+      return `givePosition:${toUserID}`;
+    }
     getCommandCooldown(...args) {
       return this.Redis.get(this.constructor.generateCommandCooldownKey(...args));
     }
@@ -50,6 +54,23 @@ module.exports = function Util(bot) {
       const keys = await this.Redis.hkeys("disconnection");
 
       return Promise.all(keys.map(key => this.removeDisconnection(key)));
+    }
+    findGivePosition(toUserID) {
+      return this.Redis.get(this.constructor.generateGivePositionKey(toUserID));
+    }
+    async registerGivePosition(toUserID, userID, position) {
+      // 120s = 2 minutes
+      await this.Redis.hset("givePosition", toUserID, userID, position);
+      return this.Redis.set(this.constructor.generateGivePositionKey(toUserID), userID, position, "EX", 120);
+    }
+    async removeGivePosition(toUserID) {
+      await this.Redis.hdel("givePosition", toUserID);
+      return this.Redis.del(this.constructor.generateGivePositionKey(toUserID));
+    }
+    async removeAllGivePosition() {
+      const keys = await this.Redis.hkeys("givePosition");
+
+      return Promise.all(keys.map(key => this.removeGivePosition(key)));
     }
   }
 
