@@ -147,6 +147,12 @@
       "cleared": "The queue was cleared.",
       "current": "Current queue: %%USERS%%",
       "empty": " The queue is empty."
+    },
+    "give": {
+      "notInList": "Both need to be in the waitlist.",
+      "behindPosition": "You are behind in the waitlist.",
+      "cantGiveAgain": " You can't give more than one time.",
+      "isGiving": "@%%TOUSER%% this user wants to give you his position %%POSITION%% in the waitlist. Type !accept to swap positions."
     }
   },
   "roulette": {
