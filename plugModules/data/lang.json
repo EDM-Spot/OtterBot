@@ -1,0 +1,168 @@
+{
+  "startup": "/em is now running!",
+  "discordStartup": "`Bot is now running!`",
+  "exceedstimeguard": "your media exceeds the defined maximum length (6m30)!",
+  "advanceprops": "%%USER%% got %%PROPS%% prop%%PLURAL%% for the song they just played.",
+  "pointsMilestone": "%%USER%% has reached 30,000 NB3 XP and for that, they were rewarded the Resident DJ role.",
+  "mehSkip": "your media received too many Mehs.",
+  "mehRule": "The current song needs %%MEHS%% Mehs to be skipped or %%HSMEHS%% if it's Hardstyle/Hardcore!",
+  "stuckSkip": "Song stuck, force skipping...",
+  "historySkip": "Song played %%TIME%%, skipping...",
+  "maybeHistorySkip": "@staff https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Song in history?",
+  "blocked": "The song is blocked in too many countries. See: http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=%%LINK%%",
+  "points": {
+    "milestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",
+    "alreadyStaff": "%%USER%% already has a staff role higher than Resident DJ but congratz on them for reaching 30,000 XP!"
+  },
+  "commands": {
+    "default": "[!%%COMMAND%%] [%%USER%%] %%MESSAGE%%",
+    "kill": "Shutting down.. :(",
+    "rules": "You can read the Rules here: https://git.io/vhVNE %%MENTION%%",
+    "rdj": "Read about the Resident DJ role here: https://git.io/fNzo0 %%MENTION%%",
+    "waitlist": "How to queue a song: https://i.imgur.com/SdazrBO.png %%MENTION%%",
+    "shush": "https://i.imgur.com/05NVq0h.png %%MENTION%%",
+    "clear": "To help reduce lag, you can clear your chat with /clear, and reduce the avatars displayed with /cap 1. %%MENTION%%",
+    "catfact": "%%CATFACT%%",
+    "catfactfail": "sorry.. I couldn't get you a cat fact..",
+    "rcs": "Want custom emotes and more customizability for plug.dj? Get the RCS Extension/Script! https://rcs.radiant.dj %%MENTION%%",
+    "app": "plug.dj has Official apps for both iOS and Android! Check out their Blog post: https://blog.plug.dj/2017/03/mobile-app-release/ %%MENTION%%",
+    "nb3xp": "you have %%POINTS%% XP!",
+    "cantUnlock": "There are users waiting to be added so I cannot unlock the wait list right now.",
+    "userNotFound": "The specified user was not found.",
+    "invalidUser": "You specified an invalid user.",
+    "commands": "Command List: Nowhere :sodas: %%MENTION%%",
+    "noPromo": "",
+    "propsInfo": "You give !props to the DJs song if you really love it! Then you can cash in your prop(s) and join the !roulette. If you join the roulette, then you have a chance of winning and getting a random place in queue.",
+    "ping": {
+      "ping": "Pong!",
+      "pong": "Ping?",
+      "marco": "Polo!"
+    },
+    "song": {
+      "nothingPlaying": "There is no media playing right now!",
+      "link": "The link to the current media is: %%LINK%%"
+    },
+    "props": {
+      "nothingPlaying": "There is no song playing to prop!",
+      "propSelf": "We know you love your song, but let others also prop you!"
+    },
+    "myprops": {
+      "result": "You're currently ranked at position %%RANK%% with %%PROPS%% prop(s).",
+      "given": "You have given away %%PROPS%% prop%%PLURAL%%!",
+      "noneGiven": "You have not given props to anyone yet! Use !props to do so.",
+      "noProps": "You don't have any props! Play a song to get some."
+    },
+    "roulette": {
+      "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",
+      "invalidParam": "You specified an invalid parameter! You can use: check, start, end, reset",
+      "started": "A roulette is running right now, silly!",
+      "notRunning": "I'm not running a roulette right now.",
+      "stopped": "Hold your typing! The roulette was interrupted.",
+      "starting": "@djs Roulette is starting! Use !join to play!",
+      "invalidPrice": "The price specified is invalid.",
+      "invalidDuration": "The duration specified is invalid.",
+      "info": "The roulette ends in %%DURATION%% seconds, and the price to enter is %%PRICE%%!",
+      "free": "FREE",
+      "error": "I don't know what happened.. But I could not start a roulette.",
+      "reset": "The cooldown for the roulette has been reset!",
+      "onCooldown": "Hold on! The last roulette was %%ELAPSED%% minute(s) ago, you must wait %%REMAINING%% minute(s) to start another roulette.",
+      "outOfCooldown": "It's been over an hour since the last roulette! Go ahead and start one."
+    },
+    "join": {
+      "noRoulette": "No roulette running right now.",
+      "noProps": "You don't have enough props to join! Play a song to get some.",
+      "isPlaying": "You can't play the roulette while DJing!",
+      "closeToPlaying": "You're too close to DJing, joining would be unfair!"
+    },
+    "dc": {
+      "noRecentDisconnection": "You haven't disconnected recently.",
+      "isPlaying": "You cannot use !dc while you're DJing.",
+      "waitlistSmaller": "The Wait List is smaller than when you disconnected, so you will only be added.",
+      "sameOrLower": "Your saved disconnection is the at the same, or a lower position than you're currently on.",
+      "placeBack": "You have disconnected at position %%POSITION%%. You will be added %%WHEN%%.",
+      "whenPossible": "when a spot frees up on the wait list",
+      "now": "now"
+    },
+    "eta": {
+      "isPlaying": "You're the current DJ!",
+      "notInWaitList": "You're not in the list.",
+      "isNext": "You're the next to DJ!",
+      "result": "You'll be the DJ in %%ETA%%"
+    },
+    "moderation": {
+      "isPlaying": "the user specified is currently playing and cannot be added!",
+      "effective": "%%MOD%% used %%COMMAND%% on %%USER%%. It was super effective!",
+      "add": "%%MOD%% added %%USER%% to the Wait List.",
+      "onStaff": "If you're really looking to do that, your role should probably be reconsidered.",
+      "onSelf": "Why are you trying to %%COMMAND%% yourself?",
+      "needReason": "You need to specify a reason!"
+    },
+    "check": {
+      "notYouTube": "The currently playing media is not from YouTube.",
+      "noMedia": "There is no media currently playing.",
+      "invalidYoutubeLink": "Invalid YouTube link.",
+      "valid": "%%TITLE%% seems good to be played!",
+      "mediaUnavailable": "The %%WHICH%% media seems to be unavailable.",
+      "plausible": "Something seems wrong with that media, I'd avoid playing it.",
+      "unavailableOnUS": "That media seems to be unavailable on the US, avoid playing it while NB3 is streaming!",
+      "blockedTooMany": "The %%WHICH%% media is blocked in too many countries (%%COUNT%%).",
+      "blockedIn": "The %%WHICH%% media is blocked on: %%COUNTRIES%%",
+      "allowedOnlyIn": "The %%WHICH%% media is only allowed on: %%COUNTRIES%%",
+      "sendLink": "You can check it here https://polsy.org.uk/stuff/ytrestrict.cgi?ytid="
+    },
+    "cookie": [
+      "%%RECEIVER%%, %%SENDER%% has sent you a simple cookie.",
+      "%%RECEIVER%%, %%SENDER%% has given you a cookie with chocolate chips.",
+      "%%RECEIVER%%, %%SENDER%% gives you a sugar cookie.",
+      "%%RECEIVER%%, %%SENDER%% gave you a peanut butter cookie.",
+      "%%RECEIVER%%, %%SENDER%% hands you a heart shaped cookie",
+      "%%RECEIVER%%, %%SENDER%% throws you an oreo",
+      "%%RECEIVER%%, %%SENDER%% made you a vanilla cookie",
+      "%%RECEIVER%%, %%SENDER%% gifted you a strawberry cookie",
+      "%%RECEIVER%%, %%SENDER%% prepared you an apple flavoured cookie",
+      "%%RECEIVER%%, %%SENDER%% baked you a honey flavoured cookie"
+    ],
+    "plays": {
+      "current": "current",
+      "specified": "specified",
+      "nothingPlaying": "There is no media playing.",
+      "lastPlayWas": "The %%WHICH%% media was last played %%TIME%%",
+      "invalidLink": "The link specified is invalid.",
+      "neverPlayed": "The %%WHICH%% media was never played."
+    },
+    "move": {
+      "isPlaying": "the user specified is currently playing and cannot be added!",
+      "invalidPosition": "Invalid position.",
+      "willMove": "%%USER%% will be moved to %%POSITION%% %%WHEN%%.",
+      "whenPossible": "when a spot frees up on the wait list",
+      "now": "now"
+    },
+    "twitchlink": {
+      "info": "If you're a subscriber to Nightblue3, connect your plug.dj and Twitch.tv accounts to receive the Resident DJ role! https://plugdj.info/auth/twitch",
+      "invalidKey": "That key is invalid.",
+      "linked": "Your plug.dj and twitch.tv accounts have been linked.",
+      "linkedWithoutPromoting": "Your accounts have been linked, but since you already have a role, you will not be set to Resident DJ."
+    },
+    "queue": {
+      "cleared": "The queue was cleared.",
+      "current": "Current queue: %%USERS%%",
+      "empty": " The queue is empty."
+    }
+  },
+  "roulette": {
+    "noplayers": "No one joined the roulette, therefore no winner was picked.",
+    "somethingwrong": "Something went wrong while picking a roulette winner.",
+    "winner": "@%%WINNER%% won the roulette!!! They will be moved to %%POSITION%%."
+  },
+  "queue": {
+    "roomMismatch": "%%USER%% could not be added to the wait list since they're apparently in another room..",
+    "noValidPlaylist": "You can't be added to the waitlist without an active playlist with at least one song in it.",
+    "waitlistBan": "you're waitlist banned so you cannot win a roulette position. Cooldown was reset."
+  },
+  "misc": {
+    "loaded_lowercase": "loaded",
+    "unloaded_lowercase": "unloaded",
+    "verb_is_singular": "is",
+    "verb_is_plural": "are"
+  }
+}

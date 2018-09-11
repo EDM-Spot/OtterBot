@@ -5,21 +5,15 @@ module.exports = function Event(bot, filename, platform) {
     _filename: filename,
     run: async () => {
       const dj = bot.plug.getDJ();
-      const score = {
-        mehCount: bot.plug.getRoomScore().negative,
-        usersCount: bot.plug.getUsers().length,
-      };
 
-      switch (true) {
-        case ((score.usersCount >= 0 && score.usersCount <= 150) && score.mehCount >= 5):
-        case ((score.usersCount >= 151 && score.usersCount <= 250) && score.mehCount >= 10):
-        case ((score.usersCount >= 251 && score.usersCount <= 500) && score.mehCount >= 15):
-        case (score.usersCount >= 501 && score.mehCount >= 20):
-          await bot.plug.sendChat(`@${dj.username} ` + bot.lang.mehSkip);
-          await bot.plug.moderateForceSkip();
-          break;
-        default:
-          break;
+      const mehCount = bot.plug.getRoomScore().negative;
+      const usersCount = bot.plug.getUsers().length;
+
+      const mehRule = Math.round((usersCount/100)*8);
+
+      if (mehCount >= mehRule) {
+        await bot.plug.sendChat(`@${dj.username} ` + bot.lang.mehSkip);
+        await bot.plug.moderateForceSkip();
       }
     },
     init() {
