@@ -1,6 +1,4 @@
 const { isObject, isNil } = require("lodash");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
-const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -22,7 +20,7 @@ module.exports = function Command(bot) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
       } else if (user.id === rawData.raw.uid) {
-        this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
+        this.reply(lang.give.onSelf, {}, 6e4);
         return false;
       }
 
@@ -40,12 +38,14 @@ module.exports = function Command(bot) {
       }
 
       const userGiving = await bot.redis.findGivePosition(rawData.raw.id);
-      const userHaveGives = await bot.redis.findGivePosition(user.id);
+      const userHaveGives = await bot.redis.findGivePositionTo(user.id);
 
-      if (isNil(latestDisconnection) || position < latestDisconnection) {
-        await bot.redis.registerGivePosition(rawData.raw.id, user.id, userPosition);
+      if (!isNil(userGiving) || !isNil(userHaveGives)) {
+        this.reply(lang.give.canGiveAgain, {}, 6e4);
+        return false;
       }
 
+      await bot.redis.registerGivePosition(rawData.raw.id, user.id, userPosition);
       this.reply(lang.give.isGiving, {
         user: rawData.raw.un,
         toUser: user.username,
