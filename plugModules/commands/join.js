@@ -2,7 +2,7 @@ const { isObject } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["join", "joinn", "jjoin", "joinroulette", "roulettejoin", "enter"],
+    names: ["join", "enter"],
     minimumPermission: 0,
     cooldownType: "perUser",
     cooldownDuration: 60,

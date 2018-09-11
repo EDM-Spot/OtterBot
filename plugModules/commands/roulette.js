@@ -3,7 +3,7 @@ const { ROOM_ROLE } = require("plugapi");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["roulette", "roulete", "roullete", "roullette"],
+    names: ["roulette"],
     minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,

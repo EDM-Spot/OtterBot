@@ -8,7 +8,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 3600,
     parameters: "",
     description: "Get a Random Catfact.",
-    async execute(rawData, command, lang) {
+    async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       request("https://catfact.ninja/fact", function(error, response, body) { // eslint-disable-line no-unused-vars
         const catFact = JSON.parse(response.body);
         console.log(response);
