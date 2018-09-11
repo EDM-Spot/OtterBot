@@ -12,7 +12,6 @@ module.exports = function Util(bot) {
       const lockSkip = {
         position: 3,
         withCycle: async () => {
-          console.log("withCycle");
           await bot.plug.changeDJCycle(true);
           await bot.plug.moderateForceSkip(function() {
             //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
@@ -25,7 +24,6 @@ module.exports = function Util(bot) {
           return resolve();
         },
         withoutCycle: async () => {
-          console.log("withoutCycle");
           await bot.plug.moderateForceSkip(function() {
             //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
             bot.plug.moderateAddDJ(user.id, function() {
@@ -36,7 +34,6 @@ module.exports = function Util(bot) {
           return resolve();
         },
         addingDJ: async () => {
-          console.log("addingDJ");
           await bot.plug.moderateForceSkip(function() {
             //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
             bot.plug.moderateAddDJ(user.id, function() {
@@ -48,12 +45,10 @@ module.exports = function Util(bot) {
           return resolve();
         },
         onlySkip: async () => {
-          console.log("onlySkip");
           await bot.plug.moderateForceSkip();
           return resolve();
         },
         skipOnlyAdd: async () => {
-          console.log("skipOnlyAdd");
           await bot.plug.moderateForceSkip(function() {
             bot.plug.moderateAddDJ(user.id);
           });
@@ -62,8 +57,6 @@ module.exports = function Util(bot) {
         },
         run: function RunLockSkip() {
           try {
-            console.log(!waitList.length);
-            console.log(this.position);
             if (!isObject(dj) || !isObject(historyEntry)) {
               return Promise.reject(new Error("[!] No DJ or Media playing."));
             } else if (!waitList.length && shouldCycle) {
