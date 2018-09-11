@@ -5,7 +5,6 @@
   "advanceprops": "%%USER%% got %%PROPS%% prop%%PLURAL%% for the song they just played.",
   "pointsMilestone": "%%USER%% has reached 30,000 NB3 XP and for that, they were rewarded the Resident DJ role.",
   "mehSkip": "your media received too many Mehs.",
-  "mehRule": "The current song needs %%MEHS%% Mehs to be skipped or %%HSMEHS%% if it's Hardstyle/Hardcore!",
   "stuckSkip": "Song stuck, force skipping...",
   "historySkip": "Song played %%TIME%%, skipping...",
   "maybeHistorySkip": "@staff https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Song in history?",
@@ -17,7 +16,7 @@
   "commands": {
     "default": "[!%%COMMAND%%] [%%USER%%] %%MESSAGE%%",
     "kill": "Shutting down.. :(",
-    "rules": "You can read the Rules here: https://git.io/vhVNE %%MENTION%%",
+    "rules": "You can read the Rules here: https://tinyurl.com/EDMspot %%MENTION%%",
     "rdj": "Read about the Resident DJ role here: https://git.io/fNzo0 %%MENTION%%",
     "waitlist": "How to queue a song: https://i.imgur.com/SdazrBO.png %%MENTION%%",
     "shush": "https://i.imgur.com/05NVq0h.png %%MENTION%%",
@@ -33,6 +32,7 @@
     "commands": "Command List: Nowhere :sodas: %%MENTION%%",
     "noPromo": "",
     "propsInfo": "You give !props to the DJs song if you really love it! Then you can cash in your prop(s) and join the !roulette. If you join the roulette, then you have a chance of winning and getting a random place in queue.",
+    "mehRule": "The current song needs %%MEHS%% Mehs to be skipped or %%HSMEHS%% if it's Hardstyle/Hardcore!",
     "ping": {
       "ping": "Pong!",
       "pong": "Ping?",
