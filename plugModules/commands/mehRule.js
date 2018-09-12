@@ -9,8 +9,8 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const usersCount = bot.plug.getUsers().length;
 
-      const mehRule = Math.round((usersCount/100)*8);
-      const hsMehRule = Math.round((usersCount/100)*5);
+      const mehRule = Math.round((usersCount/100)*6);
+      const hsMehRule = Math.round((usersCount/100)*4);
 
       this.reply(lang.mehRule, {
         mehs: mehRule,
