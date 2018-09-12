@@ -108,7 +108,7 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        console.log("isinlist");
+        //console.log("isinlist");
         try {
           //await next.user.moveInWaitList(next.position);
           //await next.user.moveInWaitList(next.position);

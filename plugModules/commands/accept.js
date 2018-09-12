@@ -34,6 +34,7 @@ module.exports = function Command(bot) {
       //console.log(`Moving ${rawData.raw.uid} to ${byPosition} and ${byID} to ${toPosition}`);
 
       bot.queue.add(byUser, toPosition);
+      await bot.wait(1000);
       bot.queue.add(toUser, byPosition);
 
       await bot.redis.removeGivePosition(byUser.id, rawData.raw.uid);
