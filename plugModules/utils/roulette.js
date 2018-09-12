@@ -89,7 +89,7 @@ module.exports = function Util(bot) {
         position: position + 1,
       }));
       this.end();
-      user.moveInWaitList(position + 1);
+      bot.queue.add(user, position);
     }
     async sort() {
       if (!this.players.length && this.end()) {

@@ -82,7 +82,6 @@ class PlugHelp extends Command {
         currentCategory = cat;
       }
       c.commands.forEach( d => {
-        console.log(d);
         output += `${d.Names} :: ${d.Description}\n`;
       });
     });
