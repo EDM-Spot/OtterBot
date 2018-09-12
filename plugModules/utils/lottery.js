@@ -57,6 +57,7 @@ module.exports = function Util(bot) {
       if (!players.length) {
         this.players = [];
         this.timer = undefined;
+        this.canJoinDate = undefined;
 
         return this.start();
       }
@@ -75,12 +76,17 @@ module.exports = function Util(bot) {
 
       bot.queue.add(user, position);
 
+      this.players = [];
+      this.timer = undefined;
+      this.canJoinDate = undefined;
+
       this.start();
     }
     async sort() {
       if (!this.players.length) {
         this.players = [];
         this.timer = undefined;
+        this.canJoinDate = undefined;
         
         return this.start();
       }

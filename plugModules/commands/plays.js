@@ -19,13 +19,13 @@ module.exports = function Command(bot) {
 
         const instance = await bot.db.models.plays.findOne({
           where: {
-            cid: `'${currentMedia.cid}'`,
+            cid: currentMedia.cid,
             format: currentMedia.format,
           },
           order: [["created_at", "DESC"]],
         });
 
-        if (isNil(instance)) {
+        if (!isObject(instance)) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.current }, 6e4);
           return true;
         }
@@ -49,7 +49,7 @@ module.exports = function Command(bot) {
           order: [["created_at", "DESC"]],
         });
 
-        if (isNil(instance)) {
+        if (!isObject(instance)) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
           return true;
         }
@@ -67,13 +67,13 @@ module.exports = function Command(bot) {
         if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
           const instance = await bot.db.models.plays.findOne({
             where: {
-              cid: `'${soundcloudMedia.id}'`,
+              cid: soundcloudMedia.id,
               format: 2,
             },
             order: [["created_at", "DESC"]],
           });
 
-          if (isNil(instance)) {
+          if (!isObject(instance)) {
             this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
             return true;
           }

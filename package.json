@@ -60,7 +60,7 @@
     "qs": "^6.5.2",
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
-    "sequelize": "^4.38.0"
+    "sequelize": "^4.38.1"
   },
   "devDependencies": {
     "eslint": "^5.5.0",

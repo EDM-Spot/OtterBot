@@ -9,7 +9,7 @@ module.exports = function Event(bot, filename, platform) {
       const mehCount = bot.plug.getRoomScore().negative;
       const usersCount = bot.plug.getUsers().length;
 
-      const mehRule = Math.round((usersCount/100)*8);
+      const mehRule = Math.round((usersCount/100)*6);
 
       if (mehCount >= mehRule) {
         await bot.plug.sendChat(`@${dj.username} ` + bot.lang.mehSkip);

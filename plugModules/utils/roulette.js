@@ -86,7 +86,7 @@ module.exports = function Util(bot) {
 
       await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.winner, {
         winner: user.username,
-        position: position + 1,
+        position: position,
       }));
       this.end();
       bot.queue.add(user, position);
