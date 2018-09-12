@@ -4,7 +4,7 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async () => {
-      await bot.plug.sendChat(bot.lang.startup);
+      //await bot.plug.sendChat(bot.lang.startup);
 
       const user = bot.plug.getUsers();
       for (var i = 0; i < user.lenght; i++) {
@@ -21,7 +21,7 @@ module.exports = function Event(bot, filename, platform) {
       console.info("[!] Plug Connected!");
       
       (function repeat() {
-        bot.plug.sendChat("Join our Discord https://discord.gg/GETaTWm");
+        //bot.plug.sendChat("Join our Discord https://discord.gg/GETaTWm");
         setTimeout(repeat, 3600000);
       })();
     },

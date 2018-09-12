@@ -61,14 +61,15 @@ module.exports = function Util(bot) {
     findGivePositionTo(toUserID) {
       return this.Redis.get(toUserID);
     }
-    async registerGivePosition(userID, toUserID, position) {
+    async registerGivePosition(userID, toUserID) {
       // 120s = 2 minutes
-      await this.Redis.hset("givePosition", userID, toUserID, position);
-      return this.Redis.set(this.constructor.generateGivePositionKey(userID), toUserID, position, "EX", 120);
+      await this.Redis.hmset("givePosition", userID, toUserID, toUserID, userID);
+      return this.Redis.mset(this.constructor.generateGivePositionKey(userID), toUserID, toUserID, userID, "EX", 120);
     }
-    async removeGivePosition(userID) {
+    async removeGivePosition(userID, toUserID) {
       await this.Redis.hdel("givePosition", userID);
-      return this.Redis.del(this.constructor.generateGivePositionKey(userID));
+      await this.Redis.hdel("givePosition", toUserID);
+      return this.Redis.del(this.constructor.generateGivePositionKey(userID), toUserID);
     }
     async removeAllGivePosition() {
       const keys = await this.Redis.hkeys("givePosition");

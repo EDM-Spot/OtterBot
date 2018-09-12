@@ -1,4 +1,4 @@
-const { isObject, isNil } = require("lodash");
+const { isNil } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -9,13 +9,34 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Accept if someone gives you the position in the waitlist.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const userHaveGives = await bot.redis.findGivePositionTo(rawData.raw.uid);
+      const byID = await bot.redis.findGivePositionTo(rawData.raw.uid);
 
-      if (!isObject(userHaveGives)) {
+      if (isNil(byID)) {
         return false;
       }
 
-      console.log(userHaveGives);
+      const byUser = bot.plug.getUser(parseInt(byID));
+      const toUser = bot.plug.getUser(rawData.raw.uid);
+
+      const byPosition = bot.plug.getWaitListPosition(byUser.id);
+      const toPosition = bot.plug.getWaitListPosition(rawData.raw.uid);
+
+      if (byPosition < 1 || toPosition < 1) {
+        this.reply(lang.give.notInList, {}, 6e4);
+        return false;
+      }
+
+      if (byPosition > toPosition) {
+        this.reply(lang.give.behindPosition, {}, 6e4);
+        return false;
+      }
+
+      //console.log(`Moving ${rawData.raw.uid} to ${byPosition} and ${byID} to ${toPosition}`);
+
+      bot.queue.add(byUser, toPosition);
+      bot.queue.add(toUser, byPosition);
+
+      await bot.redis.removeGivePosition(byUser.id, rawData.raw.uid);
 
       return true;
     },
