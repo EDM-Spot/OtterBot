@@ -62,9 +62,9 @@ module.exports = function Util(bot) {
       return this.Redis.get(toUserID);
     }
     async registerGivePosition(userID, toUserID) {
-      // 120s = 2 minutes
+      // 180s = 3 minutes
       await this.Redis.hmset("givePosition", userID, toUserID, toUserID, userID);
-      return this.Redis.mset(this.constructor.generateGivePositionKey(userID), toUserID, toUserID, userID, "EX", 120);
+      return this.Redis.mset(this.constructor.generateGivePositionKey(userID), toUserID, toUserID, userID, "EX", 180);
     }
     async removeGivePosition(userID, toUserID) {
       await this.Redis.hdel("givePosition", userID);
