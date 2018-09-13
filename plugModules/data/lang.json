@@ -10,7 +10,7 @@
   "historySkip": "Song played %%TIME%%, skipping...",
   "maybeHistorySkip": "@staff https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Song in history?",
   "blocked": "The song is blocked in too many countries. See: http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=%%LINK%%",
-  "lotteryWinner": "@%%WINNER%% won the lottery this time! They will be moved to %%POSITION%%.",
+  "lotteryWinner": "@%%WINNER%% won the lottery this time! Type !accept to be moved to position %%POSITION%%.",
   "points": {
     "milestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",
     "alreadyStaff": "%%USER%% already has a staff role higher than Resident DJ but congratz on them for reaching 30,000 XP!"

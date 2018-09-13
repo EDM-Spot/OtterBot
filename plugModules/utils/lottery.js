@@ -9,6 +9,7 @@ module.exports = function Util(bot) {
       this.players = [];
       this.timer = undefined;
       this.canJoinDate = undefined;
+      this.giveTimer = undefined;
     }
     async start() {
       const startRandom = moment().add(1, "hours");
@@ -24,7 +25,6 @@ module.exports = function Util(bot) {
         console.log("Lottery Event Will now Start: " + eventStart.format("LTS"));
         await this.sort();
       });
-
     }
     add(id) {
       if (!this.players.includes(id)) {
@@ -50,6 +50,15 @@ module.exports = function Util(bot) {
 
       return isIn ? (inside[players] || 2) : (outside[players] || 3);
     }
+    accepted() {
+      this.players = [];
+      this.timer = undefined;
+      this.canJoinDate = undefined;
+
+      clearTimeout(this.giveTimer);
+
+      return this.start();
+    }
     async winner(players) {
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.getUser(winner);
@@ -69,18 +78,27 @@ module.exports = function Util(bot) {
         return;
       }
 
+      await bot.redis.removeGivePosition(user.id, bot.plug.getSelf().id);
+
       await bot.plug.sendChat(bot.utils.replace(bot.lang.lotteryWinner, {
         winner: user.username,
         position: position,
       }));
 
-      bot.queue.add(user, position);
+      //bot.queue.add(user, position);
+      await bot.redis.registerGivePosition(bot.plug.getSelf().id, user.id, position);
 
-      this.players = [];
-      this.timer = undefined;
-      this.canJoinDate = undefined;
+      this.giveTimer = setTimeout(() => {
+        bot.redis.removeGivePosition(user.id, bot.plug.getSelf().id);
+        this.winner(players.filter(player => player !== winner));
+        return;
+      }, (120000);
+    
+      //this.players = [];
+      //this.timer = undefined;
+      //this.canJoinDate = undefined;
 
-      this.start();
+      //this.start();
     }
     async sort() {
       if (!this.players.length) {

@@ -21,6 +21,10 @@ module.exports = function Command(bot) {
       const byPosition = bot.plug.getWaitListPosition(byUser.id);
       const toPosition = bot.plug.getWaitListPosition(rawData.raw.uid);
 
+      if (byUser.id === bot.plug.getSelf().id) {
+        bot.lottery.accepted();
+      }
+
       if (byPosition < 1 || toPosition < 1) {
         this.reply(lang.give.notInList, {}, 6e4);
         return false;
@@ -33,7 +37,9 @@ module.exports = function Command(bot) {
 
       //console.log(`Moving ${rawData.raw.uid} to ${byPosition} and ${byID} to ${toPosition}`);
 
-      bot.queue.add(byUser, toPosition);
+      if (byUser.id !== bot.plug.getSelf().id) {
+        bot.queue.add(byUser, toPosition);
+      }
       await bot.wait(1000);
       bot.queue.add(toUser, byPosition);
 
