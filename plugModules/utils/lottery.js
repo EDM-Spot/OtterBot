@@ -64,6 +64,7 @@ module.exports = function Util(bot) {
     }
     async winner(players) {
       if (this.acceptedBool) return;
+      if (bot.plug.getWaitList().length <= 10) return;
 
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.getUser(winner);

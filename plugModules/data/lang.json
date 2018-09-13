@@ -77,7 +77,7 @@
       "started": "A Russian roulette is running right now, silly!",
       "notRunning": "I'm not running a russian roulette right now.",
       "stopped": "Hold your typing! The russian roulette was interrupted.",
-      "starting": "A Russian Roulette is starting! Use !join to play! Join at your OWN RISK!",
+      "starting": "@djs A Russian Roulette is starting! Use !join to play! Join at your OWN RISK!",
       "invalidPrice": "The price specified is invalid.",
       "invalidDuration": "The duration specified is invalid.",
       "info": "The Russian Roulette ends in %%DURATION%% seconds, and the price to enter is %%PRICE%%!",
