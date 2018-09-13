@@ -92,7 +92,7 @@ module.exports = function Util(bot) {
         bot.redis.removeGivePosition(user.id, bot.plug.getSelf().id);
         this.winner(players.filter(player => player !== winner));
         return;
-      }, (120000);
+      }, (120000));
     
       //this.players = [];
       //this.timer = undefined;
