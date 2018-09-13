@@ -1,5 +1,3 @@
-const { each, sample } = require("lodash");
-
 module.exports = function Util(bot) {
   class RussianRouletteUtil {
     constructor() {
@@ -16,7 +14,7 @@ module.exports = function Util(bot) {
       await bot.redis.placeCommandOnCooldown("plug", "russianroulette@start", "perUse", 1, 3600);
 
       this.timeout = setTimeout(async () => {
-        await this.chooseVictim(this.players);
+        await this.sort();
       }, duration * 1e3);
     }
     end() {
@@ -70,11 +68,14 @@ module.exports = function Util(bot) {
       await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.shot, {
         user: user.username,
       }));
-      await bot.wait(3000);
+      await bot.wait(5000);
 
       if (bot.plug.getWaitListPosition(victim) === -1) {
+        await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
+          user: user.username,
+        }));
         await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
-        await bot.wait(1000);
+        await bot.wait(3000);
 
         this.chooseVictim(players.filter(player => player !== victim));
         return;
@@ -89,22 +90,28 @@ module.exports = function Util(bot) {
         await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
-        await bot.wait(2000);
+        await bot.wait(4000);
 
         bot.queue.add(user, luckyshot);
-        await bot.wait(1000);
       }
       else {
         await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
           user: user.username,
         }));
-        await bot.wait(2000);
+        await bot.wait(4000);
 
         bot.queue.add(user, unluckyshot);
-        await bot.wait(1000);
       }
-
+      
+      await bot.wait(2000);
       this.chooseVictim(players.filter(player => player !== victim));
+    }
+    async sort() {
+      this.running = false;
+
+      const alteredOdds = this.players;
+
+      return this.chooseVictim(alteredOdds);
     }
   }
 

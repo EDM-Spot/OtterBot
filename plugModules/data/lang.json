@@ -70,6 +70,22 @@
       "onCooldown": "Hold on! The last roulette was %%ELAPSED%% minute(s) ago, you must wait %%REMAINING%% minute(s) to start another roulette.",
       "outOfCooldown": "It's been over an hour since the last roulette! Go ahead and start one."
     },
+    "russianroulette": {
+      "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",
+      "invalidParam": "You specified an invalid parameter! You can use: check, start, end, reset",
+      "started": "A Russian roulette is running right now, silly!",
+      "notRunning": "I'm not running a russian roulette right now.",
+      "stopped": "Hold your typing! The russian roulette was interrupted.",
+      "starting": "A Russian Roulette is starting! Use !join to play! Join at your OWN RISK!",
+      "invalidPrice": "The price specified is invalid.",
+      "invalidDuration": "The duration specified is invalid.",
+      "info": "The Russian Roulette ends in %%DURATION%% seconds, and the price to enter is %%PRICE%%!",
+      "free": "FREE",
+      "error": "I don't know what happened.. But I could not start a russian roulette.",
+      "reset": "The cooldown for the russian roulette has been reset!",
+      "onCooldown": "Hold on! The last russian roulette was %%ELAPSED%% minute(s) ago, you must wait %%REMAINING%% minute(s) to start another russian roulette.",
+      "outOfCooldown": "It's been over an hour since the last russian roulette! Go ahead and start one."
+    },
     "join": {
       "noRoulette": "No roulette running right now.",
       "noProps": "You don't have enough props to join! Play a song to get some.",
@@ -167,6 +183,14 @@
     "noplayers": "No one joined the roulette, therefore no winner was picked.",
     "somethingwrong": "Something went wrong while picking a roulette winner.",
     "winner": "@%%WINNER%% won the roulette!!! They will be moved to %%POSITION%%."
+  },
+  "russianroulette": {
+    "noplayers": "No one joined the roulette, therefore no winner was picked.",
+    "countOver": "The russian roulette it's over.",
+    "chicken": "The user %%USER%% runned away! :chicken: Removing DC position!",
+    "shot": "@%%USER%% pulled the trigger...",
+    "luckyshot": "@%%USER%% survived! :feelsgoodman:",
+    "unluckyshot": ":mrdestructoid::bulletgun::tfw::quinsplat: BANG! @%%USER%%"
   },
   "queue": {
     "roomMismatch": "%%USER%% could not be added to the wait list since they're apparently in another room..",

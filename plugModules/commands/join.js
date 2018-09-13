@@ -12,7 +12,7 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) {
       const dj = bot.plug.getDJ();
 
-      if (!await bot.roulette.check()) {
+      if (!await bot.roulette.check() && !await bot.russianRoulette.check()) {
         this.reply(lang.join.noRoulette, {}, 6e4);
         return true;
       } else if (isObject(dj) && dj.id === rawData.raw.uid) {
@@ -25,20 +25,38 @@ module.exports = function Command(bot) {
 
       const { uid: id } = rawData.raw;
 
-      if (bot.roulette.players.includes(rawData.raw.uid)) return true;
+      if (bot.roulette.running) {
+        if (bot.roulette.players.includes(rawData.raw.uid)) return true;
 
-      const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
+        const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 
-      const props = inst.get("props");
+        const props = inst.get("props");
 
-      if (props < bot.roulette.price) {
-        this.reply(lang.join.noProps, {}, 6e4);
+        if (props < bot.roulette.price) {
+          this.reply(lang.join.noProps, {}, 6e4);
+          return true;
+        }
+
+        await inst.decrement("props", { by: bot.roulette.price });
+        bot.roulette.add(rawData.raw.uid);
         return true;
       }
+      else {
+        if (bot.russianRoulette.players.includes(rawData.raw.uid)) return true;
 
-      await inst.decrement("props", { by: bot.roulette.price });
-      bot.roulette.add(rawData.raw.uid);
-      return true;
+        const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
+
+        const props = inst.get("props");
+
+        if (props < bot.russianRoulette.price) {
+          this.reply(lang.join.noProps, {}, 6e4);
+          return true;
+        }
+
+        await inst.decrement("props", { by: bot.russianRoulette.price });
+        bot.russianRoulette.add(rawData.raw.uid);
+        return true;
+      }
     },
   });
 };
