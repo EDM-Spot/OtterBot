@@ -58,7 +58,7 @@ module.exports = function Util(bot) {
       this.canJoinDate = undefined;
       this.acceptedBool = true;
 
-      clearTimeout(this.giveTimer);
+      this.giveTimer.stop();
 
       return this.start();
     }
