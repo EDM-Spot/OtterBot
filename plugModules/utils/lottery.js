@@ -10,6 +10,7 @@ module.exports = function Util(bot) {
       this.timer = undefined;
       this.canJoinDate = undefined;
       this.giveTimer = undefined;
+      this.acceptedBool = false;
     }
     async start() {
       const startRandom = moment().add(1, "hours");
@@ -23,6 +24,7 @@ module.exports = function Util(bot) {
 
       this.timer = moment.duration(randomTimeDuration, "milliseconds").timer({loop: false, start: true}, async () => {
         console.log("Lottery Event Will now Start: " + eventStart.format("LTS"));
+        this.acceptedBool = false;
         await this.sort();
       });
     }
@@ -54,12 +56,15 @@ module.exports = function Util(bot) {
       this.players = [];
       this.timer = undefined;
       this.canJoinDate = undefined;
+      this.acceptedBool = true;
 
       clearTimeout(this.giveTimer);
 
       return this.start();
     }
     async winner(players) {
+      if (this.acceptedBool) return;
+
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.getUser(winner);
 
@@ -88,10 +93,10 @@ module.exports = function Util(bot) {
       //bot.queue.add(user, position);
       await bot.redis.registerGivePosition(bot.plug.getSelf().id, user.id, position);
 
-      this.giveTimer = setTimeout(() => {
+      this.giveTimer = moment.duration(2, "minutes").timer({loop: false, start: true}, async () => {
+        await bot.plug.sendChat(bot.lang.notAccepted);
         bot.redis.removeGivePosition(user.id, bot.plug.getSelf().id);
         this.winner(players.filter(player => player !== winner));
-        return;
       }, (120000));
     
       //this.players = [];

@@ -23,6 +23,9 @@ module.exports = function Command(bot) {
 
       if (byUser.id === bot.plug.getSelf().id) {
         bot.lottery.accepted();
+        bot.queue.add(toUser, 5);
+        await bot.redis.removeGivePosition(byUser.id, rawData.raw.uid);
+        return true;
       }
 
       if (byPosition < 1 || toPosition < 1) {
@@ -37,9 +40,7 @@ module.exports = function Command(bot) {
 
       //console.log(`Moving ${rawData.raw.uid} to ${byPosition} and ${byID} to ${toPosition}`);
 
-      if (byUser.id !== bot.plug.getSelf().id) {
-        bot.queue.add(byUser, toPosition);
-      }
+      bot.queue.add(byUser, toPosition);
       await bot.wait(1000);
       bot.queue.add(toUser, byPosition);
 

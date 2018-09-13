@@ -1,4 +1,4 @@
-const { isNil } = require("lodash");
+const { isObject } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, filename, platform) {
@@ -10,6 +10,9 @@ module.exports = function Event(bot, filename, platform) {
       await bot.db.models.messages.update({ deleted_by }, { where: { cid } });
 
       const userDB = await bot.db.models.messages.findOne({ where: { cid: cid }});
+
+      if (!isObject(userDB)) return;
+
       const userId = userDB.get("id");
       const username = userDB.get("username");
       const message = userDB.get("message");

@@ -1,3 +1,5 @@
+const { isObject } = require("lodash");
+
 module.exports = function Event(bot, filename, platform) {
   const event = {
     name: bot.plug.events.VOTE,
@@ -5,6 +7,8 @@ module.exports = function Event(bot, filename, platform) {
     _filename: filename,
     run: async () => {
       const dj = bot.plug.getDJ();
+
+      if (!isObject(dj)) return;
 
       const mehCount = bot.plug.getRoomScore().negative;
       const usersCount = bot.plug.getUsers().length;
