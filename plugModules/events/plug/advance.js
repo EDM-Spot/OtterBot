@@ -34,6 +34,13 @@ module.exports = function Event(bot, filename, platform) {
         });
       }
 
+      const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid }});
+
+      if (isObject(blacklisted)) {
+        await bot.plug.sendChat(`@${dj.username} ` + bot.lang.blacklisted);
+        await bot.plug.moderateForceSkip();
+      }
+
       if (isObject(dj) && data.media.duration >= 390) {
         await bot.plug.sendChat(`@${dj.username} ` + bot.lang.exceedstimeguard);
         await bot.utils.lockskip(dj);
