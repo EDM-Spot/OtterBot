@@ -4,6 +4,9 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async () => {
+      // Following the same reason to wait here as discord ready 
+      await bot.wait(1000);
+
       await bot.plug.sendChat(bot.lang.startup);
 
       await bot.lottery.start();

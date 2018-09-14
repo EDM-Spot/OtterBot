@@ -228,6 +228,7 @@ const init = async () => {
   // Load Plug Modules
   plugModuleManager(client).then(() => {
     client.events.init();
+    client.plug.connect(client.config.plug.room);
     console.info("[!] Plug Modules Loaded [!]");
   });
   
