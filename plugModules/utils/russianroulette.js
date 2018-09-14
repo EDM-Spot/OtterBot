@@ -11,7 +11,7 @@ module.exports = function Util(bot) {
       this.duration = duration;
       this.price = price;
 
-      await bot.redis.placeCommandOnCooldown("plug", "russianroulette@start", "perUse", 1, 3600);
+      await bot.redis.placeCommandOnCooldown("plug", "russianroulette@start", "perUse", 1, 10800);
 
       this.timeout = setTimeout(async () => {
         await this.sort();
@@ -79,6 +79,7 @@ module.exports = function Util(bot) {
         await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
+        await bot.wait(2000);
         bot.queue.add(user, luckyshot);
       }
       else {
@@ -94,10 +95,10 @@ module.exports = function Util(bot) {
           return;
         }
 
+        await bot.wait(2000);
         bot.queue.add(user, unluckyshot);
       }
-      
-      await bot.wait(2000);
+
       this.chooseVictim(players.filter(player => player !== victim));
     }
     async sort() {

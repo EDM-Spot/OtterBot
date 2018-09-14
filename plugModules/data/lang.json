@@ -32,7 +32,7 @@
     "cantUnlock": "There are users waiting to be added so I cannot unlock the wait list right now.",
     "userNotFound": "The specified user was not found.",
     "invalidUser": "You specified an invalid user.",
-    "commands": "Command List: Check in Discord witrh the command -plughelp %%MENTION%%",
+    "commands": "Command List: Check in Discord with the command -plughelp %%MENTION%%",
     "noPromo": "",
     "propsInfo": "You give !props to the DJs song if you really love it! Then you can cash in your prop(s) and join the !roulette. If you join the roulette, then you have a chance of winning and getting a random place in queue.",
     "mehRule": "The current song needs %%MEHS%% Mehs to be skipped or %%HSMEHS%% if it's Hardstyle/Hardcore!",
@@ -187,7 +187,7 @@
   },
   "russianroulette": {
     "noplayers": "No one joined the roulette, therefore no winner was picked.",
-    "countOver": "The russian roulette it's over.",
+    "countOver": "The russian roulette is over.",
     "chicken": "The user %%USER%% runned away! :chicken: Removing DC position!",
     "shot": "@%%USER%% pulled the trigger...",
     "luckyshot": "@%%USER%% survived! :feelsgoodman:",
