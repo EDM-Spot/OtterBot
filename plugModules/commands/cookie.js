@@ -26,7 +26,7 @@ module.exports = function Command(bot) {
 
       const randomCookie = Math.floor(Math.random() * lang.cookie.length);
 
-      this.reply(lang.cookie[randomCookie], { receiver: user, sender: rawData.raw.un }, 6e4);
+      this.reply(lang.cookie[randomCookie], { receiver: user, sender: rawData.from.username }, 6e4);
       return true;
     },
   });

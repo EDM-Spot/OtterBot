@@ -21,7 +21,7 @@ module.exports = function Command(bot) {
           where: { cid: currentMedia.cid },
           defaults: {
             cid: currentMedia.cid,
-            moderator: rawData.raw.uid,
+            moderator: rawData.from.id,
           },
         });
 
@@ -38,7 +38,7 @@ module.exports = function Command(bot) {
           where: { cid: cid },
           defaults: {
             cid: cid,
-            moderator: rawData.raw.uid,
+            moderator: rawData.from.id,
           },
         });
 
@@ -54,7 +54,7 @@ module.exports = function Command(bot) {
             where: { cid: soundcloudMedia.id },
             defaults: {
               cid: soundcloudMedia.id,
-              moderator: rawData.raw.uid,
+              moderator: rawData.from.id,
             },
           });
 

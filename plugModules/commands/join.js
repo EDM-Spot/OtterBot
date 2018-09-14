@@ -9,24 +9,24 @@ module.exports = function Command(bot) {
     deleteInstantly: true,
     parameters: "",
     description: "Joins the roulette, if there is one active. This may also charge the user in props if the roulette had a set price.",
-    async execute(rawData, command, lang) {
+    async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const dj = bot.plug.getDJ();
 
       if (!await bot.roulette.check() && !await bot.russianRoulette.check()) {
         this.reply(lang.join.noRoulette, {}, 6e4);
         return true;
-      } else if (isObject(dj) && dj.id === rawData.raw.uid) {
+      } else if (isObject(dj) && dj.id === rawData.from.id) {
         this.reply(lang.join.isPlaying, {}, 6e4);
         return true;
-      } else if (bot.plug.getWaitListPosition(rawData.raw.uid) >= 1 && bot.plug.getWaitListPosition(rawData.raw.uid) <= 5) {
+      } else if (bot.plug.getWaitListPosition(rawData.from.id) >= 1 && bot.plug.getWaitListPosition(rawData.from.id) <= 5) {
         this.reply(lang.join.closeToPlaying, {}, 6e4);
         return true;
       }
 
-      const { uid: id } = rawData.raw;
+      const { uid: id } = rawData.from;
 
       if (bot.roulette.running) {
-        if (bot.roulette.players.includes(rawData.raw.uid)) return true;
+        if (bot.roulette.players.includes(rawData.from.id)) return true;
 
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 
@@ -38,11 +38,11 @@ module.exports = function Command(bot) {
         }
 
         await inst.decrement("props", { by: bot.roulette.price });
-        bot.roulette.add(rawData.raw.uid);
+        bot.roulette.add(rawData.from.id);
         return true;
       }
       else {
-        if (bot.russianRoulette.players.includes(rawData.raw.uid)) return true;
+        if (bot.russianRoulette.players.includes(rawData.from.id)) return true;
 
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 
@@ -54,7 +54,7 @@ module.exports = function Command(bot) {
         }
 
         await inst.decrement("props", { by: bot.russianRoulette.price });
-        bot.russianRoulette.add(rawData.raw.uid);
+        bot.russianRoulette.add(rawData.from.id);
         return true;
       }
     },

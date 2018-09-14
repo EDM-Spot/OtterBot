@@ -21,7 +21,7 @@ module.exports = function Command(bot) {
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
-      } else if (user.id === rawData.raw.uid) {
+      } else if (user.id === rawData.from.id) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
       } else if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) {
@@ -71,7 +71,7 @@ module.exports = function Command(bot) {
         .setAuthor(user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)
         //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("By " + rawData.user.username)
+        .setFooter("By " + rawData.from.username)
         //.setImage("http://i.imgur.com/yVpymuV.png")
         //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()
@@ -87,7 +87,7 @@ module.exports = function Command(bot) {
       
       await bot.plug.moderateBanUser(user.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, apiDuration);
       this.reply(lang.moderation.effective, {
-        mod: rawData.raw.un,
+        mod: rawData.from.username,
         command: `!${name}`,
         user: user.username,
       });

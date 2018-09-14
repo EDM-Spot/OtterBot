@@ -22,7 +22,7 @@ module.exports = function Command(bot) {
     description: "What this command does.",
     async execute(rawData, command, lang) {
       // do something
-      const { user } = rawData;
+      const { user } = rawData.from;
       console.log(rawData, command, user, lang.ping.pong);
       // true/false for successful run or not
       return true;

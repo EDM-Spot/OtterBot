@@ -8,7 +8,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 0,
     parameters: "<@username> <1-50>",
     description: "Moves the specified user to the specified waitlist position.",
-    async execute(rawData, { args }, lang) {
+    async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       if (!args.length || args.join(" ").charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;

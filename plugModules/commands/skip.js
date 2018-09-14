@@ -15,7 +15,7 @@ module.exports = function Command(bot) {
       if (isObject(currentMedia) && isObject(dj)) {
         await bot.plug.moderateForceSkip();
         this.reply(lang.moderation.effective, {
-          mod: rawData.raw.un,
+          mod: rawData.from.username,
           command: `!${name}`,
           user: dj.username,
         }, 6e4);

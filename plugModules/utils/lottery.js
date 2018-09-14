@@ -20,10 +20,7 @@ module.exports = function Util(bot) {
 
       const randomTimeDuration = eventStart - moment();
 
-      console.log("Lottery Event Start: " + eventStart.format("LTS"));
-
       this.timer = moment.duration(randomTimeDuration, "milliseconds").timer({loop: false, start: true}, async () => {
-        console.log("Lottery Event Will now Start: " + eventStart.format("LTS"));
         this.acceptedBool = false;
         await this.sort();
       });

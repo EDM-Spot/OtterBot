@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     parameters: "[given]",
     description: "Checks how many props the user has and their ranking, or how many the user has given.",
     async execute(rawData, { args }, lang) {
-      const id = rawData.raw.uid;
+      const id = rawData.from.id;
 
       if (args.length && `${args.shift()}`.toLowerCase() === "given") {
         const props = await bot.db.models.props.count({ where: { id } });

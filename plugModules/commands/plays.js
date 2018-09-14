@@ -8,7 +8,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 10,
     parameters: "[YouTube Link|SoundCloud Link]",
     description: "Checks the specified link, or the current media, for the last time it was played in the community.",
-    async execute(rawData, { args }, lang) {
+    async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       if (!args.length) {
         const currentMedia = bot.plug.getMedia();
 

@@ -6,7 +6,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 10,
     parameters: "",
     description: "Pong!",
-    async execute(rawData, { name }, lang) {
+    async execute(rawData, { name }, lang) { // eslint-disable-line no-unused-vars
       this.reply(lang.ping[name], {}, 3e4);
       return true;
     },

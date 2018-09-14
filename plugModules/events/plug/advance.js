@@ -14,8 +14,6 @@ module.exports = function Event(bot, filename, platform) {
     run: async (data) => {
       if (!isObject(data) || !isObject(data.media)) return;
 
-      const dj = bot.plug.getDJ();
-
       clearTimeout(bot.autoSkipTimeout);
 
       let songAuthor = null;
@@ -37,13 +35,13 @@ module.exports = function Event(bot, filename, platform) {
       const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid }});
 
       if (isObject(blacklisted)) {
-        await bot.plug.sendChat(`@${dj.username} ` + bot.lang.blacklisted);
+        await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
         await bot.plug.moderateForceSkip();
       }
 
-      if (isObject(dj) && data.media.duration >= 390) {
-        await bot.plug.sendChat(`@${dj.username} ` + bot.lang.exceedstimeguard);
-        await bot.utils.lockskip(dj);
+      if (isObject(data.currentDJ) && data.media.duration >= 390) {
+        await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
+        await bot.utils.lockskip(data.currentDJ);
       }
 
       const savedCID = data.media.cid;
@@ -114,7 +112,7 @@ module.exports = function Event(bot, filename, platform) {
           }
         }
         
-        bot.channels.get("486125808553820160").send("**" + dj.username + " (" + dj.id + ")** is now Playing: " + `${data.media.author} - ${data.media.title}`).then(m => {
+        bot.channels.get("486125808553820160").send("**" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${data.media.author} - ${data.media.title}`).then(m => {
           savedMessageID = m.id;
           savedMessage = m.content;
         });

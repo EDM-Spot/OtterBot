@@ -8,18 +8,18 @@ module.exports = function Command(bot) {
     cooldownDuration: 180,
     parameters: "",
     description: "Calculates the ETA (Estimated Time of Arrival) for the user to DJ.",
-    async execute(rawData, command, lang) {
+    async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const dj = bot.plug.getDJ();
 
-      if (isObject(dj) && dj.id === rawData.raw.uid) {
+      if (isObject(dj) && dj.id === rawData.from.id) {
         this.reply(lang.eta.isPlaying, {}, 6e4);
         return true;
-      } else if (bot.plug.getWaitListPosition(rawData.raw.uid) === -1) {
+      } else if (bot.plug.getWaitListPosition(rawData.from.id) === -1) {
         this.reply(lang.eta.notInWaitList, {}, 6e4);
         return false;
       }
 
-      const position = bot.plug.getWaitListPosition(rawData.raw.uid);
+      const position = bot.plug.getWaitListPosition(rawData.from.id);
 
       if (position === 1) {
         this.reply(lang.eta.isNext, {}, 6e4);

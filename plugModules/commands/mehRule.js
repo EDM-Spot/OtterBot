@@ -1,7 +1,7 @@
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["meh"],
-    minimumPermission: 1000,
+    minimumPermission: 2000,
     cooldownType: "perUse",
     cooldownDuration: 20,
     parameters: "",

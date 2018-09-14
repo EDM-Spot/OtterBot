@@ -16,7 +16,7 @@ module.exports = class Command {
   async reply(string, variables = {}, ttl) {
     this.bot.plug.sendChat(this.utils.replace(this.lang.commands.default, {
       command: this.instance.name,
-      user: this.rawData.raw.un,
+      user: this.rawData.from.username,
       message: this.utils.replace(string, variables),
     }), ttl);
 
@@ -28,11 +28,11 @@ module.exports = class Command {
     if (get(this.rawData, "user.gRole", 0) >= GLOBAL_ROLES.MODERATOR) return; 
 
     if (IMMEDIATE_DELETION.includes(name) || registeredCommand.minimumPermission >= ROOM_ROLE.RESIDENTDJ) {
-      await this.bot.plug.moderateDeleteChat(this.rawData.raw.cid); //this.rawData.delete();
+      await this.bot.plug.moderateDeleteChat(this.rawData.id); //this.rawData.delete();
     }
 
     this.deletionTimeout = setTimeout(async (rawData) => { // eslint-disable-line no-unused-vars
-      await this.bot.plug.moderateDeleteChat(this.rawData.raw.cid);
+      await this.bot.plug.moderateDeleteChat(this.rawData.id);
     }, 3e4, this.rawData);
   }
   async isBanned() {
@@ -45,7 +45,7 @@ module.exports = class Command {
 
     const userCmdBanned = await bot.db.models.cmdbans.findOne({
       where: {
-        id: rawData.uid,
+        id: rawData.from.id,
       },
     });
 
@@ -74,7 +74,7 @@ module.exports = class Command {
     const { rawData, instance: command, redis } = this;
     const { platform } = command;
 
-    const currentCooldown = await redis.getCommandCooldown(platform, id, cdType, rawData.raw.uid);
+    const currentCooldown = await redis.getCommandCooldown(platform, id, cdType, rawData.from.id);
 
     if (isNil(currentCooldown))	return false;
 
@@ -86,7 +86,7 @@ module.exports = class Command {
 
     const duration = success ? cdDur : Math.max(Math.floor(cdDur / 2), 1);
 
-    return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.uid, duration);
+    return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.from.id, duration);
   }
   async run() {
     const { rawData, instance: command } = this;
@@ -94,7 +94,7 @@ module.exports = class Command {
 
     await this.handleDeletion();
 
-    if (await this.utils.getRole(rawData.user) >= registeredCommand.minimumPermission) {
+    if (await this.utils.getRole(rawData.from) >= registeredCommand.minimumPermission) {
       const isBanned = await this.isBanned();
       const isOnCooldown = await this.isOnCooldown(registeredCommand);
 

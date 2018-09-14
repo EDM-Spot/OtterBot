@@ -19,11 +19,11 @@ module.exports = function Command(bot) {
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
-      } else if (user.id === rawData.raw.uid) {
+      } else if (user.id === rawData.from.id) {
         return false;
       }
 
-      const userPosition = bot.plug.getWaitListPosition(rawData.raw.uid);
+      const userPosition = bot.plug.getWaitListPosition(rawData.from.id);
       const toUserPosition = bot.plug.getWaitListPosition(user.id);
 
       if (userPosition < 1 || toUserPosition < 1) {
@@ -36,7 +36,7 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const userGiving = await bot.redis.findGivePosition(rawData.raw.uid);
+      const userGiving = await bot.redis.findGivePosition(rawData.from.id);
       const userHaveGives = await bot.redis.findGivePositionTo(user.id);
 
       if (!isNil(userGiving) || !isNil(userHaveGives)) {
@@ -44,7 +44,7 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      await bot.redis.registerGivePosition(rawData.raw.uid, user.id, userPosition);
+      await bot.redis.registerGivePosition(rawData.from.id, user.id, userPosition);
       this.reply(lang.give.isGiving, {
         toUser: user.username,
         position: userPosition,

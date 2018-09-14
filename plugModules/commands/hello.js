@@ -15,7 +15,7 @@ module.exports = function Command(bot) {
         return true;
       }
 
-      await bot.plug.sendChat(`Hi There, @${rawData.raw.un}`);
+      await bot.plug.sendChat(`Hi There, @${rawData.from.username}`);
       return true;
     },
   });

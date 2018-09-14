@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 10,
     parameters: "[YouTube Link]",
     description: "Checks if the specified (if none was specified it takes the current) media is unavailable in any sort of way",
-    async execute(rawData, { args }, lang) {
+    async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       let YouTubeMediaID;
       let which; // eslint-disable-line no-unused-vars
 
