@@ -5,19 +5,19 @@ module.exports = function Command(bot) {
     names: ["catfact", "catfacts"],
     minimumPermission: 0,
     cooldownType: "perUse",
-    cooldownDuration: 0,
+    cooldownDuration: 3600,
     parameters: "",
     description: "Get a Random Catfact.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
+
+      let catFact;
       request("https://catfact.ninja/fact", function(error, response, body) { // eslint-disable-line no-unused-vars
-        const catFact = JSON.parse(response.body);
-        console.log(response);
-        bot.reply(lang.catfact, { catfact: catFact.fact });
-      }).catch(err => {
-        console.log(err);
-        bot.reply(lang.catfactfail, { });
+        if (error) return false;
+      
+        catFact = JSON.parse(body);
       });
 
+      this.reply(lang.catfact, { catfact: catFact.fact });
       return true;
     },
   });

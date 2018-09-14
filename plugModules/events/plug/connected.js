@@ -5,7 +5,7 @@ module.exports = function Event(bot, filename, platform) {
     _filename: filename,
     run: async () => {
       // Following the same reason to wait here as discord ready 
-      await bot.wait(1000);
+      await bot.wait(2000);
 
       await bot.plug.sendChat(bot.lang.startup);
 
