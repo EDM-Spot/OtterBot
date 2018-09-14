@@ -79,20 +79,17 @@ module.exports = function Util(bot) {
         await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
-        await bot.wait(4000);
-
         bot.queue.add(user, luckyshot);
       }
       else {
         await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
           user: user.username,
         }));
-        await bot.wait(4000);
 
         if (bot.plug.getWaitListPosition(victim) === -1) {
           await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
-          await bot.wait(3000);
   
+          await bot.wait(2000);
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }

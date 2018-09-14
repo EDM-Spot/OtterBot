@@ -23,7 +23,7 @@ module.exports = function Command(bot) {
         return true;
       }
 
-      const { uid: id } = rawData.from;
+      const { id } = rawData.from;
 
       if (bot.roulette.running) {
         if (bot.roulette.players.includes(rawData.from.id)) return true;
