@@ -92,7 +92,7 @@ module.exports = function Command(bot) {
         const { role } = user;
         
         await bot.moderateSetRole(user.id, ROOM_ROLE.NONE);
-        await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, apiDuration);
+        await bot.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, apiDuration);
         await bot.moderateSetRole(user.id, role);
         
         this.reply(lang.moderation.effective, {

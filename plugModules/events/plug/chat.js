@@ -1,4 +1,4 @@
-const { each } = require("lodash");
+const { each, isObject } = require("lodash");
 const moment = require("moment");
 
 module.exports = function Event(bot, platform) {
@@ -28,7 +28,7 @@ module.exports = function Event(bot, platform) {
       }
 
       if (!commandHandleRegex.test(rawData.message)) {
-        if (bot.lottery.timer.isStarted) {
+        if (isObject(bot.lottery.timer) || bot.lottery.timer.isStarted) {
           if (rawData.from.id !== bot.plug.getSelf().id) {
             if (moment().valueOf() > bot.lottery.canJoinDate.valueOf()) {
               bot.lottery.add(rawData.from.id);

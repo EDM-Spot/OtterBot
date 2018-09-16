@@ -26,6 +26,7 @@
     "clear": "To help reduce lag, you can clear your chat with /clear, and reduce the avatars displayed with /cap 1. %%MENTION%%",
     "catfact": "%%CATFACT%% :smartcat:",
     "catfactfail": "sorry.. I couldn't get you a cat fact..",
+    "urban": "%%TEXT%%",
     "rcs": "Want custom emotes and more customizability for plug.dj? Get the RCS Extension/Script! https://rcs.radiant.dj %%MENTION%%",
     "app": "plug.dj has Official apps for both iOS and Android! Check out their Blog post: https://blog.plug.dj/2017/03/mobile-app-release/ %%MENTION%%",
     "xp": "you have %%POINTS%% XP!",
@@ -190,8 +191,8 @@
     "countOver": "The russian roulette is over.",
     "chicken": "The user %%USER%% runned away! :chicken: Removing DC position!",
     "shot": "@%%USER%% pulled the trigger...",
-    "luckyshot": "@%%USER%% survived! :feelsgoodman:",
-    "unluckyshot": ":mrdestructoid::bulletgun::tfw::quinsplat: BANG! @%%USER%%"
+    "luckyshot": "/em @%%USER%% survived! :feelsgoodman:",
+    "unluckyshot": "/em :mrdestructoid::bulletgun::tfw::quinsplat: BANG! @%%USER%%"
   },
   "queue": {
     "roomMismatch": "%%USER%% could not be added to the wait list since they're apparently in another room..",

@@ -43,7 +43,7 @@ module.exports = function Util(bot) {
     }
     async registerDisconnection(userID, position) {
       // 5400s = 90 minutes
-      await this.Redis.hset("disconnection", userID, position);
+      //await this.Redis.hset("disconnection", userID, position);
       return this.Redis.set(this.constructor.generateDisconnectionKey(userID), position, "EX", 5400);
     }
     async removeDisconnection(userID) {
@@ -63,7 +63,7 @@ module.exports = function Util(bot) {
     }
     async registerGivePosition(userID, toUserID) {
       // 180s = 3 minutes
-      await this.Redis.hmset("givePosition", userID, toUserID, toUserID, userID);
+      //await this.Redis.hmset("givePosition", userID, toUserID, toUserID, userID);
       return this.Redis.mset(this.constructor.generateGivePositionKey(userID), toUserID, toUserID, userID, "EX", 180);
     }
     async removeGivePosition(userID, toUserID) {

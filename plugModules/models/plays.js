@@ -52,6 +52,11 @@ module.exports = async function Model(bot, sequelize) {
       defaultValue: false,
       allowNull: false,
     },
+    author: {
+      type: sequelize.STRING,
+      defaultValue: "",
+      allowNull: false,
+    },
     title: {
       type: sequelize.STRING,
       defaultValue: "",

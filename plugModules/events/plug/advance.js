@@ -12,7 +12,7 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async (data) => {
-      if (!isObject(data) || !isObject(data.media)) return;
+      if (!isObject(data) || !isObject(data.media) || !isObject(data.currentDJ)) return;
 
       clearTimeout(bot.autoSkipTimeout);
 
@@ -85,7 +85,8 @@ module.exports = function Event(bot, filename, platform) {
           mehs: lastPlay.score.negative,
           dj: lastPlay.dj.id,
           skipped: lastPlay.score.skipped > 0,
-          title: `${lastPlay.media.author} - ${lastPlay.media.title}`,
+          author: `${lastPlay.media.author}`,
+          title: `${lastPlay.media.title}`,
         });
 
         // count how many props were given while that media played

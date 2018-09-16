@@ -79,6 +79,15 @@ module.exports = function Util(bot) {
         await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
+
+        if (bot.plug.getWaitListPosition(victim) === -1) {
+          bot.queue.add(user, waitlist.length);
+  
+          await bot.wait(2000);
+          this.chooseVictim(players.filter(player => player !== victim));
+          return;
+        }
+
         await bot.wait(2000);
         bot.queue.add(user, luckyshot);
       }
@@ -88,7 +97,7 @@ module.exports = function Util(bot) {
         }));
 
         if (bot.plug.getWaitListPosition(victim) === -1) {
-          await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
+          await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
   
           await bot.wait(2000);
           this.chooseVictim(players.filter(player => player !== victim));
