@@ -1,15 +1,15 @@
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["catfact", "catfacts"],
+    names: ["sodas"],
     minimumPermission: 0,
     cooldownType: "perUser",
     cooldownDuration: 120,
     parameters: "",
-    description: "Get a Random Catfact.",
+    description: "Get a Random Joke.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const catFact = await bot.api.getCatfact();
+      const sodas = await bot.api.getSodas(rawData.from.username);
 
-      this.reply(lang.catfact, { catfact: catFact.fact });
+      this.reply(lang.sodas, { sodas: sodas.value.joke });
       return true;
     },
   });

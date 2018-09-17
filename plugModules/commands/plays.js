@@ -1,4 +1,5 @@
-const { isObject, isNil, has } = require("lodash");
+const { isObject, isNil, has, get } = require("lodash");
+const { Op } = require("sequelize");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -9,6 +10,16 @@ module.exports = function Command(bot) {
     parameters: "[YouTube Link|SoundCloud Link]",
     description: "Checks the specified link, or the current media, for the last time it was played in the community.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
+      
+      const instance = await bot.db.models.plays.findAll({
+        where: {
+          created_at: {
+            [Op.gt]: bot.moment().subtract(360, "minutes").toDate()
+          }
+        },
+        order: [["created_at", "ASC"]],
+      });
+
       if (!args.length) {
         const currentMedia = bot.plug.getMedia();
 
@@ -17,72 +28,206 @@ module.exports = function Command(bot) {
           return false;
         }
 
-        const instance = await bot.db.models.plays.findOne({
-          where: {
-            cid: currentMedia.cid,
-            format: currentMedia.format,
-          },
-          order: [["created_at", "DESC"]],
-        });
-
-        if (!isObject(instance)) {
+        let songAuthor = null;
+        let songTitle = null;
+  
+        if (get(currentMedia, "format", 2) === 1) {
+          const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.cid);
+  
+          const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
+          const fullTitle = get(YouTubeMediaData, "snippet.title");
+  
+          songAuthor = fullTitle.split(" - ")[0].trim();
+          songTitle = fullTitle.split(" - ")[1].trim();
+        } else {
+          const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.cid);
+  
+          if (!isNil(SoundCloudMediaData)) {
+            const fullTitle = SoundCloudMediaData.title;
+  
+            songAuthor = fullTitle.split(" - ")[0].trim();
+            songTitle = fullTitle.split(" - ")[1].trim();
+          }
+        }
+  
+        if (isNil(songAuthor) || isNil(songTitle)) {
+          songAuthor = currentMedia.author;
+          songTitle = currentMedia.title;
+        }
+  
+        if (!isNil(instance)) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.current }, 6e4);
           return true;
+        } else {
+          for (let i = 0; i < instance.length; i++) {
+            const playedMinutes = bot.moment().diff(bot.moment(instance[i].created_at), "minutes");
+  
+            if (!isNil(instance[i].title)) {
+              if (playedMinutes <= 360) {
+                const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+                const savedAuthor = instance[i].author.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+  
+                const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+                const savedTitle = instance[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+  
+                if (instance.cid === currentMedia.cid) {
+                  // Song Played | Same ID
+                  this.reply(lang.plays.lastPlayWas, {
+                    which: lang.plays.specified,
+                    time: bot.moment(instance[i].created_at).fromNow(),
+                  }, 6e4);
+                  return true;
+                }
+  
+                if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (instance[i].cid !== currentMedia.cid)) {
+                  // Same Song | Diff CID | Diff Remix/Channel
+                  this.reply(lang.plays.lastPlayWas, {
+                    which: lang.plays.specified,
+                    time: bot.moment(instance[i].created_at).fromNow(),
+                  }, 6e4);
+                  return true;
+                }
+  
+                if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor) && (instance[i].cid !== currentMedia.cid)) {
+                  // Same Song Name/Maybe diff Author
+                  if (instance[i].format === 1) {
+                    this.reply(lang.plays.maybeLastPlayWas, {
+                      which: lang.plays.specified,
+                      cid: instance[i].cid,
+                      time: bot.moment(instance[i].created_at).fromNow(),
+                    }, 6e4);
+                    return true;
+                  }
+                }
+              }
+            }
+          }
         }
-
-        this.reply(lang.plays.lastPlayWas, {
-          which: lang.plays.specified,
-          time: bot.moment(instance.get("created_at")).fromNow(),
-        }, 6e4);
-        return true;
       }
 
       const link = args.shift();
       const cid = bot.youtube.getMediaID(link);
 
       if (!isNil(cid)) {
-        const instance = await bot.db.models.plays.findOne({
-          where: {
-            cid: cid,
-            format: 1,
-          },
-          order: [["created_at", "DESC"]],
-        });
+        const YouTubeMediaData = await bot.youtube.getMedia(cid);
+  
+        const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
+        const fullTitle = get(YouTubeMediaData, "snippet.title");
+  
+        const songAuthor = fullTitle.split(" - ")[0].trim();
+        const songTitle = fullTitle.split(" - ")[1].trim();
 
         if (!isObject(instance)) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
           return true;
+        } else {
+          for (let i = 0; i < instance.length; i++) {
+            const playedMinutes = bot.moment().diff(bot.moment(instance[i].created_at), "minutes");
+  
+            if (!isNil(instance[i].title)) {
+              if (playedMinutes <= 360) {
+                const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+                const savedAuthor = instance[i].author.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+  
+                const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+                const savedTitle = instance[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+  
+                if (instance.cid === cid) {
+                  // Song Played | Same ID
+                  this.reply(lang.plays.lastPlayWas, {
+                    which: lang.plays.specified,
+                    time: bot.moment(instance[i].created_at).fromNow(),
+                  }, 6e4);
+                  return true;
+                }
+  
+                if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (instance[i].cid !== cid)) {
+                  // Same Song | Diff CID | Diff Remix/Channel
+                  this.reply(lang.plays.lastPlayWas, {
+                    which: lang.plays.specified,
+                    time: bot.moment(instance[i].created_at).fromNow(),
+                  }, 6e4);
+                  return true;
+                }
+  
+                if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor) && (instance[i].cid !== cid)) {
+                  // Same Song Name/Maybe diff Author
+                  if (instance[i].format === 1) {
+                    this.reply(lang.plays.maybeLastPlayWas, {
+                      which: lang.plays.specified,
+                      cid: instance[i].cid,
+                      time: bot.moment(instance[i].created_at).fromNow(),
+                    }, 6e4);
+                    return true;
+                  }
+                }
+              }
+            }
+          }
         }
-
-        this.reply(lang.plays.lastPlayWas, {
-          which: lang.plays.specified,
-          time: await bot.moment(instance.get("created_at")).fromNow(),
-        }, 6e4);
-        return true;
       } else if (link.includes("soundcloud.com")) {
         const soundcloudMedia = await bot.soundcloud.resolve(link);
 
         if (isNil(soundcloudMedia)) return false;
 
         if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
-          const instance = await bot.db.models.plays.findOne({
-            where: {
-              cid: soundcloudMedia.id,
-              format: 2,
-            },
-            order: [["created_at", "DESC"]],
-          });
+          const SoundCloudMediaData = await bot.soundcloud.getTrack(soundcloudMedia.id);
+  
+          if (!isNil(SoundCloudMediaData)) {
+            const fullTitle = SoundCloudMediaData.title;
+  
+            const songAuthor = fullTitle.split(" - ")[0].trim();
+            const songTitle = fullTitle.split(" - ")[1].trim();
 
-          if (!isObject(instance)) {
-            this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
-            return true;
+            if (!isObject(instance)) {
+              this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
+              return true;
+            } else {
+              for (let i = 0; i < instance.length; i++) {
+                const playedMinutes = bot.moment().diff(bot.moment(instance[i].created_at), "minutes");
+    
+                if (!isNil(instance[i].title)) {
+                  if (playedMinutes <= 360) {
+                    const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+                    const savedAuthor = instance[i].author.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+    
+                    const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+                    const savedTitle = instance[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+    
+                    if (instance.cid === cid) {
+                    // Song Played | Same ID
+                      this.reply(lang.plays.lastPlayWas, {
+                        which: lang.plays.specified,
+                        time: bot.moment(instance[i].created_at).fromNow(),
+                      }, 6e4);
+                      return true;
+                    }
+    
+                    if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (instance[i].cid !== cid)) {
+                    // Same Song | Diff CID | Diff Remix/Channel
+                      this.reply(lang.plays.lastPlayWas, {
+                        which: lang.plays.specified,
+                        time: bot.moment(instance[i].created_at).fromNow(),
+                      }, 6e4);
+                      return true;
+                    }
+    
+                    if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor) && (instance[i].cid !== cid)) {
+                    // Same Song Name/Maybe diff Author
+                      if (instance[i].format === 1) {
+                        this.reply(lang.plays.maybeLastPlayWas, {
+                          which: lang.plays.specified,
+                          cid: instance[i].cid,
+                          time: bot.moment(instance[i].created_at).fromNow(),
+                        }, 6e4);
+                        return true;
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-
-          this.reply(lang.plays.lastPlayWas, {
-            which: lang.plays.specified,
-            time: bot.moment(instance.get("created_at")).fromNow(),
-          }, 6e4);
-          return true;
         }
 
         return false;

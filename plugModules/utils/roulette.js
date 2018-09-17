@@ -48,8 +48,8 @@ module.exports = function Util(bot) {
       // the highest position you can go to is 5
       // users outside the list have a chance to get at least pos 35
       return currentPosition !== -1 ?
-        Math.floor(Math.random() * (currentPosition - 5)) + 4 :
-        Math.floor(Math.random() * Math.min(waitlistLength, 34)) + 4;
+        Math.floor(Math.random() * (currentPosition - 5)) + 5 :
+        Math.floor(Math.random() * Math.min(waitlistLength, 35)) + 5;
     }
     async multiplier(players, isIn) {
       // multipler for users outside the waitlist

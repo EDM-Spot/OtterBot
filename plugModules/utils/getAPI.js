@@ -1,0 +1,112 @@
+const { isNil } = require("lodash");
+const request = require("request-promise");
+
+module.exports = function Util(bot) {
+  class API {
+    constructor() {
+      this.catfactURL = "https://catfact.ninja/fact";
+      this.urbanURL = "https://api.urbandictionary.com/v0/define?term=";
+    }
+    getCatfact() {
+      const options = {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      };
+
+      return request(this.catfactURL, options).then(body => body).catch((err) => {
+        console.error("[!] Catfact API Error");
+        console.error(err);
+      });
+    }
+    getUrban(text) {
+      const options = {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      };
+
+      return request(this.urbanURL + text, options).then(body => body).catch((err) => {
+        console.error("[!] Urban API Error");
+        console.error(err);
+      });
+    }
+    getGiphy(text) {
+      const options = {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      };
+
+      return request(`https://api.giphy.com/v1/gifs/search?api_key=${bot.config.giphy}&q=${text}&limit=10&offset=0&rating=G&lang=en`, options).then(body => body).catch((err) => {
+        console.error("[!] Giphy API Error");
+        console.error(err);
+      });
+    }
+    getSodas(user) {
+      const options = {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      };
+
+      return request(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`, options).then(body => body).catch((err) => {
+        console.error("[!] Sodas API Error");
+        console.error(err);
+      });
+    }
+    getGenre(media) {
+      const options = {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      };
+
+      const title = media.title.replace(/\[.*?\]/g,"").trim();
+
+      return request(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${bot.config.lastfm}&artist=${media.author}&track=${title}&autocorrect=1&format=json`, options)
+        .then(function(body) {
+          const genres = [];
+          let found = false;
+
+          if (isNil(body.track)) {
+            return "Nothing Found";
+          }
+
+          if (body.track.toptags.tag.length !== 0) {
+            for (var q = 0; q < body.track.toptags.tag.length; q++) {
+              genres.push(" " + body.track.toptags.tag[q].name);
+            }
+
+            found = true;
+          }
+          //}
+
+          if (!found) {
+            return "Nothing Found. You can contribute here " + encodeURI(body.track.url);
+          }
+
+          var mySet = new Set(genres);
+          var filteredArray = Array.from(mySet);
+
+          if (filteredArray.length === 0) {
+            return "Nothing Found. You can contribute here " + encodeURI(body.track.url);
+          }
+          else
+          {
+            return filteredArray;
+          }
+        }).catch((err) => {
+          console.error("[!] LastFM API Error");
+          console.error(err);
+        });
+    }
+  }
+
+  bot.api = new API();
+};

@@ -8,7 +8,7 @@ module.exports = function Event(bot, platform) {
       if (isNil(data.username) || data.id === bot.plug.getSelf().id) return;
       
       const position = parseInt(await bot.redis.findDisconnection(data.id), 10);
-      
+
       const user = bot.plug.getUser(data.id);
       await bot.db.models.users.findOrCreate({
         where: { id: user.id }, defaults: { id: user.id, username: user.username },

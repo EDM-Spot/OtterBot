@@ -27,6 +27,9 @@
     "catfact": "%%CATFACT%% :smartcat:",
     "catfactfail": "sorry.. I couldn't get you a cat fact..",
     "urban": "%%TEXT%%",
+    "gif": "%%URL%%",
+    "sodas": "%%SODAS%% :sodas:",
+    "genre": "Genres: %%GENRES%%",
     "rcs": "Want custom emotes and more customizability for plug.dj? Get the RCS Extension/Script! https://rcs.radiant.dj %%MENTION%%",
     "app": "plug.dj has Official apps for both iOS and Android! Check out their Blog post: https://blog.plug.dj/2017/03/mobile-app-release/ %%MENTION%%",
     "xp": "you have %%POINTS%% XP!",
@@ -147,6 +150,7 @@
       "specified": "specified",
       "nothingPlaying": "There is no media playing.",
       "lastPlayWas": "The %%WHICH%% media was last played %%TIME%%",
+      "maybeLastPlayWas": "https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Same Song?",
       "invalidLink": "The link specified is invalid.",
       "neverPlayed": "The %%WHICH%% media was never played."
     },
