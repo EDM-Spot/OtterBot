@@ -34,7 +34,7 @@ module.exports = function Util(bot) {
       });
     }
     getMediaID(link) {
-      return (link.match(this.fullRegex));
+      return (link.match(this.fullRegex)[1]);
     }
     getMedia(id) {
       return this.req("GET", "/videos", null, {
