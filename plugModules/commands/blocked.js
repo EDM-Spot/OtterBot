@@ -20,12 +20,12 @@ module.exports = function Command(bot) {
         if (!isObject(currentMedia)) {
           this.reply(lang.check.noMedia, {}, 6e4);
           return false;
-        } else if (get(currentMedia, "media.format", 2) !== 1) {
+        } else if (get(currentMedia, "format", 2) !== 1) {
           this.reply(lang.check.notYouTube, {}, 6e4);
           return false;
         }
 
-        YouTubeMediaID = get(currentMedia, "media.cid");
+        YouTubeMediaID = get(currentMedia, "cid");
         which = "current";
       } else {
         YouTubeMediaID = bot.youtube.getMediaID(args.join(" "));
