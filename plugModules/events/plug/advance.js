@@ -19,32 +19,39 @@ module.exports = function Event(bot, filename, platform) {
       let songAuthor = null;
       let songTitle = null;
 
-      if (get(data, "media.format", 2) === 1) {
-        const YouTubeMediaData = await bot.youtube.getMedia(data.media.cid);
+      try {
+        if (get(data, "media.format", 2) === 1) {
+          const YouTubeMediaData = await bot.youtube.getMedia(data.media.cid);
 
-        const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
-        const fullTitle = get(YouTubeMediaData, "snippet.title");
+          const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
+          const fullTitle = get(YouTubeMediaData, "snippet.title");
 
-        const { contentDetails, status } = YouTubeMediaData;
-        const uploadStatus = get(YouTubeMediaData, "status.uploadStatus");
-        const privacyStatus = get(YouTubeMediaData, "status.privacyStatus");
-        const embeddable = get(YouTubeMediaData, "status.embeddable");
+          const { contentDetails, status } = YouTubeMediaData;
+          const uploadStatus = get(YouTubeMediaData, "status.uploadStatus");
+          const privacyStatus = get(YouTubeMediaData, "status.privacyStatus");
+          const embeddable = get(YouTubeMediaData, "status.embeddable");
 
-        if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
-          await bot.plug.sendChat(bot.utils.replace(bot.check.mediaUnavaialble, { which: "current" }));
-        }
-
-        songAuthor = fullTitle.split(" - ")[0].trim();
-        songTitle = fullTitle.split(" - ")[1].trim();
-      } else {
-        const SoundCloudMediaData = await bot.soundcloud.getTrack(data.media.cid);
-
-        if (!isNil(SoundCloudMediaData)) {
-          const fullTitle = SoundCloudMediaData.title;
+          if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
+            await bot.plug.sendChat(bot.utils.replace(bot.check.mediaUnavaialble, { which: "current" }));
+          }
 
           songAuthor = fullTitle.split(" - ")[0].trim();
           songTitle = fullTitle.split(" - ")[1].trim();
+        } else {
+          const SoundCloudMediaData = await bot.soundcloud.getTrack(data.media.cid);
+
+          if (!isNil(SoundCloudMediaData)) {
+            const fullTitle = SoundCloudMediaData.title;
+
+            songAuthor = fullTitle.split(" - ")[0].trim();
+            songTitle = fullTitle.split(" - ")[1].trim();
+          }
         }
+      } catch (err) {
+        console.log(err);
+
+        songAuthor = data.media.author;
+        songTitle = data.media.title;
       }
 
       if (isNil(songAuthor) || isNil(songTitle)) {
