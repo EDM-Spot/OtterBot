@@ -19,6 +19,25 @@ module.exports = function Event(bot, filename, platform) {
       let songAuthor = null;
       let songTitle = null;
 
+      if (get(data, "media.format", 2) === 1) {
+        const YouTubeMediaData = await bot.youtube.getMedia(data.media.cid);
+
+        const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
+        const fullTitle = get(YouTubeMediaData, "snippet.title");
+
+        songAuthor = fullTitle.split(" - ")[0].trim();
+        songTitle = fullTitle.split(" - ")[1].trim();
+      } else {
+        const SoundCloudMediaData = await bot.soundcloud.getTrack(data.media.cid);
+
+        if (!isNil(SoundCloudMediaData)) {
+          const fullTitle = SoundCloudMediaData.title;
+
+          songAuthor = fullTitle.split(" - ")[0].trim();
+          songTitle = fullTitle.split(" - ")[1].trim();
+        }
+      }
+
       if (isNil(songAuthor) || isNil(songTitle)) {
         songAuthor = data.media.author;
         songTitle = data.media.title;
@@ -76,6 +95,33 @@ module.exports = function Event(bot, filename, platform) {
         await bot.redis.removeDisconnection(lastPlay.dj.id);
         await bot.redis.removeGivePosition(lastPlay.dj.id);
 
+        let lastSongAuthor = null;
+        let lastSongTitle = null;
+
+        if (get(lastPlay, "media.format", 2) === 1) {
+          const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.media.cid);
+  
+          const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
+          const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
+  
+          lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
+          lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+        } else {
+          const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
+  
+          if (!isNil(lastSoundCloudMediaData)) {
+            const lastFullTitle = lastSoundCloudMediaData.title;
+  
+            lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
+            lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+          }
+        }
+
+        if (isNil(lastSongAuthor) || isNil(lastSongTitle)) {
+          lastSongAuthor = lastPlay.media.author;
+          lastSongTitle = lastPlay.media.title;
+        }
+
         // keep track of played media in the room
         await bot.db.models.plays.create({
           cid: lastPlay.media.cid,
@@ -85,8 +131,8 @@ module.exports = function Event(bot, filename, platform) {
           mehs: lastPlay.score.negative,
           dj: lastPlay.dj.id,
           skipped: lastPlay.score.skipped > 0,
-          author: `${lastPlay.media.author}`,
-          title: `${lastPlay.media.title}`,
+          author: `${lastSongAuthor}`,
+          title: `${lastSongTitle}`,
         });
 
         // count how many props were given while that media played

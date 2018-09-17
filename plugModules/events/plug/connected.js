@@ -9,7 +9,7 @@ module.exports = function Event(bot, filename, platform) {
 
       await bot.plug.sendChat(bot.lang.startup);
 
-      //await bot.lottery.start();
+      await bot.lottery.start();
 
       const user = bot.plug.getUsers();
       for (var i = 0; i < user.lenght; i++) {

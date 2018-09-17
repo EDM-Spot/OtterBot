@@ -1,49 +1,44 @@
 const { isObject, get, merge } = require("lodash");
-const request = require("request");
+const request = require("request-promise");
 
 module.exports = function Util(bot) {
   class YouTube {
     constructor(key) {
       this.baseURL = "https://www.googleapis.com/youtube/v3";
       this.ytrestrictURL = "http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=";
-      this.shortlinkRegex = /youtu\.be\//g;
-      this.linkRegex = /watch\?/g;
+      this.fullRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
       this.key = key;
     }
     req(method, endpoint, body = {}, opts = {}) {
       const options = merge(opts, {
-        json: true,
-        query: {
+        qs: {
           key: this.key,
         },
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
       });
 
-      if (Array.isArray(get(options, "query.part"))) {
-        options.query.part = options.query.part.join(",");
+      if (Array.isArray(get(options, "qs.part"))) {
+        options.qs.part = options.qs.part.join(",");
       }
 
       if (["POST", "PUT"].includes(method.toUpperCase()) && isObject(body)) {
         options.body = body;
       }
 
-      return request[method.toLowerCase()](this.baseURL + endpoint, options).then(res => res.body)
-        .catch((err) => {
-          console.error("[!] YouTube Util Error");
-          console.error(err);
-        });
+      return request[method.toLowerCase()](this.baseURL + endpoint, options).catch((err) => {
+        console.error("[!] Youtube Util Error");
+        console.error(err);
+      });
     }
     getMediaID(link) {
-      if (this.shortlinkRegex.test(link)) {
-        return link.split(this.shortlinkRegex)[1].split("?")[0];
-      } else if (this.linkRegex.test(link)) {
-        return link.split("v=")[1].split("&")[0];
-      }
-
-      return undefined;
+      return (link.match(this.fullRegex));
     }
     getMedia(id) {
       return this.req("GET", "/videos", null, {
-        query: {
+        qs: {
           part: ["snippet", "contentDetails", "statistics", "status"],
           id,
         },

@@ -1,5 +1,5 @@
 const { merge } = require("lodash");
-const request = require("request");
+const request = require("request-promise");
 
 global.Promise = require("bluebird");
 
@@ -12,17 +12,19 @@ module.exports = function Util(bot) {
     }
     req(endpoint, opts = {}) {
       const options = merge(opts, {
-        json: true,
-        query: {
+        qs: {
           client_id: this.key,
         },
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
       });
 
-      return request(this.baseURL + endpoint, options).then(res => res.body)
-        .catch((err) => {
-          console.error("[!] SoundCloud Util Error");
-          console.error(err);
-        });
+      return request(this.baseURL + endpoint, options).catch((err) => {
+        console.error("[!] SoundCloud Util Error");
+        console.error(err);
+      });
     }
     resolve(url) {
       return this.req("resolve", { query: { url } });

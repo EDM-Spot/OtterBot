@@ -81,7 +81,7 @@ module.exports = function Util(bot) {
         return;
       }
 
-      await bot.redis.removeGivePosition(user.id, bot.plug.getSelf().id);
+      await bot.redis.removeGivePosition(bot.plug.getSelf().id, user.id);
 
       await bot.plug.sendChat(bot.utils.replace(bot.lang.lotteryWinner, {
         winner: user.username,
@@ -93,7 +93,7 @@ module.exports = function Util(bot) {
 
       this.giveTimer = moment.duration(3, "minutes").timer({loop: false, start: true}, async () => {
         await bot.plug.sendChat(bot.lang.notAccepted);
-        bot.redis.removeGivePosition(user.id, bot.plug.getSelf().id);
+        bot.redis.removeGivePosition(bot.plug.getSelf().id, user.id);
         this.winner(players.filter(player => player !== winner));
       }, (120000));
     
