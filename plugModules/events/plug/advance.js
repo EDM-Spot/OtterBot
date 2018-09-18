@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const {
-  isObject, isNaN, isNil, get, keys,
+  isObject, isNaN, isNil, get, keys, map,
 } = require("lodash");
 
 var savedMessageID;
@@ -21,23 +21,39 @@ module.exports = function Event(bot, filename, platform) {
       let songAuthor = null;
       let songTitle = null;
 
-      if (get(data, "media.format", 2) === 1) {
-        const YouTubeMediaData = await bot.youtube.getMedia(data.media.cid);
+      try {
+        if (get(data, "media.format", 2) === 1) {
+          const YouTubeMediaData = await bot.youtube.getMedia(data.media.cid);
 
-        const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
-        const fullTitle = get(YouTubeMediaData, "snippet.title");
+          const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
+          const fullTitle = get(YouTubeMediaData, "snippet.title");
 
-        songAuthor = fullTitle.split(" - ")[0].trim();
-        songTitle = fullTitle.split(" - ")[1].trim();
-      } else {
-        const SoundCloudMediaData = await bot.soundcloud.getTrack(data.media.cid);
+          const { contentDetails, status } = YouTubeMediaData;
+          const uploadStatus = get(YouTubeMediaData, "status.uploadStatus");
+          const privacyStatus = get(YouTubeMediaData, "status.privacyStatus");
+          const embeddable = get(YouTubeMediaData, "status.embeddable");
 
-        if (!isNil(SoundCloudMediaData)) {
-          const fullTitle = SoundCloudMediaData.title;
+          if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
+            await bot.plug.sendChat(bot.utils.replace(bot.check.mediaUnavaialble, { which: "current" }));
+          }
 
           songAuthor = fullTitle.split(" - ")[0].trim();
           songTitle = fullTitle.split(" - ")[1].trim();
+        } else {
+          const SoundCloudMediaData = await bot.soundcloud.getTrack(data.media.cid);
+
+          if (!isNil(SoundCloudMediaData)) {
+            const fullTitle = SoundCloudMediaData.title;
+
+            songAuthor = fullTitle.split(" - ")[0].trim();
+            songTitle = fullTitle.split(" - ")[1].trim();
+          }
         }
+      } catch (err) {
+        console.log(err);
+
+        songAuthor = data.media.author;
+        songTitle = data.media.title;
       }
 
       if (isNil(songAuthor) || isNil(songTitle)) {
@@ -65,57 +81,20 @@ module.exports = function Event(bot, filename, platform) {
         await bot.utils.lockskip(data.currentDJ);
       }
 
-      const songHistory = await bot.db.models.plays.findAll({
-        where: {
-          created_at: {
-            [Op.gt]: bot.moment().subtract(360, "minutes").toDate()
-          }
-        },
-        order: [["created_at", "ASC"]],
-      });
+      const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, data.media.cid);
 
       if (!isNil(songHistory)) {
-        for (let i = 0; i < songHistory.length; i++) {
-          const playedMinutes = bot.moment().diff(bot.moment(songHistory[i].created_at), "minutes");
-
-          if (!isNil(songHistory[i].title)) {
-            if (playedMinutes <= 360) {
-              const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-              const savedAuthor = songHistory[i].author.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-
-              const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-              const savedTitle = songHistory[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-
-              if (songHistory.cid === data.media.cid) {
-                // Song Played | Same ID
-                await bot.plug.chat(bot.utils.replace(bot.lang.historySkip, {
-                  time: bot.moment(songHistory[i].created_at).fromNow(),
-                }));
-                //await bot.plug.moderateForceSkip();
-                break;
-              }
-
-              if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (songHistory[i].cid !== data.media.cid)) {
-                // Same Song | Diff CID | Diff Remix/Channel
-                await bot.plug.chat(bot.utils.replace(bot.lang.historySkip, {
-                  time: bot.moment(songHistory[i].created_at).fromNow(),
-                }));
-                //await bot.plug.moderateForceSkip();
-                break;
-              }
-
-              if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor) && (songHistory[i].cid !== data.media.cid)) {
-                // Same Song Name/Maybe diff Author
-                if (songHistory[i].format === 1) {
-                  await bot.plug.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {
-                    cid: songHistory[i].cid,
-                    time: bot.moment(songHistory[i].created_at).fromNow(),
-                  }));
-                  break;
-                }
-              }
-            }
-          }
+        if (!songHistory.maybe) {
+          await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
+            time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+          }));
+          await bot.plug.sendChat("!plays");
+          //await bot.plug.moderateForceSkip();
+        } else {
+          await bot.plug.sendChat(bot.utils.replace(bot.lang.maybeHistorySkip, {
+            cid: songHistory.cid,
+            time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+          }));
         }
       }
 
