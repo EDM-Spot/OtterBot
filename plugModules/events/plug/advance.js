@@ -14,6 +14,8 @@ module.exports = function Event(bot, filename, platform) {
     run: async (data) => {
       if (!isObject(data) || !isObject(data.media) || !isObject(data.currentDJ)) return;
 
+      bot.plug.woot();
+
       clearTimeout(bot.autoSkipTimeout);
 
       let songAuthor = null;
