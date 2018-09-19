@@ -59,7 +59,7 @@ module.exports = function Command(bot) {
       }
 
       const regionRestriction = get(YouTubeMediaData, "contentDetails.regionRestriction");
-      const MINIMUM_COUNTRIES_ALLOWED = 5;
+      const MINIMUM_COUNTRIES_ALLOWED = 96;
 
       const allowed = get(regionRestriction, "allowed", []);
       const blocked = get(regionRestriction, "blocked", []);
