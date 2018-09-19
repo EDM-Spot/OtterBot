@@ -67,6 +67,12 @@ module.exports = function Command(bot) {
 
       const arraysCheck = (isArray(allowed) || isArray(denied) || isArray(blocked));
 
+      console.log(regionRestriction);
+      console.log(arraysCheck);
+      console.log(allowed);
+      console.log(blocked);
+      console.log(denied);
+      
       if (isObject(regionRestriction) && arraysCheck) {
         if (isArray(denied) && denied.length >= MINIMUM_COUNTRIES_ALLOWED) {
           this.reply(lang.check.blockedTooMany, { count: denied.length || 149, which }, 6e4);

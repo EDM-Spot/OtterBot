@@ -48,8 +48,6 @@ module.exports = function Event(bot, filename, platform) {
           }
         }
       } catch (err) {
-        console.log(err);
-
         songAuthor = data.media.author;
         songTitle = data.media.title;
       }
@@ -151,8 +149,6 @@ module.exports = function Event(bot, filename, platform) {
             }
           }
         } catch (err) {
-          console.log(err);
-
           lastSongAuthor = lastPlay.media.author;
           lastSongTitle = lastPlay.media.title;
         }
