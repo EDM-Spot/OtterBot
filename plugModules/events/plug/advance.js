@@ -16,8 +16,6 @@ module.exports = function Event(bot, filename, platform) {
 
       bot.plug.woot();
 
-      clearTimeout(bot.autoSkipTimeout);
-
       let songAuthor = null;
       let songTitle = null;
 
@@ -98,12 +96,12 @@ module.exports = function Event(bot, filename, platform) {
         }
       }
 
-      const savedCID = data.media.cid;
+      const savedID = data.media.id;
 
       setTimeout(async () => {
         const currentMedia = bot.plug.getMedia();
 
-        if (savedCID === get(currentMedia, "cid")) {
+        if (savedID === get(currentMedia, "id")) {
           await bot.plug.sendChat(bot.lang.stuckSkip);
           await bot.plug.moderateForceSkip();
         }
