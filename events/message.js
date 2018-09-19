@@ -12,6 +12,14 @@ module.exports = class {
     //  and not get into a spam loop (we call that "botception").
     if (message.author.bot) return;
 
+    // Delete messages in bot only channels
+    if (!message.author.bot) {
+      if (message.channel.id === "486637288923725824" || message.channel.id === "487985043776733185"
+           || message.channel.id === "486125808553820160" || message.channel.id === "486598639691497474") {
+        message.delete();
+      }
+    }
+
     // Grab the settings for this server from the Enmap
     // If there is no guild, get default conf (DMs)
     const settings = this.client.getSettings(message.guild);

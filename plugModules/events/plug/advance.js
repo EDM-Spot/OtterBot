@@ -84,9 +84,7 @@ module.exports = function Event(bot, filename, platform) {
       const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, data.media.cid);
 
       if (!isNil(songHistory)) {
-        console.log(map(songHistory, "maybe"));
-        console.log(songHistory.maybe);
-        if (!map(songHistory, "maybe")) {
+        if (!songHistory.maybe) {
           await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
             time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
           }));
@@ -94,7 +92,7 @@ module.exports = function Event(bot, filename, platform) {
           //await bot.plug.moderateForceSkip();
         } else {
           await bot.plug.sendChat(bot.utils.replace(bot.lang.maybeHistorySkip, {
-            cid: map(songHistory, "cid"),
+            cid: map(songHistory, "cid")[0],
             time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
           }));
         }
