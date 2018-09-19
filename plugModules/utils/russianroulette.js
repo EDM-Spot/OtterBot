@@ -1,3 +1,5 @@
+const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+
 module.exports = function Util(bot) {
   class RussianRouletteUtil {
     constructor() {
@@ -95,13 +97,14 @@ module.exports = function Util(bot) {
           user: user.username,
         }));
 
-        if (bot.plug.getWaitListPosition(victim) === -1) {
+        if (bot.plug.getWaitListPosition(victim) === -1 && (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR)) {
           await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
   
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }
-
+        console.log(user);
+        console.log(unluckyshot);
         bot.queue.add(user, unluckyshot);
       }
 

@@ -50,17 +50,17 @@ module.exports = function Command(bot) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.current }, 6e4);
           return true;
         } else {
-          if (!songHistory.maybe) {
+          if (!map(songHistory, "maybe")) {
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
             }, 6e4);
             return true;
           } else {
-            if (songHistory.format === 1) {
+            if (map(songHistory, "format") === 1) {
               this.reply(lang.plays.maybeLastPlayWas, {
                 which: lang.plays.specified,
-                cid: songHistory.cid,
+                cid: map(songHistory, "cid"),
                 time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
               }, 6e4);
               return true;
@@ -87,17 +87,17 @@ module.exports = function Command(bot) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
           return true;
         } else {
-          if (!songHistory.maybe) {
+          if (!map(songHistory, "maybe")) {
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
             }, 6e4);
             return true;
           } else {
-            if (songHistory.format === 1) {
+            if (map(songHistory, "format") === 1) {
               this.reply(lang.plays.maybeLastPlayWas, {
                 which: lang.plays.specified,
-                cid: songHistory.cid,
+                cid: map(songHistory, "cid"),
                 time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
               }, 6e4);
               return true;
@@ -124,17 +124,17 @@ module.exports = function Command(bot) {
               this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
               return true;
             } else {
-              if (!songHistory.maybe) {
+              if (!map(songHistory, "maybe")) {
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,
                   time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
                 }, 6e4);
                 return true;
               } else {
-                if (songHistory.format === 1) {
+                if (map(songHistory, "format") === 1) {
                   this.reply(lang.plays.maybeLastPlayWas, {
                     which: lang.plays.specified,
-                    cid: songHistory.cid,
+                    cid: map(songHistory, "cid"),
                     time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
                   }, 6e4);
                   return true;

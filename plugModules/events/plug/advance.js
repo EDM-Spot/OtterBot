@@ -71,7 +71,7 @@ module.exports = function Event(bot, filename, platform) {
 
       const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid }});
 
-      if (isObject(blacklisted)) {
+      if (isObject(blacklisted) || songAuthor.includes("Nightcore") || songTitle.includes("Nightcore")) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
         await bot.plug.moderateForceSkip();
       }
@@ -84,7 +84,9 @@ module.exports = function Event(bot, filename, platform) {
       const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, data.media.cid);
 
       if (!isNil(songHistory)) {
-        if (!songHistory.maybe) {
+        console.log(map(songHistory, "maybe"));
+        console.log(songHistory.maybe);
+        if (!map(songHistory, "maybe")) {
           await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
             time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
           }));
@@ -92,7 +94,7 @@ module.exports = function Event(bot, filename, platform) {
           //await bot.plug.moderateForceSkip();
         } else {
           await bot.plug.sendChat(bot.utils.replace(bot.lang.maybeHistorySkip, {
-            cid: songHistory.cid,
+            cid: map(songHistory, "cid"),
             time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
           }));
         }
@@ -133,23 +135,30 @@ module.exports = function Event(bot, filename, platform) {
         let lastSongAuthor = null;
         let lastSongTitle = null;
 
-        if (get(lastPlay, "media.format", 2) === 1) {
-          const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.media.cid);
+        try {
+          if (get(lastPlay, "media.format", 2) === 1) {
+            const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.media.cid);
   
-          const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
-          const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
-  
-          lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
-          lastSongTitle = lastFullTitle.split(" - ")[1].trim();
-        } else {
-          const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
-  
-          if (!isNil(lastSoundCloudMediaData)) {
-            const lastFullTitle = lastSoundCloudMediaData.title;
+            const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
+            const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
   
             lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
             lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+          } else {
+            const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
+  
+            if (!isNil(lastSoundCloudMediaData)) {
+              const lastFullTitle = lastSoundCloudMediaData.title;
+  
+              lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
+              lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+            }
           }
+        } catch (err) {
+          console.log(err);
+
+          lastSongAuthor = lastPlay.media.author;
+          lastSongTitle = lastPlay.media.title;
         }
 
         if (isNil(lastSongAuthor) || isNil(lastSongTitle)) {

@@ -127,7 +127,6 @@
       "valid": "%%TITLE%% seems good to be played!",
       "mediaUnavailable": "The %%WHICH%% media seems to be unavailable.",
       "plausible": "Something seems wrong with that media, I'd avoid playing it.",
-      "unavailableOnUS": "That media seems to be unavailable on the US.",
       "blockedTooMany": "The %%WHICH%% media is blocked in too many countries (%%COUNT%%).",
       "blockedIn": "The %%WHICH%% media is blocked on: %%COUNTRIES%%",
       "allowedOnlyIn": "The %%WHICH%% media is only allowed on: %%COUNTRIES%%",

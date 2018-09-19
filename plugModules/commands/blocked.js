@@ -4,12 +4,12 @@ const {
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["blocked", "check", "regioncheck", "videocheck"],
+    names: ["blocked", "check"],
     minimumPermission: 2000,
     cooldownType: "perUse",
     cooldownDuration: 10,
     parameters: "[YouTube Link]",
-    description: "Checks if the specified (if none was specified it takes the current) media is unavailable in any sort of way",
+    description: "Checks if media is unavailable in any sort of way",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       let YouTubeMediaID;
       let which;
@@ -68,10 +68,7 @@ module.exports = function Command(bot) {
       const arraysCheck = (isArray(allowed) || isArray(denied) || isArray(blocked));
 
       if (isObject(regionRestriction) && arraysCheck) {
-        if ((isArray(denied) && denied.includes("US")) || (isArray(blocked) && blocked.includes("US")) || (isArray(allowed) && !allowed.includes("US"))) {
-          this.reply(lang.check.unavailableOnUS, {}, 6e4);
-          return true;
-        } else if (isArray(denied) && denied.length >= MINIMUM_COUNTRIES_ALLOWED) {
+        if (isArray(denied) && denied.length >= MINIMUM_COUNTRIES_ALLOWED) {
           this.reply(lang.check.blockedTooMany, { count: denied.length || 149, which }, 6e4);
           return true;
         } else if (isArray(blocked) && blocked.length >= MINIMUM_COUNTRIES_ALLOWED) {
