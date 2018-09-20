@@ -65,6 +65,7 @@ module.exports = function Util(bot) {
 
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.getUser(winner);
+      const userPos = bot.plug.getWaitListPosition(user.id);
 
       if (!players.length) {
         this.players = [];
@@ -76,7 +77,7 @@ module.exports = function Util(bot) {
 
       const position = 5;
 
-      if (!user || typeof user.username !== "string" || !user.username.length) {
+      if (!user || typeof user.username !== "string" || !user.username.length || (userPos >= 0 && userPos <= 5)) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
