@@ -64,6 +64,7 @@ let currentCategory = "";
     <% currentCategory = cat; %>
   <% } %>
   <div class="card-columns">
+    <% let modalCount = 0; %>
     <% c.commands.forEach( d => { %>
       <div class="card">
         <h3 class="card-header">
@@ -73,10 +74,10 @@ let currentCategory = "";
           <p class="card-text">
             <%= d.Description %>
           </p>
-          <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#<%= `${d.Names}` %>Modal">more...</a></h6>
+          <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#<%= `${modalCount}` %>Modal">more...</a></h6>
         </div>
       </div>
-      <div class="modal fade" id="<%= `${d.Names}` %>Modal" tabindex="-1" role="dialog" aria-labelledby="<%= `${d.Names}` %>Label" aria-hidden="true">
+      <div class="modal fade" id="<%= `${modalCount}` %>Modal" tabindex="-1" role="dialog" aria-labelledby="<%= `${modalCount}` %>Label" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header btn-info disabled">
@@ -94,6 +95,7 @@ let currentCategory = "";
           </div>
         </div>
       </div>
+      <% modalCount += 1; %>
     <% }); %>
   </div>
 <% }); %>
