@@ -55,46 +55,46 @@ let currentCategory = "";
 %>
 
 <% commands.forEach( c => { %>
-<% const cat = c.roleName.toProperCase(); %>
-<% if (currentCategory !== cat) { %>
-<h3>
-  <%= cat %>
-</h3>
-<br>
-<div class="card-columns">
-  <% currentCategory = cat; %>
-  <% } %>
-  <% c.commands.forEach( d => { %>
-  <div class="card">
-    <h3 class="card-header">
-      <%= d.Names.toProperCase() %>
+  <% const cat = c.roleName.toProperCase(); %>
+  <% if (currentCategory !== cat) { %>
+    <h3>
+      <%= cat %>
     </h3>
-    <div class="card-body">
-      <p class="card-text">
-        <%= d.Description %>
-      </p>
-      <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#<%= `${d.Names}` %>Modal">more...</a></h6>
-    </div>
-  </div>
-  <div id="<%= `${d.Names}` %>Modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header btn-info disabled">
-          <h4 class="modal-title">
-            <%= d.Names.toProperCase() %>
-          </h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>Param:
-            <%= d.Parameters %>
+    <br>
+    <% currentCategory = cat; %>
+  <% } %>
+  <div class="card-columns">
+    <% c.commands.forEach( d => { %>
+      <div class="card">
+        <h3 class="card-header">
+          <%= d.Names.toProperCase() %>
+        </h3>
+        <div class="card-body">
+          <p class="card-text">
+            <%= d.Description %>
           </p>
+          <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#<%= `${d.Names}` %>Modal">more...</a></h6>
         </div>
-        <div class="modal-footer"><button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button></div>
       </div>
-    </div>
+      <div id="<%= `${d.Names}` %>Modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header btn-info disabled">
+              <h4 class="modal-title">
+                <%= d.Names.toProperCase() %>
+              </h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>Param:
+                <%= d.Parameters %>
+              </p>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button></div>
+          </div>
+        </div>
+      </div>
+    <% }); %>
   </div>
-  <% }); %>
-</div>
 <% }); %>
 <% include ./blocks/footer %>
