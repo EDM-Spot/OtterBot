@@ -74,10 +74,10 @@ let currentCategory = "";
           <p class="card-text">
             <%= d.Description %>
           </p>
-          <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#<%= `${modalCount}` %>Modal">more...</a></h6>
+          <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#N<%= `${modalCount}` %>Modal">Details</a></h6>
         </div>
       </div>
-      <div class="modal fade" id="<%= `${modalCount}` %>Modal" tabindex="-1" role="dialog" aria-labelledby="<%= `${modalCount}` %>Label" aria-hidden="true">
+      <div class="modal fade" id="N<%= `${modalCount}` %>Modal" tabindex="-1" role="dialog" aria-labelledby="N<%= `${modalCount}` %>Label" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header btn-info disabled">

@@ -84,9 +84,10 @@ class Set extends Command {
       
     } else {
       // Otherwise, the default action is to return the whole configuration;
+      const longestKey = Object.keys(settings).reduce((long, str) => Math.max(long, str.length), 0);
       const array = [];
       Object.entries(settings).forEach(([key, value]) => {
-        array.push(`${key}${" ".repeat(20 - key.length)}::  ${value}`); 
+        array.push(`${key}${" ".repeat(longestKey - key.length)} ::  ${value}`); 
       });
       await message.channel.send(`= Current Guild Settings =\n${array.join("\n")}`, {code: "asciidoc"});
     }
