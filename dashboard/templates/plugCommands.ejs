@@ -1,6 +1,7 @@
 <%- include('blocks/header', {bot, user, path}) %>
 
 <% const cmds = bot.plugCommands.getLoaded();
+console.log(cmds);
 const commands = [];
 
 const roles = {
@@ -51,7 +52,8 @@ for (let i = 0; i < 5; i++) {
   });
 }
 %>
-  <% for (const roleSection in commands) { %>
+  <% for (const roleSection in commands) { 
+    console.log(roleSection); %>
       <h3><%= roleSection %></h3>
       <br>
       <div class="card-columns">
