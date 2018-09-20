@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="GuideBot" />
-    <meta property="og:title" content="<%= bot.user.username %> Dashboard" />
+    <meta name="EDMSpot" />
+    <meta property="og:title" content="EDM Spot" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://dashboard.ban-hammered.me" /> <!--This redirects to the this site no matter what link-->
     <meta property="og:description" content="<% if(bot.appInfo.description.length > 3) { %> <%= bot.appInfo.description %> <% } else { %>No description given.<% }%>" />
     <meta property="og:image" content="<%= bot.user.displayAvatarURL %>"/>
-    <meta property="og:site_name" content="<%= bot.user.username %> Dashboard">
+    <meta property="og:site_name" content="EDM Spot">
     <meta property="og:locale" content="en_US">
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -25,7 +25,7 @@
     <link rel='icon' href='<%= bot.user.avatarURL %>'>
 
 
-    <title><%= bot.user.username %></title>
+    <title>EDM Spot</title>
   </head>
   <body>
     <a name="top"></a>
@@ -36,8 +36,7 @@
         <div class="collapse navbar-collapse" id="navbar01">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" href="/commands">Commands</a></li>
-            <li class="nav-item"><a class="nav-link<% if(!bot.appInfo.botPublic) { %> disabled<% } %>" href="https://discordapp.com/oauth2/authorize?client_id=<%= bot.appInfo.id %>&scope=bot&response_type=code&redirect_uri=<%= encodeURIComponent(bot.config.dashboard.callbackURL) %>">Add to Server</a></li>
-            <li class="nav-item"><a class="nav-link" href="/stats">On <%= bot.guilds.size %> Servers</a></li>
+            <li class="nav-item"><a class="nav-link" href="/stats">Stats</a></li>
           </ul>
           <ul class="navbar-nav">
             <% if(user) { %>
