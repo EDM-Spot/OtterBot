@@ -22,9 +22,7 @@ module.exports = function Command(bot) {
 
 
       if (isNil(inst)) return false;
-      console.log(id);
-      console.log(inst);
-
+      
       const rank = bot.utils.numberWithCommas(inst[0][0].rank);
       const props = bot.utils.numberWithCommas(inst[0][0].props);
 
