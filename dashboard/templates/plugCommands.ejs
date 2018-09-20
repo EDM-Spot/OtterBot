@@ -1,7 +1,6 @@
 <%- include('blocks/header', {bot, user, path}) %>
 
 <% const cmds = bot.plugCommands.getLoaded();
-console.log(cmds);
 const commands = [];
 
 const roles = {
@@ -51,35 +50,40 @@ for (let i = 0; i < 5; i++) {
     commands: cmds.filter(filter.bind(this, i * 1000)).map(mapper),
   });
 }
+
+let currentCategory = "";
 %>
-  <% for (const roleSection in commands) { 
-    console.log(roleSection); %>
-      <h3><%= roleSection %></h3>
+
+    <% commands.forEach( c => { %>
+      <% const cat = c.roleName.toProperCase(); %>
+      <% if (currentCategory !== cat) { %>
+        <h3><%= cat %></h3>
       <br>
       <div class="card-columns">
-        <% for (const command in roleSection) { %>
+        <% currentCategory = cat; %>
+        <% } %>
+        <% c.commands.forEach( d => { %>
           <div class="card">
-            <h3 class="card-header"><%= command.Names.toProperCase() %></h3>
+            <h3 class="card-header"><%= d.Names.toProperCase() %></h3>
             <div class="card-body">
-              <p class="card-text"><%= command.Description %></p>
-              <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#<%= `${command.Names}` %>Modal">more...</a></h6>
+              <p class="card-text"><%= d.Description %></p>
+              <h6 class="card-subtitle text-muted"><br /><a href="#" data-toggle="modal" data-target="#<%= `${d.Names}` %>Modal">more...</a></h6>
             </div>
           </div>
-          <div id="<%= `${command.Names}` %>Modal" class="modal fade" role="dialog">
+          <div id="<%= `${d.Names}` %>Modal" class="modal fade" role="dialog">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header btn-info disabled">
-                  <h4 class="modal-title"><%= command.Names.toProperCase() %></h4>
+                  <h4 class="modal-title"><%= d.Names.toProperCase() %></h4>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                  <p>Param: <%= command.Parameters %></p>
+                  <p>Param: <%= d.Parameters %></p>
                 </div>
                 <div class="modal-footer"><button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button></div>
               </div>
             </div>
           </div>
-        <% } %>
-      </div>
-  <% } %>
+        <% }); %>
+        <% }); %>
 <% include ./blocks/footer %>
