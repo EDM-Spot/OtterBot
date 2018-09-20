@@ -52,7 +52,6 @@ for (let i = 0; i < 5; i++) {
 }
 %>
   <% for (const roleSection in commands) { %>
-    <% if (roleSection.commands.length) { %>
       <h3><%= roleSection %></h3>
       <br>
       <div class="card-columns">
@@ -80,6 +79,5 @@ for (let i = 0; i < 5; i++) {
           </div>
         <% } %>
       </div>
-    <% } %>
   <% } %>
 <% include ./blocks/footer %>
