@@ -195,7 +195,7 @@ module.exports = function Event(bot, filename, platform) {
           }
         }
         
-        bot.channels.get("486125808553820160").send("**" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${data.media.author} - ${data.media.title}`).then(m => {
+        bot.channels.get("486125808553820160").send("**" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
           savedMessageID = m.id;
           savedMessage = m.content;
         });
