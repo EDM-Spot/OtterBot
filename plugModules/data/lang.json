@@ -19,7 +19,7 @@
   "commands": {
     "default": "[!%%COMMAND%%] [%%USER%%] %%MESSAGE%%",
     "kill": "Shutting down.. :(",
-    "rules": "You can read the Rules here: https://tinyurl.com/EDMspot %%MENTION%%",
+    "rules": "You can read the Rules here: https://edmspot.tk/rules %%MENTION%%",
     "rdj": "Read about the Resident DJ role here: https://git.io/fNzo0 %%MENTION%%",
     "waitlist": "How to queue a song: https://i.imgur.com/SdazrBO.png %%MENTION%%",
     "shush": "https://i.imgur.com/05NVq0h.png %%MENTION%%",

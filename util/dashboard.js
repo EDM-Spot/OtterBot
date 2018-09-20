@@ -219,6 +219,9 @@ module.exports = (client) => {
     renderTemplate(res, req, "index.ejs");
   });
 
+  app.get("/rules", (req, res) => {
+    renderTemplate(res, req, "rules.ejs");
+  });
 
   // The list of commands the bot has. Current **not filtered** by permission.
   app.get("/commands", (req, res) => {
