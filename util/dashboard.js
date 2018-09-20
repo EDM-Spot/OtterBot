@@ -19,6 +19,9 @@ example, putting it in one file is a little simpler. Just *a little*.
 // Native Node Imports
 const url = require("url");
 const path = require("path");
+const fs = require("fs");
+const https = require("https");
+
 
 // Used for Permission Resolving...
 const Discord = require("discord.js");
@@ -93,7 +96,6 @@ module.exports = (client) => {
   (accessToken, refreshToken, profile, done) => {
     process.nextTick(() => done(null, profile));
   }));
-
   
   // Session data, used for temporary storage of your visitor's session information.
   // the `secret` is in fact a "salt" for the data, and should not be shared publicly.
@@ -103,6 +105,17 @@ module.exports = (client) => {
     resave: false,
     saveUninitialized: false,
   }));
+
+  // Certificate
+  const privateKey = fs.readFileSync("/etc/letsencrypt/live/edmspot.tk-0001/privkey.pem", "utf8");
+  const certificate = fs.readFileSync("/etc/letsencrypt/live/edmspot.tk-0001/cert.pem", "utf8");
+  const ca = fs.readFileSync("/etc/letsencrypt/live/edmspot.tk-0001/chain.pem", "utf8");
+
+  const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+  };
 
   // Initializes passport and session.
   app.use(passport.initialize());
@@ -374,5 +387,7 @@ module.exports = (client) => {
     res.redirect("/dashboard/"+req.params.guildID);
   });
   
-  client.site = app.listen(client.config.dashboard.port);
+  const httpsServer = https.createServer(credentials, app);
+
+  client.site = httpsServer.listen(client.config.dashboard.port);
 };
