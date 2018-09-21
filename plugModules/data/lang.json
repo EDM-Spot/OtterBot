@@ -31,6 +31,7 @@
     "sodas": "%%SODAS%% :sodas:",
     "genre": "Genres: %%GENRES%%",
     "rcs": "Want custom emotes and more customizability for plug.dj? Get the RCS Extension/Script! https://rcs.radiant.dj %%MENTION%%",
+    "myID": "Your ID is %%ID%%",
     "app": "plug.dj has Official apps for both iOS and Android! Check out their Blog post: https://blog.plug.dj/2017/03/mobile-app-release/ %%MENTION%%",
     "xp": "you have %%POINTS%% XP!",
     "cantUnlock": "There are users waiting to be added so I cannot unlock the wait list right now.",
