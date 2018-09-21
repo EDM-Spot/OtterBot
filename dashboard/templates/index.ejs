@@ -22,15 +22,17 @@
           </thead>
           <tbody>
             <% for (let i = 0; i < instance.length; i++) { %>
+              <% console.log(instance[i]) %>
+              console.log(instance[i].dataValues)
             <tr>
               <td>
                 <% i %>
               </td>
               <td>
-                <% instance[i].username %>
+                <% instance[i].dataValues.username %>
               </td>
               <td>
-                <% instance[i].props %>
+                <% instance[i].dataValues.props %>
               </td>
             </tr>
             <% } %>

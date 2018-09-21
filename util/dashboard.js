@@ -227,7 +227,6 @@ module.exports = (client) => {
       order: [["created_at", "ASC"]],
       limit: 5,
     });
-    console.log(instance);
 
     renderTemplate(res, req, "index.ejs", {instance});
   });
