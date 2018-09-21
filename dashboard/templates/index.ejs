@@ -1,7 +1,7 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <%
 const Op = bot.Sequelize.Op;
-  const instance = await bot.db.models.users.findAll({
+  const instance = bot.db.models.users.findAll({
     attributes: ["id", "props"],
     order: [["props", "DESC"]],
     where: {
