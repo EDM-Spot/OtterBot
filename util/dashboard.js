@@ -231,6 +231,12 @@ module.exports = (client) => {
     renderTemplate(res, req, "index.ejs", {instance});
   });
 
+  app.get("/blacklist", async (req, res) => {
+    const instance = await client.db.models.blacklist.findAll();
+
+    renderTemplate(res, req, "blacklist.ejs", {instance});
+  });
+
   app.get("/rules", (req, res) => {
     renderTemplate(res, req, "rules.ejs");
   });

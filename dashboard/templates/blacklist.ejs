@@ -1,0 +1,31 @@
+<%- include('blocks/header', {bot, user, path}) %>
+<div class="jumbotron">
+  <div>
+    <h3>Blacklist</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">cid</th>
+          <th scope="col">By</th>
+          <th scope="col">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i = 0; i < instance.length; i++) { %>
+        <tr>
+          <td class="text-center">
+            <%= instance[i].dataValues.cid %>
+          </td>
+          <td class="text-center">
+            <%= instance[i].dataValues.moderator %>
+          </td>
+          <td class="text-center">
+            <%= instance[i].dataValues.created_at %>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% include ./blocks/footer %>
