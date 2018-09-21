@@ -1,3 +1,6 @@
+const moment = require("moment");
+require("moment-timer");
+
 module.exports = function Event(bot, filename, platform) {
   const event = {
     name: "connected",
@@ -24,11 +27,10 @@ module.exports = function Event(bot, filename, platform) {
       }
       
       console.info("[!] Plug Connected!");
-      
-      (function repeat() {
+
+      moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
         bot.plug.sendChat("Join our Discord https://discord.gg/GETaTWm");
-        setTimeout(repeat, 3600000);
-      })();
+      });
     },
     init() {
       bot.plug.on(this.name, this.run);
