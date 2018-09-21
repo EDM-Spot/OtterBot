@@ -102,17 +102,6 @@ module.exports = function Command(bot) {
 
           this.reply(lang.check.blockedIn, { countries: blocked.join(", "), which }, 6e4);
           return true;
-        } else if (isArray(allowed) && allowed.length >= MINIMUM_COUNTRIES_ALLOWED) {
-          if (allowed.length >= 20) {
-            this.reply(lang.check.blockedIn, {
-              countries: [...allowed.splice(0, 20), `and ${allowed.length} more.`].join(", "),
-              which,
-            }, 6e4);
-            return true;
-          }
-
-          this.reply(lang.check.blockedIn, { countries: allowed.join(", "), which }, 6e4);
-          return true;
         }
       }
 
