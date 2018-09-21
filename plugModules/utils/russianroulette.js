@@ -76,7 +76,7 @@ module.exports = function Util(bot) {
       const randomBool = Math.random() >= 0.5;
 
       const luckyshot = Math.floor(Math.random() * (bot.plug.getWaitListPosition(victim) - 5)) + 5;
-      const unluckyshot = Math.floor(Math.random() * Math.min(waitlist.length, bot.plug.getWaitListPosition(victim))) + 5; //Math.floor(Math.random() * (waitlist.length - bot.plug.getWaitListPosition(victim))) + waitlist.length;
+      const unluckyshot = Math.floor(Math.random() * (waitlist.length - bot.plug.getWaitListPosition(victim) + 1) + bot.plug.getWaitListPosition(victim));
 
       if (randomBool) {
         await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
