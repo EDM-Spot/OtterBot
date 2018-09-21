@@ -1,17 +1,4 @@
 <%- include('blocks/header', {bot, user, path}) %>
-<%
-  const instance = bot.db.models.users.findAll({
-    attributes: ["id", "props"],
-    order: [["props", "DESC"]],
-    where: {
-      props: {
-        [Op.not]: 0
-      }
-    },
-    limit: 5
-  });
-  console.log(instance);
-%>
 <div class="jumbotron">
   <div>
     <div class="row">

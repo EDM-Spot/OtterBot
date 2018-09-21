@@ -218,7 +218,18 @@ module.exports = (client) => {
   // Index page. If the user is authenticated, it shows their info
   // at the top right of the screen.
   app.get("/", (req, res) => {
-    renderTemplate(res, req, "index.ejs", {Op});
+    const instance = client.db.models.users.findAll({
+      where: {
+        props: {
+          [Op.not]: 0
+        }
+      },
+      order: [["created_at", "ASC"]],
+      limit: 5,
+    });
+    console.log(instance);
+
+    renderTemplate(res, req, "index.ejs", {instance});
   });
 
   app.get("/rules", (req, res) => {
