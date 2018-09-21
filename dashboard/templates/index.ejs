@@ -11,11 +11,11 @@
       </div>
       <div class="col-md-6">
         <div class="row justify-content-center d-flex">
-          <h5><i class="fas fa-crown"></i> Props LeaderBoard </h5>
+          <h4><i class="fas fa-crown"></i> Props LeaderBoard</h4>
         </div>
         <table class="table">
           <thead>
-            <tr>
+            <tr class="d-none">
               <th scope="col">Rank</th>
               <th scope="col">Username</th>
               <th scope="col">Props</th>
@@ -24,13 +24,13 @@
           <tbody>
             <% for (let i = 0; i < instance.length; i++) { %>
               <tr>
-                <td>
+                <td class="text-center">
                   <%= i + 1 %>
                 </td>
-                <td>
+                <td class="text-center">
                   <%= instance[i].dataValues.username %>
                 </td>
-                <td>
+                <td class="text-center">
                   <%= instance[i].dataValues.props %>
                 </td>
               </tr>
