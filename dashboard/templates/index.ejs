@@ -23,18 +23,15 @@
           </thead>
           <tbody>
             <% for (let i = 0; i < instance.length; i++) { %>
-            <% console.log(i) %>
-            <% console.log(instance[i].dataValues.username) %>
-            <% console.log(instance[i].dataValues.props) %>
               <tr>
                 <td>
-                  <% i %>
+                  <%= i + 1 %>
                 </td>
                 <td>
-                  <% instance[i].dataValues.username %>
+                  <%= instance[i].dataValues.username %>
                 </td>
                 <td>
-                  <% instance[i].dataValues.props %>
+                  <%= instance[i].dataValues.props %>
                 </td>
               </tr>
             <% } %>
