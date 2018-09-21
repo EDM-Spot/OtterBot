@@ -15,14 +15,20 @@
         </div>
         <table class="table">
           <thead>
-            <tr> </tr>
+            <tr>
+              <th scope="col">Rank</th>
+              <th scope="col">Username</th>
+              <th scope="col">Props</th>
+            </tr>
           </thead>
           <tbody>
-            <% let count = 1 %>
             <% for (let i = 0; i < instance.length; i++) { %>
+            <% console.log(i) %>
+            <% console.log(instance[i].dataValues.username) %>
+            <% console.log(instance[i].dataValues.props) %>
               <tr>
                 <td>
-                  <% count %>
+                  <% i %>
                 </td>
                 <td>
                   <% instance[i].dataValues.username %>
@@ -31,7 +37,6 @@
                   <% instance[i].dataValues.props %>
                 </td>
               </tr>
-            <% count += 1 %>
             <% } %>
           </tbody>
         </table>
