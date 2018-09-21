@@ -23,7 +23,7 @@ class Link extends Command {
       if (isNil(user)) return message.reply("Can't find your ID. Login in plug.dj, join the room and try again.");
 
       if (!isNil(user.get("discord"))) {
-        const discordName = this.client.users.get(userID.get("discord")).displayName;
+        const discordName = this.client.users.get(user.get("discord")).displayName;
         return message.reply("That ID it's already linked with " + discordName);
       }
 
