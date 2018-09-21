@@ -34,7 +34,7 @@ module.exports = async function Model(bot, sequelize) {
       defaultValue: 0,
     },
     discord: {
-      type: sequelize.INTEGER,
+      type: sequelize.BIGINT,
       allowNull: true,
     },
   });
