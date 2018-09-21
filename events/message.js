@@ -15,7 +15,7 @@ module.exports = class {
     // Delete messages in bot only channels
     if (!message.author.bot) {
       if (message.channel.id === "486637288923725824" || message.channel.id === "487985043776733185"
-           || message.channel.id === "486125808553820160" || message.channel.id === "486598639691497474") {
+           || message.channel.id === "486125808553820160") {
         message.delete();
       }
     }
