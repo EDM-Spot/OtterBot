@@ -22,6 +22,11 @@ class Link extends Command {
 
       if (isNil(user)) return message.reply("Can't find your ID. Login in plug.dj, join the room and try again.");
 
+      if (!isNil(user.get("discord"))) {
+        const discordName = this.client.users.get(userID.get("discord")).displayName;
+        return message.reply("That ID it's already linked with " + discordName);
+      }
+
       const userID = await this.client.db.models.users.findOne({
         where: {
           discord: message.author.id,
@@ -29,8 +34,7 @@ class Link extends Command {
       });
 
       if (!isNil(userID)) {
-        const discordName = this.client.users.get(userID.get("discord")).displayName;
-        return message.reply("That ID it's already linked with " + discordName);
+        return message.reply("You already linked your account!");
       }
 
       await this.client.db.models.users.update(
