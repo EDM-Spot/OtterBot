@@ -217,8 +217,8 @@ module.exports = (client) => {
 
   // Index page. If the user is authenticated, it shows their info
   // at the top right of the screen.
-  app.get("/", (req, res) => {
-    const instance = client.db.models.users.findAll({
+  app.get("/", async (req, res) => {
+    const instance = await client.db.models.users.findAll({
       where: {
         props: {
           [Op.not]: 0
