@@ -49,6 +49,8 @@ const helmet = require("helmet");
 // Used to parse Markdown from things like ExtendedHelp
 const md = require("marked");
 
+const { Op } = require("sequelize");
+
 module.exports = (client) => {
   // It's easier to deal with complex paths. 
   // This resolves to: yourbotdir/dashboard/
@@ -216,7 +218,7 @@ module.exports = (client) => {
   // Index page. If the user is authenticated, it shows their info
   // at the top right of the screen.
   app.get("/", (req, res) => {
-    renderTemplate(res, req, "index.ejs");
+    renderTemplate(res, req, "index.ejs", {Op});
   });
 
   app.get("/rules", (req, res) => {
