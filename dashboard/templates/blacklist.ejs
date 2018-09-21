@@ -1,31 +1,41 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <div class="jumbotron">
-  <div>
-    <h3>Blacklist</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">cid</th>
-          <th scope="col">By</th>
-          <th scope="col">Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (let i = 0; i < instance.length; i++) { %>
-        <tr>
-          <td class="text-center">
+  <h1>Blacklist</h1>
+  </hr>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Preview</th>
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Blacklisted By</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let i = 0; i < instance.length; i++) { %>
+      <tr>
+        <td class="text-center">
+        <a href="http://www.youtube.com/watch?v=<%= instance[i].dataValues.cid %>">
+          <img border="0" src="https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/youtube-64.png" width="64" height="64">
+        </a>
+        </td>
+        <td class="text-center">
             <%= instance[i].dataValues.cid %>
-          </td>
-          <td class="text-center">
-            <%= instance[i].dataValues.moderator %>
-          </td>
-          <td class="text-center">
-            <%= instance[i].dataValues.created_at %>
-          </td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
+        </td>
+        <td class="text-center">
+          
+        </td>
+        <td class="text-center">
+          <% const user = bot.db.models.users.findOne({ where: { id: instance[i].dataValues.moderator, }, }); %>
+          <%= user.get("username") %>
+        </td>
+        <td class="text-center">
+          <%= instance[i].dataValues.created_at %>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
 </div>
 <% include ./blocks/footer %>
