@@ -28,15 +28,17 @@ class Link extends Command {
         },
       });
 
-      const discordName = this.client.users.get(userID.get("discord")).displayName;
-      if (!isNil(userID)) return message.reply("That ID it's already linked with " + discordName);
+      if (!isNil(userID)) {
+        const discordName = this.client.users.get(userID.get("discord")).displayName;
+        return message.reply("That ID it's already linked with " + discordName);
+      }
 
       await this.client.db.models.users.update(
         { discord: message.author.id },
         { where: { id: args[0] }, defaults: { id: args[0] }}
       );
 
-      await message.reply(discordName + " linked with plug Account: " + user.get("username"));
+      await message.reply(message.author.username + " linked with plug Account: " + user.get("username"));
     } catch (e) {
       console.log(e);
     }
