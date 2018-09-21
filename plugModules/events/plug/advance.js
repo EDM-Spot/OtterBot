@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const moment = require("moment");
 const {
   isObject, isNaN, isNil, get, keys, map,
 } = require("lodash");
@@ -200,7 +201,7 @@ module.exports = function Event(bot, filename, platform) {
             }
           }
         
-          bot.channels.get("486125808553820160").send("**" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
+          bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
             savedMessageID = m.id;
             savedMessage = m.content;
           });

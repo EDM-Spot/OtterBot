@@ -38,6 +38,7 @@ class Link extends Command {
         { where: { id: args[0] }, defaults: { id: args[0] }}
       );
 
+      console.log(user);
       await message.reply(message.author.username + " linked with plug Account: " + user.get("username"));
     } catch (e) {
       console.log(e);
