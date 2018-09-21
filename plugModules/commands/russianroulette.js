@@ -38,7 +38,7 @@ module.exports = function Command(bot) {
           }
 
           this.reply(lang.russianroulette.onCooldown, {
-            elapsed: Math.floor((3600 - cooldown) / 60),
+            elapsed: Math.floor((10800 - cooldown) / 60),
             remaining: Math.ceil(cooldown / 60),
           });
           return true;
@@ -62,7 +62,7 @@ module.exports = function Command(bot) {
 
           if (cooldown != -2) {
             this.reply(lang.russianroulette.onCooldown, {
-              elapsed: Math.floor((3600 - cooldown) / 60),
+              elapsed: Math.floor((10800 - cooldown) / 60),
               remaining: Math.ceil(cooldown / 60),
             });
             return true;
