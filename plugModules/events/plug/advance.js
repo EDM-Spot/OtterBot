@@ -57,12 +57,16 @@ module.exports = function Event(bot, filename, platform) {
         songTitle = data.media.title;
       }
 
-      if (!isNil(bot.user)) {
-        bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
-          type: "LISTENING"
-        }).catch(function(error) {
-          console.log(error);
-        });
+      try {
+        if (!isNil(bot.user)) {
+          bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
+            type: "LISTENING"
+          }).catch(function(error) {
+            console.log(error);
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
 
       const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid }});
@@ -185,20 +189,24 @@ module.exports = function Event(bot, filename, platform) {
         const grabs = lastPlay.score.grabs;
         const mehs = lastPlay.score.negative;
 
-        if (!isNil(savedMessageID)) {
-          if (lastPlay.score.skipped === 1) {
-            bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
-              .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " Skipped!"));
-          } else {
-            bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
-              .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
+        try {
+          if (!isNil(savedMessageID)) {
+            if (lastPlay.score.skipped === 1) {
+              bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
+                .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " Skipped!"));
+            } else {
+              bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
+                .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
+            }
           }
-        }
         
-        bot.channels.get("486125808553820160").send("**" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
-          savedMessageID = m.id;
-          savedMessage = m.content;
-        });
+          bot.channels.get("486125808553820160").send("**" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
+            savedMessageID = m.id;
+            savedMessage = m.content;
+          });
+        } catch (err) {
+          console.log(err);
+        }
         
         // if they weren't skipped they deserve XP equivalent to the votes
         if (!lastPlay.score.skipped) {
