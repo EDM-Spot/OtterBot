@@ -224,7 +224,7 @@ module.exports = (client) => {
           [Op.not]: 0
         }
       },
-      order: [["created_at", "ASC"]],
+      order: [["props", "DESC"]],
       limit: 5,
     });
 

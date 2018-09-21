@@ -18,20 +18,20 @@
             <tr> </tr>
           </thead>
           <tbody>
+            <% let count = 1 %>
             <% for (let i = 0; i < instance.length; i++) { %>
-              <% console.log(instance[i].dataValues) %>
-              <% console.log(instance[i].dataValues.username) %>
-            <tr>
-              <td>
-                <% i %>
-              </td>
-              <td>
-                <% instance[i].dataValues.username %>
-              </td>
-              <td>
-                <% instance[i].dataValues.props %>
-              </td>
-            </tr>
+              <tr>
+                <td>
+                  <% count %>
+                </td>
+                <td>
+                  <% instance[i].dataValues.username %>
+                </td>
+                <td>
+                  <% instance[i].dataValues.props %>
+                </td>
+              </tr>
+            <% count += 1 %>
             <% } %>
           </tbody>
         </table>
