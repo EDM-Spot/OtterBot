@@ -27,8 +27,9 @@
           
         </td>
         <td class="text-center">
-          <% const user = bot.db.models.users.findOne({ where: { id: instance[i].dataValues.moderator, }, }); %>
-          <%= user.get("username") %>
+          <%# const user = bot.db.models.users.findOne({ where: { id: instance[i].dataValues.moderator, }, }); %>
+          <%#= user.get("username") %>
+          <%= instance[i].dataValues.moderator %>
         </td>
         <td class="text-center">
           <%= instance[i].dataValues.created_at %>
