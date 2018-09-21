@@ -35,8 +35,23 @@
         <div class="collapse navbar-collapse" id="navbar01">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" href="/rules">Rules</a></li>
-            <li class="nav-item"><a class="nav-link" href="/plugCommands">Plug Commands</a></li>
-            <li class="nav-item"><a class="nav-link" href="/commands">Discord Commands</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="commandsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Commands
+                </a>
+                <div class="dropdown-menu" aria-labelledby="commandsDropdown">
+                  <a class="dropdown-item" href="/plugCommands">Plug Commands</a>
+                  <a class="dropdown-item" href="/commands">Discord Commands</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="songsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Songs
+                </a>
+                <div class="dropdown-menu" aria-labelledby="songsDropdown">
+                  <a class="dropdown-item" href="/blacklist">Blacklist</a>
+                </div>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/stats">Stats</a></li>
           </ul>
           <ul class="navbar-nav">
