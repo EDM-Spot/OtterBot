@@ -5,10 +5,7 @@
       <div class="col-md-6">
         <h1 draggable="true">EDM Spot</h1>
         <h4>
-          <% if(bot.appInfo.description.length > 3) { %>
-          <%= bot.appInfo.description %>
-          <% } else { %>No description given.
-          <% }%>
+          <% if(bot.appInfo.description.length > 3) { %> <%= bot.appInfo.description %> <% } else { %>No description given. <% }%>
         </h4>
         <br>
       </div>
@@ -22,8 +19,8 @@
           </thead>
           <tbody>
             <% for (let i = 0; i < instance.length; i++) { %>
-              <% console.log(instance[i]) %>
-              console.log(instance[i].dataValues)
+              <% console.log(instance[i].dataValues) %>
+              <% console.log(instance[i].dataValues.username) %>
             <tr>
               <td>
                 <% i %>
