@@ -1,7 +1,7 @@
 const { get, assign, isNil } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
-const IMMEDIATE_DELETION = ["d", "join", "shush", "rules", "cmds", "plays"];
+const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays"];
 const CMD_BANNED = ["cookie", "myprops", "xp", "hello", "catfact"];
 
 module.exports = class Command {
@@ -25,7 +25,7 @@ module.exports = class Command {
   async handleDeletion() {
     const { registeredCommand, name } = this.instance;
 
-    if (get(this.rawData, "user.gRole", 0) >= GLOBAL_ROLES.MODERATOR) return; 
+    if (get(this.rawData, "user.gRole", 0) >= GLOBAL_ROLES.MODERATOR) return;
 
     if (IMMEDIATE_DELETION.includes(name) || registeredCommand.minimumPermission >= ROOM_ROLE.RESIDENTDJ) {
       await this.bot.plug.moderateDeleteChat(this.rawData.id); //this.rawData.delete();

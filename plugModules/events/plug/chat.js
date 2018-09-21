@@ -1,4 +1,4 @@
-const { each, isNaN } = require("lodash");
+const { each } = require("lodash");
 const moment = require("moment");
 
 module.exports = function Event(bot, platform) {
