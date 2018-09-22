@@ -178,14 +178,14 @@ module.exports = function Event(bot, filename, platform) {
 
         // count how many props were given while that media played
         const props = await bot.db.models.props.count({
-          where: { historyID: `'${lastPlay.media.id}'`, dj: lastPlay.dj.id },
+          where: { historyID: `${lastPlay.id}`, dj: lastPlay.dj.id },
         });
 
         // get an user object for the last DJ
         const [instance] = await bot.db.models.users.findOrCreate({
           where: { id: lastPlay.dj.id }, defaults: { id: lastPlay.dj.id, username: lastPlay.dj.username },
         });
-        
+
         const woots = lastPlay.score.positive;
         const grabs = lastPlay.score.grabs;
         const mehs = lastPlay.score.negative;
