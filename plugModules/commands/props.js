@@ -15,7 +15,7 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const historyID = bot.plug.getHistoryID();
       const dj = bot.plug.getDJ();
-
+      console.log(historyID);
       if (isNil(historyID)) {
         this.reply(lang.props.nothingPlaying, {}, 6e4);
         return false;
