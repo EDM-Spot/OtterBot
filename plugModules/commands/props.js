@@ -16,7 +16,7 @@ module.exports = function Command(bot) {
       const historyID = bot.plug.getHistoryID();
       const dj = bot.plug.getDJ();
 
-      if (!isNil(historyID)) {
+      if (isNil(historyID)) {
         this.reply(lang.props.nothingPlaying, {}, 6e4);
         return false;
       } else if (isObject(dj) && dj.id === rawData.from.id) {
