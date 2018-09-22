@@ -28,7 +28,7 @@ module.exports = function Event(bot, filename, platform) {
       
       console.info("[!] Plug Connected!");
 
-      moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
+      new moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
         bot.plug.sendChat("Join our Discord https://discord.gg/GETaTWm");
       });
     },

@@ -34,7 +34,12 @@ module.exports = function Util(bot) {
       });
     }
     getMediaID(link) {
-      return (link.match(this.fullRegex)[1]);
+      try {
+        return (link.match(this.fullRegex)[1]);
+      }
+      catch (err) {
+        return undefined;
+      }
     }
     getMedia(id) {
       return this.req("GET", "/videos", null, {
