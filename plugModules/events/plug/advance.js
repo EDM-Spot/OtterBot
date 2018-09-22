@@ -128,8 +128,8 @@ module.exports = function Event(bot, filename, platform) {
         bot.points.votes = {};
 
         // reset any DC spots when they start DJing
-        await bot.redis.removeDisconnection(lastPlay.dj.id);
-        await bot.redis.removeGivePosition(lastPlay.dj.id);
+        await bot.redis.removeDisconnection(lastPlay.user.id);
+        await bot.redis.removeGivePosition(lastPlay.user.id);
 
         let lastSongAuthor = null;
         let lastSongTitle = null;
@@ -170,7 +170,7 @@ module.exports = function Event(bot, filename, platform) {
           woots: lastPlay.score.positive,
           grabs: lastPlay.score.grabs,
           mehs: lastPlay.score.negative,
-          dj: lastPlay.dj.id,
+          dj: lastPlay.user.id,
           skipped: lastPlay.score.skipped > 0,
           author: `${lastSongAuthor}`,
           title: `${lastSongTitle}`,
@@ -180,12 +180,12 @@ module.exports = function Event(bot, filename, platform) {
         console.log(lastPlay.id);
         // count how many props were given while that media played
         const props = await bot.db.models.props.count({
-          where: { historyID: `${lastPlay.id}`, dj: lastPlay.dj.id },
+          where: { historyID: `${lastPlay.id}`, dj: lastPlay.user.id },
         });
 
         // get an user object for the last DJ
         const [instance] = await bot.db.models.users.findOrCreate({
-          where: { id: lastPlay.dj.id }, defaults: { id: lastPlay.dj.id, username: lastPlay.dj.username },
+          where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id, username: lastPlay.user.username },
         });
 
         const woots = lastPlay.score.positive;
@@ -230,7 +230,7 @@ module.exports = function Event(bot, filename, platform) {
 
           await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
             props,
-            user: lastPlay.dj.username,
+            user: lastPlay.user.username,
             plural: props > 1 ? "s" : "",
           }), data.media.duration * 1e3);
         }
