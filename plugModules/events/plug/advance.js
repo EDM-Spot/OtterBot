@@ -176,8 +176,6 @@ module.exports = function Event(bot, filename, platform) {
           title: `${lastSongTitle}`,
         });
 
-        console.log(lastPlay);
-        console.log(lastPlay.id);
         // count how many props were given while that media played
         const props = await bot.db.models.props.count({
           where: { historyID: `${lastPlay.id}`, dj: lastPlay.user.id },
