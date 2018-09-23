@@ -82,7 +82,7 @@ class PlugHelp extends Command {
         currentCategory = cat;
       }
       c.commands.forEach( d => {
-        output += `${d.Names}${" ".repeat(31 - d.Names.length)} :: ${d.Parameters} :: ${d.Description}\n\n`;
+        output += `${d.Names}${" ".repeat(31 - d.Names.length)} :: ${d.Parameters} :: ${d.Description}\n`;
       });
     });
 

@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
 const moment = require("moment");
 const {
-  isObject, isNaN, isNil, get, keys, map,
+  isObject, isNaN, isNil, get, keys, map, sortBy,
 } = require("lodash");
 
 var savedMessageID;
@@ -113,7 +113,9 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        const lastPlay = bot.plug.getHistory()[0]; //await bot.plug.getHistory();
+        const getHistory = bot.plug.getHistory();
+        const sortHistory = sortBy(getHistory, ["timestamp"]);
+        const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
 
         // if plug reset the history or its a brand new room it won't have history
         if (isNil(lastPlay.media)) return;
