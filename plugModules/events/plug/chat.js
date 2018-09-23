@@ -55,8 +55,8 @@ module.exports = function Event(bot, platform) {
         });
       }
 
-      const dubtrack = /^(?=.*join)(?=.*dubtrack.fm)/;
-      const plug = /^(.*join|.*room).*plug.dj./;
+      const dubtrack = /^(?=.*join)(?=.*dubtrack.fm)/i;
+      const plug = /^(.*join|.*room).*plug.dj./i;
 
       if (dubtrack.test(rawData.message) || plug.test(rawData.message)) {
         bot.plug.moderateDeleteChat(rawData.id);
