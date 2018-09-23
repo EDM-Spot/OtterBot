@@ -2,6 +2,7 @@ const { each } = require("lodash");
 const moment = require("moment");
 require("moment-timer");
 const momentRandom = require("moment-random");
+const { ROOM_ROLE } = require("plugapi");
 
 module.exports = function Util(bot) {
   class LotteryUtil {
@@ -117,7 +118,7 @@ module.exports = function Util(bot) {
 
       each(this.players, (player) => {
         if (bot.plug.getUser(player)) {
-          if (bot.plug.getWaitListPosition(player) === -1) {
+          if (bot.plug.getWaitListPosition(player) === -1 || bot.plug.getUser(player).role >= ROOM_ROLE.BOUNCER) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
             if (bot.plug.getWaitListPosition(player) > 5) {
