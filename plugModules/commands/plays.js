@@ -2,7 +2,7 @@ const { isObject, isNil, has, get, map } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["plays", "lastplayed", "history"],
+    names: ["plays", "lastplayed"],
     minimumPermission: 0,
     cooldownType: "perUser",
     cooldownDuration: 10,
