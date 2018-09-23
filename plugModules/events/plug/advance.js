@@ -119,7 +119,7 @@ module.exports = function Event(bot, filename, platform) {
 
         // if plug reset the history or its a brand new room it won't have history
         if (isNil(lastPlay.media)) return;
-
+        console.log(lastPlay);
         //const [lastPlay] = history;
         
         // save how much XP they got for their play
