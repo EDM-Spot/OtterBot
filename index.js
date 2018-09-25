@@ -52,6 +52,7 @@ class Bot extends Discord.Client {
         console.log("Error initializing PlugAPI: " + err);
       }
     });
+    this.plug.multiLine = true;
 	
     // Aliases and commands are put in collections where they can be read from,
     // catalogued, listed, etc.
