@@ -36,16 +36,20 @@ module.exports = function Event(bot, filename, platform) {
             await bot.plug.sendChat(bot.utils.replace(bot.check.mediaUnavaialble, { which: "current" }));
           }
 
-          songAuthor = fullTitle.split(" - ")[0].trim();
-          songTitle = fullTitle.split(" - ")[1].trim();
+          if ((fullTitle.match(/-/g) || []).length === 1) {
+            songAuthor = fullTitle.split(" - ")[0].trim();
+            songTitle = fullTitle.split(" - ")[1].trim();
+          }
         } else {
           const SoundCloudMediaData = await bot.soundcloud.getTrack(data.media.cid);
 
           if (!isNil(SoundCloudMediaData)) {
             const fullTitle = SoundCloudMediaData.title;
 
-            songAuthor = fullTitle.split(" - ")[0].trim();
-            songTitle = fullTitle.split(" - ")[1].trim();
+            if ((fullTitle.match(/-/g) || []).length === 1) {
+              songAuthor = fullTitle.split(" - ")[0].trim();
+              songTitle = fullTitle.split(" - ")[1].trim();
+            }
           }
         }
       } catch (err) {
@@ -144,16 +148,20 @@ module.exports = function Event(bot, filename, platform) {
             const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
             const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
   
-            lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
-            lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+            if ((lastFullTitle.match(/-/g) || []).length === 1) {
+              lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
+              lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+            }
           } else {
             const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
   
             if (!isNil(lastSoundCloudMediaData)) {
               const lastFullTitle = lastSoundCloudMediaData.title;
   
-              lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
-              lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+              if ((lastFullTitle.match(/-/g) || []).length === 1) {
+                lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
+                lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+              }
             }
           }
         } catch (err) {
