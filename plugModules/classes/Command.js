@@ -56,7 +56,7 @@ module.exports = class Command {
     switch (true) {
       case (userCmdBanned.duration === "h" && timePassed >= 1):
       case (userCmdBanned.duration === "d" && timePassed >= 24):
-        bot.db.models.cmdbans.destroy({ where: { id: userCmdBanned.id } });
+        await bot.db.models.cmdbans.destroy({ where: { id: userCmdBanned.id } });
         return false;
       default:
         break;
