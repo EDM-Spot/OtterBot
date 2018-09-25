@@ -271,6 +271,8 @@ client.on("disconnect", () => client.logger.warn("Bot is disconnecting..."))
   .on("error", e => client.logger.error(e))
   .on("warn", info => client.logger.warn(info));
 
+client.plug.on("close", () => client.plug.connect(client.config.plug.room));
+client.plug.on("error", () => client.plug.connect(client.config.plug.room));
 
 /* MISCELANEOUS NON-CRITICAL FUNCTIONS */
 
