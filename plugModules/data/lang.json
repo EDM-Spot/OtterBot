@@ -159,7 +159,7 @@
       "currentAdded": "Current song blacklisted!",
       "linkAdded": "Song added to the blacklist!",
       "invalidLink": "The link specified is invalid.",
-      "deleted": "Song deleted from blacklist!",
+      "deleted": "Song deleted from blacklist!"
     },
     "move": {
       "isPlaying": "the user specified is currently playing and cannot be added!",
