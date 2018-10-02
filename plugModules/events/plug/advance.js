@@ -76,7 +76,12 @@ module.exports = function Event(bot, filename, platform) {
 
       const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid }});
 
-      if (isObject(blacklisted) || songAuthor.includes("Nightcore") || songTitle.includes("Nightcore")) {
+      if (isObject(blacklisted) || songAuthor.toLowerCase().includes("nightcore") || songTitle.toLowerCase().includes("nightcore") ||
+          songAuthor.toLowerCase().includes("bass boosted") || songTitle.toLowerCase().includes("bass boosted") ||
+          songAuthor.toLowerCase().includes("whatsapp") || songTitle.toLowerCase().includes("whatsapp") ||
+          songAuthor.toLowerCase().includes("gemido") || songTitle.toLowerCase().includes("gemido") ||
+          songAuthor.toLowerCase().includes("gemidão") || songTitle.toLowerCase().includes("gemidão") ||
+          songAuthor.toLowerCase().includes("rape") || songTitle.toLowerCase().includes("rape")) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
         await bot.plug.moderateForceSkip();
       }

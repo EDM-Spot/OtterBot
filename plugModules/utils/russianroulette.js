@@ -108,7 +108,7 @@ module.exports = function Util(bot) {
             this.chooseVictim(players.filter(player => player !== victim));
             return;
           }
-              
+
           await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
   
           this.chooseVictim(players.filter(player => player !== victim));
