@@ -237,6 +237,19 @@ module.exports = (client) => {
     renderTemplate(res, req, "blacklist.ejs", {instance});
   });
 
+  app.get("/history", async (req, res) => {
+    const instance = await client.db.models.plays.findAll({
+      where: {
+        created_at: {
+          [Op.gt]: client.moment().subtract(360, "minutes").toDate()
+        }
+      },
+      order: [["created_at", "DESC"]],
+    });
+
+    renderTemplate(res, req, "history.ejs", {instance});
+  });
+
   app.get("/rules", (req, res) => {
     renderTemplate(res, req, "rules.ejs");
   });
