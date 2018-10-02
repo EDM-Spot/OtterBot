@@ -32,6 +32,7 @@ module.exports = function Command(bot) {
           const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.cid);
   
           if (!isNil(SoundCloudMediaData)) {
+            console.log(SoundCloudMediaData);
             const fullTitle = SoundCloudMediaData.title;
   
             songAuthor = fullTitle.split(" - ")[0].trim();
