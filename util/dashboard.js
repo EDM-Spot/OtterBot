@@ -228,7 +228,16 @@ module.exports = (client) => {
       limit: 5,
     });
 
-    renderTemplate(res, req, "index.ejs", {instance});
+    const rank = await client.db.models.plays.findAll({
+      where: {
+        skipped: false
+      },
+      group : ["cid", "author", "title", "woots", "mehs", "grabs"],
+      order: [["woots", "DESC"]],
+      limit: 10,
+    });
+
+    renderTemplate(res, req, "index.ejs", {instance, rank});
   });
 
   app.get("/blacklist", async (req, res) => {

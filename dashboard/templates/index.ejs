@@ -41,6 +41,43 @@
         </table>
       </div>
     </div>
+    <div class="row">
+      <div class="row justify-content-center d-flex">
+        <h4><i class="fas fa-crown"></i> Songs LeaderBoard</h4>
+      </div>
+      <table class="table">
+        <thead>
+          <tr class="d-none">
+            <th scope="col">Rank</th>
+            <th scope="col">Title</th>
+            <th scope="col">Woots</th>
+            <th scope="col">Mehs</th>
+            <th scope="col">Grabs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < instance.length; i++) { %>
+            <tr>
+              <td class="text-center">
+                <%= i + 1 %>
+              </td>
+              <td class="text-center">
+                <%= rank[i].dataValues.author %> - <%= rank[i].dataValues.title %>
+              </td>
+              <td class="text-center">
+                <%= rank[i].dataValues.woots %>
+              </td>
+              <td class="text-center">
+                <%= rank[i].dataValues.mehs %>
+              </td>
+              <td class="text-center">
+                <%= rank[i].dataValues.grabs %>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 <% include ./blocks/footer %>
