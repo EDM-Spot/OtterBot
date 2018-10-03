@@ -243,7 +243,7 @@ module.exports = (client) => {
         skipped: false
       },
       group: ["cid", "author", "title"],
-      order: [literal("totalWoots DESC")],
+      order: [[literal("totalWoots DESC")]],
       limit: 10,
     });
 
