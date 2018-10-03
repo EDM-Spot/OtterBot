@@ -49,7 +49,7 @@ const helmet = require("helmet");
 // Used to parse Markdown from things like ExtendedHelp
 const md = require("marked");
 
-const { Op, literal, fn } = require("sequelize");
+const { Op, literal } = require("sequelize");
 
 module.exports = (client) => {
   // It's easier to deal with complex paths. 
@@ -242,8 +242,7 @@ module.exports = (client) => {
       where: {
         skipped: false
       },
-      group: ["cid", "author", "title"],
-      order: [[fn("sum", "woots"), "DESC"]],
+      group: ["cid", "author", "title"], //order: [["totalWoots", "DESC"]],
       limit: 10,
     });
 
