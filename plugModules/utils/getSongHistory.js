@@ -8,11 +8,6 @@ module.exports = function Util(bot) {
       if (isNil(cid)) return;
 
       const songHistory = await bot.db.models.plays.findAll({
-        where: {
-          created_at: {
-            [Op.gt]: bot.moment().subtract(360, "minutes").toDate()
-          }
-        },
         order: [["created_at", "ASC"]],
       });
 
@@ -21,28 +16,39 @@ module.exports = function Util(bot) {
           const playedMinutes = bot.moment().diff(bot.moment(songHistory[i].created_at), "minutes");
 
           if (!isNil(songHistory[i].title)) {
+            const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+            const savedAuthor = songHistory[i].author.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+
+            const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+            const savedTitle = songHistory[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
+
             if (playedMinutes <= 360) {
-              const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-              const savedAuthor = songHistory[i].author.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-
-              const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-              const savedTitle = songHistory[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
-
               if (songHistory[i].cid === cid) {
                 // Song Played | Same ID
-                return { songHistory: songHistory[i], maybe: false };
+                return { songHistory: songHistory[i], maybe: false, skip: true };
               }
 
               if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (songHistory[i].cid !== cid)) {
                 // Same Song | Diff CID | Diff Remix/Channel
-                return { songHistory: songHistory[i], maybe: false };
+                return { songHistory: songHistory[i], maybe: false, skip: true };
               }
 
               if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor) && (songHistory[i].cid !== cid)) {
                 // Same Song Name/Maybe diff Author
                 if (songHistory[i].format === 1) { //Until soundcloud works?
-                  return { songHistory: songHistory[i], maybe: true };
+                  return { songHistory: songHistory[i], maybe: true, skip: true };
                 }
+              }
+            }
+            else {
+              if (songHistory[i].cid === cid) {
+                // Song Played | Same ID
+                return { songHistory: songHistory[i], maybe: false, skip: false };
+              }
+
+              if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (songHistory[i].cid !== cid)) {
+                // Same Song | Diff CID | Diff Remix/Channel
+                return { songHistory: songHistory[i], maybe: false, skip: false };
               }
             }
           }
