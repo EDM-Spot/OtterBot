@@ -132,6 +132,19 @@ module.exports = function Event(bot, filename, platform) {
         // if plug reset the history or its a brand new room it won't have history
         if (isNil(lastPlay.media)) return;
 
+        const lastSaved = await bot.db.models.plays.findAll({
+          where: {
+            cid: lastPlay.media.cid,
+            created_at: {	
+              [Op.gt]: bot.moment().subtract(2, "minutes").toDate()	
+            }
+          },
+          order: [["id", "DESC"]],
+          limit: 1,
+        });
+
+        if (!isNil(lastSaved)) return;
+
         //const [lastPlay] = history;
         
         // save how much XP they got for their play
