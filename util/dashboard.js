@@ -229,20 +229,20 @@ module.exports = (client) => {
     });
 
     const rank = await client.db.models.plays.findAll({
-      attributes: ["id", "cid", "author", "title",
+      attributes: ["cid", "author", "title",
         [literal(
-          "COALESCE(woots, 0)"
+          "SUM(woots)"
         ), "totalWoots"],
         [literal(
-          "COALESCE(mehs, 0)"
+          "SUM(mehs)"
         ), "totalMehs"],
         [literal(
-          "COALESCE(grabs, 0)"
+          "SUM(grabs)"
         ), "totalGrabs"]],
       where: {
         skipped: false
       },
-      group: ["cid", "cid"],
+      group: ["cid", "author", "title"],
       order: [["totalWoots", "DESC"]],
       limit: 10,
     });
