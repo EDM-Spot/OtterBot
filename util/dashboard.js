@@ -232,7 +232,7 @@ module.exports = (client) => {
       where: {
         skipped: false
       },
-      group : ["cid", "author", "title", "woots", "mehs", "grabs"],
+      group: ["id", "cid", "author", "title", "woots", "mehs", "grabs"],
       order: [["woots", "DESC"]],
       limit: 10,
     });
