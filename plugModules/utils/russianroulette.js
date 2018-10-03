@@ -114,8 +114,7 @@ module.exports = function Util(bot) {
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }
-        console.log(user);
-        console.log(unluckyshot);
+        
         bot.queue.add(user, unluckyshot);
       }
 
