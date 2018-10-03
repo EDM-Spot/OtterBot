@@ -1,3 +1,5 @@
+const { isNil } = require("lodash");
+
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["rules", "rule"],
@@ -12,7 +14,13 @@ module.exports = function Command(bot) {
       const user = users.filter(u => u.username.toLowerCase() === username.toLowerCase())[0] ||
 				users.filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
 
-      this.reply(lang.rules, { mention: `@${user}` || "" }, 6e4);
+      let mention = "";
+
+      if (!isNil(user)) {
+        mention = `@${user}`;
+      }
+
+      this.reply(lang.rules, { mention }, 6e4);
       return true;
     },
   });
