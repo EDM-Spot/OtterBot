@@ -49,7 +49,7 @@ const helmet = require("helmet");
 // Used to parse Markdown from things like ExtendedHelp
 const md = require("marked");
 
-const { Op } = require("sequelize");
+const { Op, literal } = require("sequelize");
 
 module.exports = (client) => {
   // It's easier to deal with complex paths. 
@@ -229,11 +229,21 @@ module.exports = (client) => {
     });
 
     const rank = await client.db.models.plays.findAll({
+      attributes: ["id", "cid", "author", "title",
+        [literal(
+          "COALESCE(woots, 0)"
+        ), "totalWoots"],
+        [literal(
+          "COALESCE(mehs, 0)"
+        ), "totalMehs"],
+        [literal(
+          "COALESCE(grabs, 0)"
+        ), "totalGrabs"]],
       where: {
         skipped: false
       },
-      group: ["id", "cid", "author", "title", "woots", "mehs", "grabs"],
-      order: [["woots", "DESC"]],
+      group: ["cid", "cid"],
+      order: [["totalWoots", "DESC"]],
       limit: 10,
     });
 
