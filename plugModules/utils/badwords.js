@@ -24,7 +24,7 @@ module.exports = function Util(bot) {
 
       return this.list
         .map(function(w) {
-          return new RegExp("^" + w.replace(/(\W)/g, "\\€1 ($1)") + "$", "gi");
+          return new RegExp("^" + w.replace(/(\W)/g, "\\\€1 (\$1)") + "\$", "gi");
         }, this)
         .reduce(function(outcome, wordExp) {
           return outcome || wordExp.test(word);
