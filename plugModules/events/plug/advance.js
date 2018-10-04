@@ -133,17 +133,11 @@ module.exports = function Event(bot, filename, platform) {
         if (isNil(lastPlay.media)) return;
 
         const lastSaved = await bot.db.models.plays.findAll({
-          where: {
-            cid: lastPlay.media.cid,
-            created_at: {	
-              [Op.gt]: bot.moment().subtract(2, "minutes").toDate()	
-            }
-          },
           order: [["id", "DESC"]],
           limit: 1,
         });
 
-        if (!isNil(lastSaved)) return;
+        if (!isNil(lastSaved)) if (lastSaved[0].cid === data.media.cid) return;
 
         //const [lastPlay] = history;
         
