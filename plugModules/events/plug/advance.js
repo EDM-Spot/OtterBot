@@ -136,11 +136,12 @@ module.exports = function Event(bot, filename, platform) {
           order: [["id", "DESC"]],
           limit: 1,
         });
-        console.log(lastSaved[0].cid);
-        console.log(lastSaved.cid);
-        console.log(lastSaved[0].dataValues.cid);
-        console.log(lastSaved.dataValues.cid);
-        if (!isNil(lastSaved)) if (lastSaved[0].cid === data.media.cid) return;
+
+        if (!isNil(lastSaved)) {
+          console.log(lastSaved[0].cid);
+          console.log(data.media.cid);
+          if (lastSaved[0].cid === data.media.cid) return;
+        }
 
         //const [lastPlay] = history;
         
