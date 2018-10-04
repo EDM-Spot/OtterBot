@@ -18,10 +18,6 @@ module.exports = function Util(bot) {
         .shift() || false;
     }
     isProfaneLike(word) {
-      if (~this.exclude.indexOf(word)) {
-        return false;
-      }
-
       if (~this.list.indexOf(word)) {
         return true;
       }
