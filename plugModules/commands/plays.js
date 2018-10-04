@@ -55,6 +55,7 @@ module.exports = function Command(bot) {
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+              count: map(songHistory, "count")[0],
             }, 6e4);
             return true;
           } else {
@@ -92,6 +93,7 @@ module.exports = function Command(bot) {
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+              count: map(songHistory, "count")[0],
             }, 6e4);
             return true;
           } else {
@@ -129,6 +131,7 @@ module.exports = function Command(bot) {
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,
                   time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                  count: map(songHistory, "count")[0],
                 }, 6e4);
                 return true;
               } else {

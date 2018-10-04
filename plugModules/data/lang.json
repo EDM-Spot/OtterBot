@@ -149,7 +149,7 @@
       "current": "current",
       "specified": "specified",
       "nothingPlaying": "There is no media playing.",
-      "lastPlayWas": "The %%WHICH%% media was last played %%TIME%%",
+      "lastPlayWas": "The %%WHICH%% media has been played %%COUNT%% times and was last played %%TIME%%",
       "maybeLastPlayWas": "https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Same Song?",
       "invalidLink": "The link specified is invalid.",
       "neverPlayed": "The %%WHICH%% media was never played."
