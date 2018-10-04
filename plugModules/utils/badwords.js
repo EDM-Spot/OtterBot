@@ -1,5 +1,5 @@
 //Original Code: https://github.com/web-mech/badwords
-const localList = require("/plugModules/data/badwords.json").words;
+const localList = require("~/plugModules/data/badwords.json").words;
 
 module.exports = function Util(bot) {
   class BadWords {
