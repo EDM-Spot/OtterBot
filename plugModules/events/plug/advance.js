@@ -136,7 +136,7 @@ module.exports = function Event(bot, filename, platform) {
           order: [["id", "DESC"]],
           limit: 1,
         });
-
+        console.log(lastSaved);
         if (!isNil(lastSaved)) if (lastSaved[0].cid === data.media.cid) return;
 
         //const [lastPlay] = history;
