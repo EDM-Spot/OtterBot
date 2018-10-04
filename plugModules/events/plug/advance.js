@@ -119,7 +119,7 @@ module.exports = function Event(bot, filename, platform) {
           await bot.plug.sendChat(bot.lang.stuckSkip);
           await bot.plug.moderateForceSkip();
         }
-      }, (data.media.duration + 5) * 1e3);
+      }, (data.media.duration + 10) * 1e3);
 
       try {
         // get history for the latest play
