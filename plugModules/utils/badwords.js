@@ -7,7 +7,6 @@ module.exports = function Util(bot) {
       this.list = Array.prototype.concat.apply(localList);
       this.regex = /[^a-zA-Z0-9|\$|\@]|\^/g;
       this.replaceRegex = /\w/g;
-  
     }
     isProfane(string) {
       return string
@@ -18,7 +17,7 @@ module.exports = function Util(bot) {
         .filter(this.isProfaneLike, this)
         .shift() || false;
     }
-    profaneLike(word) {
+    isProfaneLike(word) {
       if (~this.exclude.indexOf(word)) {
         return false;
       }
