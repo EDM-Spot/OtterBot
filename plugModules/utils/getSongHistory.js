@@ -12,6 +12,7 @@ module.exports = function Util(bot) {
           [literal(
             "COUNT(cid)"
           ), "count"]],
+        group: ["id"],
         order: [["created_at", "ASC"]],
       });
 
