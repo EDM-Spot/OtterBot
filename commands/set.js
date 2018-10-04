@@ -38,7 +38,7 @@ class Set extends Command {
       // User must specify a key.
       if (!key) return message.reply("Please specify a key to edit");
       // User must specify a key that actually exists!
-      if (!settings[key]) return message.reply("This key does not exist in the settings");
+      if (!settings.hasOwnProperty(key)) return message.reply("This key does not exist in the settings");
       // User must specify a value to change.
       const joinedValue = value.join(" ");
       if (joinedValue.length < 1) return message.reply("Please specify a new value");
@@ -56,7 +56,7 @@ class Set extends Command {
     // If a user does `-set del <key>`, let's ask the user if they're sure...
     if (action === "del" || action === "reset") {
       if (!key) return message.reply("Please specify a key to delete (reset).");
-      if (!settings[key]) return message.reply("This key does not exist in the settings");
+      if (!settings.hasOwnProperty(key)) return message.reply("This key does not exist in the settings");
       if (!overrides[key]) return message.reply("This key does not have an override and is already using defaults.");
 
       // Throw the 'are you sure?' text at them.
@@ -79,7 +79,7 @@ class Set extends Command {
     // Using `-set get <key>` we simply return the current value for the guild.
     if (action === "get") {
       if (!key) return message.reply("Please specify a key to view");
-      if (!settings[key]) return message.reply("This key does not exist in the settings");
+      if (!settings.hasOwnProperty(key)) return message.reply("This key does not exist in the settings");
       message.reply(`The value of ${key} is currently ${settings[key]}`);
       
     } else {

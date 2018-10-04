@@ -26,16 +26,18 @@ class Eval extends Command {
     try {
       const evaled = eval(code);
       const clean = await this.client.clean(this.client, evaled);
-      console.log(clean);
+
       if (isNil(evaled)) {
         message.channel.send("```js\nCommand Executed!\n```");
       }
       else
       {
+        message.channel.send(`\`\`\`js\n${clean}\n\`\`\``);
         message.channel.send(`\`\`\`js\n${evaled}\n\`\`\``);
       }
     } catch (err) {
       message.channel.send(`\`ERROR\` \`\`\`xl\n${await this.client.clean(this.client, err)}\n\`\`\``);
+      message.channel.send(`\`\`\`js\n${err}\n\`\`\``);
     }
     
     message.delete();
