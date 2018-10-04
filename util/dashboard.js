@@ -242,7 +242,8 @@ module.exports = (client) => {
       where: {
         skipped: false
       },
-      group: ["cid", "author", "title"], //order: [["totalWoots", "DESC"]],
+      group: ["cid", "author", "title"],
+      order: [[literal("totalWoots"), "DESC"]],
       limit: 10,
     });
 
