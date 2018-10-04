@@ -232,18 +232,18 @@ module.exports = (client) => {
       attributes: ["cid", "author", "title",
         [literal(
           "SUM(woots)"
-        ), "totalWoots"],
+        ), "totalwoots"],
         [literal(
           "SUM(mehs)"
-        ), "totalMehs"],
+        ), "totalmehs"],
         [literal(
           "SUM(grabs)"
-        ), "totalGrabs"]],
+        ), "totalgrabs"]],
       where: {
         skipped: false
       },
       group: ["cid", "author", "title"],
-      order: [[literal("totalWoots"), "DESC"]],
+      order: [[literal("totalwoots"), "DESC"]],
       limit: 10,
     });
 
