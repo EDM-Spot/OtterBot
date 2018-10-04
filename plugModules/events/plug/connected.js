@@ -28,8 +28,15 @@ module.exports = function Event(bot, filename, platform) {
       
       console.info("[!] Plug Connected!");
 
-      new moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
-        bot.plug.sendChat("Join our Discord https://discord.gg/GETaTWm");
+      var randomTimedText = [
+        "Join our Discord https://discord.gg/GETaTWm",
+        "Feel free to visit our website here: https://edmspot.tk/",
+        "Don't forget to read our Rules https://edmspot.tk/rules"
+      ];
+
+      new moment.duration(80, "minutes").timer({loop: true, start: true}, async () => {
+        var randomNumber = Math.floor(Math.random() * randomTimedText.length);
+        bot.plug.sendChat(randomTimedText[randomNumber]);
       });
     },
     init() {
