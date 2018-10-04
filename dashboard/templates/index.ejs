@@ -1,30 +1,35 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <div class="jumbotron" style="padding-top: 10px;">
-  <h1 draggable="true">EDM Spot</h1>
-  <h4>
-    <% if(bot.appInfo.description.length > 3) { %> <%= bot.appInfo.description %> <% } else { %>No description given. <% }%>
-  </h4>
-  <br>
-  <div>
-    <div class="row">
-      <div class="col-md-4">
-        <h4>Now Playing:</h4>
-        <iframe id="ytplayer" type="text/html" src="https://www.youtube.com/embed/<%= bot.plug.getMedia().cid %>" frameborder="0" height="300" width="500"></iframe>
-      </div>
-      <div class="col-md-4">
-        <div class="row justify-content-center d-flex">
-          <h4><i class="fas fa-crown"></i> Props LeaderBoard</h4>
+  <div class="col-md-8">
+    <h1 draggable="true">EDM Spot</h1>
+    <h4>
+      <% if(bot.appInfo.description.length > 3) { %>
+      <%= bot.appInfo.description %>
+      <% } else { %>No description given.
+      <% }%>
+    </h4>
+    <br>
+    <div>
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Now Playing:</h4>
+          <iframe id="ytplayer" type="text/html" src="https://www.youtube.com/embed/<%= bot.plug.getMedia().cid %>"
+            frameborder="0" height="300" width="500"></iframe>
         </div>
-        <table class="table table-hover">
-          <thead>
-            <tr class="d-none">
-              <th scope="col">Rank</th>
-              <th scope="col">Username</th>
-              <th scope="col">Props</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for (let i = 0; i < instance.length; i++) { %>
+        <div class="col-md-6">
+          <div class="row justify-content-center d-flex">
+            <h4><i class="fas fa-crown"></i> Props LeaderBoard</h4>
+          </div>
+          <table class="table table-hover">
+            <thead>
+              <tr class="d-none">
+                <th scope="col">Rank</th>
+                <th scope="col">Username</th>
+                <th scope="col">Props</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < instance.length; i++) { %>
               <tr>
                 <td class="text-center">
                   <%= i + 1 %>
@@ -36,13 +41,15 @@
                   <%= instance[i].dataValues.props %>
                 </td>
               </tr>
-            <% } %>
-          </tbody>
-        </table>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 justify-content-end d-flex">
         <h4>Join our Discord:</h4>
-        <iframe src="https://discordapp.com/widget?id=485173051432894489&theme=dark" width="400" height="300" allowtransparency="true" frameborder="0"></iframe>
+        <iframe src="https://discordapp.com/widget?id=485173051432894489&theme=dark" width="400" height="300"
+          allowtransparency="true" frameborder="0"></iframe>
       </div>
     </div>
     <br><br>
@@ -63,29 +70,30 @@
         </thead>
         <tbody>
           <% for (let i = 0; i < rank.length; i++) { %>
-            <tr>
-              <td class="text-center">
-                <%= i + 1 %>
-              </td>
-              <td class="text-center">
-                <%= rank[i].dataValues.count %>
-              </td>
-              <td class="text-center">
-                <%= rank[i].dataValues.author %> - <%= rank[i].dataValues.title %>
-              </td>
-              <td class="text-center">
-                <i style="color:forestgreen" class="fas fa-thumbs-up"></i>
-                <%= rank[i].dataValues.totalwoots %>
-              </td>
-              <td class="text-center">
-                <i style="color:red" class="fas fa-thumbs-down"></i>
-                <%= rank[i].dataValues.totalmehs %>
-              </td>
-              <td class="text-center">
-                <i style="color:steelblue" class="fas fa-hand-rock"></i>
-                <%= rank[i].dataValues.totalgrabs %>
-              </td>
-            </tr>
+          <tr>
+            <td class="text-center">
+              <%= i + 1 %>
+            </td>
+            <td class="text-center">
+              <%= rank[i].dataValues.count %>
+            </td>
+            <td class="text-center">
+              <%= rank[i].dataValues.author %> -
+              <%= rank[i].dataValues.title %>
+            </td>
+            <td class="text-center">
+              <i style="color:forestgreen" class="fas fa-thumbs-up"></i>
+              <%= rank[i].dataValues.totalwoots %>
+            </td>
+            <td class="text-center">
+              <i style="color:red" class="fas fa-thumbs-down"></i>
+              <%= rank[i].dataValues.totalmehs %>
+            </td>
+            <td class="text-center">
+              <i style="color:steelblue" class="fas fa-hand-rock"></i>
+              <%= rank[i].dataValues.totalgrabs %>
+            </td>
+          </tr>
           <% } %>
         </tbody>
       </table>
