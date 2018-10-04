@@ -52,10 +52,13 @@ module.exports = function Command(bot) {
           return true;
         } else {
           if (!songHistory.maybe) {
+            const playsCount = await bot.db.models.plays.count({
+              where: { cid: `${map(songHistory, "cid")[0]}` },
+            });
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
-              count: map(songHistory, "count")[0],
+              count: playsCount,
             }, 6e4);
             return true;
           } else {
@@ -90,10 +93,13 @@ module.exports = function Command(bot) {
           return true;
         } else {
           if (!songHistory.maybe) {
+            const playsCount = await bot.db.models.plays.count({
+              where: { cid: `${map(songHistory, "cid")[0]}` },
+            });
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
-              count: map(songHistory, "count")[0],
+              count: playsCount,
             }, 6e4);
             return true;
           } else {
@@ -128,10 +134,13 @@ module.exports = function Command(bot) {
               return true;
             } else {
               if (!songHistory.maybe) {
+                const playsCount = await bot.db.models.plays.count({
+                  where: { cid: `${map(songHistory, "cid")[0]}` },
+                });
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,
                   time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
-                  count: map(songHistory, "count")[0],
+                  count: playsCount,
                 }, 6e4);
                 return true;
               } else {

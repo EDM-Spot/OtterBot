@@ -1,5 +1,4 @@
 const { isNil } = require("lodash");
-const { literal } = require("sequelize");
 
 module.exports = function Util(bot) {
   const util = {
@@ -8,11 +7,6 @@ module.exports = function Util(bot) {
       if (isNil(cid)) return;
 
       const songHistory = await bot.db.models.plays.findAll({
-        attributes: ["id", "cid", "format", "woots", "grabs", "mehs", "dj", "skipped", "author", "title",
-          [literal(
-            "COUNT(cid)"
-          ), "count"]],
-        group: ["id"],
         order: [["created_at", "ASC"]],
       });
 
