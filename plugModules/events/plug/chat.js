@@ -24,7 +24,7 @@ module.exports = function Event(bot, platform) {
         { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
       );
 
-      if (bot.badwords.isProfane(rawData.message)) {
+      if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(nigger)|(faggot)/ig.test(rawData.message)) {
         await bot.plug.moderateDeleteChat(rawData.id);
         return;
       }
