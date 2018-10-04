@@ -1,13 +1,13 @@
 <%- include('blocks/header', {bot, user, path}) %>
-<div class="jumbotron">
+<div class="jumbotron" style="padding-top: 10px;">
+  <h1 draggable="true">EDM Spot</h1>
+  <h4>
+    <% if(bot.appInfo.description.length > 3) { %> <%= bot.appInfo.description %> <% } else { %>No description given. <% }%>
+  </h4>
+  <br>
   <div>
     <div class="row">
       <div class="col-md-6">
-        <h1 draggable="true">EDM Spot</h1>
-        <h4>
-          <% if(bot.appInfo.description.length > 3) { %> <%= bot.appInfo.description %> <% } else { %>No description given. <% }%>
-        </h4>
-        <br>
         <h4>Now Playing:</h4>
         <iframe id="ytplayer" type="text/html" src="https://www.youtube.com/embed/<%= bot.plug.getMedia().cid %>" frameborder="0" height="300" width="500"></iframe>
       </div>
