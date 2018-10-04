@@ -2,6 +2,7 @@ const { each } = require("lodash");
 const moment = require("moment");
 const Discord = require("discord.js");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const Filter = require("bad-words");
 
 module.exports = function Event(bot, platform) {
   const event = {
@@ -24,7 +25,9 @@ module.exports = function Event(bot, platform) {
         { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
       );
 
-      if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(nigger)|(faggot)/ig.test(rawData.message)) {
+      const filter = new Filter();
+
+      if (filter.isProfane(rawData.message)) {
         await bot.plug.moderateDeleteChat(rawData.id);
         return;
       }
