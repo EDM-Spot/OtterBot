@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/EDM-Spot/OtterBot#readme",
   "dependencies": {
+    "bad-words": "^1.6.4",
     "better-sqlite-pool": "^0.1.2",
     "bluebird": "^3.5.2",
     "body-parser": "^1.18.3",
