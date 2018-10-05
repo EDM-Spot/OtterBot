@@ -1,9 +1,9 @@
-const { isObject, isNil } = require("lodash");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { isObject } = require("lodash");
+const { ROOM_ROLE } = require("plugapi");
 const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
-  bot.commands.register({
+  bot.plugCommands.register({
     names: ["cmdban"],
     minimumPermission: 2000,
     cooldownType: "none",
