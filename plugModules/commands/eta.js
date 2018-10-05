@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["eta"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 180,
+    cooldownDuration: 600,
     parameters: "",
     description: "Calculates the ETA (Estimated Time of Arrival) for the user to DJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
