@@ -8,6 +8,7 @@
 // you don't want to put in a command.
 const Command = require("../base/Command.js");
 const { isNil } = require("lodash");
+const { inspect } = require("util");
 
 class Eval extends Command {
   constructor(client) {
@@ -24,7 +25,12 @@ class Eval extends Command {
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     const code = args.join(" ");
     try {
-      const evaled = eval(code);
+      let evaled = eval(code);
+      
+      if (typeof evaled !== "string") {
+        evaled = inspect(evaled);
+      }
+
       const clean = await this.client.clean(this.client, evaled);
 
       if (isNil(evaled)) {
