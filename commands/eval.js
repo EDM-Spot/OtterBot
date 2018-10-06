@@ -39,6 +39,7 @@ class Eval extends Command {
       else
       {
         message.channel.send(`\`\`\`js\n${eval(code)}\n\`\`\``);
+        message.channel.send(`\`\`\`js\n${this.pEval(code)}\n\`\`\``);
         message.channel.send(`\`\`\`js\n${evaled}\n\`\`\``);
       }
     } catch (err) {
@@ -47,6 +48,19 @@ class Eval extends Command {
     }
     
     message.delete();
+  }
+
+  pEval(code) {
+    return new Promise(function scheduleEval(solve, reject) {
+      function tryEvalSoon() {
+        try {
+          return solve(eval(code));
+        } catch (err) {
+          return reject(err);
+        }
+      }
+      setImmediate(tryEvalSoon);  // cut off the stack.
+    });
   }
 }
 
