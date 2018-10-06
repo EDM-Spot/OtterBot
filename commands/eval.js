@@ -54,7 +54,7 @@ class Eval extends Command {
     return new Promise(function scheduleEval(solve, reject) {
       function tryEvalSoon() {
         try {
-          return solve(eval(code));
+          return solve(inspect(eval(code)));
         } catch (err) {
           return reject(err);
         }
