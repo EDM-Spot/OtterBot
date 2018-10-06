@@ -30,7 +30,7 @@ module.exports = function Util(bot) {
       return this.req("resolve", { query: { url } });
     }
     getTrack(id) {
-      return this.req("tracks", { query: { ids: `${id}.json` } }).get(0);
+      return this.req("tracks/" + id);
     }
   }
 
