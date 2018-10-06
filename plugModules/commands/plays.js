@@ -53,7 +53,7 @@ module.exports = function Command(bot) {
         } else {
           if (!songHistory.maybe) {
             const playsCount = await bot.db.models.plays.count({
-              where: { cid: `${map(songHistory, "cid")[0]}` },
+              where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
             });
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
@@ -94,7 +94,7 @@ module.exports = function Command(bot) {
         } else {
           if (!songHistory.maybe) {
             const playsCount = await bot.db.models.plays.count({
-              where: { cid: `${map(songHistory, "cid")[0]}` },
+              where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
             });
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
@@ -135,7 +135,7 @@ module.exports = function Command(bot) {
             } else {
               if (!songHistory.maybe) {
                 const playsCount = await bot.db.models.plays.count({
-                  where: { cid: `${map(songHistory, "cid")[0]}` },
+                  where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
                 });
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,

@@ -7,7 +7,7 @@ module.exports = function Util(bot) {
       if (isNil(cid)) return;
 
       const songHistory = await bot.db.models.plays.findAll({
-        order: [["created_at", "ASC"]],
+        order: [["created_at", "DESC"]],
       });
 
       if (!isNil(songHistory)) {
