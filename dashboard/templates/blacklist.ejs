@@ -1,5 +1,4 @@
 <%- include('blocks/header', {bot, user, path}) %>
-<% const { get } = require("lodash"); %>
 <div class="jumbotron">
   <h1>Blacklist</h1>
   </hr>
@@ -26,7 +25,7 @@
         </td>
         <td class="text-center">
           <%=
-            get(bot.youtube.getMedia(instance[i].dataValues.cid), "snippet.title");
+            get(bot.youtube.getMedia(instance[i].dataValues.cid), "snippet.title", "");
           %>
         </td>
         <td class="text-center">
@@ -42,4 +41,19 @@
     </tbody>
   </table>
 </div>
+<%
+  function get(obj, path, def) {
+    var fullPath = path
+      .replace(/\[/g, '.')
+      .replace(/]/g, '')
+      .split('.')
+      .filter(Boolean);
+
+    return fullPath.every(everyFunc) ? obj : def;
+
+    function everyFunc(step) {
+      return !(step && (obj = obj[step]) === undefined);
+    }
+  }
+%>
 <% include ./blocks/footer %>
