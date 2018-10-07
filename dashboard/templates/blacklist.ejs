@@ -25,8 +25,8 @@
         </td>
         <td class="text-center">
           <%=
-            var ytApiKey = bot.config.youtube;
-            var videoId = instance[i].dataValues.cid;
+            const ytApiKey = bot.config.youtube;
+            const videoId = instance[i].dataValues.cid;
 
             $.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + ytApiKey, function(data) {
               data.items[0].snippet.title
