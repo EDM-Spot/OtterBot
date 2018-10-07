@@ -16,8 +16,8 @@ module.exports = function Util(bot) {
       };
 
       return request(this.catfactURL, options).then(body => body).catch((err) => {
-        console.error("[!] Catfact API Error");
-        console.error(err);
+        console.warn("[!] Catfact API Error");
+        //console.error(err);
       });
     }
     getUrban(text) {
@@ -29,8 +29,8 @@ module.exports = function Util(bot) {
       };
 
       return request(this.urbanURL + text, options).then(body => body).catch((err) => {
-        console.error("[!] Urban API Error");
-        console.error(err);
+        console.warn("[!] Urban API Error");
+        //console.error(err);
       });
     }
     getGiphy(text) {
@@ -42,8 +42,8 @@ module.exports = function Util(bot) {
       };
 
       return request(`https://api.giphy.com/v1/gifs/search?api_key=${bot.config.giphy}&q=${text}&limit=10&offset=0&rating=G&lang=en`, options).then(body => body).catch((err) => {
-        console.error("[!] Giphy API Error");
-        console.error(err);
+        console.warn("[!] Giphy API Error");
+        //console.error(err);
       });
     }
     getSodas(user) {
@@ -55,8 +55,8 @@ module.exports = function Util(bot) {
       };
 
       return request(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`, options).then(body => body).catch((err) => {
-        console.error("[!] Sodas API Error");
-        console.error(err);
+        console.warn("[!] Sodas API Error");
+        //console.error(err);
       });
     }
     getGenre(media) {
@@ -102,8 +102,8 @@ module.exports = function Util(bot) {
             return filteredArray;
           }
         }).catch((err) => {
-          console.error("[!] LastFM API Error");
-          console.error(err);
+          console.warn("[!] LastFM API Error");
+          //console.error(err);
         });
     }
   }

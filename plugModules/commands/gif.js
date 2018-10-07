@@ -1,3 +1,5 @@
+const { isNil } = require("lodash");
+
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["gif"],
@@ -13,6 +15,8 @@ module.exports = function Command(bot) {
 
       const gif = await bot.api.getGiphy(text);
       var randomNumb = Math.floor(Math.random() * 10) + 0;
+
+      if (isNil(gif)) return false;
 
       this.reply(lang.gif, { url: gif.data[randomNumb].images.downsized.url });
       return true;

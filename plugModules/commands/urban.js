@@ -1,3 +1,5 @@
+const { isNil } = require("lodash");
+
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["urban"],
@@ -12,6 +14,8 @@ module.exports = function Command(bot) {
       const text = rawData.args.join(" ");
 
       const urban = await bot.api.getUrban(text);
+
+      if (isNil(urban)) return false;
 
       this.reply(lang.urban, { text: urban.list[0].definition });
       return true;

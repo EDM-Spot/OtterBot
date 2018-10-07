@@ -1,3 +1,5 @@
+const { isNil } = require("lodash");
+
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["genre"],
@@ -10,6 +12,8 @@ module.exports = function Command(bot) {
       const currentMedia = bot.plug.getMedia();
 
       const genres = await bot.api.getGenre(currentMedia);
+
+      if (isNil(genres)) return false;
 
       this.reply(lang.genre, { genres: genres });
       return true;
