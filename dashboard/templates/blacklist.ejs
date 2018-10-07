@@ -24,7 +24,7 @@
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
-          <div id="<%= instance[i].dataValues.cid %>">
+          <span id="<%= instance[i].dataValues.cid %>"></span>
             <script type="text/javascript">
               var ytApiKey = "<%= bot.config.youtube %>";
               var videoId = "<%= instance[i].dataValues.cid %>";
@@ -33,7 +33,6 @@
                 $("#" + videoId).append(data.items[0].snippet.title);
               });
             </script>
-          </div>
         </td>
         <td class="text-center">
           <%# const user = bot.db.models.users.findOne({ where: { id: instance[i].dataValues.moderator, }, }); %>
