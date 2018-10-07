@@ -24,13 +24,13 @@
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
-          <span id="<%= instance[i].dataValues.cid %>"></span>
+          <span id="<%= i %>"></span>
             <script type="text/javascript">
               var ytApiKey = "<%= bot.config.youtube %>";
               var videoId = "<%= instance[i].dataValues.cid %>";
 
               $.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${ytApiKey}`, function(data) {
-                $("#" + videoId).append(data.items[0].snippet.title);
+                $("#" + "<%= i %>").append(data.items[0].snippet.title);
               });
             </script>
         </td>
