@@ -73,7 +73,7 @@ module.exports = function Command(bot) {
           if (args.length) {
             const specifiedDuration = parseInt(args.shift(), 10);
 
-            if (isNaN(specifiedDuration) || specifiedDuration < 10 || specifiedDuration > 120) {
+            if (isNaN(specifiedDuration) || specifiedDuration < 30 || specifiedDuration > 120) {
               this.reply(lang.roulette.invalidDuration, {}, 6e4);
               return false;
             }
@@ -84,11 +84,11 @@ module.exports = function Command(bot) {
           let price = 1;
 
           if (args.length) {
-            const specifiedPrice = parseInt(args.shift(), 10);
+            let specifiedPrice = parseInt(args.shift(), 10);
 
-            //if (specifiedPrice === 0) {
-            //   specifiedPrice = 1;
-            //}
+            if (specifiedPrice === 0) {
+              specifiedPrice = 1;
+            }
 
             if (isNaN(specifiedPrice) && specifiedPrice <= 100) {
               this.reply(lang.roulette.invalidPrice, {}, 6e4);
