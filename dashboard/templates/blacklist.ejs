@@ -24,7 +24,9 @@
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
-          
+          <%=
+            get(bot.youtube.getMedia(instance[i].dataValues.cid), "snippet.title");
+          %>
         </td>
         <td class="text-center">
           <%# const user = bot.db.models.users.findOne({ where: { id: instance[i].dataValues.moderator, }, }); %>
