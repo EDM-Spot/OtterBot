@@ -24,14 +24,16 @@
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
-          <%=
-            const ytApiKey = bot.config.youtube;
-            const videoId = instance[i].dataValues.cid;
+          <div id="<%= instance[i].dataValues.cid %>">
+            <script type="text/javascript">
+              var ytApiKey = "<%= bot.config.youtube %>";
+              var videoId = "<%= instance[i].dataValues.cid %>";
 
-            $.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + ytApiKey, function(data) {
-              data.items[0].snippet.title
-            });          
-          %>
+              $.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${ytApiKey}`, function(data) {
+                $("#" + videoId).append(data.items[0].snippet.title);
+              });
+            </script>
+          </div>
         </td>
         <td class="text-center">
           <%# const user = bot.db.models.users.findOne({ where: { id: instance[i].dataValues.moderator, }, }); %>
