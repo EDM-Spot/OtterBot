@@ -25,7 +25,12 @@
         </td>
         <td class="text-center">
           <%=
-            bot.youtube.getMedia(instance[i].dataValues.cid);
+            var ytApiKey = bot.config.youtube;
+            var videoId = instance[i].dataValues.cid;
+
+            $.get("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoId + "&key=" + ytApiKey, function(data) {
+              data.items[0].snippet.title
+            });          
           %>
         </td>
         <td class="text-center">
@@ -41,19 +46,4 @@
     </tbody>
   </table>
 </div>
-<%
-  function get(obj, path, def) {
-    var fullPath = path
-      .replace(/\[/g, '.')
-      .replace(/]/g, '')
-      .split('.')
-      .filter(Boolean);
-
-    return fullPath.every(everyFunc) ? obj : def;
-
-    function everyFunc(step) {
-      return !(step && (obj = obj[step]) === undefined);
-    }
-  }
-%>
 <% include ./blocks/footer %>
