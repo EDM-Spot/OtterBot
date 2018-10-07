@@ -25,14 +25,14 @@
         </td>
         <td class="text-center">
           <span id="<%= i %>"></span>
-            <script type="text/javascript">
-              var ytApiKey = "<%= bot.config.youtube %>";
-              var videoId = "<%= instance[i].dataValues.cid %>";
+          <script type="text/javascript">
+            var ytApiKey = "<%= bot.config.youtube %>";
+            var videoId = "<%= instance[i].dataValues.cid %>";
 
-              $.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${ytApiKey}`, function(data) {
-                $("#" + "<%= i %>").append(data.items[0].snippet.title);
-              });
-            </script>
+            $.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${ytApiKey}`, function(data) {
+              $("#" + "<%= i %>").append(data.items[0].snippet.title);
+            });
+          </script>
         </td>
         <td class="text-center">
           <%# const user = bot.db.models.users.findOne({ where: { id: instance[i].dataValues.moderator, }, }); %>
