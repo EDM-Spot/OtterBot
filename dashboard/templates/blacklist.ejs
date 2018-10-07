@@ -25,7 +25,7 @@
         </td>
         <td class="text-center">
           <%=
-            get(bot.youtube.getMedia(instance[i].dataValues.cid), "snippet.title", "");
+            bot.youtube.getMedia(instance[i].dataValues.cid);
           %>
         </td>
         <td class="text-center">
