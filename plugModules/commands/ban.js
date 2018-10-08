@@ -4,12 +4,12 @@ const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["ban", "permaban"],
+    names: ["ban"],
     minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,
     parameters: "<@username> [hour|h|d|day|p|perma] reason",
-    description: "Permanently bans the specified user from the community.",
+    description: "Bans the specified user for the specified duration from the community.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.mentions.length || rawData.mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
