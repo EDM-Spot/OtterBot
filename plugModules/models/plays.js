@@ -62,6 +62,12 @@ module.exports = async function Model(bot, sequelize) {
       defaultValue: "",
       allowNull: false,
     },
+  }, {
+    classMethods: {
+      associate: function(models) {
+        Plays.belongsTo(models.users, {foreignKey: "dj"});
+      }
+    }
   });
 
   await Plays.sync();
