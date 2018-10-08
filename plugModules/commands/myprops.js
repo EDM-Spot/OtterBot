@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["myprops"],
     minimumPermission: 0,
     cooldownType: "none",
-    cooldownDuration: 3600,
+    cooldownDuration: 10800,
     parameters: "[given]",
     description: "Checks how many props the user has and their ranking, or how many the user has given.",
     async execute(rawData, { args }, lang) {
@@ -19,7 +19,6 @@ module.exports = function Command(bot) {
       }
 
       const inst = await bot.db.query("SELECT x.* FROM(SELECT id, props, ROW_NUMBER() OVER(ORDER BY props DESC) as rank FROM users) x WHERE x.id = '" + id + "'");
-
 
       if (isNil(inst)) return false;
       
