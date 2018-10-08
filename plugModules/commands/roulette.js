@@ -7,7 +7,7 @@ module.exports = function Command(bot) {
     minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,
-    parameters: "<check|end|start [duration] [price]>",
+    parameters: "<check|end|start> [duration] [price]",
     description: "Roulette management command, can check if a roulette can be ran, can end or start a roulette (with specified duration or price, both defaulting to 60 and 1 respectively).",
     async execute(rawData, { args }, lang) {
       if (!args.length) {

@@ -6,7 +6,7 @@ module.exports = function Command(bot) {
     minimumPermission: 2000,
     cooldownType: "perUser",
     cooldownDuration: 3,
-    parameters: "[YouTube Link|SoundCloud Link]",
+    parameters: "<YouTube Link|SoundCloud Link>",
     description: "Delete a song from blacklist",
     async execute(rawData, { args }, lang) {
       const link = args.shift();

@@ -6,7 +6,7 @@ module.exports = function Command(bot) {
     minimumPermission: 0,
     cooldownType: "perUse",
     cooldownDuration: 60,
-    parameters: "Text",
+    parameters: "",
     description: "Check song genre.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const currentMedia = bot.plug.getMedia();

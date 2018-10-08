@@ -6,7 +6,7 @@ module.exports = function Command(bot) {
     minimumPermission: 2000,
     cooldownType: "perUse",
     cooldownDuration: 60,
-    parameters: "<@username @username>",
+    parameters: "<@username> <@username>",
     description: "Swap users position.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.mentions.length || rawData.mentions.length !== 2) {

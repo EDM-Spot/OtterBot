@@ -8,7 +8,7 @@ module.exports = function Command(bot) {
     minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,
-    parameters: "<@username> [15|s|short|30|m|medium|45|l|long] reason",
+    parameters: "<@username> [15|s|short|30|m|medium|45|l|long] <reason>",
     description: "Mutes the specified user for the specified duration, or defaults to 15 minutes.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.mentions.length || rawData.mentions.length >= 2) {
