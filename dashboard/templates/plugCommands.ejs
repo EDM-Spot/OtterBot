@@ -54,6 +54,7 @@ for (let i = 0; i < 5; i++) {
 let currentCategory = "";
 %>
 
+<% let modalCount = 0; %>
 <% commands.forEach( c => { %>
   <% const cat = c.roleName.toProperCase(); %>
   <% if (currentCategory !== cat) { %>
@@ -64,7 +65,6 @@ let currentCategory = "";
     <% currentCategory = cat; %>
   <% } %>
   <div class="card-columns">
-    <% let modalCount = 0; %>
     <% c.commands.forEach( d => { %>
       <div class="card">
         <h3 class="card-header">
