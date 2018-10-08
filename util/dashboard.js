@@ -250,7 +250,29 @@ module.exports = (client) => {
       limit: 10,
     });
 
-    renderTemplate(res, req, "index.ejs", {instance, rank});
+    const djRank = await client.db.models.plays.findAll({
+      attributes: ["dj",
+        [literal(
+          "SUM(woots)"
+        ), "totalwoots"],
+        [literal(
+          "SUM(mehs)"
+        ), "totalmehs"],
+        [literal(
+          "SUM(grabs)"
+        ), "totalgrabs"],
+        [literal(
+          "COUNT(cid)"
+        ), "count"]],
+      where: {
+        skipped: false
+      },
+      group: ["dj"],
+      order: [[literal("totalwoots"), "DESC"]],
+      limit: 10,
+    });
+
+    renderTemplate(res, req, "index.ejs", {instance, rank, djRank});
   });
 
   app.get("/blacklist", async (req, res) => {
