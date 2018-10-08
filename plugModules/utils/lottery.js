@@ -21,7 +21,7 @@ module.exports = function Util(bot) {
 
       const randomTimeDuration = eventStart - moment();
 
-      this.timer = moment.duration(randomTimeDuration, "milliseconds").timer({loop: false, start: true}, async () => {
+      this.timer = new moment.duration(randomTimeDuration, "milliseconds").timer({loop: false, start: true}, async () => {
         this.acceptedBool = false;
         await this.sort();
       });
