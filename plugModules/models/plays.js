@@ -46,6 +46,10 @@ module.exports = async function Model(bot, sequelize) {
     dj: {
       type: sequelize.INTEGER,
       allowNull: false,
+      references: {
+        model: "users",
+        key: "id"
+      }
     },
     skipped: {
       type: sequelize.BOOLEAN,
@@ -62,13 +66,9 @@ module.exports = async function Model(bot, sequelize) {
       defaultValue: "",
       allowNull: false,
     },
-  }, {
-    classMethods: {
-      associate: function(models) {
-        Plays.belongsTo(models.users, {foreignKey: "dj"});
-      }
-    }
   });
+
+  Plays.hasOne(bot.db.models.users);
 
   await Plays.sync();
 
