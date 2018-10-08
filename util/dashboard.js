@@ -269,7 +269,8 @@ module.exports = (client) => {
       },
       group: ["dj"],
       order: [[literal("totalwoots"), "DESC"]],
-      limit: 10,
+      limit: 10, 
+      include: [client.db.models.users]
     });
 
     renderTemplate(res, req, "index.ejs", {instance, rank, djRank});
