@@ -15,12 +15,16 @@ module.exports = function Event(bot, platform) {
         where: { id: user.id }, defaults: { id: user.id, username: user.username },
       });
       
-      console.log("JOIN");
-      console.log(user.username);
-      await bot.db.models.users.update(
-        { username: user.username, last_seen: moment() },
-        { where: { id: user.id }, defaults: { id: user.id }}
-      );
+      try {
+        await bot.db.models.users.update(
+          { username: user.username, last_seen: moment() },
+          { where: { id: user.id }, defaults: { id: user.id }}
+        );
+      }
+      catch (err) {
+        console.warn(err);
+        console.log(user);
+      }
       
       if (isNil(position) || isNaN(position))	return;
 
