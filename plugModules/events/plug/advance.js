@@ -119,11 +119,11 @@ module.exports = function Event(bot, filename, platform) {
           await bot.plug.sendChat(bot.lang.stuckSkip);
 
           const [instance] = await bot.db.models.users.findOrCreate({
-            where: { id: data.user.id }, defaults: { id: data.user.id, username: data.user.username },
+            where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id, username: data.currentDJ.username },
           });
 
           const props = await bot.db.models.props.count({
-            where: { historyID: `${data.historyID}`, dj: data.user.id },
+            where: { historyID: `${data.historyID}`, dj: data.currentDJ.id },
           });
 
           const score = keys(bot.points.votes).length + 1;
@@ -142,7 +142,7 @@ module.exports = function Event(bot, filename, platform) {
 
             await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
               props,
-              user: data.user.username,
+              user: data.currentDJ.username,
               plural: props > 1 ? "s" : "",
             }), data.media.duration * 1e3);
           }
