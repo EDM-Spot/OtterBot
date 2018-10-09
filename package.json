@@ -37,7 +37,7 @@
     "express-session": "^1.15.6",
     "fs-extra": "^7.0.0",
     "helmet": "^3.13.0",
-    "ioredis": "^4.0.1",
+    "ioredis": "^4.0.2",
     "klaw": "^3.0.0",
     "level-session-store": "^2.1.0",
     "linear-promise-backoff-queue": "^1.0.0",
