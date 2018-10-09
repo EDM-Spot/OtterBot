@@ -4,7 +4,7 @@ module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["myrank"],
     minimumPermission: 0,
-    cooldownType: "none",
+    cooldownType: "perUser",
     cooldownDuration: 10800,
     parameters: "",
     description: "Checks your Rank in the leaderboards.",

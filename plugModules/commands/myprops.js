@@ -4,7 +4,7 @@ module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["myprops"],
     minimumPermission: 0,
-    cooldownType: "none",
+    cooldownType: "perUser",
     cooldownDuration: 10800,
     parameters: "[given]",
     description: "Checks how many props the user has and their ranking, or how many the user has given.",
