@@ -261,6 +261,7 @@ module.exports = (client) => {
       "(((users.props * .0025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-users.last_seen))) / (COUNT(plays.cid))) as totalpoints " +
       "FROM plays " +
       "INNER JOIN users ON (plays.dj = users.id) " +
+      "WHERE plays.skipped = false " +
       "GROUP BY plays.dj, users.username, users.props, users.last_seen " +
       "ORDER BY totalpoints DESC " +
       "LIMIT 10;");
