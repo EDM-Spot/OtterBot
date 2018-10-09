@@ -17,7 +17,7 @@ module.exports = function Command(bot) {
         "round((((users.props * .0025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM MAX(current_date)-MIN(users.last_seen)))) / (COUNT(plays.cid)))) as totalpoints " +
         "FROM plays " +
         "JOIN users ON (plays.dj = users.id) " +
-        "GROUP BY plays.dj, users.username, users.props, users.last_seen " +
+        "GROUP BY plays.dj, users.props " +
         "ORDER BY totalpoints DESC) x WHERE x.dj = '" + id + "'");
 
       if (isNil(inst)) return false;
