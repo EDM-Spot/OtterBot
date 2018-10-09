@@ -5,6 +5,8 @@ module.exports = function Event(bot, platform) {
     name: bot.plug.events.USER_LEAVE,
     platform,
     run: async (user) => {
+      console.log("LEAVE");
+      console.log(user.username);
       await bot.db.models.users.update(
         { username: user.username, last_seen: moment() },
         { where: { id: user.id }, defaults: { id: user.id }}

@@ -19,6 +19,8 @@ module.exports = function Event(bot, platform) {
         message: rawData.message,
       });
       
+      console.log("CHAT");
+      console.log(rawData.from.username);
       await bot.db.models.users.update(
         { username: rawData.from.username, last_seen: moment() },
         { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
