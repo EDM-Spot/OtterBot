@@ -34,9 +34,7 @@ module.exports = function Util(bot) {
 
               if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor) && (songHistory[i].cid !== cid)) {
                 // Same Song Name/Maybe diff Author
-                if (songHistory[i].format === 1) { //Until soundcloud works?
-                  return { songHistory: songHistory[i], maybe: true, skip: true };
-                }
+                return { songHistory: songHistory[i], maybe: true, skip: true };
               }
             }
             else {
