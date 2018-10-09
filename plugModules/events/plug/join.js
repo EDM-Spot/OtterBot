@@ -1,4 +1,5 @@
 const { isNil, isNaN } = require("lodash");
+const moment = require("moment");
 
 module.exports = function Event(bot, platform) {
   const event = {
@@ -15,7 +16,7 @@ module.exports = function Event(bot, platform) {
       });
       
       await bot.db.models.users.update(
-        { username: user.username },
+        { username: user.username, last_seen: moment() },
         { where: { id: user.id }, defaults: { id: user.id }}
       );
       

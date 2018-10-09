@@ -18,33 +18,7 @@
               frameborder="0" height="300" width="500"></iframe>
           </div>
           <div class="col-md-6">
-            <div class="row justify-content-center d-flex">
-              <h4><i class="fas fa-crown"></i> Props LeaderBoard</h4>
-            </div>
-            <table class="table table-hover">
-              <thead>
-                <tr class="d-none">
-                  <th scope="col">Rank</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Props</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% for (let i = 0; i < instance.length; i++) { %>
-                <tr>
-                  <td class="text-center">
-                    <%= i + 1 %>
-                  </td>
-                  <td class="text-center">
-                    <%= instance[i].dataValues.username %>
-                  </td>
-                  <td class="text-center">
-                    <%= instance[i].dataValues.props %>
-                  </td>
-                </tr>
-                <% } %>
-              </tbody>
-            </table>
+
           </div>
         </div>
       </div>
@@ -55,6 +29,57 @@
         allowtransparency="true" frameborder="0"></iframe>
     </div>
   </div>
+  <div class="row justify-content-center d-flex">
+    <h4><i class="fas fa-crown"></i> DJ LeaderBoard </h4>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center">Rank</th>
+        <th scope="col" class="text-center">User</th>
+        <th scope="col" class="text-center">Songs Played</th>
+        <th scope="col" class="text-center">Messages Sent</th>
+        <th scope="col" class="text-center">Props</th>
+        <th scope="col" class="text-center">Woots</th>
+        <th scope="col" class="text-center">Mehs</th>
+        <th scope="col" class="text-center">Grabs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let i = 0; i < djRank[0].length; i++) { %>
+      <tr>
+        <td class="text-center">
+          <%= i + 1 %>
+        </td>
+        <td class="text-center">
+          <%= djRank[0][i].username %>
+        </td>
+        <td class="text-center">
+          <%= djRank[0][i].playscount %>
+        </td>
+        <td class="text-center">
+          <%= djRank[0][i].totalmessages %>
+        </td>
+        <td class="text-center">
+          <%= djRank[0][i].props %>
+        </td>
+        <td class="text-center">
+          <i style="color:forestgreen" class="fas fa-thumbs-up"></i>
+          <%= djRank[0][i].totalwoots %>
+        </td>
+        <td class="text-center">
+          <i style="color:red" class="fas fa-thumbs-down"></i>
+          <%= djRank[0][i].totalmehs %>
+        </td>
+        <td class="text-center">
+          <i style="color:steelblue" class="fas fa-hand-rock"></i>
+          <%= djRank[0][i].totalgrabs %>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <br>
   <div class="row justify-content-center d-flex">
     <h4><i class="fas fa-crown"></i> Top 10 Songs</h4>
   </div>
@@ -93,49 +118,6 @@
         <td class="text-center">
           <i style="color:steelblue" class="fas fa-hand-rock"></i>
           <%= rank[i].dataValues.totalgrabs %>
-        </td>
-      </tr>
-      <% } %>
-    </tbody>
-  </table>
-  <br>
-  <div class="row justify-content-center d-flex">
-    <h4><i class="fas fa-crown"></i> Top 10 Dj's</h4>
-  </div>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col" class="text-center">Rank</th>
-        <th scope="col" class="text-center">User</th>
-        <th scope="col" class="text-center">Songs Played</th>
-        <th scope="col" class="text-center">Woots</th>
-        <th scope="col" class="text-center">Mehs</th>
-        <th scope="col" class="text-center">Grabs</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (let i = 0; i < djRank.length; i++) { %>
-      <tr>
-        <td class="text-center">
-          <%= i + 1 %>
-        </td>
-        <td class="text-center">
-          <%= djRank[i].dataValues.dj %>
-        </td>
-        <td class="text-center">
-          <%= djRank[i].dataValues.count %>
-        </td>
-        <td class="text-center">
-          <i style="color:forestgreen" class="fas fa-thumbs-up"></i>
-          <%= djRank[i].dataValues.totalwoots %>
-        </td>
-        <td class="text-center">
-          <i style="color:red" class="fas fa-thumbs-down"></i>
-          <%= djRank[i].dataValues.totalmehs %>
-        </td>
-        <td class="text-center">
-          <i style="color:steelblue" class="fas fa-hand-rock"></i>
-          <%= djRank[i].dataValues.totalgrabs %>
         </td>
       </tr>
       <% } %>

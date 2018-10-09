@@ -250,33 +250,34 @@ module.exports = (client) => {
       limit: 10,
     });
 
-    const djRank = await client.db.models.plays.findAll({
-      attributes: ["dj",
-        [literal(
-          "SUM(woots)"
-        ), "totalwoots"],
-        [literal(
-          "SUM(mehs)"
-        ), "totalmehs"],
-        [literal(
-          "SUM(grabs)"
-        ), "totalgrabs"],
-        [literal(
-          "COUNT(cid)"
-        ), "count"]],
-      where: {
-        skipped: false
-      },
-      group: ["dj"],
-      order: [[literal("totalwoots"), "DESC"]],
-      limit: 10,
-    });
+    const djRank = await client.db.query(
+      "SELECT plays.dj, " +
+      "SUM(plays.woots) as totalwoots, " +
+      "SUM(plays.mehs) as totalmehs, " +
+      "SUM(plays.grabs) as totalgrabs, " +
+      "COUNT(plays.cid) as playscount, " +
+      "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) as totalmessages, " +
+      "users.username, users.props, " +
+      "(((users.props * .0025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-users.last_seen))) / (COUNT(plays.cid))) as totalpoints " +
+      "FROM plays " +
+      "INNER JOIN users ON (plays.dj = users.id) " +
+      "GROUP BY plays.dj, users.username, users.props, users.last_seen " +
+      "ORDER BY totalpoints DESC " +
+      "LIMIT 10;");
 
     renderTemplate(res, req, "index.ejs", {instance, rank, djRank});
   });
 
   app.get("/blacklist", async (req, res) => {
-    const instance = await client.db.models.blacklist.findAll();
+    const instance = await client.db.models.blacklist.findAll({
+      attributes: ["id", "cid", "moderator", "created_at",
+        [literal(
+          "(SELECT users.username FROM users WHERE users.id = blacklist.moderator)"
+        ), "username"],
+        [literal(
+          "(SELECT (plays.author || ' - ' || plays.title) as title FROM plays WHERE plays.cid = blacklist.cid LIMIT 1)"
+        ), "title"]],
+    });
 
     renderTemplate(res, req, "blacklist.ejs", {instance});
   });

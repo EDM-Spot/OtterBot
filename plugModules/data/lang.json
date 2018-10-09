@@ -55,10 +55,13 @@
       "propSelf": "We know you love your song, but let others also prop you!"
     },
     "myprops": {
-      "result": "You're currently ranked at position %%RANK%% with %%PROPS%% prop(s).",
+      "result": "You have %%PROPS%% prop(s).",
       "given": "You have given away %%PROPS%% prop%%PLURAL%%!",
       "noneGiven": "You have not given props to anyone yet! Use !props to do so.",
       "noProps": "You don't have any props! Play a song to get some."
+    },
+    "myrank": {
+      "result": "You're currently ranked at position %%RANK%% with %%TOTALPOINTS%% points.",
     },
     "roulette": {
       "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",

@@ -22,7 +22,7 @@ module.exports = function Command(bot) {
 
       if (isNil(inst)) return false;
       
-      const rank = bot.utils.numberWithCommas(inst[0][0].rank);
+      //const rank = bot.utils.numberWithCommas(inst[0][0].rank);
       const props = bot.utils.numberWithCommas(inst[0][0].props);
 
       if (props <= 0) {
@@ -30,7 +30,8 @@ module.exports = function Command(bot) {
         return true;
       }
 
-      this.reply(lang.myprops.result, { rank, props }, 6e4);
+      //this.reply(lang.myprops.result, { rank, props }, 6e4);
+      this.reply(lang.myprops.result, { props }, 6e4);
       return true;
     },
   });

@@ -20,7 +20,7 @@ module.exports = function Event(bot, platform) {
       });
       
       await bot.db.models.users.update(
-        { username: rawData.from.username },
+        { username: rawData.from.username, last_seen: moment() },
         { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
       );
 

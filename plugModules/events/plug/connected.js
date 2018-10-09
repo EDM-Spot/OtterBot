@@ -21,7 +21,7 @@ module.exports = function Event(bot, filename, platform) {
         });
         
         await bot.db.models.users.update(
-          { username: user[i].username },
+          { username: user[i].username, last_seen: moment() },
           { where: { id: user[i].id }, defaults: { id: user[i].id }}
         );
       }
