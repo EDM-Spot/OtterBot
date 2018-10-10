@@ -6,7 +6,7 @@ module.exports = function Event(bot, platform) {
     name: bot.plug.events.USER_JOIN,
     platform,
     run: async (data) => {
-      if (isNil(data.username) || data.id === bot.plug.getSelf().id) return;
+      if (isNil(data.username) || data.guest || data.id === bot.plug.getSelf().id) return;
       
       const position = parseInt(await bot.redis.findDisconnection(data.id), 10);
 
@@ -15,10 +15,16 @@ module.exports = function Event(bot, platform) {
         where: { id: user.id }, defaults: { id: user.id, username: user.username },
       });
       
-      await bot.db.models.users.update(
-        { username: user.username, last_seen: moment() },
-        { where: { id: user.id }, defaults: { id: user.id }}
-      );
+      try {
+        await bot.db.models.users.update(
+          { username: user.username, last_seen: moment() },
+          { where: { id: user.id }, defaults: { id: user.id }}
+        );
+      }
+      catch (err) {
+        console.warn(err);
+        console.log(user);
+      }
       
       if (isNil(position) || isNaN(position))	return;
 

@@ -38,7 +38,7 @@ class Eval extends Command {
       }
       else
       {
-        message.channel.send(`\`\`\`js\n${clean(evaled)}\n\`\`\``);
+        message.channel.send(`\`\`\`js\n${clean}\n\`\`\``);
         message.channel.send(`\`\`\`js\n${evaled}\n\`\`\``);
       }
     } catch (err) {
