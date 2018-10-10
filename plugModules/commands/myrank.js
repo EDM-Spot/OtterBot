@@ -13,12 +13,12 @@ module.exports = function Command(bot) {
 
       const inst = await bot.db.query(
         "SELECT x.* FROM(SELECT plays.dj, " +
-        "ROW_NUMBER() OVER(ORDER BY (((users.props * .0025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-users.last_seen))) / (COUNT(plays.cid))) DESC) as rank, " + 
-        "round((((users.props * .0025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-users.last_seen))) / (COUNT(plays.cid)))) as totalpoints " +
+        "ROW_NUMBER() OVER(ORDER BY ((((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * .025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-users.last_seen))) / (COUNT(plays.cid))) DESC) as rank, " + 
+        "round(((((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * .025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-users.last_seen))) / (COUNT(plays.cid)))) as totalpoints " +
         "FROM plays " +
         "JOIN users ON (plays.dj = users.id) " +
         "WHERE plays.skipped = false " +
-        "GROUP BY plays.dj, users.props, users.last_seen " +
+        "GROUP BY plays.dj, users.last_seen " +
         "ORDER BY totalpoints DESC) x WHERE x.dj = '" + id + "'");
 
       if (isNil(inst)) return false;
