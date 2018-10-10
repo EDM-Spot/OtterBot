@@ -20,23 +20,29 @@ module.exports = function Command(bot) {
         let songAuthor = null;
         let songTitle = null;
   
-        if (get(currentMedia, "format", 2) === 1) {
-          const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.cid);
+        try {
+          if (get(currentMedia, "format", 2) === 1) {
+            const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.cid);
   
-          const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
-          const fullTitle = get(YouTubeMediaData, "snippet.title");
-  
-          songAuthor = fullTitle.split(" - ")[0].trim();
-          songTitle = fullTitle.split(" - ")[1].trim();
-        } else {
-          const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.cid);
-  
-          if (!isNil(SoundCloudMediaData)) {
-            const fullTitle = SoundCloudMediaData.title;
+            const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
+            const fullTitle = get(YouTubeMediaData, "snippet.title");
   
             songAuthor = fullTitle.split(" - ")[0].trim();
             songTitle = fullTitle.split(" - ")[1].trim();
+          } else {
+            const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.cid);
+  
+            if (!isNil(SoundCloudMediaData)) {
+              const fullTitle = SoundCloudMediaData.title;
+  
+              songAuthor = fullTitle.split(" - ")[0].trim();
+              songTitle = fullTitle.split(" - ")[1].trim();
+            }
           }
+        }
+        catch (err) {
+          songAuthor = currentMedia.author;
+          songTitle = currentMedia.title;
         }
   
         if (isNil(songAuthor) || isNil(songTitle)) {
