@@ -67,6 +67,8 @@ module.exports = async function Model(bot, sequelize) {
   await Plays.sync();
 
   bot.db.models.plays = Plays;
+  bot.db.models.plays.belongsTo(bot.db.models.blacklist, {foreignKey: "cid", sourceKey: "cid"});
+  bot.db.models.plays.belongsTo(bot.db.models.users, {foreignKey: "dj", sourceKey: "id"});
 
   return Plays;
 };

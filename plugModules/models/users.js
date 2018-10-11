@@ -42,6 +42,8 @@ module.exports = async function Model(bot, sequelize) {
   await Users.sync();
 
   bot.db.models.users = Users;
+  bot.db.models.users.belongsTo(bot.db.models.blacklist, {foreignKey: "id", sourceKey: "moderator"});
+  bot.db.models.users.hasMany(bot.db.models.plays, {foreignKey: "dj", sourceKey: "id"});
 
   return Users;
 };

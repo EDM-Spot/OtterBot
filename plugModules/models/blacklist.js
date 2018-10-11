@@ -20,6 +20,7 @@ module.exports = async function Model(bot, sequelize) {
   await Blacklist.sync();
 
   bot.db.models.blacklist = Blacklist;
+  bot.db.models.blacklist.hasMany(bot.db.models.plays, {foreignKey: "cid", sourceKey: "cid"});
 
   return Blacklist;
 };

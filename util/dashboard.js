@@ -49,7 +49,7 @@ const helmet = require("helmet");
 // Used to parse Markdown from things like ExtendedHelp
 const md = require("marked");
 
-const { Op, literal } = require("sequelize");
+const { Op, literal, fn, col } = require("sequelize");
 
 module.exports = (client) => {
   // It's easier to deal with complex paths. 
@@ -250,34 +250,55 @@ module.exports = (client) => {
       limit: 10,
     });
 
-    const djRank = await client.db.query(
-      "SELECT plays.dj, " +
-      "SUM(plays.woots) as totalwoots, " +
-      "SUM(plays.mehs) as totalmehs, " +
-      "SUM(plays.grabs) as totalgrabs, " +
-      "COUNT(plays.cid) as playscount, " +
-      "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) as totalmessages, " +
-      "users.username, " +
-      "((((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * .025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-users.last_seen))) / (COUNT(plays.cid))) as totalpoints " +
-      "FROM plays " +
-      "INNER JOIN users ON (plays.dj = users.id) " +
-      "WHERE plays.skipped = false " +
-      "GROUP BY plays.dj, users.username, users.last_seen " +
-      "ORDER BY totalpoints DESC " +
-      "LIMIT 10;");
+    const djRank = await client.db.models.plays.findAll({
+      attributes: ["plays.dj",
+        [fn("SUM", col("plays.woots")
+        ), "totalwoots"],
+        [fn("SUM", col("plays.mehs")
+        ), "totalmehs"],
+        [fn("SUM", col("plays.grabs")
+        ), "totalgrabs"],
+        [fn("COUNT", col("plays.cid")
+        ), "playscount"],
+        [literal(
+          "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false)"
+        ), "totalmessages"],
+        [literal(
+          "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
+        ), "propsgiven"],
+        [literal(
+          "((((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * .025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-last_seen))) / (COUNT(plays.cid)))"
+        ), "totalpoints"]],
+      include: [{
+        model: client.db.models.users,
+        attributes: ["username", "last_seen"]
+      }],
+      where: {
+        skipped: false
+      },
+      group: ["user.id", "plays.dj"],
+      order: [[literal("totalpoints"), "DESC"]],
+      limit: 10
+    });
 
     renderTemplate(res, req, "index.ejs", {instance, rank, djRank});
   });
 
   app.get("/blacklist", async (req, res) => {
     const instance = await client.db.models.blacklist.findAll({
-      attributes: ["id", "cid", "moderator", "created_at",
-        [literal(
-          "(SELECT users.username FROM users WHERE users.id = blacklist.moderator)"
-        ), "username"],
-        [literal(
-          "(SELECT (plays.author || ' - ' || plays.title) as title FROM plays WHERE plays.cid = blacklist.cid LIMIT 1)"
-        ), "title"]],
+      //attributes: ["id", "cid", "moderator", "created_at",
+      //  [literal(
+      //    "(SELECT users.username FROM users WHERE users.id = blacklist.moderator)"
+      //  ), "username"],
+      //  [literal(
+      //    "(SELECT (plays.author || ' - ' || plays.title) as title FROM plays WHERE plays.cid = blacklist.cid LIMIT 1)"
+      //  ), "title"]],
+      include: [{
+        model: client.db.models.plays
+      },
+      {
+        model: client.db.models.users
+      }]
     });
 
     renderTemplate(res, req, "blacklist.ejs", {instance});
