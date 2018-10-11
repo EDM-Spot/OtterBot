@@ -13,7 +13,7 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       const id = rawData.from.id;
 
-      const inst = await bot.db.models.plays.findAll({
+      const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [fn("SUM", col("plays.woots")
           ), "totalwoots"],
@@ -31,21 +31,25 @@ module.exports = function Command(bot) {
           ), "propsgiven"],
           [literal(
             "ROW_NUMBER() OVER(ORDER BY ((((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * .025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-last_seen))) / (COUNT(plays.cid))) DESC)"
-          ), "rank"]],
+          ), "rank"],
+          [literal(
+            "plays.dj"
+          ), "userid"]],
         include: [{
           model: bot.db.models.users,
           attributes: ["username", "last_seen"]
         }],
         where: {
-          skipped: false,
-          dj: id
+          skipped: false
         },
-        group: ["user.id", "plays.dj"],
+        group: ["user.id", "plays.dj"]
       });
 
-      const points = (((inst[0].dataValues.propsgiven * .025) + (inst[0].dataValues.totalmessages * .0075) + (((inst[0].dataValues.totalwoots * 0.75) + (inst[0].dataValues.totalgrabs * 1.5)) * inst[0].dataValues.playscount) - (inst[0].dataValues.totalmehs * moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days"))) / inst[0].dataValues.playscount);
+      const inst = rankList.filter(u => u.dataValues.userid === id);
       
       if (isNil(inst)) return false;
+      
+      const points = (((inst[0].dataValues.propsgiven * .025) + (inst[0].dataValues.totalmessages * .0075) + (((inst[0].dataValues.totalwoots * 0.75) + (inst[0].dataValues.totalgrabs * 1.5)) * inst[0].dataValues.playscount) - (inst[0].dataValues.totalmehs * moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days"))) / inst[0].dataValues.playscount);
       
       const rank = bot.utils.numberWithCommas(inst[0].dataValues.rank);
       const totalpoints = bot.utils.numberWithCommas(Math.round(points));
