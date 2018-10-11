@@ -31,6 +31,8 @@
         <td class="text-center">
           <% if (instance[i].dataValues.users[0]) { %>
             <%= instance[i].dataValues.users[0].dataValues.username %>
+          <% } else { %>
+            <%= instance[i].dataValues.moderator %>
           <% } %>
         </td>
         <td class="text-center">
