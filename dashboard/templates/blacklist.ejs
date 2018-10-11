@@ -24,12 +24,12 @@
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
-          <% if (instance[i].dataValues.plays !== null || instance[i].dataValues.plays.length > 0) { %>
+          <% if (instance[i].dataValues.plays) { %>
             <%= instance[i].dataValues.plays[0].dataValues.title %>
           <% } %>
         </td>
         <td class="text-center">
-          <% if (instance[i].dataValues.users !== null || instance[i].dataValues.users.length > 0) { %>
+          <% if (instance[i].dataValues.users) { %>
             <%= instance[i].dataValues.users[0].dataValues.username %>
           <% } %>
         </td>
