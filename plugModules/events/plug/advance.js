@@ -93,14 +93,14 @@ module.exports = function Event(bot, filename, platform) {
 
       const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, data.media.cid);
 
-      if (!isNil(songHistory)) {
+      if (!isNil(songHistory) || !bot.global.ignoreHistoryNext) {
         if (songHistory.skip) {
           if (!songHistory.maybe) {
             await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
             }));
-            await bot.plug.sendChat("!plays");
-          //await bot.plug.moderateForceSkip();
+            //await bot.plug.sendChat("!plays");
+            await bot.plug.moderateForceSkip();
           } else {
             await bot.plug.sendChat(bot.utils.replace(bot.lang.maybeHistorySkip, {
               cid: map(songHistory, "cid")[0],
@@ -289,6 +289,8 @@ module.exports = function Event(bot, filename, platform) {
             plural: props > 1 ? "s" : "",
           }), data.media.duration * 1e3);
         }
+
+        bot.global.ignoreHistoryNext = false;
       } catch (err) {
         console.error(err);
       }
