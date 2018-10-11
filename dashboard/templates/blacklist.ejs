@@ -13,7 +13,6 @@
       </tr>
     </thead>
     <tbody>
-      <% console.log(instance) %>
       <% for (let i = 0; i < instance.length; i++) { %>
       <tr>
         <td class="text-center">
@@ -25,10 +24,14 @@
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
-          <%= instance[i].dataValues.plays[0].dataValues.title %>
+          <% if (instance[i].dataValues.plays !== null || instance[i].dataValues.plays.length > 0) { %>
+            <%= instance[i].dataValues.plays[0].dataValues.title %>
+          <% } %>
         </td>
         <td class="text-center">
-          <%= instance[i].dataValues.users[0].dataValues.username %>
+          <% if (instance[i].dataValues.users !== null || instance[i].dataValues.users.length > 0) { %>
+            <%= instance[i].dataValues.users[0].dataValues.username %>
+          <% } %>
         </td>
         <td class="text-center">
           <%= instance[i].dataValues.created_at %>
