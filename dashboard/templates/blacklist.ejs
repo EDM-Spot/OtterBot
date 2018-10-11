@@ -24,13 +24,12 @@
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
-          <% if (instance[i].dataValues.plays) { %>
+          <% if (instance[i].dataValues.plays[0]) { %>
             <%= instance[i].dataValues.plays[0].dataValues.title %>
           <% } %>
         </td>
         <td class="text-center">
-          <% if (instance[i].dataValues.users) { %>
-            <% console.log(instance[i].dataValues.users) %>
+          <% if (instance[i].dataValues.users[0]) { %>
             <%= instance[i].dataValues.users[0].dataValues.username %>
           <% } %>
         </td>
