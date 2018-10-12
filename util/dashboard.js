@@ -254,8 +254,8 @@ module.exports = (client) => {
       where: { skipped: false }
     });
     
-    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.25)";
-    const totalMessagesPoints = "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * 0.25)";
+    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
+    const totalMessagesPoints = "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * 1.25)";
 
     const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
     const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
@@ -280,7 +280,7 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
-          "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / " + totalsongs + ") - (" + totalMehsPoints + " * " + offlineDaysPoints + ")) / COUNT(plays.cid)) * 1000)"
+          "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - (" + totalMehsPoints + " * " + offlineDaysPoints + ")) / " + totalsongs + ") * 1000)"
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,

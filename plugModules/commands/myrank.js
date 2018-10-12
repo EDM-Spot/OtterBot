@@ -45,7 +45,7 @@ module.exports = function Command(bot) {
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (((" + (propsgiven * 1.25) + " + " + (totalmessages * 0.25) + " + (((SUM(plays.woots) * 0.75) * (SUM(plays.grabs) * 3.5)) / " + totalsongs + ") - ((SUM(plays.mehs) * 2.75) * ((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1))) / " + playscount + ") * 1000) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (((" + (propsgiven * 1.75) + " + " + (totalmessages * 1.25) + " + (((SUM(plays.woots) * 0.75) * (SUM(plays.grabs) * 3.5)) / " + playscount + ") - ((SUM(plays.mehs) * 2.75) * ((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1))) / " + totalsongs + ") * 1000) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
@@ -64,8 +64,8 @@ module.exports = function Command(bot) {
       
       if (isNil(inst)) return false;
       
-      const propsGivenPoints = propsgiven * 1.25;
-      const totalMessagesPoints = totalmessages * 0.25;
+      const propsGivenPoints = propsgiven * 1.75;
+      const totalMessagesPoints = totalmessages * 1.25;
 
       const totalWootsPoints = songvotes[0].dataValues.totalwoots * 0.75;
       const totalGrabsPoints = songvotes[0].dataValues.totalgrabs * 3.5;
@@ -73,7 +73,7 @@ module.exports = function Command(bot) {
 
       const offlineDaysPoints = (moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days") * 100) + 1;
 
-      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / totalsongs) - (totalMehsPoints * offlineDaysPoints)) / playscount) * 1000;
+      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - (totalMehsPoints * offlineDaysPoints)) / totalsongs) * 1000;
       
       const rank = bot.utils.numberWithCommas(inst[0].dataValues.rank);
       const totalpoints = bot.utils.numberWithCommas(Math.round(points));
