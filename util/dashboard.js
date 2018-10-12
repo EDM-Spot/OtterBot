@@ -250,6 +250,16 @@ module.exports = (client) => {
       limit: 10,
     });
 
+
+    const propsGivenPoints = "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.25)";
+    const totalMessagesPoints = "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * 2.75)";
+
+    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
+    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
+    const totalMehsPoints = "(SUM(plays.mehs) * 2.75)";
+
+    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)";
+
     const djRank = await client.db.models.plays.findAll({
       attributes: ["plays.dj",
         [fn("SUM", col("plays.woots")
@@ -267,7 +277,7 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
-          "((((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * .025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-last_seen))) / (COUNT(plays.cid)))"
+          "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - (" + totalMehsPoints + " * " + offlineDaysPoints + ")) / COUNT(plays.cid)) * 100)"
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,

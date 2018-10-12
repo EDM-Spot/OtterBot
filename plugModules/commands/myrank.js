@@ -13,6 +13,16 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       const id = rawData.from.id;
 
+      const totalmessages = await bot.db.models.messages.count({
+        where: { id: id, command: false }
+      });
+
+      const propsgiven = await bot.db.models.props.count({ where: { id } });
+
+      const playscount = await bot.db.models.plays.count({
+        where: { dj: id, skipped: false }
+      });
+
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [fn("SUM", col("plays.woots")
@@ -21,23 +31,15 @@ module.exports = function Command(bot) {
           ), "totalmehs"],
           [fn("SUM", col("plays.grabs")
           ), "totalgrabs"],
-          [fn("COUNT", col("plays.cid")
-          ), "playscount"],
           [literal(
-            "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false)"
-          ), "totalmessages"],
-          [literal(
-            "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
-          ), "propsgiven"],
-          [literal(
-            "ROW_NUMBER() OVER(ORDER BY ((((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * .025) + ((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * .0075) + (((SUM(plays.woots) * 0.75) + (SUM(plays.grabs) * 1.5)) * (COUNT(plays.cid))) - (SUM(plays.mehs) * EXTRACT(DAY FROM current_date-last_seen))) / (COUNT(plays.cid))) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (((" + (propsgiven * 1.25) + " + " + (totalmessages * 2.75) + " + (((SUM(plays.woots) * 0.75) * (SUM(plays.grabs) * 3.5)) / " + playscount + ") - ((SUM(plays.mehs) * 2.75) * ((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1))) / " + playscount + ") * 100) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
           ), "userid"]],
         include: [{
           model: bot.db.models.users,
-          attributes: ["username", "last_seen"]
+          attributes: ["last_seen"]
         }],
         where: {
           skipped: false
@@ -49,7 +51,16 @@ module.exports = function Command(bot) {
       
       if (isNil(inst)) return false;
       
-      const points = (((inst[0].dataValues.propsgiven * .025) + (inst[0].dataValues.totalmessages * .0075) + (((inst[0].dataValues.totalwoots * 0.75) + (inst[0].dataValues.totalgrabs * 1.5)) * inst[0].dataValues.playscount) - (inst[0].dataValues.totalmehs * moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days"))) / inst[0].dataValues.playscount);
+      const propsGivenPoints = propsgiven * 1.25;
+      const totalMessagesPoints = totalmessages * 2.75;
+
+      const totalWootsPoints = inst[0].dataValues.totalwoots * 0.75;
+      const totalGrabsPoints = inst[0].dataValues.totalgrabs * 3.5;
+      const totalMehsPoints = inst[0].dataValues.totalmehs * 2.75;
+
+      const offlineDaysPoints = (moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days") * 100) + 1;
+
+      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - (totalMehsPoints * offlineDaysPoints)) / playscount) * 100;
       
       const rank = bot.utils.numberWithCommas(inst[0].dataValues.rank);
       const totalpoints = bot.utils.numberWithCommas(Math.round(points));
