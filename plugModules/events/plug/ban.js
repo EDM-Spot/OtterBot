@@ -10,6 +10,15 @@ module.exports = function Event(bot, platform) {
       const userDB = await bot.db.models.users.findOne({ where: { username: data.user }});
       const userID = userDB.get("id");
       
+      await bot.db.models.bans.create({
+        where: {
+          id: userID,
+          type: "BAN",
+          duration: data.duration,
+        },
+        defaults: { id: userID },
+      });
+
       if (data.moderator.id === bot.plug.getSelf().id) return;
 
       const embed = new Discord.RichEmbed()
@@ -28,7 +37,7 @@ module.exports = function Event(bot, platform) {
       //.addBlankField(true);
 
       bot.channels.get("487985043776733185").send({embed});
-      
+
       await bot.redis.removeDisconnection(userID);
     },
     init() {

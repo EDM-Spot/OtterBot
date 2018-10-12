@@ -78,13 +78,13 @@ module.exports = function Command(bot) {
         //.addField("This is a field title, it can hold 256 characters")
         .addField("ID", user.id, true)
         .addField("Type", "Ban", true)
-        .addField("Time", "Permanent", true)
+        .addField("Time", apiDuration, true)
         .addField("Reason", reason, false);
       //.addBlankField(true);
 
       bot.channels.get("485173444330258454").send({embed});
       bot.channels.get("486637288923725824").send({embed});
-      
+
       await bot.plug.moderateBanUser(user.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, apiDuration);
       this.reply(lang.moderation.effective, {
         mod: rawData.from.username,

@@ -7,6 +7,16 @@ module.exports = function Event(bot, platform) {
     platform,
     run: async (data) => {
       if (isNil(data)) return;
+
+      await bot.db.models.bans.create({
+        where: {
+          id: data.user.id,
+          type: "MUTE",
+          duration: data.duration,
+        },
+        defaults: { id: data.user.id },
+      });
+
       if (data.moderator.id === bot.plug.getSelf().id) return;
 
       const embed = new Discord.RichEmbed()
