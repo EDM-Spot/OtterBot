@@ -251,7 +251,7 @@ module.exports = (client) => {
     });
 
 
-    const propsGivenPoints = "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.25)";
+    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.25)";
     const totalMessagesPoints = "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * 2.75)";
 
     const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
