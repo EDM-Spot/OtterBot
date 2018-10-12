@@ -128,17 +128,6 @@ module.exports = function Event(bot, filename, platform) {
             where: { historyID: `${data.historyID}`, dj: data.currentDJ.id },
           });
 
-          const score = keys(bot.points.votes).length + 1;
-          const ids = keys(bot.points.votes).map(k => parseInt(k, 10)).filter(i => !isNaN(i));
-
-          const previousScore = instance.get("points");
-          await instance.increment("points", { by: score });
-          if (previousScore < 10000) {
-            bot.points.incrementHook(instance);
-          }
-
-          await bot.db.models.users.increment("points", { by: 1, where: { id: { [Op.in]: ids } } });
-
           if (props) {
             await instance.increment("props", { by: props });
 
@@ -174,13 +163,6 @@ module.exports = function Event(bot, filename, platform) {
         }
 
         //const [lastPlay] = history;
-        
-        // save how much XP they got for their play
-        const score = keys(bot.points.votes).length + 1;
-        const ids = keys(bot.points.votes).map(k => parseInt(k, 10)).filter(i => !isNaN(i));
-
-        // empty the XP counter
-        bot.points.votes = {};
 
         // reset any DC spots when they start DJing
         await bot.redis.removeDisconnection(lastPlay.user.id);
@@ -270,15 +252,6 @@ module.exports = function Event(bot, filename, platform) {
         
         // if they weren't skipped they deserve XP equivalent to the votes
         if (!lastPlay.score.skipped) {
-          const previousScore = instance.get("points");
-          await instance.increment("points", { by: score });
-          if (previousScore < 10000) {
-            bot.points.incrementHook(instance);
-          }
-
-          // award users that voted their XP
-          await bot.db.models.users.increment("points", { by: 1, where: { id: { [Op.in]: ids } } });
-
           // if no props were given, we done here
           if (!props) return;
 
