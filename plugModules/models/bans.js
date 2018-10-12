@@ -1,5 +1,5 @@
 module.exports = async function Model(bot, sequelize) {
-  const Bans = bot.db.define("cbans", {
+  const Bans = bot.db.define("bans", {
     index: {
       type: sequelize.INTEGER,
       primaryKey: true,
