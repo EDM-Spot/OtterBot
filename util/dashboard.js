@@ -254,12 +254,20 @@ module.exports = (client) => {
       where: { skipped: false }
     });
     
+    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * 4.5)";
+
+    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * 2.75)";
+
+    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * 3.25)";
+    
+    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
+
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
     const totalMessagesPoints = "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * 1.25)";
 
     const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
     const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
-    const totalMehsPoints = "(SUM(plays.mehs) * 2.75)";
+    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
 
     const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)";
 
@@ -280,7 +288,7 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
-          "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - (" + totalMehsPoints + " * " + offlineDaysPoints + ")) / " + totalsongs + ") * 1000)"
+          "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")) / " + totalsongs + ") * 1000)"
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,

@@ -23,6 +23,18 @@ module.exports = function Command(bot) {
         where: { dj: id, skipped: false }
       });
 
+      const bancount = await bot.db.models.bans.count({
+        where: { id: id, type: "BAN" }
+      });
+
+      const mutecount = await bot.db.models.bans.count({
+        where: { id: id, type: "MUTE" }
+      });
+
+      const wlbancount = await bot.db.models.bans.count({
+        where: { id: id, type: "WLBAN" }
+      });
+
       const songvotes = await bot.db.models.plays.findAll({
         attributes: [
           [fn("SUM", col("plays.woots")
@@ -42,10 +54,12 @@ module.exports = function Command(bot) {
         where: { skipped: false }
       });
       
+      const totalbans = ((bancount * 4.5) + (mutecount * 2.75) + (wlbancount * 3.25) * 100);
+
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (((" + (propsgiven * 1.75) + " + " + (totalmessages * 1.25) + " + (((SUM(plays.woots) * 0.75) * (SUM(plays.grabs) * 3.5)) / " + playscount + ") - ((SUM(plays.mehs) * 2.75) * ((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1))) / " + totalsongs + ") * 1000) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (((" + (propsgiven * 1.75) + " + " + (totalmessages * 1.25) + " + (((SUM(plays.woots) * 0.75) * (SUM(plays.grabs) * 3.5)) / " + playscount + ") - (((SUM(plays.mehs) * 8.75) * ((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)) + " + totalbans + ")) / " + totalsongs + ") * 1000) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
@@ -69,11 +83,11 @@ module.exports = function Command(bot) {
 
       const totalWootsPoints = songvotes[0].dataValues.totalwoots * 0.75;
       const totalGrabsPoints = songvotes[0].dataValues.totalgrabs * 3.5;
-      const totalMehsPoints = songvotes[0].dataValues.totalmehs * 2.75;
+      const totalMehsPoints = songvotes[0].dataValues.totalmehs * 8.75;
 
       const offlineDaysPoints = (moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days") * 100) + 1;
 
-      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - (totalMehsPoints * offlineDaysPoints)) / totalsongs) * 1000;
+      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - ((totalMehsPoints * offlineDaysPoints) + totalbans)) / totalsongs) * 1000;
       
       const rank = bot.utils.numberWithCommas(inst[0].dataValues.rank);
       const totalpoints = bot.utils.numberWithCommas(Math.round(points));
