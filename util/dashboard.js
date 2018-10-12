@@ -263,7 +263,7 @@ module.exports = (client) => {
     const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
-    const totalMessagesPoints = "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) * 1.25)";
+    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.25)";
 
     const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
     const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
@@ -292,14 +292,14 @@ module.exports = (client) => {
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,
-        attributes: ["username", "last_seen"]
+        attributes: ["username", "last_seen", "points"]
       }],
       where: {
         skipped: false
       },
       group: ["user.id", "plays.dj"],
       order: [[literal("totalpoints"), "DESC"]],
-      limit: 10
+      limit: 30
     });
 
     renderTemplate(res, req, "index.ejs", {instance, rank, djRank});

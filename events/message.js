@@ -1,6 +1,7 @@
 // The MESSAGE event runs anytime a message is received
 // Note that due to the binding of client to every event, every event
 // goes `client, other, args` when this function is run.
+const { isNil } = require("lodash");
 
 module.exports = class {
   constructor(client) {
@@ -13,10 +14,31 @@ module.exports = class {
     if (message.author.bot) return;
 
     // Delete messages in bot only channels
-    if (!message.author.bot) {
-      if (message.channel.id === "486637288923725824" || message.channel.id === "487985043776733185"
+    if (message.channel.id === "486637288923725824" || message.channel.id === "487985043776733185"
            || message.channel.id === "486125808553820160") {
-        message.delete();
+      message.delete();
+      return;
+    }
+
+    const allowedChannels = [
+      "485173051432894491",
+      "487253193894658049",
+      "490172887085613076",
+      "487728777669902347",
+      "487247526622134274",
+      "486597265520328707",
+      "487337286128893972"
+    ];
+
+    if (allowedChannels.includes(message.channel.id)) {
+      const userID = await this.client.db.models.users.findOne({
+        where: {
+          discord: message.author.id,
+        },
+      });
+
+      if (!isNil(userID)) {
+        await this.client.db.models.users.increment("points", { by: 1, where: { discord: message.author.id } });
       }
     }
 

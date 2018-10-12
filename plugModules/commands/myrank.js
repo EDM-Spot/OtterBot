@@ -17,6 +17,12 @@ module.exports = function Command(bot) {
         where: { id: id, command: false }
       });
 
+      const discordpoints = await bot.db.models.users.findOne({
+        where: {
+          id: id
+        },
+      });
+
       const propsgiven = await bot.db.models.props.count({ where: { id } });
 
       const playscount = await bot.db.models.plays.count({
@@ -59,7 +65,7 @@ module.exports = function Command(bot) {
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (((" + (propsgiven * 1.75) + " + " + (totalmessages * 1.25) + " + (((SUM(plays.woots) * 0.75) * (SUM(plays.grabs) * 3.5)) / " + playscount + ") - (((SUM(plays.mehs) * 8.75) * ((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)) + " + totalbans + ")) / " + totalsongs + ") * 1000) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (((" + (propsgiven * 1.75) + " + " + ((totalmessages + discordpoints.get("points")) * 1.25) + " + (((SUM(plays.woots) * 0.75) * (SUM(plays.grabs) * 3.5)) / " + playscount + ") - (((SUM(plays.mehs) * 8.75) * ((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)) + " + totalbans + ")) / " + totalsongs + ") * 1000) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
@@ -79,7 +85,7 @@ module.exports = function Command(bot) {
       if (isNil(inst)) return false;
       
       const propsGivenPoints = propsgiven * 1.75;
-      const totalMessagesPoints = totalmessages * 1.25;
+      const totalMessagesPoints = (totalmessages + discordpoints.get("points")) * 1.25;
 
       const totalWootsPoints = songvotes[0].dataValues.totalwoots * 0.75;
       const totalGrabsPoints = songvotes[0].dataValues.totalgrabs * 3.5;
