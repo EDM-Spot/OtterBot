@@ -9,12 +9,9 @@ module.exports = function Event(bot, platform) {
       if (isNil(data)) return;
 
       await bot.db.models.bans.create({
-        where: {
-          id: data.user.id,
-          type: "MUTE",
-          duration: data.duration,
-        },
-        defaults: { id: data.user.id },
+        id: data.user.id,
+        type: "MUTE",
+        duration: data.duration,
       });
 
       if (data.moderator.id === bot.plug.getSelf().id) return;

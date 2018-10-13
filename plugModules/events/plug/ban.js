@@ -11,12 +11,9 @@ module.exports = function Event(bot, platform) {
       const userID = userDB.get("id");
       
       await bot.db.models.bans.create({
-        where: {
-          id: userID,
-          type: "BAN",
-          duration: data.duration,
-        },
-        defaults: { id: userID },
+        id: userID,
+        type: "BAN",
+        duration: data.duration,
       });
 
       if (data.moderator.id === bot.plug.getSelf().id) return;
