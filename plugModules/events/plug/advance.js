@@ -24,7 +24,6 @@ module.exports = function Event(bot, filename, platform) {
         if (get(data, "media.format", 2) === 1) {
           const YouTubeMediaData = await bot.youtube.getMedia(data.media.cid);
 
-          const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
           const fullTitle = get(YouTubeMediaData, "snippet.title");
 
           const { contentDetails, status } = YouTubeMediaData;

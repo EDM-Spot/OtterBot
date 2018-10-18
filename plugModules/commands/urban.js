@@ -16,6 +16,7 @@ module.exports = function Command(bot) {
       const urban = await bot.api.getUrban(text);
 
       if (isNil(urban)) return false;
+      if (isNil(urban.list[0])) return false;
 
       this.reply(lang.urban, { text: urban.list[0].definition });
       return true;

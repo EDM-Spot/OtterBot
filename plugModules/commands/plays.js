@@ -24,7 +24,6 @@ module.exports = function Command(bot) {
           if (get(currentMedia, "format", 2) === 1) {
             const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.cid);
   
-            const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
             const fullTitle = get(YouTubeMediaData, "snippet.title");
   
             songAuthor = fullTitle.split(" - ")[0].trim();
@@ -80,16 +79,26 @@ module.exports = function Command(bot) {
       }
 
       const link = args.shift();
+
+      if (isNil(link)) return;
+
       const cid = bot.youtube.getMediaID(link);
 
       if (!isNil(cid)) {
         const YouTubeMediaData = await bot.youtube.getMedia(cid);
+        let songAuthor = null;
+        let songTitle = null;
+
+        try {
+          const fullTitle = get(YouTubeMediaData, "snippet.title");
   
-        const { snippet } = YouTubeMediaData; // eslint-disable-line no-unused-vars
-        const fullTitle = get(YouTubeMediaData, "snippet.title");
-  
-        const songAuthor = fullTitle.split(" - ")[0].trim();
-        const songTitle = fullTitle.split(" - ")[1].trim();
+          songAuthor = fullTitle.split(" - ")[0].trim();
+          songTitle = fullTitle.split(" - ")[1].trim();
+        }
+        catch (err) {
+          console.warn(err);
+          return;
+        }
 
         const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, cid);
 

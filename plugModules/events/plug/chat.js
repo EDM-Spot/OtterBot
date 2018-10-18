@@ -1,4 +1,4 @@
-const { each } = require("lodash");
+const { each, isNil } = require("lodash");
 const moment = require("moment");
 const Discord = require("discord.js");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
@@ -33,16 +33,6 @@ module.exports = function Event(bot, platform) {
       if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(nigger)|(faggot)/ig.test(rawData.message)) {
         await bot.plug.moderateDeleteChat(rawData.id);
         return;
-      }
-
-      if (!commandHandleRegex.test(rawData.message)) {
-        if (bot.lottery.timer.isStarted) {
-          if (rawData.from.id !== bot.plug.getSelf().id) {
-            if (moment().valueOf() > bot.lottery.canJoinDate.valueOf()) {
-              bot.lottery.add(rawData.from.id);
-            }
-          }
-        }
       }
 
       if (commandHandleRegex.test(rawData.message)) {
@@ -88,6 +78,17 @@ module.exports = function Event(bot, platform) {
 
       if (/^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(rawData.message)) {
         setTimeout(() => bot.plug.moderateDeleteChat(rawData.id), 3e5);
+      }
+
+      if (!commandHandleRegex.test(rawData.message)) {
+        if (isNil(bot.lottery.timer)) return;
+        if (bot.lottery.timer.isStarted) {
+          if (rawData.from.id !== bot.plug.getSelf().id) {
+            if (moment().valueOf() > bot.lottery.canJoinDate.valueOf()) {
+              bot.lottery.add(rawData.from.id);
+            }
+          }
+        }
       }
     },
     init() {
