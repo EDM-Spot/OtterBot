@@ -37,7 +37,7 @@
     "express-session": "^1.15.6",
     "fs-extra": "^7.0.0",
     "helmet": "^3.14.0",
-    "ioredis": "^4.0.2",
+    "ioredis": "^4.2.0",
     "klaw": "^3.0.0",
     "level-session-store": "^2.1.0",
     "linear-promise-backoff-queue": "^1.0.0",
@@ -56,7 +56,7 @@
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "sequelize": "^4.39.0"
+    "sequelize": "^4.39.1"
   },
   "devDependencies": {
     "eslint": "^5.7.0",
