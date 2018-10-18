@@ -263,7 +263,7 @@ module.exports = (client) => {
     const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
-    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.25)";
+    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.55)";
 
     const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
     const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";

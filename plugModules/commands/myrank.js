@@ -24,7 +24,7 @@ module.exports = function Command(bot) {
       const totalbansSQL = "((" + bancountSQL + " + " + mutecountSQL + " + " + wlbancountSQL + ") * 100)";
   
       const propsGivenPointsSQL = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
-      const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.25)";
+      const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.55)";
   
       const totalWootsPointsSQL = "(SUM(plays.woots) * 0.75)";
       const totalGrabsPointsSQL = "(SUM(plays.grabs) * 3.5)";
@@ -101,7 +101,7 @@ module.exports = function Command(bot) {
       const totalbans = ((bancount * 4.5) + (mutecount * 2.75) + (wlbancount * 3.25) * 100);
 
       const propsGivenPoints = propsgiven * 1.75;
-      const totalMessagesPoints = (totalmessages + discordpoints.get("points")) * 1.25;
+      const totalMessagesPoints = (totalmessages + discordpoints.get("points")) * 1.55;
 
       const totalWootsPoints = songvotes[0].dataValues.totalwoots * 0.75;
       const totalGrabsPoints = songvotes[0].dataValues.totalgrabs * 3.5;
