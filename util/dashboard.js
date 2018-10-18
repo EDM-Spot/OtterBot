@@ -288,9 +288,6 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
-          "ROW_NUMBER() OVER(ORDER BY (((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")) / " + totalsongs + ") * 1000) DESC)"
-        ), "ranknumber"],
-        [literal(
           "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")) / " + totalsongs + ") * 1000)"
         ), "totalpoints"]],
       include: [{
@@ -302,7 +299,8 @@ module.exports = (client) => {
       },
       group: ["user.id", "plays.dj"],
       order: [[literal("totalpoints"), "DESC"]],
-      limit: 30
+      limit: 10,
+      logging: console.log
     });
 
     renderTemplate(res, req, "index.ejs", {instance, rank, djRank});

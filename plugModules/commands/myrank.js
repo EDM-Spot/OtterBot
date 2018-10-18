@@ -77,7 +77,8 @@ module.exports = function Command(bot) {
         where: {
           skipped: false
         },
-        group: ["user.id", "plays.dj"]
+        group: ["user.id", "plays.dj"],
+        logging: console.log
       });
 
       const inst = rankList.filter(u => u.dataValues.userid === id);

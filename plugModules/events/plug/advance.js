@@ -1,7 +1,6 @@
-const { Op } = require("sequelize");
 const moment = require("moment");
 const {
-  isObject, isNaN, isNil, get, keys, map, sortBy,
+  isObject, isNil, get, map, sortBy,
 } = require("lodash");
 
 var savedMessageID;
