@@ -288,6 +288,9 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
+          "ROW_NUMBER() OVER(ORDER BY (((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")) / " + totalsongs + ") * 1000) DESC)"
+        ), "ranknumber"],
+        [literal(
           "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")) / " + totalsongs + ") * 1000)"
         ), "totalpoints"]],
       include: [{
