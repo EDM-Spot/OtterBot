@@ -1,7 +1,7 @@
 const { isObject, isNil } = require("lodash");
 
 function generateIdentifier(currentMedia, dj, rawData) {
-  if (isNil(rawData.from.id) || isNil(dj.id)) {
+  if (isNil(rawData.from.id) || isNil(dj)) {
     console.log(rawData);
     console.log(dj);
   }
