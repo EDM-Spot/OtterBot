@@ -218,15 +218,13 @@ module.exports = (client) => {
   // Index page. If the user is authenticated, it shows their info
   // at the top right of the screen.
   app.get("/", async (req, res) => {
-    const instance = await client.db.models.users.findAll({
-      where: {
-        props: {
-          [Op.not]: 0
-        }
-      },
-      order: [["props", "DESC"]],
-      limit: 5,
+    const totalsongs = await client.db.models.plays.count({
+      where: { skipped: false }
     });
+
+    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
+    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
+    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
 
     const rank = await client.db.models.plays.findAll({
       attributes: ["author", "title",
@@ -241,17 +239,16 @@ module.exports = (client) => {
         ), "totalgrabs"],
         [literal(
           "COUNT(cid)"
-        ), "count"]],
+        ), "count"],
+        [literal(
+          "(((((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - " + totalMehsPoints + ") / " + totalsongs + ") * 1000)"
+        ), "score"]],
       where: {
         skipped: false
       },
       group: ["author", "title"],
-      order: [[literal("totalwoots"), "DESC"]],
+      order: [[literal("score"), "DESC"]],
       limit: 10,
-    });
-
-    const totalsongs = await client.db.models.plays.count({
-      where: { skipped: false }
     });
     
     const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * 4.5)";
@@ -264,10 +261,6 @@ module.exports = (client) => {
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
     const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.55)";
-
-    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
-    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
-    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
 
     const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)";
 
@@ -302,7 +295,7 @@ module.exports = (client) => {
       limit: 10
     });
 
-    renderTemplate(res, req, "index.ejs", {instance, rank, djRank});
+    renderTemplate(res, req, "index.ejs", {rank, djRank});
   });
 
   app.get("/blacklist", async (req, res) => {
