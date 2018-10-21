@@ -299,8 +299,7 @@ module.exports = (client) => {
       },
       group: ["user.id", "plays.dj"],
       order: [[literal("totalpoints"), "DESC"]],
-      limit: 10,
-      logging: console.log
+      limit: 10
     });
 
     renderTemplate(res, req, "index.ejs", {instance, rank, djRank});
