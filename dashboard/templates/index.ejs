@@ -121,7 +121,7 @@
           <%= rank[i].dataValues.totalgrabs %>
         </td>
         <td class="text-center">
-          <%= rank[i].dataValues.score %>
+          <%= Math.round(rank[i].dataValues.score) %>
         </td>
       </tr>
       <% } %>
