@@ -118,24 +118,7 @@ module.exports = function Event(bot, filename, platform) {
         if (savedID === get(currentMedia, "id")) {
           await bot.plug.sendChat(bot.lang.stuckSkip);
 
-          const [instance] = await bot.db.models.users.findOrCreate({
-            where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id, username: data.currentDJ.username },
-          });
-
-          const props = await bot.db.models.props.count({
-            where: { historyID: `${data.historyID}`, dj: data.currentDJ.id },
-          });
-
-          if (props) {
-            await instance.increment("props", { by: props });
-
-            await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
-              props,
-              user: data.currentDJ.username,
-              plural: props > 1 ? "s" : "",
-            }), data.media.duration * 1e3);
-          }
-
+          bot.global.isSkippedByTimeGuard = true;
           await bot.plug.moderateForceSkip();
         }
       }, (data.media.duration + 10) * 1e3);
@@ -202,6 +185,13 @@ module.exports = function Event(bot, filename, platform) {
           lastSongTitle = lastPlay.media.title;
         }
 
+        let lastPlaySkipped = lastPlay.score.skipped;
+
+        if (bot.global.isSkippedByTimeGuard) {
+          lastPlaySkipped = false;
+          bot.global.isSkippedByTimeGuard = false;
+        }
+
         // keep track of played media in the room
         await bot.db.models.plays.create({
           cid: lastPlay.media.cid,
@@ -210,7 +200,7 @@ module.exports = function Event(bot, filename, platform) {
           grabs: lastPlay.score.grabs,
           mehs: lastPlay.score.negative,
           dj: lastPlay.user.id,
-          skipped: lastPlay.score.skipped > 0,
+          skipped: lastPlaySkipped > 0,
           author: `${lastSongAuthor}`,
           title: `${lastSongTitle}`,
         });
@@ -231,7 +221,7 @@ module.exports = function Event(bot, filename, platform) {
 
         try {
           if (!isNil(savedMessageID)) {
-            if (lastPlay.score.skipped === 1) {
+            if (lastPlaySkipped === 1) {
               bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
                 .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " Skipped!"));
             } else {
@@ -249,7 +239,7 @@ module.exports = function Event(bot, filename, platform) {
         }
         
         // if they weren't skipped they deserve XP equivalent to the votes
-        if (!lastPlay.score.skipped) {
+        if (!lastPlaySkipped) {
           // if no props were given, we done here
           if (!props) return;
 
