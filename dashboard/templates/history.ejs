@@ -1,15 +1,15 @@
 <%- include('blocks/header', {bot, user, path}) %>
-<div class="jumbotron">
+<div class="jumbotron" style="padding: 1rem 2rem;">
   <h1>6 Hours History</h1>
   </hr>
-  <table class="table table-hover">
+  <table class="table table-hover" id="searchTableHistory">
     <thead>
       <tr>
-        <th scope="col">Preview</th>
-        <th scope="col">ID</th>
-        <th scope="col">Title</th>
-        <th scope="col">Skipped</th>
-        <th scope="col">Date</th>
+        <th scope="col" class="text-center">Preview</th>
+        <th scope="col" class="text-center">ID</th>
+        <th scope="col" class="text-center">Title</th>
+        <th scope="col" class="text-center">Skipped</th>
+        <th scope="col" class="text-center">Date</th>
       </tr>
     </thead>
     <tbody>
@@ -37,4 +37,26 @@
     </tbody>
   </table>
 </div>
+<script type="text/javascript">
+  $('#searchTableHistory').DataTable({
+    "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
+        "<'row'<'col-12'tr>>" +
+        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+    colReorder: true,
+    fixedHeader: true,
+    responsive: true,
+    "pageLength": 100,
+    "autoWidth": true,
+    "processing": true,
+    "searchHighlight": true,
+    "lengthChange": false,
+    "ordering": false,
+
+    "select": {
+        "style": 'single',
+        "blurable": true
+    },
+  });
+</script>
 <% include ./blocks/footer %>
