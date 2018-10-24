@@ -291,8 +291,7 @@ module.exports = (client) => {
         skipped: false
       },
       group: ["user.id", "plays.dj"],
-      order: [[literal("totalpoints"), "DESC"]],
-      limit: 50
+      order: [[literal("totalpoints"), "DESC"]]
     });
 
     renderTemplate(res, req, "index.ejs", {rank, djRank});

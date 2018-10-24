@@ -32,7 +32,7 @@
   <div class="row justify-content-center d-flex">
     <h4><i class="fas fa-crown"></i> DJ LeaderBoard </h4>
   </div>
-  <table class="table table-hover">
+  <table class="table table-hover" id="searchTableDJRank">
     <thead>
       <tr>
         <th scope="col" class="text-center">Rank</th>
@@ -128,4 +128,28 @@
     </tbody>
   </table>
 </div>
+<script type="text/javascript">
+  $('#searchTableDJRank').DataTable({
+    "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
+        "<'row'<'col-12'tr>>" +
+        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+    autoFill: false,
+    colReorder: true,
+    fixedHeader: true,
+    responsive: true,
+    select: true,
+    "pageLength": 10,
+    "autoWidth": true,
+    stateSave: true,
+    "processing": true,
+    "searchHighlight": true,
+
+    ],
+    "select": {
+        "style": 'single',
+        "blurable": true
+    },
+  });
+</script>
 <% include ./blocks/footer %>
