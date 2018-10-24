@@ -16,9 +16,11 @@
       <% for (let i = 0; i < instance.length; i++) { %>
       <tr>
         <td class="text-center">
-        <a href="http://www.youtube.com/watch?v=<%= instance[i].dataValues.cid %>">
-          <img border="0" src="https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/youtube-64.png" width="64" height="64">
-        </a>
+        <% if (instance[i].dataValues.format === 1) { %>
+          <a href="http://www.youtube.com/watch?v=<%= instance[i].dataValues.cid %>">
+            <img border="0" src="https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/youtube-64.png" width="64" height="64">
+          </a>
+        <% } %>
         </td>
         <td class="text-center">
           <%= instance[i].dataValues.cid %>
