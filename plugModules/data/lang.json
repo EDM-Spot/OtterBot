@@ -121,7 +121,7 @@
       "isPlaying": "the user specified is currently playing and cannot be added!",
       "effective": "%%MOD%% used %%COMMAND%% on %%USER%%. It was super effective!",
       "add": "%%MOD%% added %%USER%% to the Wait List.",
-      "onStaff": "If you're really looking to do that, your role should probably be reconsidered.",
+      "onStaff": "You can't do that, talk with a higher rank.",
       "onSelf": "Why are you trying to %%COMMAND%% yourself?",
       "needReason": "You need to specify a reason!"
     },
