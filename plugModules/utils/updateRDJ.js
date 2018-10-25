@@ -3,14 +3,25 @@ const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 const { fn, col } = require("sequelize");
 const moment = require("moment");
 
+//-eval this.client.plug.getAllStaff((err, data) => console.log(data.filter(u => u.id === 4838584)));
+
 module.exports = function Util(bot) {
   const util = {
     name: "updateRDJ",
-    function: async (user) => {
-      if (!isObject(user)) return;
-      if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return;
+    function: async (id) => {
+      if (isNil(id)) return false;
 
-      const id = user.id;
+      let user = bot.plug.getUser(id);
+
+      if (!isObject(user)) {
+        user = await bot.plug.getAllStaff((err, data) => data.filter(u => u.id === id));
+      }
+
+      console.log(user);
+      return false;
+      
+      if (!isObject(user)) return false;
+      if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
       const totalsongs = await bot.db.models.plays.count({
         where: { skipped: false }
@@ -84,6 +95,10 @@ module.exports = function Util(bot) {
           if (!isNil(userDB.get("discord"))) {
             bot.users.get(userDB.get("discord")).removeRole(role).catch(console.error);
           }
+
+          await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
+            user: user.username
+          }));
         }
       } else {
         const joined = moment().diff(userDB.get("created_at"), "months");
@@ -94,6 +109,10 @@ module.exports = function Util(bot) {
           if (!isNil(userDB.get("discord"))) {
             bot.users.get(userDB.get("discord")).addRole(role).catch(console.error);
           }
+
+          await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
+            user: user.username
+          }));
         }
       }
 
