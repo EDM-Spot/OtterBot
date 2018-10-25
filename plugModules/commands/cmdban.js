@@ -50,7 +50,7 @@ module.exports = function Command(bot) {
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
-      } else if (user.id === rawData.uid) {
+      } else if (user.id === rawData.from.id) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
       } else if (user.role >= ROOM_ROLE.BOUNCER && rawData.from.role <= ROOM_ROLE.BOUNCER) {
@@ -85,7 +85,7 @@ module.exports = function Command(bot) {
         defaults: { id: user.id },
       });
       this.reply(lang.moderation.effective, {
-        mod: rawData.un,
+        mod: rawData.from.username,
         command: `!${name}`,
         user: user.username,
       }, 6e4);
