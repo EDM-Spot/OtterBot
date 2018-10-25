@@ -53,7 +53,7 @@ module.exports = function Command(bot) {
       } else if (user.id === rawData.uid) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if (user.role >= ROOM_ROLE.BOUNCER) {
+      } else if (user.role >= ROOM_ROLE.BOUNCER && rawData.from.role <= ROOM_ROLE.BOUNCER) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
         return false;
       }
