@@ -13,7 +13,7 @@ module.exports = function Command(bot) {
 
       const id = rawData.args.join(" ");
 
-      await bot.utils.updateRDJ(id);
+      bot.utils.updateRDJ(id);
       return true;
     },
   });
