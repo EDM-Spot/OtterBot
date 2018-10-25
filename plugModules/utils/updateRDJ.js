@@ -15,6 +15,8 @@ module.exports = function Util(bot) {
 
       if (!isObject(user)) {
         user = await bot.plug.getAllStaff((err, data) => data.filter(u => u.id === id));
+        await bot.plug.getAllStaff((err, data) => user = data.filter(u => u.id === id));
+        bot.plug.getAllStaff((err, data) => user = data.filter(u => u.id === id));
       }
 
       console.log(user);
