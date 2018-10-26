@@ -30,7 +30,6 @@
     "chalk": "^2.4.1",
     "compose-function": "^3.0.3",
     "discord.js": "^11.4.2",
-    "easy-promise-queue": "^0.4.0",
     "ejs": "^2.6.1",
     "enmap": "^4.3.3",
     "express": "^4.16.4",
