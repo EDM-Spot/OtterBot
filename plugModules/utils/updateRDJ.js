@@ -111,10 +111,10 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        await bot.plug.getAllStaff(async (err, data) => {
+        bot.plug.getAllStaff((err, data) => {
           const offUser = data.filter(u => u.id === id);
-          
-          if (isObject(user)) return false;
+          console.log(offUser);
+          if (isObject(offUser)) return false;
           if (offUser.role >= ROOM_ROLE.BOUNCER || offUser.gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
           if (offUser.role === ROOM_ROLE.RESIDENTDJ) {
