@@ -16,6 +16,8 @@ const path = require("path");
 const Redis = require("ioredis");
 const Sequelize = require("sequelize");
 const plugModuleManager = require("./plugModules");
+var Promise = require("bluebird");
+Promise.longStackTraces();
 
 class Bot extends Discord.Client {
   constructor(options) {

@@ -2,15 +2,12 @@ const { isNil, isObject } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 const { fn, col } = require("sequelize");
 const moment = require("moment");
-var Promise = require("bluebird");
 
 module.exports = function Util(bot) {
   const util = {
     name: "updateRDJ",
     function: async (id) => {
       if (isNil(id)) return false;
-
-      Promise.longStackTraces();
 
       const user = bot.plug.getUser(id);
 
