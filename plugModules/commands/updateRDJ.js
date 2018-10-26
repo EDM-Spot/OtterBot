@@ -9,10 +9,12 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const users = await bot.db.models.users.findAll();
 
-      for (const user of users) {
-        await bot.wait(5000);
-        await bot.utils.updateRDJ(user.id);
-      }
+      var i = 0;
+      var interval = setInterval(function() {
+        bot.utils.updateRDJ(users[i].id);
+        i++;
+        if (i === users.length) clearInterval(interval);
+      }, 5000);
 
       console.log("Finished");
 
