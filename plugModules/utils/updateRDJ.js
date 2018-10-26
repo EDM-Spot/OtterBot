@@ -87,13 +87,7 @@ module.exports = function Util(bot) {
           const userPoints = points + tolerance;
 
           if (userPoints < 700) {
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE, (error, data) => {
-              if (error) {
-                console.log(error);
-              } else {
-                console.log(data);
-              }
-            });
+            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
 
             if (!isNil(userDB.get("discord"))) {
               bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
@@ -107,13 +101,7 @@ module.exports = function Util(bot) {
           const joined = moment().diff(userDB.get("created_at"), "months");
 
           if (points >= 700 && joined >= 1 && playscount >= 150) {
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ, (error, data) => {
-              if (error) {
-                console.log(error);
-              } else {
-                console.log(data);
-              }
-            });
+            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
 
             if (!isNil(userDB.get("discord"))) {
               bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
@@ -136,13 +124,7 @@ module.exports = function Util(bot) {
             const userPoints = points + tolerance;
 
             if (userPoints < 700) {
-              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE, (error, data) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  console.log(data);
-                }
-              });
+              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
                 bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRoles(role).catch(console.error);
@@ -156,13 +138,7 @@ module.exports = function Util(bot) {
             const joined = moment().diff(userDB.get("created_at"), "months");
   
             if (points >= 700 && joined >= 1 && playscount >= 150) {
-              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ, (error, data) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  console.log(data);
-                }
-              });
+              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
   
               if (!isNil(userDB.get("discord"))) {
                 bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRoles(role).catch(console.error);
