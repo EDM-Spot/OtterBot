@@ -113,12 +113,11 @@ module.exports = function Util(bot) {
       } else {
         bot.plug.getAllStaff((err, data) => {
           const offUser = data.filter(u => u.id === id);
-          console.log(offUser);
-          console.log(offUser.role);
-          if (isNil(offUser)) return false;
-          if (offUser.role >= ROOM_ROLE.BOUNCER || offUser.gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
-          if (offUser.role === ROOM_ROLE.RESIDENTDJ) {
+          if (isNil(offUser)) return false;
+          if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
+
+          if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
             const tolerance = 30;
             const userPoints = points + tolerance;
   
