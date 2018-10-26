@@ -3,8 +3,6 @@ const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 const { fn, col } = require("sequelize");
 const moment = require("moment");
 
-//-eval this.client.plug.getAllStaff((err, data) => console.log(data.filter(u => u.id === 4838584)));
-
 module.exports = function Util(bot) {
   const util = {
     name: "updateRDJ",
@@ -73,7 +71,7 @@ module.exports = function Util(bot) {
 
       const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - ((totalMehsPoints * offlineDaysPoints) + totalbans)) / totalsongs) * 1000;
 
-      //const role = bot.guild.roles.find(r => r.name === "RDJ");
+      const role = bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
       if (isObject(user)) {
         if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return false;
@@ -83,35 +81,33 @@ module.exports = function Util(bot) {
           const userPoints = points + tolerance;
 
           if (userPoints < 700) {
-            //await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
-            console.log("Should Demote Online");
+            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
 
             if (!isNil(userDB.get("discord"))) {
-              //bot.users.get(userDB.get("discord")).removeRole(role).catch(console.error);
+              bot.users.get(userDB.get("discord")).removeRole(role).catch(console.error);
             }
 
-            //await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
-            //  user: user.username
-            //}));
+            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
+              user: user.username
+            }));
           }
         } else {
           const joined = moment().diff(userDB.get("created_at"), "months");
 
           if (points >= 700 && joined >= 1 && playscount >= 150) {
-            //await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
-            console.log("Should Promote Online");
+            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
 
             if (!isNil(userDB.get("discord"))) {
-              //bot.users.get(userDB.get("discord")).addRole(role).catch(console.error);
+              bot.users.get(userDB.get("discord")).addRole(role).catch(console.error);
             }
 
-            //await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
-            //  user: user.username
-            //}));
+            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
+              user: user.username
+            }));
           }
         }
       } else {
-        bot.plug.getAllStaff((err, data) => {
+        bot.plug.getAllStaff(async (err, data) => {
           const offUser = data.filter(u => u.id === id);
 
           if (isNil(offUser)) return false;
@@ -122,31 +118,29 @@ module.exports = function Util(bot) {
             const userPoints = points + tolerance;
   
             if (userPoints < 700) {
-              //await bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.NONE);
-              console.log("Should Demote Offline");
+              await bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
-                //bot.users.get(userDB.get("discord")).removeRole(role).catch(console.error);
+                bot.users.get(userDB.get("discord")).removeRole(role).catch(console.error);
               }
   
-              //bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
-              //  user: offUser.username
-              //}));
+              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
+                user: offUser.username
+              }));
             }
           } else {
             const joined = moment().diff(userDB.get("created_at"), "months");
   
             if (points >= 700 && joined >= 1 && playscount >= 150) {
-              //bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.RESIDENTDJ);
-              console.log("Should Promote Offline");
+              await bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.RESIDENTDJ);
   
               if (!isNil(userDB.get("discord"))) {
-                //bot.users.get(userDB.get("discord")).addRole(role).catch(console.error);
+                bot.users.get(userDB.get("discord")).addRole(role).catch(console.error);
               }
   
-              //bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
-              //  user: offUser.username
-              //}));
+              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
+                user: offUser.username
+              }));
             }
           }
         });
