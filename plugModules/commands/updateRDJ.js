@@ -9,8 +9,8 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const users = await bot.db.models.users.findAll();
 
-      for (let i = 0; i < users.length; i++) {
-        await bot.utils.updateRDJ(users[i].id);
+      for (const user of users) {
+        await bot.utils.updateRDJ(user.id);
       }
 
       return true;
