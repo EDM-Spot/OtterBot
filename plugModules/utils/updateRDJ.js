@@ -88,7 +88,7 @@ module.exports = function Util(bot) {
 
           if (userPoints < 700) {
             //await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
-            bot.rdjqueue(user.id, ROOM_ROLE.NONE);
+            bot.rdjqueue.add(user.id, ROOM_ROLE.NONE);
 
             if (!isNil(userDB.get("discord"))) {
               bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
@@ -103,7 +103,7 @@ module.exports = function Util(bot) {
 
           if (points >= 700 && joined >= 1 && playscount >= 150) {
             //await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
-            bot.rdjqueue(user.id, ROOM_ROLE.RESIDENTDJ);
+            bot.rdjqueue.add(user.id, ROOM_ROLE.RESIDENTDJ);
 
             if (!isNil(userDB.get("discord"))) {
               bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
@@ -127,7 +127,7 @@ module.exports = function Util(bot) {
 
             if (userPoints < 700) {
               //await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
-              bot.rdjqueue(offUser[0].id, ROOM_ROLE.NONE);
+              bot.rdjqueue.add(offUser[0].id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
                 bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRoles(role).catch(console.error);
@@ -142,7 +142,7 @@ module.exports = function Util(bot) {
   
             if (points >= 700 && joined >= 1 && playscount >= 150) {
               //await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
-              bot.rdjqueue(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
+              bot.rdjqueue.add(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
   
               if (!isNil(userDB.get("discord"))) {
                 bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRoles(role).catch(console.error);
