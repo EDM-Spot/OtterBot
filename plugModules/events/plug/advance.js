@@ -237,7 +237,7 @@ module.exports = function Event(bot, filename, platform) {
         } catch (err) {
           console.log(err);
         }
-        
+
         // if they weren't skipped they deserve XP equivalent to the votes
         if (!lastPlaySkipped) {
           // if no props were given, we done here

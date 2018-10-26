@@ -9,6 +9,8 @@ module.exports = function Util(bot) {
     function: async (id) => {
       if (isNil(id)) return false;
 
+      await bot.wait(1000);
+
       const user = bot.plug.getUser(id);
 
       const totalsongs = await bot.db.models.plays.count({
@@ -90,7 +92,7 @@ module.exports = function Util(bot) {
             await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
 
             if (!isNil(userDB.get("discord"))) {
-              bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
+              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRoles(role).catch(console.error);
             }
 
             await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
@@ -104,7 +106,7 @@ module.exports = function Util(bot) {
             await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
 
             if (!isNil(userDB.get("discord"))) {
-              bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
+              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRoles(role).catch(console.error);
             }
 
             await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
@@ -127,7 +129,7 @@ module.exports = function Util(bot) {
               await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
-                bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRoles(role).catch(console.error);
+                await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRoles(role).catch(console.error);
               }
   
               await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
@@ -141,7 +143,7 @@ module.exports = function Util(bot) {
               await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
   
               if (!isNil(userDB.get("discord"))) {
-                bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRoles(role).catch(console.error);
+                await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRoles(role).catch(console.error);
               }
   
               await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
