@@ -73,7 +73,7 @@ module.exports = function Util(bot) {
 
       const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - ((totalMehsPoints * offlineDaysPoints) + totalbans)) / totalsongs) * 1000;
 
-      const role = bot.guild.roles.find(r => r.name === "RDJ");
+      //const role = bot.guild.roles.find(r => r.name === "RDJ");
 
       if (isObject(user)) {
         if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return false;
