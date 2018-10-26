@@ -1,6 +1,6 @@
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["updateRDJ"],
+    names: ["updaterdj"],
     minimumPermission: 4000,
     cooldownType: "perUse",
     cooldownDuration: 2,
@@ -10,7 +10,8 @@ module.exports = function Command(bot) {
       const users = await bot.db.models.users.findAll();
 
       for (let i = 0; i < users.length; i++) {
-        await bot.utils.updateRDJ(users.id);
+        console.log(users[i].username);
+        bot.utils.updateRDJ(users[i].id);
       }
 
       return true;
