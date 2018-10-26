@@ -11,6 +11,7 @@ module.exports = function Command(bot) {
 
       for (let i = 0; i < users.length; i++) {
         console.log(users[i].username);
+        await bot.wait(1000);
         bot.utils.updateRDJ(users[i].id);
       }
 
