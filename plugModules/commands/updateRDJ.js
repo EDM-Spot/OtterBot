@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["rdjranks"],
     minimumPermission: 0,
     cooldownType: "perUse",
-    cooldownDuration: 0,
+    cooldownDuration: 1,
     parameters: "<id>",
     description: "Update RDJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
