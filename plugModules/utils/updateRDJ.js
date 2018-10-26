@@ -88,8 +88,6 @@ module.exports = function Util(bot) {
 
           if (userPoints < 700) {
             await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
-            console.log(await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE));
-            console.log(bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE));
 
             if (!isNil(userDB.get("discord"))) {
               await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRoles(role).catch(console.error);
