@@ -111,7 +111,7 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        bot.plug.getAllStaff((err, data) => {
+        await bot.plug.getAllStaff((err, data) => {
           const offUser = data.filter(u => u.id === id);
           
           if (isObject(user)) return false;
