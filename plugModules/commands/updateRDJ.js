@@ -14,8 +14,8 @@ module.exports = function Command(bot) {
       const users = await bot.db.models.users.findAll();
 
       for (const user of users) {
-        pq.add(() => {
-          bot.utils.updateRDJ(user.id);
+        pq.add(async () => {
+          await bot.utils.updateRDJ(user.id);
         });
       }
 
