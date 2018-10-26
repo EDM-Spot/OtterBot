@@ -14,8 +14,11 @@ module.exports = function Command(bot) {
       const users = await bot.db.models.users.findAll();
 
       for (const user of users) {
-        pq.add(async () => {
-          await bot.utils.updateRDJ(user.id);
+        pq.add(() => {
+          return new Promise(function(resolve, reject) { // eslint-disable-line no-unused-vars
+            bot.utils.updateRDJ(user.id);
+            resolve();
+          });
         });
       }
 
