@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
       const users = await bot.db.models.users.findAll();
 
       for (const user of users) {
-        bot.utils.updateRDJ(user.id);
+        await bot.utils.updateRDJ(user.id);
       }
 
       console.log("Finished");
