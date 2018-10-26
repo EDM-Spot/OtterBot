@@ -96,6 +96,7 @@ module.exports = function Util(bot) {
             await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
               user: user.username
             }));
+            bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
           }
         } else {
           const joined = moment().diff(userDB.get("created_at"), "months");
@@ -110,6 +111,7 @@ module.exports = function Util(bot) {
             await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
               user: user.username
             }));
+            bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
           }
         }
       } else {
@@ -133,6 +135,7 @@ module.exports = function Util(bot) {
               await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
                 user: offUser[0].username
               }));
+              bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
             }
           } else {
             const joined = moment().diff(userDB.get("created_at"), "months");
@@ -147,6 +150,7 @@ module.exports = function Util(bot) {
               await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
                 user: offUser[0].username
               }));
+              bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
             }
           }
         });
