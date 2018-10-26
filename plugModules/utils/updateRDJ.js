@@ -116,12 +116,12 @@ module.exports = function Util(bot) {
           if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
             const tolerance = 30;
             const userPoints = points + tolerance;
-  
+
             if (userPoints < 700) {
               await bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
-                bot.users.get(userDB.get("discord")).removeRole(role).catch(console.error);
+                bot.users.get(userDB.get("discord")).removeRoles(role).catch(console.error);
               }
   
               await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
@@ -135,7 +135,7 @@ module.exports = function Util(bot) {
               await bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.RESIDENTDJ);
   
               if (!isNil(userDB.get("discord"))) {
-                bot.users.get(userDB.get("discord")).addRole(role).catch(console.error);
+                bot.users.get(userDB.get("discord")).addRoles(role).catch(console.error);
               }
   
               await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
