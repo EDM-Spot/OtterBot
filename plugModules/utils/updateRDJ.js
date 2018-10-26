@@ -87,13 +87,13 @@ module.exports = function Util(bot) {
           const userPoints = points + tolerance;
 
           if (userPoints < 700) {
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
+            bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
 
             if (!isNil(userDB.get("discord"))) {
               bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
             }
 
-            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
+            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
               user: user.username
             }));
           }
@@ -101,13 +101,13 @@ module.exports = function Util(bot) {
           const joined = moment().diff(userDB.get("created_at"), "months");
 
           if (points >= 700 && joined >= 1 && playscount >= 150) {
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
+            bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
 
             if (!isNil(userDB.get("discord"))) {
               bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
             }
 
-            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
+            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
               user: user.username
             }));
           }
@@ -124,13 +124,13 @@ module.exports = function Util(bot) {
             const userPoints = points + tolerance;
 
             if (userPoints < 700) {
-              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
+              bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
                 bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRoles(role).catch(console.error);
               }
   
-              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
+              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
                 user: offUser[0].username
               }));
             }
@@ -138,13 +138,13 @@ module.exports = function Util(bot) {
             const joined = moment().diff(userDB.get("created_at"), "months");
   
             if (points >= 700 && joined >= 1 && playscount >= 150) {
-              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
+              bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
   
               if (!isNil(userDB.get("discord"))) {
                 bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRoles(role).catch(console.error);
               }
   
-              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
+              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
                 user: offUser[0].username
               }));
             }
