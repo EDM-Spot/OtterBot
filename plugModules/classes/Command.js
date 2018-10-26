@@ -2,7 +2,7 @@ const { get, assign, isNil } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
 const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays"];
-const CMD_BANNED = ["cookie", "myprops", "hello", "catfact", "urban", "eta", "sodas", "gif", "myrank"];
+const CMD_BANNED = ["cookie", "myprops", "hello", "catfact", "catfacts", "urban", "eta", "sodas", "gif", "myrank"];
 
 module.exports = class Command {
   constructor(bot, rawData, instance) {
