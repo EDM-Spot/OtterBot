@@ -12,7 +12,7 @@
   "blocked": "The song is blocked in too many countries. See: http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=%%LINK%%",
   "lotteryWinner": "@%%WINNER%% won the lottery this time! Type !accept to be moved to position %%POSITION%%.",
   "notAccepted": "Position not accepted! Giving it to someone else...",
-  "rdjPromoted": "%%USER%% have enough points and was gifted with the RDJ Role. Congratulations.",
+  "rdjPromoted": "%%USER%% has enough points and was gifted with the RDJ Role. Congratulations.",
   "rdjDemoted": "%%USER%% lost too many points and the RDJ Role.",
   "points": {
     "milestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",
