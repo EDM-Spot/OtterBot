@@ -114,7 +114,7 @@ module.exports = function Util(bot) {
         bot.plug.getAllStaff((err, data) => {
           const offUser = data.filter(u => u.id === id);
           console.log(offUser);
-          if (isObject(offUser)) return false;
+          if (!isObject(offUser)) return false;
           if (offUser.role >= ROOM_ROLE.BOUNCER || offUser.gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
           if (offUser.role === ROOM_ROLE.RESIDENTDJ) {
