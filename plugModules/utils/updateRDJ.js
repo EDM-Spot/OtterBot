@@ -111,7 +111,7 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        await bot.plug.getAllStaff((err, data) => {
+        await bot.plug.getAllStaff(async (err, data) => {
           const offUser = data.filter(u => u.id === id);
           
           if (isObject(user)) return false;
@@ -122,7 +122,7 @@ module.exports = function Util(bot) {
             const userPoints = points + tolerance;
   
             if (userPoints < 700) {
-              //bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.NONE);
+              //await bot.plug.moderateSetRole(offUser.id, ROOM_ROLE.NONE);
               console.log("Should Demote Offline");
   
               if (!isNil(userDB.get("discord"))) {
