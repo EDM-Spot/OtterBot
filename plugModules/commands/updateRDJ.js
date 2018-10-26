@@ -1,19 +1,18 @@
-const { isNil } = require("lodash");
-
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["rdjranks"],
-    minimumPermission: 0,
+    names: ["updateRDJ"],
+    minimumPermission: 4000,
     cooldownType: "perUse",
-    cooldownDuration: 1,
-    parameters: "<id>",
+    cooldownDuration: 2,
+    parameters: "",
     description: "Update RDJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      if (!rawData.args.length) return;
+      const users = await bot.db.models.users.findAll();
 
-      const id = rawData.args.join(" ");
+      for (let i = 0; i < users.length; i++) {
+        await bot.utils.updateRDJ(users.id);
+      }
 
-      bot.utils.updateRDJ(id);
       return true;
     },
   });
