@@ -1,5 +1,6 @@
 const { isObject, isNaN } = require("lodash");
 const { ROOM_ROLE } = require("plugapi");
+const moment = require("moment");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -53,6 +54,9 @@ module.exports = function Command(bot) {
           return true;
         }
         case "start": {
+          const day = moment().isoWeekday();
+          const isWeekend = (day === 6) || (day === 7);
+
           if (await bot.roulette.check()) {
             this.reply(lang.roulette.started, {}, 6e4);
             return true;
@@ -90,6 +94,10 @@ module.exports = function Command(bot) {
               specifiedPrice = 1;
             }
 
+            if (isWeekend) {
+              specifiedPrice = 0;
+            }
+
             if (isNaN(specifiedPrice) && specifiedPrice <= 100) {
               this.reply(lang.roulette.invalidPrice, {}, 6e4);
               return false;
@@ -99,6 +107,11 @@ module.exports = function Command(bot) {
           }
 
           await bot.roulette.start(duration, price);
+          
+          if (isWeekend) {
+            this.reply(lang.roulette.startingWeekend, {}, duration * 1e3);
+          }
+
           this.reply(lang.roulette.starting, {}, duration * 1e3);
 
           await bot.plug.sendChat(bot.utils.replace(lang.roulette.info, {
