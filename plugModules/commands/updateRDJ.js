@@ -11,6 +11,7 @@ module.exports = function Command(bot) {
 
       var i = 0;
       var interval = setInterval(function() {
+        console.log(users[i].username);
         bot.utils.updateRDJ(users[i].id);
         i++;
         if (i === users.length) clearInterval(interval);
