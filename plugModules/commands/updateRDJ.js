@@ -18,10 +18,10 @@ module.exports = function Command(bot) {
 
         var i = 0;
         var interval = setInterval(function() {          
-          if (isNil(offUser[0])) return false;
-          if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
+          if (isNil(offUser[i])) return false;
+          if (offUser[i].role >= ROOM_ROLE.BOUNCER || offUser[i].gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
-          if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
+          if (offUser[i].role === ROOM_ROLE.RESIDENTDJ) {
             bot.utils.updateRDJ(offUser[i].id);
           }
           i++;
