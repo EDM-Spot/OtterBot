@@ -248,7 +248,7 @@ module.exports = (client) => {
       },
       group: ["author", "title"],
       order: [[literal("score"), "DESC"]],
-      limit: 10,
+      limit: 10
     });
     
     const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * 4.5)";
@@ -291,7 +291,8 @@ module.exports = (client) => {
         skipped: false
       },
       group: ["user.id", "plays.dj"],
-      order: [[literal("totalpoints"), "DESC"]]
+      order: [[literal("totalpoints"), "DESC"]],
+      limit: 300
     });
 
     renderTemplate(res, req, "index.ejs", {rank, djRank});
