@@ -29,7 +29,6 @@ module.exports = function Util(bot) {
         await bot.plug.moderateSetRole(id, ROOM_ROLE.NONE);
         return true;
       }
-      console.log(userDB.get("id"));
 
       const propsgiven = await bot.db.models.props.count({ where: { id } });
 
