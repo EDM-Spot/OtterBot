@@ -1,5 +1,6 @@
 const Command = require("../base/Command.js");
 const { isNil } = require("lodash");
+const { ROOM_ROLE } = require("plugapi");
 
 class Link extends Command {
   constructor(client) {
@@ -41,6 +42,15 @@ class Link extends Command {
         { discord: message.author.id },
         { where: { id: args[0] }, defaults: { id: args[0] }}
       );
+
+      const userPlug = this.client.plug.getUser(args[0]);
+
+      if (!isNil(userPlug)) {
+        if (userPlug.role === ROOM_ROLE.RESIDENTDJ) {
+          const role = "485174834448564224";
+          await this.client.guilds.get("485173051432894489").members.get(message.author.id).addRole(role).catch(console.error);
+        }
+      }
 
       console.log(user);
       await message.reply(message.author.username + " linked with plug Account: " + user.get("username"));
