@@ -21,8 +21,12 @@
         <div class="row">
           <div class="col-md-6">
             <h4>Now Playing:</h4>
+            <% if (bot.plug.getMedia()) { %>
             <iframe id="ytplayer" type="text/html" src="https://www.youtube.com/embed/<%= bot.plug.getMedia().cid %>"
               frameborder="0" height="300" width="500"></iframe>
+            <% } else { %>
+            <p class="font-italic text-muted">No song playing.</p>
+            <% } %>
           </div>
           <div class="col-md-6">
             <h1>Upcoming Events</h1>
