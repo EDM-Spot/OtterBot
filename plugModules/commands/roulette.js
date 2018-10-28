@@ -94,16 +94,16 @@ module.exports = function Command(bot) {
               specifiedPrice = 1;
             }
 
-            if (isWeekend) {
-              specifiedPrice = 0;
-            }
-
             if (isNaN(specifiedPrice) && specifiedPrice <= 100) {
               this.reply(lang.roulette.invalidPrice, {}, 6e4);
               return false;
             }
 
             price = specifiedPrice;
+          }
+
+          if (isWeekend) {
+            price = 0;
           }
 
           await bot.roulette.start(duration, price);
