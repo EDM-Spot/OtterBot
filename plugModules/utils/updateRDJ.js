@@ -25,6 +25,10 @@ module.exports = function Util(bot) {
         },
       });
 
+      if (isNil(userDB)) {
+        await bot.plug.moderateSetRole(id, ROOM_ROLE.NONE);
+      }
+
       const propsgiven = await bot.db.models.props.count({ where: { id } });
 
       const playscount = await bot.db.models.plays.count({
