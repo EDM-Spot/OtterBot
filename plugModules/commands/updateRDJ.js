@@ -19,11 +19,13 @@ module.exports = function Command(bot) {
         var i = 0;
         var interval = setInterval(function() {
           console.log(offUser[i].username);
-          if (isNil(offUser[i])) return false;
-          if (offUser[i].role >= ROOM_ROLE.BOUNCER || offUser[i].gRole >= GLOBAL_ROLES.MODERATOR) return false;
+          if (!isNil(offUser[i])) {
+            if (offUser[i].role < ROOM_ROLE.BOUNCER || offUser[i].gRole < GLOBAL_ROLES.MODERATOR) {
 
-          if (offUser[i].role === ROOM_ROLE.RESIDENTDJ) {
-            bot.utils.updateRDJ(offUser[i].id);
+              if (offUser[i].role === ROOM_ROLE.RESIDENTDJ) {
+                bot.utils.updateRDJ(offUser[i].id);
+              }
+            }
           }
           i++;
           if (i === offUser.length) clearInterval(interval);
