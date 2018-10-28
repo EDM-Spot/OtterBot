@@ -20,7 +20,8 @@
       <div>
         <div class="row">
           <div class="col-md-6">
-            <h4>Now Playing:</h4>
+            <h2>Now Playing</h2>
+            <hr>
             <% if (bot.plug.getMedia()) { %>
             <iframe id="ytplayer" type="text/html" src="https://www.youtube.com/embed/<%= bot.plug.getMedia().cid %>"
               frameborder="0" height="300" width="500"></iframe>
@@ -29,7 +30,7 @@
             <% } %>
           </div>
           <div class="col-md-6">
-            <h1>Upcoming Events</h1>
+            <h2>Upcoming Events</h2>
             <hr>
             <p class="font-italic text-muted">No upcoming events.</p>
           </div>
