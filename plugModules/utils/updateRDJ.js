@@ -1,4 +1,4 @@
-const { isNil, isObject } = require("lodash");
+const { isNil, isNaN, isObject } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 const { fn, col } = require("sequelize");
 const moment = require("moment");
@@ -85,7 +85,10 @@ module.exports = function Util(bot) {
 
       const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
-      console.log(points);
+      if (isNaN(points)) {
+        await bot.plug.moderateSetRole(id, ROOM_ROLE.NONE);
+        return true;
+      }
 
       if (isObject(user)) {
         if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return false;
