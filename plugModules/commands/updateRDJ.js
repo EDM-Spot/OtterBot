@@ -10,17 +10,20 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Update RDJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
+      const totalusers = await bot.db.models.users.count();
+      console.log(totalusers);
+      
       bot.plug.getAllStaff(async (err, data) => {
         var i = 0;
         var interval = setInterval(function() {
-          const offUser = data.filter(u => u.id === data[i].id);
-          console.log(offUser[i].username);
+          //const offUser = data.filter(u => u.id === data[i].id);
+          console.log(data[i].username);
           
-          if (isNil(offUser[0])) return false;
-          if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
+          if (isNil(data[0])) return false;
+          if (data[0].role >= ROOM_ROLE.BOUNCER || data[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
-          if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
-            bot.utils.updateRDJ(offUser[i].id);
+          if (data[0].role === ROOM_ROLE.RESIDENTDJ) {
+            bot.utils.updateRDJ(data[i].id);
           }
           i++;
           if (i === data.length) clearInterval(interval);
