@@ -17,7 +17,7 @@ module.exports = function Command(bot) {
         var i = 0;
         var interval = setInterval(function() {
           //const offUser = data.filter(u => u.id === data[i].id);
-          console.log(data[i]);
+          console.log(data[i].username);
           
           if (isNil(data[0])) return false;
           if (data[0].role >= ROOM_ROLE.BOUNCER || data[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
