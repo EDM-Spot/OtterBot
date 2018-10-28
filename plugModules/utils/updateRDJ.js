@@ -29,7 +29,6 @@ module.exports = function Util(bot) {
         await bot.plug.moderateSetRole(id, ROOM_ROLE.NONE);
         return true;
       }
-      console.log(userDB.get("username"));
 
       const propsgiven = await bot.db.models.props.count({ where: { id } });
 
@@ -84,8 +83,6 @@ module.exports = function Util(bot) {
       const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - ((totalMehsPoints * offlineDaysPoints) + totalbans)) / totalsongs) * 1000;
 
       const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
-
-      console.log(points);
 
       if (isNaN(points)) {
         await bot.plug.moderateSetRole(id, ROOM_ROLE.NONE);
