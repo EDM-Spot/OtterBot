@@ -28,6 +28,8 @@ module.exports = function Event(bot, filename, platform) {
       //.addBlankField(true);
 
       bot.channels.get("486637288923725824").send({embed});
+
+      bot.utils.updateRDJ(data.users.map((item) => { if (item.user != null) { return `${item.user.id}`; }}));
     },
     init() {
       bot.plug.on(this.name, this.run);
