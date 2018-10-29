@@ -41,6 +41,12 @@ class Bot extends Discord.Client {
         timestamps: true,
         underscored: true,
       },
+      pool: {
+        max: 100,
+        min: 0,
+        idle: 20000,
+        acquire: 20000
+      }
     }));
 
     //Connect to plug
