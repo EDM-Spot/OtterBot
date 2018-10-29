@@ -250,52 +250,8 @@ module.exports = (client) => {
       order: [[literal("score"), "DESC"]],
       limit: 10
     });
-    
-    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * 4.5)";
 
-    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * 2.75)";
-
-    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * 3.25)";
-    
-    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
-
-    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
-    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.55)";
-
-    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)";
-
-    const djRank = await client.db.models.plays.findAll({
-      attributes: ["plays.dj",
-        [fn("SUM", col("plays.woots")
-        ), "totalwoots"],
-        [fn("SUM", col("plays.mehs")
-        ), "totalmehs"],
-        [fn("SUM", col("plays.grabs")
-        ), "totalgrabs"],
-        [fn("COUNT", col("plays.cid")
-        ), "playscount"],
-        [literal(
-          "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false)"
-        ), "totalmessages"],
-        [literal(
-          "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
-        ), "propsgiven"],
-        [literal(
-          "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")) / " + totalsongs + ") * 1000)"
-        ), "totalpoints"]],
-      include: [{
-        model: client.db.models.users,
-        attributes: ["username", "last_seen", "points"]
-      }],
-      where: {
-        skipped: false
-      },
-      group: ["user.id", "plays.dj"],
-      order: [[literal("totalpoints"), "DESC"]],
-      limit: 300
-    });
-
-    renderTemplate(res, req, "index.ejs", {rank, djRank});
+    renderTemplate(res, req, "index.ejs", {rank});
   });
 
   app.get("/blacklist", async (req, res) => {
@@ -506,7 +462,68 @@ module.exports = (client) => {
     client.settings.delete(guild.id);
     res.redirect("/dashboard/"+req.params.guildID);
   });
-  
+
+  /** API ENDPOINTS */
+
+  // Get DJs list (without pagination)
+  app.get("/api/djs", async (req, res) => {
+    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
+    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
+    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
+
+    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * 4.5)";
+
+    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * 2.75)";
+
+    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * 3.25)";
+
+    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
+
+    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
+    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.55)";
+
+    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)";
+
+    const totalsongs = await client.db.models.plays.count({
+      where: { skipped: false }
+    });
+
+    const djRank = await client.db.models.plays.findAll({
+      attributes: ["plays.dj",
+        [fn("SUM", col("plays.woots")
+        ), "totalwoots"],
+        [fn("SUM", col("plays.mehs")
+        ), "totalmehs"],
+        [fn("SUM", col("plays.grabs")
+        ), "totalgrabs"],
+        [fn("COUNT", col("plays.cid")
+        ), "playscount"],
+        [literal(
+          "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false)"
+        ), "totalmessages"],
+        [literal(
+          "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
+        ), "propsgiven"],
+        [literal(
+          "(((" + propsGivenPoints + " + " + totalMessagesPoints + " + ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")) / " + totalsongs + ") * 1000)"
+        ), "totalpoints"]],
+      include: [{
+        model: client.db.models.users,
+        attributes: ["username", "last_seen", "points"]
+      }],
+      where: {
+        skipped: false
+      },
+      group: ["user.id", "plays.dj"],
+      order: [[literal("totalpoints"), "DESC"]],
+      limit: 300
+    });
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+
+    res.end(JSON.stringify({ "data": djRank }));
+  });
+
   const httpsServer = https.createServer(credentials, app);
 
   client.site = httpsServer.listen(client.config.dashboard.port);
