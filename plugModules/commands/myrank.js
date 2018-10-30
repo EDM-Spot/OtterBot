@@ -17,6 +17,8 @@ module.exports = function Command(bot) {
         where: { skipped: false }
       });
 
+      console.log(totalsongs);
+
       const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + bot.global.pointsWeight.ban + ")";
       const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
       const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + bot.global.pointsWeight.wlban + ")";
@@ -97,7 +99,7 @@ module.exports = function Command(bot) {
         group: ["dj"]
       });
 
-      const totalbans = ((bancount * bot.global.pointsWeight.ban) + (mutecount * bot.global.pointsWeight.mute) + (wlbancount * bot.global.pointsWeight.wlban) * 100);
+      const totalbans = (((bancount * bot.global.pointsWeight.ban) + (mutecount * bot.global.pointsWeight.mute) + (wlbancount * bot.global.pointsWeight.wlban)) * 100);
 
       const propsGivenPoints = propsgiven * bot.global.pointsWeight.propsGiven;
       const totalMessagesPoints = (totalmessages + discordpoints.get("points")) * bot.global.pointsWeight.messages;
