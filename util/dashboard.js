@@ -251,7 +251,17 @@ module.exports = (client) => {
       limit: 10
     });
 
-    renderTemplate(res, req, "index.ejs", {rank});
+    const userProps = await client.db.models.users.findAll({
+      where: {
+        props: {
+          [Op.not]: 0
+        }
+      },
+      order: [["props", "DESC"]],
+      limit: 5,
+    });
+
+    renderTemplate(res, req, "index.ejs", {rank, userProps});
   });
 
   app.get("/blacklist", async (req, res) => {
