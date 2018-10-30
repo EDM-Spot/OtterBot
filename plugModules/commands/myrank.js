@@ -7,7 +7,7 @@ module.exports = function Command(bot) {
     names: ["myrank"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 10800,
+    cooldownDuration: 21600,
     parameters: "",
     description: "Checks your Rank in the leaderboards.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars

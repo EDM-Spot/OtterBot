@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["myprops"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 10800,
+    cooldownDuration: 21600,
     parameters: "[given]",
     description: "Checks how many props the user has and their ranking, or how many the user has given.",
     async execute(rawData, { args }, lang) {
