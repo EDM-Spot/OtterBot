@@ -97,14 +97,14 @@ module.exports = function Command(bot) {
         group: ["dj"]
       });
 
-      const totalbans = ((bancount * 4.5) + (mutecount * 2.75) + (wlbancount * 3.25) * 100);
+      const totalbans = ((bancount * bot.global.pointsWeight.ban) + (mutecount * bot.global.pointsWeight.mute) + (wlbancount * bot.global.pointsWeight.wlban) * 100);
 
-      const propsGivenPoints = propsgiven * 1.75;
-      const totalMessagesPoints = (totalmessages + discordpoints.get("points")) * 1.55;
+      const propsGivenPoints = propsgiven * bot.global.pointsWeight.propsGiven;
+      const totalMessagesPoints = (totalmessages + discordpoints.get("points")) * bot.global.pointsWeight.messages;
 
-      const totalWootsPoints = songvotes[0].dataValues.totalwoots * 0.75;
-      const totalGrabsPoints = songvotes[0].dataValues.totalgrabs * 3.5;
-      const totalMehsPoints = songvotes[0].dataValues.totalmehs * 8.75;
+      const totalWootsPoints = songvotes[0].dataValues.totalwoots * bot.global.pointsWeight.woots;
+      const totalGrabsPoints = songvotes[0].dataValues.totalgrabs * bot.global.pointsWeight.grabs;
+      const totalMehsPoints = songvotes[0].dataValues.totalmehs * bot.global.pointsWeight.mehs;
 
       const offlineDaysPoints = (moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days") * 100) + 1;
 

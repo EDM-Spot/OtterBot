@@ -467,20 +467,20 @@ module.exports = (client) => {
 
   // Get DJs list (without pagination)
   app.get("/api/djs", async (req, res) => {
-    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
-    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
-    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
+    const totalWootsPoints = "(SUM(plays.woots) * " + client.global.pointsWeight.woots + ")";
+    const totalGrabsPoints = "(SUM(plays.grabs) * " + client.global.pointsWeight.grabs + ")";
+    const totalMehsPoints = "(SUM(plays.mehs) * " + client.global.pointsWeight.mehs + ")";
 
-    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * 4.5)";
+    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + client.global.pointsWeight.ban + ")";
 
-    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * 2.75)";
+    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + client.global.pointsWeight.mute + ")";
 
-    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * 3.25)";
+    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + client.global.pointsWeight.wlban + ")";
 
     const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
-    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
-    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.55)";
+    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
+    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + client.global.pointsWeight.messages + ")";
 
     const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)";
 
