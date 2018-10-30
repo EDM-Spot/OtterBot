@@ -17,18 +17,18 @@ module.exports = function Command(bot) {
         where: { skipped: false }
       });
 
-      const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * 4.5)";
-      const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * 2.75)";
-      const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * 3.25)";
+      const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + bot.global.pointsWeight.ban + ")";
+      const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
+      const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + bot.global.pointsWeight.wlban + ")";
       
       const totalbansSQL = "((" + bancountSQL + " + " + mutecountSQL + " + " + wlbancountSQL + ") * 100)";
   
-      const propsGivenPointsSQL = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * 1.75)";
-      const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * 1.55)";
+      const propsGivenPointsSQL = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + bot.global.pointsWeight.propsGiven + ")";
+      const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + bot.global.pointsWeight.messages + ")";
   
-      const totalWootsPointsSQL = "(SUM(plays.woots) * 0.75)";
-      const totalGrabsPointsSQL = "(SUM(plays.grabs) * 3.5)";
-      const totalMehsPointsSQL = "(SUM(plays.mehs) * 8.75)";
+      const totalWootsPointsSQL = "(SUM(plays.woots) * " + bot.global.pointsWeight.woots + ")";
+      const totalGrabsPointsSQL = "(SUM(plays.grabs) * " + bot.global.pointsWeight.grabs + ")";
+      const totalMehsPointsSQL = "(SUM(plays.mehs) * " + bot.global.pointsWeight.mehs + ")";
   
       const offlineDaysPointsSQL = "((EXTRACT(DAY FROM current_date-last_seen) * 100) + 1)";
 
