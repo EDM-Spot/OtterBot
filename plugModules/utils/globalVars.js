@@ -4,7 +4,7 @@ module.exports = function Util(bot) {
       this.ignoreHistoryNext = false;
       this.isSkippedByTimeGuard = false;
 
-      this.pointsWeight = [{
+      this.pointsWeight = {
         woots: 0.75,
         mehs: 5,
         grabs: 3.5,
@@ -13,7 +13,7 @@ module.exports = function Util(bot) {
         ban: 8.5,
         wlban: 5.25,
         mute: 3.75
-      }];
+      };
     }
   }
 
