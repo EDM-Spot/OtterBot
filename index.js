@@ -59,6 +59,7 @@ class Bot extends Discord.Client {
       }
     });
     this.plug.multiLine = true;
+    this.plug.multiLineLimit = 2;
 	
     // Aliases and commands are put in collections where they can be read from,
     // catalogued, listed, etc.
