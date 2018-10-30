@@ -42,8 +42,8 @@ module.exports = function Command(bot) {
       try {
         YouTubeMediaData = await bot.youtube.getMedia(YouTubeMediaID);
       } catch (err) {
-        console.error("[!] YouTube getMedia Error");
-        console.error(err);
+        console.warn("[!] YouTube getMedia Error");
+        console.warn(err);
         this.reply(lang.check.plausible, {}, 6e4);
         return true;
       }
@@ -59,26 +59,23 @@ module.exports = function Command(bot) {
       }
 
       const regionRestriction = get(YouTubeMediaData, "contentDetails.regionRestriction");
-      const MINIMUM_COUNTRIES_ALLOWED = 5;
+      const MINIMUM_COUNTRIES_ALLOWED = 96;
 
       const allowed = get(regionRestriction, "allowed", []);
       const blocked = get(regionRestriction, "blocked", []);
       const denied = get(regionRestriction, "denied", []);
 
       const arraysCheck = (isArray(allowed) || isArray(denied) || isArray(blocked));
-
-      console.log(regionRestriction);
-      console.log(isArray(blocked));
-      console.log(blocked.length);
-      console.log(blocked);
-      console.log(denied);
       
       if (isObject(regionRestriction) && arraysCheck) {
         if (isArray(denied) && denied.length >= MINIMUM_COUNTRIES_ALLOWED) {
-          this.reply(lang.check.blockedTooMany, { count: denied.length, which }, 6e4);
+          this.reply(lang.check.blockedTooMany, { count: denied.length || 149, which }, 6e4);
           return true;
         } else if (isArray(blocked) && blocked.length >= MINIMUM_COUNTRIES_ALLOWED) {
-          this.reply(lang.check.blockedTooMany, { count: blocked.length, which }, 6e4);
+          this.reply(lang.check.blockedTooMany, { count: blocked.length || 149, which }, 6e4);
+          return true;	
+        } else if (isArray(allowed) && allowed.length <= MINIMUM_COUNTRIES_ALLOWED) {	
+          this.reply(lang.check.blockedTooMany, { count: allowed.length || 149, which }, 6e4);
           return true;
         } else if (isArray(denied) && denied.length <= MINIMUM_COUNTRIES_ALLOWED) {
           if (denied.length >= 20) {
@@ -101,6 +98,16 @@ module.exports = function Command(bot) {
           }
 
           this.reply(lang.check.blockedIn, { countries: blocked.join(", "), which }, 6e4);
+          return true;
+        } else if (isArray(allowed) && allowed.length >= MINIMUM_COUNTRIES_ALLOWED) {	
+          if (allowed.length >= 20) {	
+            this.reply(lang.check.blockedIn, {	
+              countries: [...allowed.splice(0, 20), `and ${allowed.length} more.`].join(", "),	
+              which,	
+            }, 6e4);	
+            return true;	
+          }
+          this.reply(lang.check.blockedIn, { countries: allowed.join(", "), which }, 6e4);	
           return true;
         }
       }
