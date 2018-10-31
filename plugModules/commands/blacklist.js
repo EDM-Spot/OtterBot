@@ -46,6 +46,7 @@ module.exports = function Command(bot) {
         return true;
       } else if (link.includes("soundcloud.com")) {
         const soundcloudMedia = await bot.soundcloud.resolve(link);
+        console.log(soundcloudMedia);
 
         if (isNil(soundcloudMedia)) return false;
 
