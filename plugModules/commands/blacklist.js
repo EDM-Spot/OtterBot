@@ -1,4 +1,4 @@
-const { isObject, isNil, has } = require("lodash");
+const { isObject, isNil, has, map } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -46,7 +46,9 @@ module.exports = function Command(bot) {
         return true;
       } else if (link.includes("soundcloud.com")) {
         const soundcloudMedia = await bot.soundcloud.resolve(link);
-        console.log(soundcloudMedia[0]);
+        console.log(has(soundcloudMedia, "id"));
+        console.log(map(soundcloudMedia, "id"));
+        console.log(soundcloudMedia.id);
 
         if (isNil(soundcloudMedia)) return false;
 
