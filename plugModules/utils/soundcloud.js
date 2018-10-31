@@ -27,7 +27,11 @@ module.exports = function Util(bot) {
       });
     }
     resolve(url) {
-      return this.req("resolve.json", { query: { url } });
+      //return this.req("resolve", { query: { url } });
+      return request(this.baseURL + "resolve.json?url=" + url + "&client_id" + this.key).catch((err) => {
+        console.error("[!] SoundCloud Resolve Util Error");
+        console.error(err);
+      });
     }
     getTrack(id) {
       return this.req("tracks/" + id);
