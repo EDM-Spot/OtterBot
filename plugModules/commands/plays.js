@@ -128,11 +128,12 @@ module.exports = function Command(bot) {
           }
         }
       } else if (link.includes("soundcloud.com")) {
-        const soundcloudMedia = await bot.soundcloud.resolve(link);
+        const soundcloudMediaRaw = await bot.soundcloud.resolve(link);
+        const soundcloudMedia = JSON.parse(soundcloudMediaRaw);
 
         if (isNil(soundcloudMedia)) return false;
 
-        if (has(soundcloudMedia, "id")) {
+        if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
           const SoundCloudMediaData = await bot.soundcloud.getTrack(soundcloudMedia.id);
   
           if (!isNil(SoundCloudMediaData)) {

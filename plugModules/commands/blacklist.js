@@ -1,4 +1,4 @@
-const { isObject, isNil, has, map } = require("lodash");
+const { isObject, isNil, has } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -45,14 +45,12 @@ module.exports = function Command(bot) {
         this.reply(lang.blacklist.linkAdded, {}, 6e4);
         return true;
       } else if (link.includes("soundcloud.com")) {
-        const soundcloudMedia = await bot.soundcloud.resolve(link);
-        console.log(has(soundcloudMedia, "id"));
-        console.log(map(soundcloudMedia, "id"));
-        console.log(soundcloudMedia.id);
+        const soundcloudMediaRaw = await bot.soundcloud.resolve(link);
+        const soundcloudMedia = JSON.parse(soundcloudMediaRaw);
 
         if (isNil(soundcloudMedia)) return false;
 
-        if (has(soundcloudMedia, "id")) {
+        if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
           await bot.db.models.blacklist.findOrCreate({
             where: { cid: soundcloudMedia.id },
             defaults: {
