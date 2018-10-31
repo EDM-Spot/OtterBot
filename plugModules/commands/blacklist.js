@@ -52,9 +52,9 @@ module.exports = function Command(bot) {
 
         if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
           await bot.db.models.blacklist.findOrCreate({
-            where: { cid: soundcloudMedia.id },
+            where: { cid: `${soundcloudMedia.id}` },
             defaults: {
-              cid: soundcloudMedia.id,
+              cid: `${soundcloudMedia.id}`,
               moderator: rawData.from.id,
             },
           });
