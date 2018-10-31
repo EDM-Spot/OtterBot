@@ -148,9 +148,9 @@
       "@%%RECEIVER%%, %%SENDER%% hands you a heart shaped cookie",
       "@%%RECEIVER%%, %%SENDER%% throws you an oreo",
       "@%%RECEIVER%%, %%SENDER%% made you a vanilla cookie",
-      "@%%RECEIVER%%, %%SENDER%% gifted you a strawberry cookie",
-      "@%%RECEIVER%%, %%SENDER%% prepared you an apple flavoured cookie",
-      "@%%RECEIVER%%, %%SENDER%% baked you a honey flavoured cookie"
+      "@%%RECEIVER%%, %%SENDER%% gifted you a strawberry flavored cookie",
+      "@%%RECEIVER%%, %%SENDER%% prepared you an apple flavored cookie",
+      "@%%RECEIVER%%, %%SENDER%% baked you a honey flavored cookie"
     ],
     "plays": {
       "current": "current",
