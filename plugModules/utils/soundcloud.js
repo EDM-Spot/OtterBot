@@ -28,7 +28,7 @@ module.exports = function Util(bot) {
     }
     resolve(url) {
       //return this.req("resolve", { query: { url } });
-      return request(this.baseURL + "resolve.json?url=" + url + "&client_id" + this.key).catch((err) => {
+      return request(this.baseURL + "resolve.json?url=" + url + "&client_id=" + this.key).catch((err) => {
         console.error("[!] SoundCloud Resolve Util Error");
         console.error(err);
       });
