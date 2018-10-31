@@ -132,7 +132,7 @@ module.exports = function Command(bot) {
 
         if (isNil(soundcloudMedia)) return false;
 
-        if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
+        if (has(soundcloudMedia, "id")) {
           const SoundCloudMediaData = await bot.soundcloud.getTrack(soundcloudMedia.id);
   
           if (!isNil(SoundCloudMediaData)) {

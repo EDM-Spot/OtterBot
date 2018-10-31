@@ -46,11 +46,11 @@ module.exports = function Command(bot) {
         return true;
       } else if (link.includes("soundcloud.com")) {
         const soundcloudMedia = await bot.soundcloud.resolve(link);
-        console.log(soundcloudMedia);
+        console.log(soundcloudMedia[0]);
 
         if (isNil(soundcloudMedia)) return false;
 
-        if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
+        if (has(soundcloudMedia, "id")) {
           await bot.db.models.blacklist.findOrCreate({
             where: { cid: soundcloudMedia.id },
             defaults: {
