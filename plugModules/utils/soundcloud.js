@@ -20,9 +20,6 @@ module.exports = function Util(bot) {
         },
         json: true
       });
-      console.log(this.baseURL);
-      console.log(endpoint);
-      console.log(options);
 
       return request(this.baseURL + endpoint, options).catch((err) => {
         console.error("[!] SoundCloud Util Error");
@@ -30,7 +27,7 @@ module.exports = function Util(bot) {
       });
     }
     resolve(url) {
-      return this.req("resolve", { query: { url } });
+      return this.req("resolve.json", { query: { url } });
     }
     getTrack(id) {
       return this.req("tracks/" + id);
