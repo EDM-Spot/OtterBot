@@ -10,6 +10,11 @@ module.exports = function Util(bot) {
         order: [["created_at", "DESC"]],
       });
 
+      if (isNil(songAuthor) || isNil(songTitle)) {
+        songAuthor = "undefined";
+        songTitle = "undefined";
+      }
+
       if (!isNil(songHistory)) {
         for (let i = 0; i < songHistory.length; i++) {
           const playedMinutes = bot.moment().diff(bot.moment(songHistory[i].created_at), "minutes");

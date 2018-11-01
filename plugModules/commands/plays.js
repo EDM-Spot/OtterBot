@@ -97,7 +97,7 @@ module.exports = function Command(bot) {
         }
         catch (err) {
           console.warn(err);
-          return;
+          //return;
         }
 
         const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, cid);
