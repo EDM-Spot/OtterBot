@@ -7,7 +7,7 @@ module.exports = function Command(bot) {
     cooldownType: "perUser",
     cooldownDuration: 120,
     parameters: "<@username>",
-    description: "Gives your positions in the waitlist.",
+    description: "has decided to give you their position in the waitlist.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.mentions.length || rawData.mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
