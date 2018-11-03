@@ -36,6 +36,8 @@ module.exports = function Event(bot, platform) {
       bot.channels.get("487985043776733185").send({embed});
 
       await bot.redis.removeDisconnection(userID);
+
+      await bot.plug.sendChat(":banhammer:");
     },
     init() {
       bot.plug.on(this.name, this.run);

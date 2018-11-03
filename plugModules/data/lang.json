@@ -1,7 +1,7 @@
 {
   "startup": "/em is now running!",
   "discordStartup": "`Bot is now running!`",
-  "exceedstimeguard": "your media exceeds the defined maximum length (6m30)!",
+  "exceedstimeguard": "your media exceeds the defined maximum length (6m30s)!",
   "blacklisted": "your media is Blacklisted!",
   "advanceprops": "%%USER%% got %%PROPS%% prop%%PLURAL%% for the song they just played.",
   "pointsMilestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",
@@ -100,10 +100,10 @@
       "outOfCooldown": "It's been over an hour since the last russian roulette! Go ahead and start one."
     },
     "join": {
-      "noRoulette": "No roulette running right now.",
-      "noProps": "You don't have enough props to join! Play a song to get some.",
+      "noRoulette": "There is no roulette running right now.",
+      "noProps": "You do not have enough props to join. Play a song to get some.",
       "isPlaying": "You can't play the roulette while DJing!",
-      "closeToPlaying": "You're too close to DJing, joining would be unfair!"
+      "closeToPlaying": "You're too close to DJing to join!"
     },
     "dc": {
       "noRecentDisconnection": "You haven't disconnected recently.",
@@ -141,16 +141,16 @@
       "sendLink": "You can check it here https://polsy.org.uk/stuff/ytrestrict.cgi?ytid="
     },
     "cookie": [
-      "@%%RECEIVER%%, %%SENDER%% has sent you a simple cookie.",
-      "@%%RECEIVER%%, %%SENDER%% has given you a cookie with chocolate chips.",
-      "@%%RECEIVER%%, %%SENDER%% gives you a sugar cookie.",
-      "@%%RECEIVER%%, %%SENDER%% gave you a peanut butter cookie.",
-      "@%%RECEIVER%%, %%SENDER%% hands you a heart shaped cookie",
-      "@%%RECEIVER%%, %%SENDER%% throws you an oreo",
-      "@%%RECEIVER%%, %%SENDER%% made you a vanilla cookie",
-      "@%%RECEIVER%%, %%SENDER%% gifted you a strawberry flavored cookie",
-      "@%%RECEIVER%%, %%SENDER%% prepared you an apple flavored cookie",
-      "@%%RECEIVER%%, %%SENDER%% baked you a honey flavored cookie"
+      "@%%RECEIVER%%, %%SENDER%% baked you a simple cookie.",
+      "@%%RECEIVER%%, %%SENDER%% baked you a chocolate chip cookie.",
+      "@%%RECEIVER%%, %%SENDER%% hands you a sugar cookie.",
+      "@%%RECEIVER%%, %%SENDER%% baked you a peanut butter cookie.",
+      "@%%RECEIVER%%, %%SENDER%% hands you a heart shaped cookie.",
+      "@%%RECEIVER%%, %%SENDER%% throws you an oreo.",
+      "@%%RECEIVER%%, %%SENDER%% baked you a dozen vanilla cookies.",
+      "@%%RECEIVER%%, %%SENDER%% gifted you a strawberry flavored cookie.",
+      "@%%RECEIVER%%, %%SENDER%% hands you an apple flavored cookie.",
+      "@%%RECEIVER%%, %%SENDER%% baked you a honey flavored cookie."
     ],
     "plays": {
       "current": "current",
