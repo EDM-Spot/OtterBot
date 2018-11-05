@@ -64,7 +64,7 @@
       "noProps": "You don't have any props! Play a song to get some."
     },
     "myrank": {
-      "result": "You're currently ranked at position %%RANK%% with %%TOTALPOINTS%% points."
+      "result": "You're currently ranked at position %%RANK%% of %%TOTALUSERS%%."
     },
     "roulette": {
       "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",

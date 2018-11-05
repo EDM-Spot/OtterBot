@@ -17,6 +17,8 @@ module.exports = function Command(bot) {
         where: { skipped: false }
       });
 
+      const totalusers = await bot.db.models.users.count();
+
       const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + bot.global.pointsWeight.ban + ")";
       const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
       const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + bot.global.pointsWeight.wlban + ")";
@@ -35,7 +37,7 @@ module.exports = function Command(bot) {
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (((" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((" + totalWootsPointsSQL + " * " + totalGrabsPointsSQL + ") / COUNT(plays.cid)) - ((" + totalMehsPointsSQL + " * " + offlineDaysPointsSQL + ") + " + totalbansSQL + ")) / " + totalsongs + ") * 1000) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (((" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((" + totalWootsPointsSQL + " * " + totalGrabsPointsSQL + ") / (COUNT(plays.cid) - " + totalsongs + ")) - ((" + totalMehsPointsSQL + " * " + offlineDaysPointsSQL + ") + " + totalbansSQL + ")))) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
@@ -54,7 +56,7 @@ module.exports = function Command(bot) {
 
       if (isNil(inst)) return false;
 
-      const totalmessages = await bot.db.models.messages.count({
+      /*const totalmessages = await bot.db.models.messages.count({
         where: { id: id, command: false }
       });
 
@@ -108,12 +110,13 @@ module.exports = function Command(bot) {
 
       const offlineDaysPoints = (moment().diff(inst[0].dataValues.user.dataValues.last_seen, "days") * 100) + 1;
 
-      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / playscount) - ((totalMehsPoints * offlineDaysPoints) + totalbans)) / totalsongs) * 1000;
+      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / (playscount - totalsongs)) - ((totalMehsPoints * offlineDaysPoints) + totalbans)));*/
 
       const rank = bot.utils.numberWithCommas(inst[0].dataValues.rank);
-      const totalpoints = bot.utils.numberWithCommas(Math.round(points));
+      //const totalpoints = bot.utils.numberWithCommas(Math.round(points));
 
-      this.reply(lang.myrank.result, { rank, totalpoints }, 6e4);
+      //this.reply(lang.myrank.result, { rank, totalpoints }, 6e4);
+      this.reply(lang.myrank.result, { rank, totalusers }, 6e4);
       return true;
     },
   });
