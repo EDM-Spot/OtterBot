@@ -10,9 +10,9 @@ module.exports = function Util(bot) {
         grabs: 3.5,
         propsGiven: 1.75,
         messages: 1.85,
-        ban: 10.5,
-        wlban: 7.25,
-        mute: 4.75
+        ban: 4.7,
+        wlban: 2.45,
+        mute: 1.65
       };
     }
   }

@@ -78,9 +78,9 @@ module.exports = function Util(bot) {
         totalMehsPoints = songvotes[0].dataValues.totalmehs * bot.global.pointsWeight.mehs;
       }
 
-      const offlineDaysPoints = (moment().diff(userDB.get("last_seen"), "days") * 100) + 1;
+      const offlineDaysPoints = (moment().diff(userDB.get("last_seen"), "days") * 0.15) + 1;
 
-      const points = ((propsGivenPoints + totalMessagesPoints + ((totalWootsPoints * totalGrabsPoints) / (playscount - totalsongs)) - ((totalMehsPoints * offlineDaysPoints) + totalbans)));
+      const points = propsGivenPoints + totalMessagesPoints + ((playscount * ((totalWootsPoints * totalGrabsPoints) / totalsongs) - (playscount * ((totalMehsPoints * offlineDaysPoints) + totalbans))));
 
       const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
