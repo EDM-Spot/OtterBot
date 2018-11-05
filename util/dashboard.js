@@ -525,8 +525,7 @@ module.exports = (client) => {
         skipped: false
       },
       group: ["user.id", "plays.dj"],
-      order: [[literal("totalpoints"), "DESC"]],
-      logging: console.log
+      order: [[literal("totalpoints"), "DESC"]]
     });
 
     res.writeHead(200, { "Content-Type": "application/json" });

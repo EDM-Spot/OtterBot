@@ -93,10 +93,10 @@ module.exports = function Util(bot) {
         if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
         if (user.role === ROOM_ROLE.RESIDENTDJ) {
-          const tolerance = 30;
+          const tolerance = 1500;
           const userPoints = points + tolerance;
 
-          if (userPoints < 700) {
+          if (userPoints < 10000) {
             await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
 
             if (!isNil(userDB.get("discord"))) {
@@ -110,7 +110,7 @@ module.exports = function Util(bot) {
         } else {
           const joined = moment().diff(userDB.get("created_at"), "months");
 
-          if (points >= 700 && joined >= 1 && playscount >= 150) {
+          if (points >= 10000 && joined >= 1 && playscount >= 150) {
             await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
 
             if (!isNil(userDB.get("discord"))) {
@@ -130,10 +130,10 @@ module.exports = function Util(bot) {
           if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
           if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
-            const tolerance = 30;
+            const tolerance = 1500;
             const userPoints = points + tolerance;
 
-            if (userPoints < 700) {
+            if (userPoints < 10000) {
               await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
@@ -147,7 +147,7 @@ module.exports = function Util(bot) {
           } else {
             const joined = moment().diff(userDB.get("created_at"), "months");
   
-            if (points >= 700 && joined >= 1 && playscount >= 150) {
+            if (points >= 10000 && joined >= 1 && playscount >= 150) {
               await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
   
               if (!isNil(userDB.get("discord"))) {
