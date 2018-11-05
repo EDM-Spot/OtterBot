@@ -116,8 +116,8 @@
     },
     "eta": {
       "isPlaying": "You're the current DJ!",
-      "notInWaitList": "You're not in the list.",
-      "isNext": "You're the next to DJ!",
+      "notInWaitList": "You're not on the list.",
+      "isNext": "You're the next DJ!",
       "result": "You'll be the DJ in %%ETA%%"
     },
     "moderation": {
