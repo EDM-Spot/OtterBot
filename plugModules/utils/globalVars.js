@@ -6,7 +6,7 @@ module.exports = function Util(bot) {
 
       this.pointsWeight = {
         woots: 1.75,
-        mehs: 6.9,
+        mehs: 4.4,
         grabs: 3.5,
         propsGiven: 1.75,
         messages: 1.85,
