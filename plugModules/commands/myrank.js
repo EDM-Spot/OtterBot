@@ -32,12 +32,12 @@ module.exports = function Command(bot) {
       const totalGrabsPointsSQL = "(SUM(plays.grabs) * " + bot.global.pointsWeight.grabs + ")";
       const totalMehsPointsSQL = "(SUM(plays.mehs) * " + bot.global.pointsWeight.mehs + ")";
   
-      const offlineDaysPointsSQL = "((EXTRACT(DAY FROM current_date-last_seen) * 0.07) + 1)";
+      const offlineDaysPointsSQL = "(((EXTRACT(DAY FROM current_date-last_seen) * " + bot.global.pointsWeight.daysOffline + ") * 100) + 1)";
 
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((COUNT(plays.cid) * ((" + totalWootsPointsSQL + " * " + totalGrabsPointsSQL + ") / " + totalsongs + ") - (COUNT(plays.cid) * ((" + totalMehsPointsSQL + " * " + offlineDaysPointsSQL + ") + " + totalbansSQL + "))))) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((((" + totalWootsPointsSQL + " + " + totalGrabsPointsSQL + ") / (" + totalMehsPointsSQL + " + 1)) - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")) * ((COUNT(plays.cid) / " + totalsongs + ") * 100))) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
