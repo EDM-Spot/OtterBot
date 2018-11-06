@@ -23,7 +23,7 @@ module.exports = function Command(bot) {
       const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
       const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + bot.global.pointsWeight.wlban + ")";
       
-      const totalbansSQL = "((" + bancountSQL + " + " + mutecountSQL + " + " + wlbancountSQL + ") * 100)";
+      const totalbansSQL = "(" + bancountSQL + " + " + mutecountSQL + " + " + wlbancountSQL + ")";
   
       const propsGivenPointsSQL = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + bot.global.pointsWeight.propsGiven + ")";
       const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + bot.global.pointsWeight.messages + ")";
@@ -32,7 +32,7 @@ module.exports = function Command(bot) {
       const totalGrabsPointsSQL = "(SUM(plays.grabs) * " + bot.global.pointsWeight.grabs + ")";
       const totalMehsPointsSQL = "(SUM(plays.mehs) * " + bot.global.pointsWeight.mehs + ")";
   
-      const offlineDaysPointsSQL = "((EXTRACT(DAY FROM current_date-last_seen) * 0.15) + 1)";
+      const offlineDaysPointsSQL = "((EXTRACT(DAY FROM current_date-last_seen) * 0.05) + 1)";
 
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",

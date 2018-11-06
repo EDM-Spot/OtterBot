@@ -5,11 +5,11 @@ module.exports = function Util(bot) {
       this.isSkippedByTimeGuard = false;
 
       this.pointsWeight = {
-        woots: 0.55,
-        mehs: 3.7,
-        grabs: 3.4,
-        propsGiven: 1.75,
-        messages: 1.85,
+        woots: 0.25,
+        mehs: 0.6,
+        grabs: 0.45,
+        propsGiven: 1.15,
+        messages: 1.4,
         ban: 4.7,
         wlban: 2.45,
         mute: 1.65

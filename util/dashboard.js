@@ -495,12 +495,12 @@ module.exports = (client) => {
 
     const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + client.global.pointsWeight.wlban + ")";
 
-    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
+    const totalbans = "(" + bancount + " + " + mutecount + " + " + wlbancount + ")";
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
     const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + client.global.pointsWeight.messages + ")";
 
-    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 0.15) + 1)";
+    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 0.05) + 1)";
 
     const totalsongs = await client.db.models.plays.count({
       where: { skipped: false }
