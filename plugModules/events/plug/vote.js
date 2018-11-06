@@ -12,9 +12,9 @@ module.exports = function Event(bot, filename, platform) {
 
       const mehCount   = bot.plug.getRoomScore().negative;
       const usersCount = bot.plug.getUsers().length;
-      const mehPercent = (mehCount / usersCount) * 100.0;
+      const mehPercent = Math.round((mehCount / usersCount) * 100);
 
-      if (mehPercent >= 6.0) {
+      if (mehPercent >= 6) {
         await bot.plug.sendChat(`@${dj.username} ` + bot.lang.mehSkip);
         await bot.plug.moderateForceSkip();
       }
