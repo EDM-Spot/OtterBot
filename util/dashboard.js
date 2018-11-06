@@ -500,11 +500,19 @@ module.exports = (client) => {
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
     const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + client.global.pointsWeight.messages + ")";
 
-    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * 0.07) + 1)";
+    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") + 1)";
 
     const totalsongs = await client.db.models.plays.count({
       where: { skipped: false }
     });
+
+    const a = propsGivenPoints + " + " + totalMessagesPoints;
+    const b = "((COUNT(plays.cid) / " + totalsongs + ") * 100)";
+    const c = "((" + totalWootsPoints + " * " + totalGrabsPoints + ") * " + b + ")";
+    const d = "(COUNT(plays.cid) * ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + "))";
+    const e = "((" + c + " - " + d + ") * " + b + ")";
+
+    const totalpoints = "(" + a + " + " + e + ")";
 
     const djRank = await client.db.models.plays.findAll({
       attributes: ["plays.dj",
@@ -523,7 +531,7 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
-          "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((COUNT(plays.cid) * ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / " + totalsongs + ") - (COUNT(plays.cid) * ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")))))"
+          totalpoints
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,
