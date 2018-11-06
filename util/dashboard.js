@@ -539,7 +539,7 @@ module.exports = (client) => {
       }],
       where: {
         skipped: false,
-        playscount: {
+        [literal("playscount")]: {
           [Op.gte]: 1
         }
       },
