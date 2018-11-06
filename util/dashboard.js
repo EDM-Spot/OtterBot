@@ -507,7 +507,6 @@ module.exports = (client) => {
     });
 
     const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((cast(COUNT(plays.cid) as float) / cast(" + totalsongs + ") as float) * 100)))";
-    console.log(totalpoints);
 
     const djRank = await client.db.models.plays.findAll({
       attributes: ["plays.dj",
@@ -536,8 +535,7 @@ module.exports = (client) => {
         skipped: false
       },
       group: ["user.id", "plays.dj"],
-      order: [[literal("totalpoints"), "DESC"]],
-      logging: console.log
+      order: [[literal("totalpoints"), "DESC"]]
     });
 
     res.writeHead(200, { "Content-Type": "application/json" });
