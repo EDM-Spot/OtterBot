@@ -63,7 +63,7 @@ module.exports = function Util(bot) {
         group: ["dj"]
       });
 
-      const totalbans = (bancount * bot.global.pointsWeight.ban) + (mutecount * bot.global.pointsWeight.mute) + (wlbancount * bot.global.pointsWeight.wlban);
+      const totalbans = ((bancount * bot.global.pointsWeight.ban) + (mutecount * bot.global.pointsWeight.mute) + (wlbancount * bot.global.pointsWeight.wlban)) * 100;
 
       const propsGivenPoints = propsgiven * bot.global.pointsWeight.propsGiven;
       const totalMessagesPoints = (totalmessages + userDB.get("points")) * bot.global.pointsWeight.messages;
@@ -78,7 +78,7 @@ module.exports = function Util(bot) {
         totalMehsPoints = songvotes[0].dataValues.totalmehs * bot.global.pointsWeight.mehs;
       }
 
-      const offlineDaysPoints = (moment().diff(userDB.get("last_seen"), "days") * 0.05) + 1;
+      const offlineDaysPoints = (moment().diff(userDB.get("last_seen"), "days") * 0.07) + 1;
 
       const points = propsGivenPoints + totalMessagesPoints + ((playscount * ((totalWootsPoints * totalGrabsPoints) / totalsongs) - (playscount * ((totalMehsPoints * offlineDaysPoints) + totalbans))));
 

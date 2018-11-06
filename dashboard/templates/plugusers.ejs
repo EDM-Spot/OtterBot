@@ -1,5 +1,38 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <div class="jumbotron" style="padding-top: 20px;">
+  <div class="row">
+    Woots: <input type="number" id="woots" value="<%= bot.global.pointsWeight.woots %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.woots = document.getElementById('woots').value %>">
+  </div>
+  <div class="row">
+    Mehs: <input type="number" id="mehs" value="<%= bot.global.pointsWeight.mehs %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.mehs = document.getElementById('mehs').value %>">
+  </div>
+  <div class="row">
+    Grabs: <input type="number" id="grabs" value="<%= bot.global.pointsWeight.grabs %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.grabs = document.getElementById('grabs').value %>">
+  </div>
+  <div class="row">
+    Props Given: <input type="number" id="propsGiven" value="<%= bot.global.pointsWeight.propsGiven %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.propsGiven = document.getElementById('propsGiven').value %>">
+  </div>
+  <div class="row">
+    Messages: <input type="number" id="messages" value="<%= bot.global.pointsWeight.messages %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.messages = document.getElementById('messages').value %>">
+  </div>
+  <div class="row">
+    Ban: <input type="number" id="ban" value="<%= bot.global.pointsWeight.ban %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.ban = document.getElementById('ban').value %>">
+  </div>
+  <div class="row">
+    WL Ban: <input type="number" id="wlban" value="<%= bot.global.pointsWeight.wlban %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.wlban = document.getElementById('wlban').value %>">
+  </div>
+  <div class="row">
+    Mute: <input type="number" id="mute" value="<%= bot.global.pointsWeight.mute %>">
+    <input type="button" value="submit" onclick="<% bot.global.pointsWeight.mute = document.getElementById('mute').value %>">
+  </div>
+
   <div class="row justify-content-center d-flex">
     <h4><i class="fas fa-crown"></i> DJ LeaderBoard </h4>
   </div>
