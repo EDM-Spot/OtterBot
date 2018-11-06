@@ -500,16 +500,16 @@ module.exports = (client) => {
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
     const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + client.global.pointsWeight.messages + ")";
 
-    const offlineDaysPoints = "((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") + 1)";
+    const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") * 100) + 1)";
 
     const totalsongs = await client.db.models.plays.count({
       where: { skipped: false }
     });
 
     const a = propsGivenPoints + " + " + totalMessagesPoints;
-    const b = "(COUNT(plays.cid) / " + totalsongs + ")";
-    const c = "((" + totalWootsPoints + " * " + totalGrabsPoints + ") / (" + b + " + 1))";
-    const d = "(" + b + " * ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + "))";
+    const b = "((COUNT(plays.cid) / " + totalsongs + ") * 100)";
+    const c = "((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1))";
+    const d = "(" + offlineDaysPoints + " + " + totalbans + ")";
     const e = "((" + c + " - " + d + ") * " + b + ")";
 
     const totalpoints = "(" + a + " + " + e + ")";
