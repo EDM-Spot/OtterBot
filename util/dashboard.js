@@ -495,7 +495,7 @@ module.exports = (client) => {
 
     const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + client.global.pointsWeight.wlban + ")";
 
-    const totalbans = "(" + bancount + " + " + mutecount + " + " + wlbancount + ")";
+    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
     const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + client.global.pointsWeight.messages + ")";
@@ -523,7 +523,7 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
-          "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((COUNT(plays.cid) * ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / " + totalsongs + ") - (COUNT(plays.cid) * ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")))))"
+          "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((COUNT(plays.cid) * ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + "))))))"
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,
