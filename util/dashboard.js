@@ -507,8 +507,8 @@ module.exports = (client) => {
     });
 
     const a = propsGivenPoints + " + " + totalMessagesPoints;
-    const b = "((COUNT(plays.cid) / " + totalsongs + ") * 100)";
-    const c = "((" + totalWootsPoints + " * " + totalGrabsPoints + ") / " + b + ")";
+    const b = "(COUNT(plays.cid) / " + totalsongs + ")";
+    const c = "((" + totalWootsPoints + " * " + totalGrabsPoints + ") / (" + b + " + 1))";
     const d = "(" + b + " * ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + "))";
     const e = "((" + c + " - " + d + ") * " + b + ")";
 
@@ -538,10 +538,7 @@ module.exports = (client) => {
         attributes: ["username", "last_seen", "points"]
       }],
       where: {
-        skipped: false,
-        [literal("playscount")]: {
-          [Op.gte]: 1
-        }
+        skipped: false
       },
       group: ["user.id", "plays.dj"],
       order: [[literal("totalpoints"), "DESC"]]
