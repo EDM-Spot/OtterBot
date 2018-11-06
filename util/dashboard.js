@@ -508,8 +508,8 @@ module.exports = (client) => {
 
     const a = propsGivenPoints + " + " + totalMessagesPoints;
     const b = "((COUNT(plays.cid) / " + totalsongs + ") * 100)";
-    const c = "((" + totalWootsPoints + " * " + totalGrabsPoints + ") * " + b + ")";
-    const d = "(COUNT(plays.cid) * ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + "))";
+    const c = "((" + totalWootsPoints + " * " + totalGrabsPoints + ") / " + b + ")";
+    const d = "(" + b + " * ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + "))";
     const e = "((" + c + " - " + d + ") * " + b + ")";
 
     const totalpoints = "(" + a + " + " + e + ")";
