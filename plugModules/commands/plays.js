@@ -96,7 +96,7 @@ module.exports = function Command(bot) {
           songTitle = fullTitle.split(" - ")[1].trim();
         }
         catch (err) {
-          console.warn(err);
+          //console.warn(err);
           //return;
         }
 

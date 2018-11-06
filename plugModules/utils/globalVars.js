@@ -5,15 +5,15 @@ module.exports = function Util(bot) {
       this.isSkippedByTimeGuard = false;
 
       this.pointsWeight = {
-        woots: 0.05,
-        mehs: 0.45,
-        grabs: 0.1,
-        propsGiven: 0.15,
-        messages: 0.7,
-        ban: 0.6,
+        woots: 0.85,
+        mehs: 2.75,
+        grabs: 1.4,
+        propsGiven: 0.085,
+        messages: 0.05,
+        ban: 1.2,
         wlban: 0.35,
         mute: 0.15,
-        daysOffline: 0.6
+        daysOffline: 0.2
       };
     }
   }
