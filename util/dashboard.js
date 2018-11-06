@@ -523,7 +523,7 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
-          "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((COUNT(plays.cid) * ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + "))))))"
+          "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((COUNT(plays.cid) * ((" + totalWootsPoints + " * " + totalGrabsPoints + ") / ((" + totalMehsPoints + " * " + offlineDaysPoints + ") + " + totalbans + ")))))"
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,
