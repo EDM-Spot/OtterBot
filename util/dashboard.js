@@ -310,6 +310,14 @@ module.exports = (client) => {
   app.get("/plugCommands", (req, res) => {
     renderTemplate(res, req, "plugCommands.ejs", {md});
   });
+
+  app.get("/plugusers", async (req, res) => {
+    renderTemplate(res, req, "plugusers.ejs", {});
+  });
+
+  app.get("/rules", (req, res) => {
+    renderTemplate(res, req, "rules.ejs");
+  });
   
   // Bot statistics. Notice that most of the rendering of data is done through this code, 
   // not in the template, to simplify the page code. Most of it **could** be done on the page.
