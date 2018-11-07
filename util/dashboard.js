@@ -487,10 +487,7 @@ module.exports = (client) => {
   app.get("/api/djs", async (req, res) => {
     const totalWootsPoints = "(SUM(plays.woots) * " + client.global.pointsWeight.woots + ")";
     const totalGrabsPoints = "(SUM(plays.grabs) * " + client.global.pointsWeight.grabs + ")";
-    const totalMehs = "(SUM(plays.mehs) * " + client.global.pointsWeight.mehs + ")";
-    const totalSkippedMehsPoints = "((SELECT SUM(mehs) FROM plays WHERE dj = plays.dj AND skipped = true) * " + client.global.pointsWeight.mehs + ")";
-
-    const totalMehsPoints = "(" + totalMehs + " + " + totalSkippedMehsPoints + ")";
+    const totalMehsPoints = "(SUM(plays.mehs) * " + client.global.pointsWeight.mehs + ")";
 
     const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + client.global.pointsWeight.ban + ")";
 
