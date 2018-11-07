@@ -82,9 +82,6 @@ module.exports = function Util(bot) {
 
       const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / totalsongs) * 100));
 
-      console.log(user.username);
-      console.log(points);
-
       const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
       if (isNaN(points)) {
