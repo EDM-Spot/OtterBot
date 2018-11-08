@@ -1,59 +1,61 @@
 <%- include('blocks/header', {bot, user, path}) %>
-<% if(user.id === bot.appInfo.owner.id) { %>
-  <div class="jumbotron" style="padding-top: 20px;">
-    <div class="row justify-content-center d-flex">
-      <h4><i class="fas fa-crown"></i> Plug Chat </h4>
+<% if(user) { %>
+  <% if(user.id === bot.appInfo.owner.id) { %>
+    <div class="jumbotron" style="padding-top: 20px;">
+      <div class="row justify-content-center d-flex">
+        <h4><i class="fas fa-crown"></i> Plug Chat </h4>
+      </div>
+      <table class="table table-hover" id="searchTableChatAdmin">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">ID</th>
+            <th scope="col" class="text-center">User</th>
+            <th scope="col" class="text-center">Message</th>
+            <th scope="col" class="text-center">isCommand</th>
+            <th scope="col" class="text-center">Deleted By</th>
+            <th scope="col" class="text-center">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <td class="text-center">
+            <%= messages[i].dataValues.cid %>
+          </td>
+          <td class="text-center">
+            <%= messages[i].dataValues.username %>
+          </td>
+          <td class="text-center">
+            <%= messages[i].dataValues.message %>
+          </td>
+          <td class="text-center">
+            <%= messages[i].dataValues.command %>
+          </td>
+          <td class="text-center">
+            <%= messages[i].dataValues.deleted_by %>
+          </td>
+          <td class="text-center">
+            <%= messages[i].dataValues.created_at %>
+          </td>
+        </tbody>
+      </table>
     </div>
-    <table class="table table-hover" id="searchTableChatAdmin">
-      <thead>
-        <tr>
-          <th scope="col" class="text-center">ID</th>
-          <th scope="col" class="text-center">User</th>
-          <th scope="col" class="text-center">Message</th>
-          <th scope="col" class="text-center">isCommand</th>
-          <th scope="col" class="text-center">Deleted By</th>
-          <th scope="col" class="text-center">Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <td class="text-center">
-          <%= messages[i].dataValues.cid %>
-        </td>
-        <td class="text-center">
-          <%= messages[i].dataValues.username %>
-        </td>
-        <td class="text-center">
-          <%= messages[i].dataValues.message %>
-        </td>
-        <td class="text-center">
-          <%= messages[i].dataValues.command %>
-        </td>
-        <td class="text-center">
-          <%= messages[i].dataValues.deleted_by %>
-        </td>
-        <td class="text-center">
-          <%= messages[i].dataValues.created_at %>
-        </td>
-      </tbody>
-    </table>
-  </div>
-  <script type="text/javascript">
-    $('#searchTableChatAdmin').DataTable({
-      "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
-          "<'row'<'col-12'tr>>" +
-          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-      colReorder: true,
-      fixedHeader: true,
-      responsive: true,
-      "pageLength": 500,
-      "autoWidth": true,
-      "processing": true,
-      "searchHighlight": true,
-      "select": {
-          "style": 'single',
-          "blurable": true
-      }
-    });
-  </script>
+    <script type="text/javascript">
+      $('#searchTableChatAdmin').DataTable({
+        "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
+            "<'row'<'col-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        colReorder: true,
+        fixedHeader: true,
+        responsive: true,
+        "pageLength": 500,
+        "autoWidth": true,
+        "processing": true,
+        "searchHighlight": true,
+        "select": {
+            "style": 'single',
+            "blurable": true
+        }
+      });
+    </script>
+  <% } %>
 <% } %>
 <% include ./blocks/footer %>
