@@ -3,7 +3,7 @@
   <% if(user.id === bot.appInfo.owner.id) { %>
     <div class="jumbotron" style="padding-top: 20px;">
       <div class="row justify-content-center d-flex">
-        <h4><i class="fas fa-crown"></i> Plug Chat </h4>
+        <h4><i class="fas fa-comments"></i> Plug Chat </h4>
       </div>
       <table class="table table-hover" id="searchTableChatAdmin">
         <thead>
@@ -20,7 +20,7 @@
           <% for (let i = 0; i < messages.length; i++) { %>
             <tr>
               <td class="text-center">
-                <%= messages[i].dataValues.cid %>
+                <%= messages[i].dataValues.id %>
               </td>
               <td class="text-center">
                 <%= messages[i].dataValues.username %>
@@ -45,19 +45,21 @@
     <script type="text/javascript">
       $('#searchTableChatAdmin').DataTable({
         "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
-            "<'row'<'col-12'tr>>" +
-            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+          "<'row'<'col-12'tr>>" +
+          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
         colReorder: true,
         fixedHeader: true,
         responsive: true,
-        "pageLength": 500,
+        "pageLength": 100,
         "autoWidth": true,
         "processing": true,
         "searchHighlight": true,
+
         "select": {
             "style": 'single',
             "blurable": true
-        }
+        },
       });
     </script>
   <% } %>

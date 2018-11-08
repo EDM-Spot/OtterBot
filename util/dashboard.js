@@ -318,6 +318,9 @@ module.exports = (client) => {
   app.get("/messages", async (req, res) => {
     const messages = await client.db.models.messages.findAll({
       where: {
+        id: {
+          [Op.ne]: 40333310
+        },
         created_at: {
           [Op.gt]: client.moment().subtract(1, "months").toDate()
         }
