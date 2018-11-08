@@ -326,6 +326,7 @@ module.exports = (client) => {
         }
       },
       order: [["created_at", "DESC"]],
+      limit: 500
     });
 
     renderTemplate(res, req, "messages.ejs", { messages });
