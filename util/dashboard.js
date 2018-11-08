@@ -98,7 +98,7 @@ module.exports = (client) => {
   (accessToken, refreshToken, profile, done) => {
     process.nextTick(() => done(null, profile));
   }));
-  
+
   // Session data, used for temporary storage of your visitor's session information.
   // the `secret` is in fact a "salt" for the data, and should not be shared publicly.
   app.use(session({
@@ -126,7 +126,7 @@ module.exports = (client) => {
 
   // The domain name used in various endpoints to link between pages.
   app.locals.domain = client.config.dashboard.domain;
-  
+
   // The EJS templating engine gives us more power to create complex web pages. 
   // This lets us have a separate header, footer, and "blocks" we can use in our pages.
   app.engine("html", require("ejs").renderFile);
@@ -138,7 +138,7 @@ module.exports = (client) => {
   app.use(bodyParser.json());       // to support JSON-encoded bodies
   app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
-  })); 
+  }));
 
   /* 
   Authentication Checks. For each page where the user should be logged in, double-checks
@@ -199,7 +199,7 @@ module.exports = (client) => {
       res.redirect("/");
     }
   });
-  
+
   // If an error happens during authentication, this is what's displayed.
   app.get("/autherror", (req, res) => {
     renderTemplate(res, req, "autherror.ejs");
@@ -212,7 +212,7 @@ module.exports = (client) => {
       res.redirect("/"); //Inside a callback… bulletproof!
     });
   });
-
+  
   /** REGULAR INFORMATION PAGES */
 
   // Index page. If the user is authenticated, it shows their info
@@ -261,7 +261,7 @@ module.exports = (client) => {
       limit: 5,
     });
 
-    renderTemplate(res, req, "index.ejs", {rank, userProps});
+    renderTemplate(res, req, "index.ejs", { rank, userProps });
   });
 
   app.get("/blacklist", async (req, res) => {
@@ -281,7 +281,7 @@ module.exports = (client) => {
       }]
     });
 
-    renderTemplate(res, req, "blacklist.ejs", {instance});
+    renderTemplate(res, req, "blacklist.ejs", { instance });
   });
 
   app.get("/history", async (req, res) => {
@@ -294,7 +294,7 @@ module.exports = (client) => {
       order: [["created_at", "DESC"]],
     });
 
-    renderTemplate(res, req, "history.ejs", {instance});
+    renderTemplate(res, req, "history.ejs", { instance });
   });
 
   app.get("/rules", (req, res) => {
@@ -303,22 +303,45 @@ module.exports = (client) => {
 
   // The list of commands the bot has. Current **not filtered** by permission.
   app.get("/commands", (req, res) => {
-    renderTemplate(res, req, "commands.ejs", {md});
+    renderTemplate(res, req, "commands.ejs", { md });
   });
 
   // The list of plug commands the bot has.
   app.get("/plugCommands", (req, res) => {
-    renderTemplate(res, req, "plugCommands.ejs", {md});
+    renderTemplate(res, req, "plugCommands.ejs", { md });
   });
 
   app.get("/plugusers", async (req, res) => {
     renderTemplate(res, req, "plugusers.ejs", {});
   });
 
+  app.get("/messages", async (req, res) => {
+    const messages = await client.db.models.messages.findAll({
+      where: {
+        created_at: {
+          [Op.gt]: client.moment().subtract(1, "months").toDate()
+        }
+      },
+      order: [["created_at", "DESC"]],
+    });
+
+    renderTemplate(res, req, "messages.ejs", { messages });
+  });
+
   app.get("/rules", (req, res) => {
     renderTemplate(res, req, "rules.ejs");
   });
-  
+
+  const plugPromoters = [
+    "https://plug.dj/edmspot/?refuid=4110949",
+    "https://plug.dj/edmspot/?refuid=3788262"
+  ];
+
+  app.get("/join", (req, res) => {
+    var randomPromoter = Math.floor(Math.random() * plugPromoters.length);
+    res.redirect(plugPromoters[randomPromoter]);
+  });
+
   // Bot statistics. Notice that most of the rendering of data is done through this code, 
   // not in the template, to simplify the page code. Most of it **could** be done on the page.
   app.get("/stats", (req, res) => {
@@ -343,7 +366,7 @@ module.exports = (client) => {
 
   app.get("/dashboard", checkAuth, (req, res) => {
     const perms = Discord.EvaluatedPermissions;
-    renderTemplate(res, req, "dashboard.ejs", {perms});
+    renderTemplate(res, req, "dashboard.ejs", { perms });
   });
 
   // The Admin dashboard is similar to the one above, with the exception that
@@ -366,7 +389,7 @@ module.exports = (client) => {
     if (!guild) return res.status(404);
     const isManaged = guild && !!guild.member(req.user.id) ? guild.member(req.user.id).permissions.has("MANAGE_GUILD") : false;
     if (!isManaged && !req.session.isAdmin) res.redirect("/");
-    renderTemplate(res, req, "guild/manage.ejs", {guild});
+    renderTemplate(res, req, "guild/manage.ejs", { guild });
   });
 
   // When a setting is changed, a POST occurs and this code runs
@@ -377,9 +400,9 @@ module.exports = (client) => {
     const isManaged = guild && !!guild.member(req.user.id) ? guild.member(req.user.id).permissions.has("MANAGE_GUILD") : false;
     if (!isManaged && !req.session.isAdmin) res.redirect("/");
     client.writeSettings(guild.id, req.body);
-    res.redirect("/dashboard/"+req.params.guildID+"/manage");
+    res.redirect("/dashboard/" + req.params.guildID + "/manage");
   });
-  
+
   // Displays the list of members on the guild (paginated).
   // NOTE: to be done, merge with manage and stats in a single UX page.
   app.get("/dashboard/:guildID/members", checkAuth, async (req, res) => {
@@ -405,20 +428,20 @@ module.exports = (client) => {
     const start = parseInt(req.query.start, 10) || 0;
     const limit = parseInt(req.query.limit, 10) || 50;
     let members = guild.members;
-    
+
     if (req.query.filter && req.query.filter !== "null") {
       //if (!req.query.filtervalue) return res.status(400);
-      members = members.filter(m=> {
+      members = members.filter(m => {
         m = req.query.filterUser ? m.user : m;
         return m["displayName"].toLowerCase().includes(req.query.filter.toLowerCase());
       });
     }
-    
+
     if (req.query.sortby) {
       members = members.sort((a, b) => a[req.query.sortby] > b[req.query.sortby]);
     }
-    const memberArray = members.array().slice(start, start+limit);
-    
+    const memberArray = members.array().slice(start, start + limit);
+
     const returnObject = [];
     for (let i = 0; i < memberArray.length; i++) {
       const m = memberArray[i];
@@ -436,7 +459,7 @@ module.exports = (client) => {
           hexColor: m.highestRole.hexColor
         },
         memberFor: moment.duration(Date.now() - m.joinedAt).format(" D [days], H [hrs], m [mins], s [secs]"),
-        roles: m.roles.map(r=>({
+        roles: m.roles.map(r => ({
           name: r.name,
           id: r.id,
           hexColor: r.hexColor
@@ -445,7 +468,7 @@ module.exports = (client) => {
     }
     res.json({
       total: totals,
-      page: (start/limit)+1,
+      page: (start / limit) + 1,
       pageof: Math.ceil(members.size / limit),
       members: returnObject
     });
@@ -457,9 +480,9 @@ module.exports = (client) => {
     if (!guild) return res.status(404);
     const isManaged = guild && !!guild.member(req.user.id) ? guild.member(req.user.id).permissions.has("MANAGE_GUILD") : false;
     if (!isManaged && !req.session.isAdmin) res.redirect("/");
-    renderTemplate(res, req, "guild/stats.ejs", {guild});
+    renderTemplate(res, req, "guild/stats.ejs", { guild });
   });
-  
+
   // Leaves the guild (this is triggered from the manage page, and only
   // from the modal dialog)
   app.get("/dashboard/:guildID/leave", checkAuth, async (req, res) => {
@@ -478,7 +501,7 @@ module.exports = (client) => {
     const isManaged = guild && !!guild.member(req.user.id) ? guild.member(req.user.id).permissions.has("MANAGE_GUILD") : false;
     if (!isManaged && !req.session.isAdmin) res.redirect("/");
     client.settings.delete(guild.id);
-    res.redirect("/dashboard/"+req.params.guildID);
+    res.redirect("/dashboard/" + req.params.guildID);
   });
 
   /** API ENDPOINTS */

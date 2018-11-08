@@ -1,124 +1,126 @@
 <%- include('blocks/header', {bot, user, path}) %>
-<div class="jumbotron" style="padding-top: 20px;">
-  <div class="row">
-    Woots: <input type="number" id="woots" value="<%= bot.global.pointsWeight.woots %>">
-    <input type="button" value="submit" onclick="">
-  </div>
-  <div class="row">
-    Mehs: <input type="number" id="mehs" value="<%= bot.global.pointsWeight.mehs %>">
-    <input type="button" value="submit" onclick="">
-  </div>
-  <div class="row">
-    Grabs: <input type="number" id="grabs" value="<%= bot.global.pointsWeight.grabs %>">
-    <input type="button" value="submit" onclick="">
-  </div>
-  <div class="row">
-    Props Given: <input type="number" id="propsGiven" value="<%= bot.global.pointsWeight.propsGiven %>">
-    <input type="button" value="submit" onclick="">
-  </div>
-  <div class="row">
-    Messages: <input type="number" id="messages" value="<%= bot.global.pointsWeight.messages %>">
-    <input type="button" value="submit" onclick="">
-  </div>
-  <div class="row">
-    Ban: <input type="number" id="ban" value="<%= bot.global.pointsWeight.ban %>">
-    <input type="button" value="submit" onclick="">
-  </div>
-  <div class="row">
-    WL Ban: <input type="number" id="wlban" value="<%= bot.global.pointsWeight.wlban %>">
-    <input type="button" value="submit" onclick="">
-  </div>
-  <div class="row">
-    Mute: <input type="number" id="mute" value="<%= bot.global.pointsWeight.mute %>">
-    <input type="button" value="submit" onclick="">
-  </div>
+<% if(user.id === bot.appInfo.owner.id) { %>
+  <div class="jumbotron" style="padding-top: 20px;">
+    <div class="row">
+      Woots: <input type="number" id="woots" value="<%= bot.global.pointsWeight.woots %>">
+      <input type="button" value="submit" onclick="">
+    </div>
+    <div class="row">
+      Mehs: <input type="number" id="mehs" value="<%= bot.global.pointsWeight.mehs %>">
+      <input type="button" value="submit" onclick="">
+    </div>
+    <div class="row">
+      Grabs: <input type="number" id="grabs" value="<%= bot.global.pointsWeight.grabs %>">
+      <input type="button" value="submit" onclick="">
+    </div>
+    <div class="row">
+      Props Given: <input type="number" id="propsGiven" value="<%= bot.global.pointsWeight.propsGiven %>">
+      <input type="button" value="submit" onclick="">
+    </div>
+    <div class="row">
+      Messages: <input type="number" id="messages" value="<%= bot.global.pointsWeight.messages %>">
+      <input type="button" value="submit" onclick="">
+    </div>
+    <div class="row">
+      Ban: <input type="number" id="ban" value="<%= bot.global.pointsWeight.ban %>">
+      <input type="button" value="submit" onclick="">
+    </div>
+    <div class="row">
+      WL Ban: <input type="number" id="wlban" value="<%= bot.global.pointsWeight.wlban %>">
+      <input type="button" value="submit" onclick="">
+    </div>
+    <div class="row">
+      Mute: <input type="number" id="mute" value="<%= bot.global.pointsWeight.mute %>">
+      <input type="button" value="submit" onclick="">
+    </div>
 
-  <div class="row justify-content-center d-flex">
-    <h4><i class="fas fa-crown"></i> DJ LeaderBoard </h4>
+    <div class="row justify-content-center d-flex">
+      <h4><i class="fas fa-crown"></i> DJ LeaderBoard </h4>
+    </div>
+    <table class="table table-hover" id="searchTableDJRankAdmin">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center">Rank</th>
+          <th scope="col" class="text-center">User</th>
+          <th scope="col" class="text-center">Songs Played</th>
+          <th scope="col" class="text-center">Messages Sent</th>
+          <th scope="col" class="text-center">Discord</th>
+          <th scope="col" class="text-center">Points</th>
+          <th scope="col" class="text-center">Woots</th>
+          <th scope="col" class="text-center">Mehs</th>
+          <th scope="col" class="text-center">Grabs</th>
+          <th scope="col" class="text-center">Last Seen</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
-  <table class="table table-hover" id="searchTableDJRankAdmin">
-    <thead>
-      <tr>
-        <th scope="col" class="text-center">Rank</th>
-        <th scope="col" class="text-center">User</th>
-        <th scope="col" class="text-center">Songs Played</th>
-        <th scope="col" class="text-center">Messages Sent</th>
-        <th scope="col" class="text-center">Discord</th>
-        <th scope="col" class="text-center">Points</th>
-        <th scope="col" class="text-center">Woots</th>
-        <th scope="col" class="text-center">Mehs</th>
-        <th scope="col" class="text-center">Grabs</th>
-        <th scope="col" class="text-center">Last Seen</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-<script type="text/javascript">
-  $('#searchTableDJRankAdmin').DataTable({
-    "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
-        "<'row'<'col-12'tr>>" +
-        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-    colReorder: true,
-    fixedHeader: true,
-    responsive: true,
-    "pageLength": 100,
-    "autoWidth": true,
-    "processing": true,
-    "searchHighlight": true,
-    "select": {
-        "style": 'single',
-        "blurable": true
-    },
-    ajax: "/api/djs",
-    columns: [
-      null,
-      { data: "user.username" },
-      { data: "playscount" },
-      { data: "totalmessages" },
-      { data: "user.points" },
-      { data: "totalpoints" },
-      { data: "totalwoots" },
-      { data: "totalmehs" },
-      { data: "totalgrabs" },
-      { data: "user.last_seen" }
-    ],
-    columnDefs: [
-      {
-        targets: '_all',
-        className: 'text-center'
+  <script type="text/javascript">
+    $('#searchTableDJRankAdmin').DataTable({
+      "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
+          "<'row'<'col-12'tr>>" +
+          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      colReorder: true,
+      fixedHeader: true,
+      responsive: true,
+      "pageLength": 100,
+      "autoWidth": true,
+      "processing": true,
+      "searchHighlight": true,
+      "select": {
+          "style": 'single',
+          "blurable": true
       },
-      {
-        targets: 0,
-        render: function (data, type, row, meta) {
-          return meta.row + 1;
-        }
-      },
-      {
-        targets: 5,
-        render: function (data, type, row) {
-          return Math.round(data);
-        }
-      },
-      {
-        targets: 6,
-        render: function (data, type, row) {
-          return '<i style="color:forestgreen" class="fas fa-thumbs-up"></i> ' + data;
-        }
-      },
-      {
-        targets: 7,
-        render: function (data, type, row) {
-          return '<i style="color:red" class="fas fa-thumbs-down"></i> ' + data;
-        }
-      },
-      {
-        targets: 8,
-        render: function (data, type, row) {
-          return '<i style="color:steelblue" class="fas fa-hand-rock"></i> ' + data;
+      ajax: "/api/djs",
+      columns: [
+        null,
+        { data: "user.username" },
+        { data: "playscount" },
+        { data: "totalmessages" },
+        { data: "user.points" },
+        { data: "totalpoints" },
+        { data: "totalwoots" },
+        { data: "totalmehs" },
+        { data: "totalgrabs" },
+        { data: "user.last_seen" }
+      ],
+      columnDefs: [
+        {
+          targets: '_all',
+          className: 'text-center'
         },
-      }
-    ]
-  });
-</script>
+        {
+          targets: 0,
+          render: function (data, type, row, meta) {
+            return meta.row + 1;
+          }
+        },
+        {
+          targets: 5,
+          render: function (data, type, row) {
+            return Math.round(data);
+          }
+        },
+        {
+          targets: 6,
+          render: function (data, type, row) {
+            return '<i style="color:forestgreen" class="fas fa-thumbs-up"></i> ' + data;
+          }
+        },
+        {
+          targets: 7,
+          render: function (data, type, row) {
+            return '<i style="color:red" class="fas fa-thumbs-down"></i> ' + data;
+          }
+        },
+        {
+          targets: 8,
+          render: function (data, type, row) {
+            return '<i style="color:steelblue" class="fas fa-hand-rock"></i> ' + data;
+          },
+        }
+      ]
+    });
+  </script>
+<% } %>
 <% include ./blocks/footer %>

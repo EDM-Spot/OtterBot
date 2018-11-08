@@ -56,6 +56,17 @@
                 </div>
             </li>
             <li class="nav-item"><a class="nav-link" href="/stats">Stats</a></li>
+            <% if(user.id === bot.appInfo.owner.id) { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="songsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Admin
+                </a>
+                <div class="dropdown-menu" aria-labelledby="songsDropdown">
+                  <a class="dropdown-item" href="/plugusers">Plug Users</a>
+                  <a class="dropdown-item" href="/messages">Plug Chat</a>
+                </div>
+              </li>
+            <% } %>
           </ul>
           <ul class="navbar-nav">
             <% if(user) { %>
@@ -66,7 +77,6 @@
                   <a class="dropdown-item" href="/dashboard"><i class="fas fa-cogs" aria-hidden="true"></i> Dashboard</a>
                   <% if(user.id === bot.appInfo.owner.id) { %>
                     <a class="dropdown-item" href="/admin"><i class="fas fa-key"></i> Admin</a>
-                    <a class="dropdown-item" href="/plugusers"><i class="fas fa-key"></i> Plug Users</a>
                   <% } %>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
