@@ -55,7 +55,7 @@ module.exports = function Command(bot) {
         }
         case "start": {
           const day = moment().isoWeekday();
-          const isWeekend = (day === 6) || (day === 7);
+          const isWeekend = (day === 5) || (day === 6) || (day === 7);
 
           if (await bot.roulette.check()) {
             this.reply(lang.roulette.started, {}, 6e4);
