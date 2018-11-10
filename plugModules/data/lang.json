@@ -157,6 +157,7 @@
       "specified": "specified",
       "nothingPlaying": "There is no media playing.",
       "lastPlayWas": "The %%WHICH%% media has been played %%COUNT%% times and was last played %%TIME%%",
+      "lastPlaySkippedWas": "The %%WHICH%% media has been played %%TIME%% but was skipped.",
       "maybeLastPlayWas": "https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Same Song?",
       "invalidLink": "The link specified is invalid.",
       "neverPlayed": "The %%WHICH%% media was never played."

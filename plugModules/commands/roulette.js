@@ -109,10 +109,10 @@ module.exports = function Command(bot) {
           await bot.roulette.start(duration, price);
           
           if (isWeekend) {
-            this.reply(lang.roulette.startingWeekend, {}, duration * 1e3);
+            await bot.plug.sendChat(bot.utils.replace(lang.roulette.startingWeekend, {}), duration * 1e3);
           }
 
-          this.reply(lang.roulette.starting, {}, duration * 1e3);
+          await bot.plug.sendChat(bot.utils.replace(lang.roulette.starting, {}), duration * 1e3);
 
           await bot.plug.sendChat(bot.utils.replace(lang.roulette.info, {
             duration,

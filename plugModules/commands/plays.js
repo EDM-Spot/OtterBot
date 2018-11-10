@@ -59,8 +59,17 @@ module.exports = function Command(bot) {
             const playsCount = await bot.db.models.plays.count({
               where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
             });
+
+            if (playsCount < 1) {
+              this.reply(lang.plays.lastPlaySkippedWas, {
+                which: lang.plays.current,
+                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+              }, 6e4);
+              return true;
+            }
+
             this.reply(lang.plays.lastPlayWas, {
-              which: lang.plays.specified,
+              which: lang.plays.current,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
               count: playsCount,
             }, 6e4);
@@ -68,7 +77,7 @@ module.exports = function Command(bot) {
           } else {
             if (map(songHistory, "format")[0] === 1) {
               this.reply(lang.plays.maybeLastPlayWas, {
-                which: lang.plays.specified,
+                which: lang.plays.current,
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
               }, 6e4);
@@ -110,6 +119,15 @@ module.exports = function Command(bot) {
             const playsCount = await bot.db.models.plays.count({
               where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
             });
+
+            if (playsCount < 1) {
+              this.reply(lang.plays.lastPlaySkippedWas, {
+                which: lang.plays.specified,
+                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+              }, 6e4);
+              return true;
+            }
+
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
@@ -152,6 +170,15 @@ module.exports = function Command(bot) {
                 const playsCount = await bot.db.models.plays.count({
                   where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
                 });
+
+                if (playsCount < 1) {
+                  this.reply(lang.plays.lastPlaySkippedWas, {
+                    which: lang.plays.specified,
+                    time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                  }, 6e4);
+                  return true;
+                }
+                
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,
                   time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
