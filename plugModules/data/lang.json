@@ -205,7 +205,7 @@
     "chicken": "The user %%USER%% runned away! :chicken: Removing DC position!",
     "shot": "@%%USER%% pulled the trigger...",
     "luckyshot": "/em @%%USER%% survived! :feelsgoodman:",
-    "unluckyshot": "/em :otterchamp::bulletgun::tfw::quinsplat: BANG! @%%USER%%"
+    "unluckyshot": "/em :otterarage::bulletgun::tfw::quinsplat: BANG! @%%USER%%"
   },
   "queue": {
     "roomMismatch": "%%USER%% could not be added to the wait list since they're apparently in another room..",
