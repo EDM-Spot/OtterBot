@@ -1,6 +1,6 @@
 {
   "name": "otterbot",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "EDM-Spot Bot",
   "private": true,
   "main": "index.js",
