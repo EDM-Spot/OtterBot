@@ -56,7 +56,7 @@
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "sequelize": "^4.41.1"
+    "sequelize": "^4.41.2"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
