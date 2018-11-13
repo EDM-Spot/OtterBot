@@ -54,7 +54,7 @@ module.exports = function Command(bot) {
 
       const inst = rankList.filter(u => u.dataValues.userid === id);
 
-      if (isNil(inst)) return false;
+      if (isNil(inst) || isNil(inst[0])) return false;
 
       /*const totalmessages = await bot.db.models.messages.count({
         where: { id: id, command: false }

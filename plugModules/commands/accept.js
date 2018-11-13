@@ -18,6 +18,10 @@ module.exports = function Command(bot) {
       const byUser = bot.plug.getUser(parseInt(byID));
       const toUser = bot.plug.getUser(rawData.from.id);
 
+      if (isNil(byUser) || isNil(toUser)) {
+        return false;
+      }
+
       const byPosition = bot.plug.getWaitListPosition(byUser.id);
       const toPosition = bot.plug.getWaitListPosition(rawData.from.id);
 

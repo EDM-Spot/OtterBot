@@ -18,6 +18,10 @@ module.exports = function Command(bot) {
 
       if (isNil(gif)) return false;
 
+      if (gif.data.length < 10) {
+        randomNumb = Math.floor(Math.random() * gif.data.length) + 0;
+      }
+
       this.reply(lang.gif, { url: gif.data[randomNumb].images.downsized.url });
       return true;
     },
