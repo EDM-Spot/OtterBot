@@ -556,7 +556,7 @@ module.exports = (client) => {
         ), "totalpoints"]],
       include: [{
         model: client.db.models.users,
-        attributes: ["username", "last_seen", "points"]
+        attributes: ["username", "last_seen", "points", "props"]
       }],
       where: {
         skipped: false
