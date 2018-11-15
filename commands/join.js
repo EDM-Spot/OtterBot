@@ -24,7 +24,7 @@ class Ping extends Command {
         return message.reply("You need to link your account first!");
       }
 
-      const userID = userDB.get("id");
+      const userID = userDB.get("discord");
 
       const dj = this.client.plug.getDJ();
       const userPos = this.client.plug.getWaitListPosition(userID);
