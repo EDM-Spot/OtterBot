@@ -8,12 +8,9 @@ module.exports = function Event(bot, platform) {
     run: async (data) => {
       if (isNil(data)) return;
       console.log(data);
-      
-      const userDB = await bot.db.models.users.findOne({ where: { username: data.user }});
-      const userID = userDB.get("id");
 
       await bot.db.models.bans.create({
-        id: userID,
+        id: data.user.id,
         type: "WLBAN",
         duration: data.duration,
       });
@@ -22,7 +19,7 @@ module.exports = function Event(bot, platform) {
 
       const embed = new Discord.RichEmbed()
         //.setTitle("Title")
-        .setAuthor(data.user, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
+        .setAuthor(data.user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)
         //.setDescription("This is the main body of text, it can hold 2048 characters.")
         .setFooter("By " + data.moderator.username)
@@ -30,7 +27,7 @@ module.exports = function Event(bot, platform) {
         //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()
         //.addField("This is a field title, it can hold 256 characters")
-        .addField("ID", userID, true)
+        .addField("ID", data.user.id, true)
         .addField("Type", "WL Ban", true)
         .addField("Time", data.duration, true);
       //.addBlankField(true);

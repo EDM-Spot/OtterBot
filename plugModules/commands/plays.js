@@ -156,9 +156,14 @@ module.exports = function Command(bot) {
   
           if (!isNil(SoundCloudMediaData)) {
             const fullTitle = SoundCloudMediaData.title;
-  
-            const songAuthor = fullTitle.split(" - ")[0].trim();
-            const songTitle = fullTitle.split(" - ")[1].trim();
+            const songAuthor = null;
+            const songTitle = null;
+
+            try {
+              songAuthor = fullTitle.split(" - ")[0].trim();
+              songTitle = fullTitle.split(" - ")[1].trim();
+            }
+            catch (err) { }
 
             const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, cid);
 

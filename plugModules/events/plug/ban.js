@@ -7,9 +7,11 @@ module.exports = function Event(bot, platform) {
     platform,
     run: async (data) => {
       if (isNil(data)) return;
-      console.log(data);
       
       const userDB = await bot.db.models.users.findOne({ where: { username: data.user }});
+
+      if (isNil(userDB)) { console.log(data); return; }
+
       const userID = userDB.get("id");
       
       await bot.db.models.bans.create({
