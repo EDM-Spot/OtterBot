@@ -1,5 +1,5 @@
 const Command = require("../base/Command.js");
-const { each, isNil } = require("lodash");
+const { forEach, reject } = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-timer");
@@ -26,7 +26,7 @@ class Trivia extends Command {
   }
 
   async trivia(message, players) {
-    const currentPlayers = players;
+    let currentPlayers = players;
 
     console.log(currentPlayers.length);
     if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
@@ -92,21 +92,27 @@ class Trivia extends Command {
         collector.stop();
         message.channel.send("Answer: " + question.correct_answer);
 
-        each(currentPlayers, (timedOut) => {
+        forEach(currentPlayers, (timedOut) => {
           if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
-            currentPlayers.filter(player => player !== timedOut);
+            //currentPlayers.filter(player => player !== timedOut);
+            currentPlayers = reject(currentPlayers, function(player) { return player === timedOut; });
+
             message.channel.send(timedOut + " is out of Trivia!");
           }
         });
 
         if (question.correct_answer) {
-          each(answerFalse, (loser) => {
-            currentPlayers.filter(player => player !== loser);
+          forEach(answerFalse, (loser) => {
+            //currentPlayers.filter(player => player !== loser);
+            currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
+
             message.channel.send(loser + " is out of Trivia!");
           });
         } else {
-          each(answerTrue, (loser) => {
-            currentPlayers.filter(player => player !== loser);
+          forEach(answerTrue, (loser) => {
+            //currentPlayers.filter(player => player !== loser);
+            currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
+
             message.channel.send(loser + " is out of Trivia!");
           });
         }
