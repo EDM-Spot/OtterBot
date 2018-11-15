@@ -22,9 +22,9 @@ class Trivia extends Command {
   }
 
   async trivia(message) {
-    const players = this.client.trivia.players;
+    const players = ["314234234", "9695759", "579898790", "476874884"]; //this.client.trivia.players;
 
-    while (players.lenght) {
+    //while (players.lenght) {
       const question = await this.client.trivia.getQuestion();
       console.log(question);
 
@@ -42,7 +42,7 @@ class Trivia extends Command {
       //.addBlankField(true);
 
       message.channel.send({embed});
-    }
+    //}
   }
 }
 
