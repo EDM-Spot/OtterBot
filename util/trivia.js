@@ -11,7 +11,7 @@ module.exports = (client) => {
       this.running = false;
     }
     
-    async start() {
+    start() {
       this.running = true;
     }
 
@@ -21,6 +21,10 @@ module.exports = (client) => {
       this.players = [];
 
       return true;
+    }
+
+    check() {
+      return this.running;
     }
 
     add(id) {

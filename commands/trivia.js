@@ -17,15 +17,16 @@ class Trivia extends Command {
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     message.channel.send("(TEST) Trivia will start in X Time (TEST)");
 
-    this.timer = new moment.duration(1, "seconds").timer({loop: false, start: true}, async () => {
-      await this.trivia(message, ["314234234", "9695759", "579898790", "476874884"]); //this.client.trivia.players;
+    this.client.triviaUtil.start();
+
+    this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
+      this.client.triviaUtil.running = false;
+      await this.trivia(message, this.client.trivia.players);
     });
   }
 
   async trivia(message, players) {
     const currentPlayers = players;
-
-    if (currentPlayers.lenght <= 0) return;
 
     const question = await this.client.triviaUtil.getQuestion();
     console.log(question);
@@ -84,26 +85,39 @@ class Trivia extends Command {
         }
       });
 
-      new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
+      new moment.duration(10, "seconds").timer({loop: false, start: true}, async () => {
         collector.stop();
         message.channel.send("Answer: " + question.correct_answer);
 
-        console.log(answerTrue);
-        console.log(answerFalse);
-
         if (question.correct_answer) {
-          each(answerFalse, (byePlayer) => {
-            currentPlayers.filter(player => player !== byePlayer);
-            message.channel.send(byePlayer + " is out of Trivia!");
+          each(answerFalse, (loser) => {
+            currentPlayers.filter(player => player !== loser);
+            message.channel.send(loser + " is out of Trivia!");
           });
         } else {
-          each(answerTrue, (byePlayer) => {
-            currentPlayers.filter(player => player !== byePlayer);
-            message.channel.send(byePlayer + " is out of Trivia!");
+          each(answerTrue, (loser) => {
+            currentPlayers.filter(player => player !== loser);
+            message.channel.send(loser + " is out of Trivia!");
           });
         }
 
+        each(currentPlayers, (timedOut) => {
+          if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
+            currentPlayers.filter(player => player !== timedOut);
+            message.channel.send(timedOut + " is out of Trivia!");
+          }
+        });
+
+        console.log(currentPlayers);
+
         console.log("Finished!");
+
+        if (currentPlayers.lenght <= 0) return;
+        if (currentPlayers.lenght === 1) return message.channel.send(currentPlayers[0] + " won the Trivia!");
+
+        new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
+          await this.trivia(message, currentPlayers);
+        });
       });
     }).catch(function() {
       console.log();
