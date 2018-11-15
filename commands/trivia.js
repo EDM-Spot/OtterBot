@@ -1,5 +1,5 @@
 const Command = require("../base/Command.js");
-const { isNil } = require("lodash");
+const { each, isNil } = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-timer");
@@ -25,13 +25,15 @@ class Trivia extends Command {
   async trivia(message, players) {
     const currentPlayers = players;
 
+    if (currentPlayers.lenght <= 0) return;
+
     const question = await this.client.triviaUtil.getQuestion();
     console.log(question);
 
     const embed = new Discord.RichEmbed()
     //.setTitle("Title")
       .setAuthor(question.category, "http://www.iconsalot.com/asset/icons/freepik/customer-service-2/512/question-icon.png")
-      .setColor(0xFF00FF)
+      .setColor(0x3AE200)
     //.setDescription("This is the main body of text, it can hold 2048 characters.")
       .setFooter("Difficulty: " + question.difficulty)
     //.setImage("http://i.imgur.com/yVpymuV.png")
@@ -40,6 +42,9 @@ class Trivia extends Command {
     //.addField("This is a field title, it can hold 256 characters")
       .addField("Question", question.question, true)
       .addBlankField(true);
+
+    const answerTrue = [];
+    const answerFalse = [];
 
     message.channel.send({embed}).then(function(m) {
       m.react("✅");
@@ -51,30 +56,46 @@ class Trivia extends Command {
         reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
       ).once("collect", async (reaction, user) => {
         console.log(user);
-        const userDB = await this.client.db.models.users.findOne({
-          where: {
-            discord: message.author.id,
-          },
-        });
+        // This should be checked on Join
+        //const userDB = await this.client.db.models.users.findOne({
+        //where: {
+        //discord: message.author.id,
+        //},
+        //});
   
-        if (isNil(userDB)) {
-          reaction.remove(user);
-          return false;
-        }
+        //if (isNil(userDB)) {
+        //reaction.remove(user);
+        //return false;
+        //}
+        reaction.remove(user);
 
         const chosen = reaction.emoji.name;
 
+        console.log(user.id);
+
         if (chosen === "✅") {
-          console.log("✅");
-          console.log(reaction.users);
+          answerTrue.push(user.id);
         } else if (chosen === "❌") {
-          console.log("❌");
-          console.log(reaction.users);
+          answerFalse.push(user.id);
         }
       });
 
       new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
         collector.stop();
+        message.channel.send("Answer: " + question.correct_answer);
+
+        if (question.correct_answer) {
+          each(answerFalse, (byePlayer) => {
+            currentPlayers.filter(player => player !== byePlayer);
+            message.channel.send(byePlayer + " is out of Trivia!");
+          });
+        } else {
+          each(answerTrue, (byePlayer) => {
+            currentPlayers.filter(player => player !== byePlayer);
+            message.channel.send(byePlayer + " is out of Trivia!");
+          });
+        }
+
         console.log("Finished!");
       });
     }).catch(function() {
