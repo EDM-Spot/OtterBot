@@ -18,14 +18,13 @@ class Trivia extends Command {
     message.channel.send("(TEST) Trivia will start in X Time (TEST)");
 
     this.timer = new moment.duration(1, "seconds").timer({loop: false, start: true}, async () => {
-      await this.trivia(message);
+      await this.trivia(message, ["314234234", "9695759", "579898790", "476874884"]); //this.client.trivia.players;
     });
   }
 
-  async trivia(message) {
-    const players = ["314234234", "9695759", "579898790", "476874884"]; //this.client.trivia.players;
+  async trivia(message, players) {
+    const currentPlayers = players;
 
-    //while (players.lenght) {
     const question = await this.client.triviaUtil.getQuestion();
     console.log(question);
 
@@ -47,29 +46,27 @@ class Trivia extends Command {
       message.react("❌");
 
       return message;
+    }).then(()=>{
+      const collector = message.createReactionCollector((reaction) => 
+        reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
+      ).once("collect", reaction => {
+        const chosen = reaction.emoji.name;
+        if (chosen === "✅") {
+          console.log("✅");
+          console.log(reaction.users);
+        } else if (chosen === "❌") {
+          console.log("❌");
+          console.log(reaction.users);
+        }
+      });
+
+      new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
+        collector.stop();
+        console.log("Finished!");
+      });
     }).catch(function() {
       console.log();
     });
-
-    const collector = questionMessage.createReactionCollector((reaction) => 
-      reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
-    ).once("collect", reaction => {
-      const chosen = reaction.emoji.name;
-      if (chosen === "✅") {
-        console.log("✅");
-        console.log(reaction.users);
-      } else if (chosen === "❌") {
-        console.log("❌");
-        console.log(reaction.users);
-      }
-    });
-
-    new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
-      collector.stop();
-      console.log("Finished!");
-    });
-
-    //}
   }
 }
 
