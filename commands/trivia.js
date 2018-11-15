@@ -57,11 +57,7 @@ class Trivia extends Command {
         reaction.emoji.name === "✅" ||
         user.id !== "486087139088400384" &&
         reaction.emoji.name === "❌"
-      ).on("collect", async (reaction, collector) => {
-        console.log("////////////////////////////////REACTION/////////////////////////////////");
-        console.log(reaction);
-        console.log("////////////////////////////////COLLECTOR/////////////////////////////////");
-        console.log(collector);
+      ).on("collect", async reaction => {
         // This should be checked on Join
         //const userDB = await this.client.db.models.users.findOne({
         //where: {
@@ -80,14 +76,12 @@ class Trivia extends Command {
 
         const chosen = reaction.emoji.name;
 
-        console.log(reaction.users);
-
         if (chosen === "✅") {
-          each(reaction.users, (user) => {
+          each(Array.from(reaction.users), (user) => {
             answerTrue.push(user.id);
           });
         } else if (chosen === "❌") {
-          each(reaction.users, (user) => {
+          each(Array.from(reaction.users), (user) => {
             answerFalse.push(user.id);
           });
         }
