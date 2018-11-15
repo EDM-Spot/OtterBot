@@ -52,8 +52,10 @@ class Trivia extends Command {
 
       return m;
     }).then((m)=>{
-      const collector = m.createReactionCollector((reaction, user) => 
-        user.id !== message.author.id && reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
+      const collector = m.createReactionCollector((reaction, user) =>
+        user.id !== m.author.id &&
+        reaction.emoji.name === "✅" ||
+        reaction.emoji.name === "❌"
       ).once("collect", async (reaction, user) => {
         console.log("////////////////////////////////REACTION/////////////////////////////////");
         console.log(reaction);
