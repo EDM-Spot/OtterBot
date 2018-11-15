@@ -19,7 +19,7 @@ class Trivia extends Command {
     //await this.trivia();
     //});
 
-    const question = await this.client.trivia.getQuestion();
+    const question = await this.client.triviaUtil.getQuestion();
 
     console.log(question);
   }
