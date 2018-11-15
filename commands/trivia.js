@@ -21,12 +21,14 @@ class Trivia extends Command {
 
     this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
       this.client.triviaUtil.running = false;
-      await this.trivia(message, this.client.trivia.players);
+      await this.trivia(message, this.client.triviaUtil.players);
     });
   }
 
   async trivia(message, players) {
     const currentPlayers = players;
+
+    if (currentPlayers.lenght <= 0) return message.channel.send("Too bad no one won the Trivia!");
 
     const question = await this.client.triviaUtil.getQuestion();
     console.log(question);
