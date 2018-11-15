@@ -53,8 +53,9 @@ class Trivia extends Command {
       return m;
     }).then((m)=>{
       const collector = m.createReactionCollector((reaction, user) =>
-        user.id !== m.author.id &&
+        user.id !== "486087139088400384" &&
         reaction.emoji.name === "✅" ||
+        user.id !== "486087139088400384" &&
         reaction.emoji.name === "❌"
       ).on("collect", async (reaction, collector) => {
         console.log("////////////////////////////////REACTION/////////////////////////////////");
@@ -80,15 +81,22 @@ class Trivia extends Command {
         const chosen = reaction.emoji.name;
 
         if (chosen === "✅") {
-          //answerTrue.push(user.id);
+          each(reaction.users, (user) => {
+            answerTrue.push(user.id);
+          });
         } else if (chosen === "❌") {
-          //answerFalse.push(user.id);
+          each(reaction.users, (user) => {
+            answerFalse.push(user.id);
+          });
         }
       });
 
       new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
         collector.stop();
         message.channel.send("Answer: " + question.correct_answer);
+
+        console.log(answerTrue);
+        console.log(answerFalse);
 
         if (question.correct_answer) {
           each(answerFalse, (byePlayer) => {
