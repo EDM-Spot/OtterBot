@@ -4,7 +4,7 @@ const request = require("request-promise");
 module.exports = (client) => {
   class TriviaUtil {
     constructor() {
-      this.baseURL = "https://opentdb.com/api.php?amount=50&type=boolean";
+      this.baseURL = "https://opentdb.com/api.php?amount=200&type=boolean";
 
       this.players = [];
       this.timer = undefined;

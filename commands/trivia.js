@@ -40,11 +40,9 @@ class Trivia extends Command {
   async trivia(message, players) {
     let currentPlayers = players;
 
-    console.log(currentPlayers.length);
     if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
 
     const question = await this.client.triviaUtil.getQuestion();
-    console.log(question);
 
     const embed = new Discord.RichEmbed()
     //.setTitle("Title")
@@ -74,22 +72,6 @@ class Trivia extends Command {
         user.id !== "486087139088400384" &&
         reaction.emoji.name === "❌"
       ).on("collect", async reaction => {
-        // This should be checked on Join
-        //const userDB = await this.client.db.models.users.findOne({
-        //where: {
-        //discord: message.author.id,
-        //},
-        //});
-  
-        //if (isNil(userDB)) {
-        //reaction.remove(user);
-        //return false;
-        //}
-
-        //if (!message.member.roles.find("name", "Admin")) {
-        //reaction.remove(user);
-        //}
-
         const user = reaction.users.last();
         const chosen = reaction.emoji.name;
 
@@ -113,39 +95,39 @@ class Trivia extends Command {
             //currentPlayers.filter(player => player !== timedOut);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(timedOut); return player === timedOut; });
 
-            const username = await this.client.triviaUtil.getUsername(timedOut);
-            message.channel.send(username + " is out of Trivia!");
+            console.log(timedOut);
+            console.log(timedOut[0]);
+
+            console.log(this);
+            console.log("///////////////////this.client////////////////////");
+            console.log(this.client);
+
             await this.client.guilds.get("485173051432894489").members.get(timedOut).removeRole("512635547320188928").catch(console.error);
+
+            const username = await this.client.triviaUtil.getUsername(timedOut);
+            message.channel.send("No Answer in time! " + username + " is out of Trivia!");
           }
         });
 
         if (question.correct_answer) {
           forEach(answerFalse, async function(loser) {
-            //currentPlayers.filter(player => player !== loser);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
-            const username = await this.client.triviaUtil.getUsername(loser);
-            message.channel.send(username + " is out of Trivia!");
-
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
+
+            const username = await this.client.triviaUtil.getUsername(loser);
+            message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           });
         } else {
           forEach(answerTrue, async function(loser) {
-            //currentPlayers.filter(player => player !== loser);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
-            const username = await this.client.triviaUtil.getUsername(loser);
-            message.channel.send(username + " is out of Trivia!");
-
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
+
+            const username = await this.client.triviaUtil.getUsername(loser);
+            message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           });
         }
-
-        console.log(currentPlayers);
-
-        console.log("Finished!");
-
-        console.log(currentPlayers.lenght === 1);
 
         if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
         if (size(currentPlayers) === 1) {
