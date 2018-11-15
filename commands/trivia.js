@@ -45,6 +45,8 @@ class Trivia extends Command {
     const questionMessage = message.channel.send({embed}).then(function(message) {
       message.react("✅");
       message.react("❌");
+
+      return message;
     }).catch(function() {
       console.log();
     });
