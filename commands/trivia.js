@@ -16,7 +16,7 @@ class Trivia extends Command {
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     message.channel.send("(TEST) Trivia will start in X Time (TEST)");
 
-    this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
+    this.timer = new moment.duration(1, "seconds").timer({loop: false, start: true}, async () => {
       await this.trivia(message);
     });
   }
