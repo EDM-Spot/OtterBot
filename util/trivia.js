@@ -104,6 +104,8 @@ module.exports = (client) => {
       if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
         return null;
       }
+
+      await client.plug.sendChat("@" + plugUser.username + " Won the Discord Trivia! Moving to 1...");
   
       return client.queue.add(plugUser, 1);
     }
