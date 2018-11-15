@@ -18,10 +18,11 @@ class Trivia extends Command {
     message.channel.send("Trivia will start in 5 Minute! Use `-join` to play.");
     message.channel.send("You will be warned 30 seconds before it starts.");
     message.channel.send("Press ✅ or ❌ to answer the question. The trivia will continue until only one stays.");
+    message.channel.send("You have 10 Seconds to answer when questions shows up.");
     message.channel.send("The Winner will be moved to position 1 so don't forget to stay on plug.");
     message.channel.send("Good Luck!");
 
-    await this.client.plug.sendChat("Discord Trivia is starting now! The winner gets moved to position 1!");
+    await this.client.plug.sendChat("@djs Discord Trivia is starting now! The winner gets moved to position 1!");
     await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
     this.client.triviaUtil.start();
@@ -112,7 +113,8 @@ class Trivia extends Command {
             //currentPlayers.filter(player => player !== timedOut);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(timedOut); return player === timedOut; });
 
-            message.channel.send(await this.client.triviaUtil.getUsername(timedOut) + " is out of Trivia!");
+            const username = await this.client.triviaUtil.getUsername(timedOut);
+            message.channel.send(username + " is out of Trivia!");
             await this.client.guilds.get("485173051432894489").members.get(timedOut).removeRole("512635547320188928").catch(console.error);
           }
         });
@@ -122,7 +124,9 @@ class Trivia extends Command {
             //currentPlayers.filter(player => player !== loser);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
-            message.channel.send(await this.client.triviaUtil.getUsername(loser) + " is out of Trivia!");
+            const username = await this.client.triviaUtil.getUsername(loser);
+            message.channel.send(username + " is out of Trivia!");
+
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
           });
         } else {
@@ -130,7 +134,9 @@ class Trivia extends Command {
             //currentPlayers.filter(player => player !== loser);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
-            message.channel.send(await this.client.triviaUtil.getUsername(loser) + " is out of Trivia!");
+            const username = await this.client.triviaUtil.getUsername(loser);
+            message.channel.send(username + " is out of Trivia!");
+
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
           });
         }
