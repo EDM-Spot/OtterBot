@@ -76,6 +76,12 @@ class Trivia extends Command {
 
         const chosen = reaction.emoji.name;
 
+        console.log(message.member);
+        console.log(m.member);
+        console.log(reaction.message.member);
+        console.log(reaction.message.member.user);
+        console.log(reaction.message.member.user);
+
         if (chosen === "✅") {
           each(Array.from(reaction.users), (user) => {
             answerTrue.push(user.id);
