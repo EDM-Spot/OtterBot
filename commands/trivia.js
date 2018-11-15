@@ -92,39 +92,31 @@ class Trivia extends Command {
 
         forEach(currentPlayers, async function(timedOut) {
           if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
-            //currentPlayers.filter(player => player !== timedOut);
-            currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(timedOut); return player === timedOut; });
-
-            console.log(timedOut);
-            console.log(timedOut[0]);
-
-            console.log(this);
-            console.log("///////////////////this.client////////////////////");
-            console.log(this.client);
+            currentPlayers = reject(currentPlayers, function(player) { return player === timedOut; });
 
             await this.client.guilds.get("485173051432894489").members.get(timedOut).removeRole("512635547320188928").catch(console.error);
 
-            const username = await this.client.triviaUtil.getUsername(timedOut);
+            const username = await this.client.triviaUtil.getUsername(timedOut[0]);
             message.channel.send("No Answer in time! " + username + " is out of Trivia!");
           }
         });
 
         if (question.correct_answer) {
           forEach(answerFalse, async function(loser) {
-            currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
+            currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
 
-            const username = await this.client.triviaUtil.getUsername(loser);
+            const username = await this.client.triviaUtil.getUsername(loser[0]);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           });
         } else {
           forEach(answerTrue, async function(loser) {
-            currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
+            currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
 
-            const username = await this.client.triviaUtil.getUsername(loser);
+            const username = await this.client.triviaUtil.getUsername(loser[0]);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           });
         }
