@@ -65,7 +65,7 @@ module.exports = (client) => {
     }
 
     async getUsername(discord) {
-      const userDB = await this.client.db.models.users.findOne({
+      const userDB = await client.db.models.users.findOne({
         where: {
           discord: discord,
         },
@@ -77,7 +77,7 @@ module.exports = (client) => {
   
       const userID = userDB.get("id");
   
-      const plugUser = this.client.plug.getUser(userID);
+      const plugUser = client.plug.getUser(userID);
   
       if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
         return null;
