@@ -49,8 +49,9 @@ class Trivia extends Command {
       console.log();
     });
 
-    new moment.duration(10, "seconds").timer({loop: false, start: true}, async () => {
+    new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
       const reactions = questionMessage.reactions;
+      console.log(reactions);
 
       each(reactions, (reaction) => {
         if (reaction.emoji.name === "✅") {
