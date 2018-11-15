@@ -41,13 +41,13 @@ class Trivia extends Command {
       .addField("Question", question.question, true)
       .addBlankField(true);
 
-    const questionMessage = message.channel.send({embed}).then(function(message) {
-      message.react("✅");
-      message.react("❌");
+    message.channel.send({embed}).then(function(m) {
+      m.react("✅");
+      m.react("❌");
 
-      return message;
-    }).then(()=>{
-      const collector = message.createReactionCollector((reaction) => 
+      return m;
+    }).then((m)=>{
+      const collector = m.createReactionCollector((reaction) => 
         reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
       ).once("collect", reaction => {
         const chosen = reaction.emoji.name;
