@@ -39,7 +39,7 @@ class Ping extends Command {
 
       if (this.client.triviaUtil.players.includes(userID)) return true;
 
-      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userID }, defaults: { id: userID } });
+      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
 
       const props = inst.get("props");
 
