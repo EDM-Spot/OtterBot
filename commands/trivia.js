@@ -15,12 +15,18 @@ class Trivia extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    message.channel.send("(TEST) Trivia will start in 5 Minute! Use `-join` to play. (TEST)");
-    message.channel.send("(TEST) Trivia will start in 5 Minute! Use `-join` to play. (TEST)");
+    message.channel.send("Trivia will start in 5 Minute! Use `-join` to play.");
+    message.channel.send("Press ✅ or ❌ to answer the question. The trivia will continue until only one stays.");
+    message.channel.send("The Winner will be moved to position 1 so don't forget to stay on plug.");
+    message.channel.send("Good Luck!");
 
     this.client.triviaUtil.start();
 
-    this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
+    new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+      message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+    });
+
+    this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
       this.client.triviaUtil.running = false;
       await this.trivia(message, this.client.triviaUtil.players);
     });
@@ -100,7 +106,8 @@ class Trivia extends Command {
             //currentPlayers.filter(player => player !== timedOut);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(timedOut); return player === timedOut; });
 
-            message.channel.send(await this.getUsername(timedOut) + " is out of Trivia!");
+            message.channel.send(await this.client.triviaUtil.getUsername(timedOut) + " is out of Trivia!");
+            await this.client.guilds.get("485173051432894489").members.get(timedOut).removeRole("512635547320188928").catch(console.error);
           }
         });
 
@@ -109,14 +116,16 @@ class Trivia extends Command {
             //currentPlayers.filter(player => player !== loser);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
-            message.channel.send(await this.getUsername(loser) + " is out of Trivia!");
+            message.channel.send(await this.client.triviaUtil.getUsername(loser) + " is out of Trivia!");
+            await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
           });
         } else {
           forEach(answerTrue, async function(loser) {
             //currentPlayers.filter(player => player !== loser);
             currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
-            message.channel.send(await this.getUsername(loser) + " is out of Trivia!");
+            message.channel.send(await this.client.triviaUtil.getUsername(loser) + " is out of Trivia!");
+            await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
           });
         }
 
@@ -128,7 +137,7 @@ class Trivia extends Command {
 
         if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
         if (size(currentPlayers) === 1) {
-          const username = await this.getUsername(currentPlayers[0]);
+          const username = await this.client.triviaUtil.getUsername(currentPlayers[0]);
 
           this.client.triviaUtil.end();
           if (isNil(username)) return message.channel.send("Something is wrong! Ending Trivia.");
@@ -144,28 +153,6 @@ class Trivia extends Command {
     }).catch(function() {
       console.log();
     });
-  }
-
-  async getUsername(discord) {
-    const userDB = await this.client.db.models.users.findOne({
-      where: {
-        discord: discord,
-      },
-    });
-
-    if (isNil(userDB)) {
-      return null;
-    }
-
-    const userID = userDB.get("id");
-
-    const plugUser = this.client.plug.getUser(userID);
-
-    if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
-      return null;
-    }
-
-    return plugUser.username;
   }
 }
 

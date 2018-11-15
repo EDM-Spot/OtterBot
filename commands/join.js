@@ -56,6 +56,8 @@ class Ping extends Command {
       await inst.decrement("props", { by: price });
 
       this.client.triviaUtil.add(userID);
+      await this.client.guilds.get("485173051432894489").members.get(message.author.id).addRole("512635547320188928").catch(console.error);
+
       return true;
     } catch (e) {
       console.log(e);

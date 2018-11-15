@@ -1,4 +1,4 @@
-const { isObject, get, merge } = require("lodash");
+const { isNil, isObject, get, merge } = require("lodash");
 const request = require("request-promise");
 
 module.exports = (client) => {
@@ -62,6 +62,28 @@ module.exports = (client) => {
 
         throw Error(`[!] Unexpected Opentdb Response\n${JSON.stringify(res, null, 4)}`);
       });
+    }
+
+    async getUsername(discord) {
+      const userDB = await this.client.db.models.users.findOne({
+        where: {
+          discord: discord,
+        },
+      });
+  
+      if (isNil(userDB)) {
+        return null;
+      }
+  
+      const userID = userDB.get("id");
+  
+      const plugUser = this.client.plug.getUser(userID);
+  
+      if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
+        return null;
+      }
+  
+      return plugUser.username;
     }
   }
 
