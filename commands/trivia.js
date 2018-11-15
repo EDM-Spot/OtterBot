@@ -93,10 +93,12 @@ class Trivia extends Command {
         const chosen = reaction.emoji.name;
 
         if (currentPlayers.includes(user.id)) {
-          if (chosen === "✅") {
-            answerTrue.push(user.id);
-          } else if (chosen === "❌") {
-            answerFalse.push(user.id);
+          if (!answerTrue.includes(user.id) && !answerFalse.includes(user.id)) {
+            if (chosen === "✅") {
+              answerTrue.push(user.id);
+            } else if (chosen === "❌") {
+              answerFalse.push(user.id);
+            }
           }
         }
       });
