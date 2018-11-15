@@ -29,6 +29,8 @@ module.exports = class {
     // Initializes the dashboard, which must be done on ready otherwise some data
     // may be missing from the dashboard. 
     require("../util/dashboard.js")(this.client);
+
+    require("../util/trivia.js")(this.client);
     
     // Set the game as the default help command + guild count.
     // NOTE: This is also set in the guildCreate and guildDelete events!
