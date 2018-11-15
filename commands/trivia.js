@@ -94,7 +94,7 @@ class Trivia extends Command {
           if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
             currentPlayers = reject(currentPlayers, function(player) { return player === timedOut; });
 
-            await this.client.guilds.get("485173051432894489").members.get(timedOut).removeRole("512635547320188928").catch(console.error);
+            await this.client.guilds.get("485173051432894489").members.get(timedOut).removeRole("512635547320188928").catch(console.warn);
 
             const username = await this.client.triviaUtil.getUsername(timedOut[0]);
             message.channel.send("No Answer in time! " + username + " is out of Trivia!");
@@ -105,7 +105,7 @@ class Trivia extends Command {
           forEach(answerFalse, async function(loser) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
-            await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
+            await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
 
             const username = await this.client.triviaUtil.getUsername(loser[0]);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
@@ -114,7 +114,7 @@ class Trivia extends Command {
           forEach(answerTrue, async function(loser) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
-            await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.error);
+            await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
 
             const username = await this.client.triviaUtil.getUsername(loser[0]);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
@@ -128,7 +128,7 @@ class Trivia extends Command {
           this.client.triviaUtil.end();
           if (isNil(username)) return message.channel.send("Something is wrong! Ending Trivia.");
 
-          await this.client.guilds.get("485173051432894489").members.get(currentPlayers[0]).removeRole("512635547320188928").catch(console.error);
+          await this.client.guilds.get("485173051432894489").members.get(currentPlayers[0]).removeRole("512635547320188928").catch(console.warn);
           await this.client.triviaUtil.moveWinner(currentPlayers[0]);
 
           return message.channel.send(username + " won the Trivia!");
@@ -140,7 +140,7 @@ class Trivia extends Command {
         });
       });
     }).catch(function() {
-      console.log();
+      console.warn();
     });
   }
 }
