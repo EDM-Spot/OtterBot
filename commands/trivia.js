@@ -56,9 +56,11 @@ class Trivia extends Command {
         user.id !== m.author.id &&
         reaction.emoji.name === "✅" ||
         reaction.emoji.name === "❌"
-      ).on("collect", async reaction => {
+      ).on("collect", async (reaction, collector) => {
         console.log("////////////////////////////////REACTION/////////////////////////////////");
         console.log(reaction);
+        console.log("////////////////////////////////COLLECTOR/////////////////////////////////");
+        console.log(collector);
         // This should be checked on Join
         //const userDB = await this.client.db.models.users.findOne({
         //where: {
