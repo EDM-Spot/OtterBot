@@ -80,6 +80,8 @@ class Trivia extends Command {
 
         const chosen = reaction.emoji.name;
 
+        console.log(reaction.users);
+
         if (chosen === "✅") {
           each(reaction.users, (user) => {
             answerTrue.push(user.id);
