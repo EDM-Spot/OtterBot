@@ -21,6 +21,9 @@ class Trivia extends Command {
     message.channel.send("The Winner will be moved to position 1 so don't forget to stay on plug.");
     message.channel.send("Good Luck!");
 
+    await this.client.plug.sendChat("Discord Trivia is starting now! The winner gets moved to position 1!");
+    await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+
     this.client.triviaUtil.start();
 
     new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
