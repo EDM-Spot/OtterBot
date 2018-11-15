@@ -49,19 +49,23 @@ class Trivia extends Command {
       console.log();
     });
 
-    new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
-      const reactions = questionMessage.reactions;
-      console.log(reactions);
+    console.log(questionMessage);
 
-      each(reactions, (reaction) => {
-        if (reaction.emoji.name === "✅") {
+    new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
+      const collector = message.createReactionCollector((reaction, user) => 
+        user.id === message.author.id &&
+      reaction.emoji.name === "✅" ||
+      reaction.emoji.name === "❌"
+      ).once("collect", reaction => {
+        const chosen = reaction.emoji.name;
+        if (chosen === "✅") {
           console.log("✅");
           console.log(reaction.users);
-        }
-        else if (reaction.emoji.name === "❌") {
+        } else if (chosen === "❌") {
           console.log("❌");
           console.log(reaction.users);
         }
+        collector.stop();
       });
     });
 
