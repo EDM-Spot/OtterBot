@@ -28,7 +28,7 @@ class Trivia extends Command {
   async trivia(message, players) {
     const currentPlayers = players;
 
-    if (currentPlayers.lenght <= 0) return message.channel.send("Too bad no one won the Trivia!");
+    if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
 
     const question = await this.client.triviaUtil.getQuestion();
     console.log(question);
@@ -114,7 +114,7 @@ class Trivia extends Command {
 
         console.log("Finished!");
 
-        if (currentPlayers.lenght <= 0) return message.channel.send("Too bad no one won the Trivia!");
+        if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
         if (currentPlayers.lenght === 1) return message.channel.send(currentPlayers[0] + " won the Trivia!");
 
         new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
