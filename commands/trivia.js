@@ -2,12 +2,13 @@ const Command = require("../base/Command.js");
 const moment = require("moment");
 require("moment-timer");
 
-class Ping extends Command {
+class Trivia extends Command {
   constructor(client) {
     super(client, {
       name: "trivia",
       description: "Play Trivia.",
       usage: "trivia",
+      permLevel: "Bot Developer"
     });
   }
 
@@ -30,4 +31,4 @@ class Ping extends Command {
   }
 }
 
-module.exports = Ping;
+module.exports = Trivia;

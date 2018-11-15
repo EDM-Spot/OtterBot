@@ -61,5 +61,5 @@ module.exports = (client) => {
     }
   }
 
-  client.trivia = new TriviaUtil();
+  client.triviaUtil = new TriviaUtil();
 };
