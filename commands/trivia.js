@@ -25,7 +25,7 @@ class Trivia extends Command {
     const players = ["314234234", "9695759", "579898790", "476874884"]; //this.client.trivia.players;
 
     //while (players.lenght) {
-      const question = await this.client.trivia.getQuestion();
+      const question = await this.client.triviaUtil.getQuestion();
       console.log(question);
 
       const embed = new Discord.RichEmbed()
@@ -38,7 +38,7 @@ class Trivia extends Command {
         //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()
         //.addField("This is a field title, it can hold 256 characters")
-        .addField("Question", question.question, true)
+        .addField("Question", question.question, true);
       //.addBlankField(true);
 
       message.channel.send({embed});
