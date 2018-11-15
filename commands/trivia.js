@@ -15,7 +15,7 @@ class Trivia extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    message.channel.send("(TEST) Trivia will start in X Time (TEST)");
+    message.channel.send("(TEST) Trivia will start in 1 Minute! Use `-join` to play. (TEST)");
 
     this.client.triviaUtil.start();
 
@@ -112,7 +112,7 @@ class Trivia extends Command {
 
         console.log("Finished!");
 
-        if (currentPlayers.lenght <= 0) return;
+        if (currentPlayers.lenght <= 0) return message.channel.send("Too bad no one won the Trivia!");
         if (currentPlayers.lenght === 1) return message.channel.send(currentPlayers[0] + " won the Trivia!");
 
         new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
