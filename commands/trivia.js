@@ -92,6 +92,13 @@ class Trivia extends Command {
         collector.stop();
         message.channel.send("Answer: " + question.correct_answer);
 
+        each(currentPlayers, (timedOut) => {
+          if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
+            currentPlayers.filter(player => player !== timedOut);
+            message.channel.send(timedOut + " is out of Trivia!");
+          }
+        });
+
         if (question.correct_answer) {
           each(answerFalse, (loser) => {
             currentPlayers.filter(player => player !== loser);
@@ -103,13 +110,6 @@ class Trivia extends Command {
             message.channel.send(loser + " is out of Trivia!");
           });
         }
-
-        each(currentPlayers, (timedOut) => {
-          if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
-            currentPlayers.filter(player => player !== timedOut);
-            message.channel.send(timedOut + " is out of Trivia!");
-          }
-        });
 
         console.log(currentPlayers);
 
