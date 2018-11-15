@@ -1,5 +1,5 @@
 const Command = require("../base/Command.js");
-const { each } = require("lodash");
+const { isNil } = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-timer");
@@ -49,8 +49,21 @@ class Trivia extends Command {
     }).then((m)=>{
       const collector = m.createReactionCollector((reaction) => 
         reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
-      ).once("collect", reaction => {
+      ).once("collect", async (reaction, user) => {
+        console.log(user);
+        const userDB = await this.client.db.models.users.findOne({
+          where: {
+            discord: message.author.id,
+          },
+        });
+  
+        if (isNil(userDB)) {
+          reaction.remove(user);
+          return false;
+        }
+
         const chosen = reaction.emoji.name;
+
         if (chosen === "✅") {
           console.log("✅");
           console.log(reaction.users);
