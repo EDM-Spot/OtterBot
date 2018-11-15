@@ -42,28 +42,28 @@ class Trivia extends Command {
       .addField("Question", question.question, true)
       .addBlankField(true);
 
-    message.channel.send({embed}).then(function(message) {
+    const questionMessage = message.channel.send({embed}).then(function(message) {
       message.react("✅");
       message.react("❌");
-      
-      const collector = message.createReactionCollector((reaction) => 
-        reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
-      ).once("collect", reaction => {
-        const chosen = reaction.emoji.name;
-        if (chosen === "✅") {
-          console.log("✅");
-          console.log(reaction.users);
-        } else if (chosen === "❌") {
-          console.log("❌");
-          console.log(reaction.users);
-        }
-        collector.stop();
-      });
     }).catch(function() {
       console.log();
     });
 
+    const collector = questionMessage.createReactionCollector((reaction) => 
+      reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
+    ).once("collect", reaction => {
+      const chosen = reaction.emoji.name;
+      if (chosen === "✅") {
+        console.log("✅");
+        console.log(reaction.users);
+      } else if (chosen === "❌") {
+        console.log("❌");
+        console.log(reaction.users);
+      }
+    });
+
     new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
+      collector.stop();
       console.log("Finished!");
     });
 
