@@ -16,6 +16,7 @@ class Trivia extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     message.channel.send("Trivia will start in 5 Minute! Use `-join` to play.");
+    message.channel.send("You will be warned 30 seconds before it starts.");
     message.channel.send("Press ✅ or ❌ to answer the question. The trivia will continue until only one stays.");
     message.channel.send("The Winner will be moved to position 1 so don't forget to stay on plug.");
     message.channel.send("Good Luck!");
@@ -26,7 +27,7 @@ class Trivia extends Command {
       message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
     });
 
-    this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
+    this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
       this.client.triviaUtil.running = false;
       await this.trivia(message, this.client.triviaUtil.players);
     });
@@ -141,6 +142,9 @@ class Trivia extends Command {
 
           this.client.triviaUtil.end();
           if (isNil(username)) return message.channel.send("Something is wrong! Ending Trivia.");
+
+          await this.client.guilds.get("485173051432894489").members.get(currentPlayers[0]).removeRole("512635547320188928").catch(console.error);
+          await this.client.triviaUtil.moveWinner(currentPlayers[0]);
 
           return message.channel.send(username + " won the Trivia!");
         }

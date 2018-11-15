@@ -85,6 +85,28 @@ module.exports = (client) => {
   
       return plugUser.username;
     }
+
+    async moveWinner(discord) {
+      const userDB = await client.db.models.users.findOne({
+        where: {
+          discord: discord,
+        },
+      });
+  
+      if (isNil(userDB)) {
+        return null;
+      }
+  
+      const userID = userDB.get("id");
+  
+      const plugUser = client.plug.getUser(userID);
+  
+      if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
+        return null;
+      }
+  
+      return client.queue.add(plugUser, 1);
+    }
   }
 
   client.triviaUtil = new TriviaUtil();
