@@ -53,11 +53,11 @@ class Trivia extends Command {
       return m;
     }).then((m)=>{
       const collector = m.createReactionCollector((reaction, user) => 
-        reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
+        user.id !== message.author.id && reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
       ).once("collect", async (reaction, user) => {
-        console.log("////////////////////////////////REACTION/////////////////////////////////")
+        console.log("////////////////////////////////REACTION/////////////////////////////////");
         console.log(reaction);
-        console.log("////////////////////////////////USER/////////////////////////////////")
+        console.log("////////////////////////////////USER/////////////////////////////////");
         console.log(user);
         // This should be checked on Join
         //const userDB = await this.client.db.models.users.findOne({
@@ -70,16 +70,17 @@ class Trivia extends Command {
         //reaction.remove(user);
         //return false;
         //}
-        reaction.remove(user);
+
+        //if (!message.member.roles.find("name", "Admin")) {
+        //reaction.remove(user);
+        //}
 
         const chosen = reaction.emoji.name;
 
-        console.log(user[0].id);
-
         if (chosen === "✅") {
-          answerTrue.push(user.id);
+          //answerTrue.push(user.id);
         } else if (chosen === "❌") {
-          answerFalse.push(user.id);
+          //answerFalse.push(user.id);
         }
       });
 
