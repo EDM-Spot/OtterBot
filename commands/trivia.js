@@ -92,26 +92,26 @@ class Trivia extends Command {
         collector.stop();
         message.channel.send("Answer: " + question.correct_answer);
 
-        forEach(currentPlayers, (timedOut) => {
+        forEach(currentPlayers, function(timedOut) {
           if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
             //currentPlayers.filter(player => player !== timedOut);
-            currentPlayers = reject(currentPlayers, function(player) { return player === timedOut; });
+            currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(timedOut); return player === timedOut; });
 
             message.channel.send(timedOut + " is out of Trivia!");
           }
         });
 
         if (question.correct_answer) {
-          forEach(answerFalse, (loser) => {
+          forEach(answerFalse, function(loser) {
             //currentPlayers.filter(player => player !== loser);
-            currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
+            currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
             message.channel.send(loser + " is out of Trivia!");
           });
         } else {
-          forEach(answerTrue, (loser) => {
+          forEach(answerTrue, function(loser) {
             //currentPlayers.filter(player => player !== loser);
-            currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
+            currentPlayers = reject(currentPlayers, function(player) { console.log(player); console.log(loser); return player === loser; });
 
             message.channel.send(loser + " is out of Trivia!");
           });
@@ -121,8 +121,10 @@ class Trivia extends Command {
 
         console.log("Finished!");
 
+        console.log(currentPlayers.lenght === 1);
+
         if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
-        if (currentPlayers.lenght === 1) return message.channel.send(currentPlayers[0] + " won the Trivia!");
+        if (currentPlayers.lenght == 1) return message.channel.send("Someone won the Trivia!");
 
         message.channel.send("Next Question will start in 15 Seconds!");
         new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
