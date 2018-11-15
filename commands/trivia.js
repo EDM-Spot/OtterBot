@@ -15,15 +15,15 @@ class Trivia extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    message.channel.send("Trivia will start in 5 Minute! Use `-join` to play.");
-    message.channel.send("You will be warned 30 seconds before it starts.");
-    message.channel.send("Press ✅ or ❌ to answer the question. The trivia will continue until only one stays.");
-    message.channel.send("You have 10 Seconds to answer when questions shows up.");
-    message.channel.send("The Winner will be moved to position 1 so don't forget to stay on plug.");
-    message.channel.send("Good Luck!");
+    let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. \n";
+    startMessage += "You will be warned 30 seconds before it starts. \n";
+    startMessage += "Press ✅ or ❌ to answer the question. The trivia will continue until only one stays. \n";
+    startMessage += "You have 15 Seconds to answer when questions shows up. \n";
+    startMessage += "The Winner will be moved to position 1 so don't forget to stay on plug. \n";
+    startMessage += "Good Luck!";
+    message.channel.send(startMessage);
 
-    await this.client.plug.sendChat("@djs Discord Trivia is starting now! The winner gets moved to position 1!");
-    await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+    await this.client.plug.sendChat("@djs Discord Trivia is starting now! The winner gets moved to position 1! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
     this.client.triviaUtil.start();
 
@@ -86,11 +86,12 @@ class Trivia extends Command {
         }
       });
 
-      new moment.duration(10, "seconds").timer({loop: false, start: true}, async () => {
+      new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
         collector.stop();
-        message.channel.send("Answer: " + question.correct_answer);
+        message.channel.send("The Answer is: " + question.correct_answer);
 
-        forEach(currentPlayers, async (timedOut) => {
+        //forEach(currentPlayers, async (timedOut) => {
+        for (const timedOut of currentPlayers) {
           if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
             currentPlayers = reject(currentPlayers, function(player) { return player === timedOut; });
 
@@ -102,7 +103,8 @@ class Trivia extends Command {
         });
 
         if (question.correct_answer) {
-          forEach(answerFalse, async (loser) => {
+          //forEach(answerFalse, async (loser) => {
+          for (const player of currentPlayers) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
@@ -111,7 +113,8 @@ class Trivia extends Command {
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           });
         } else {
-          forEach(answerTrue, async (loser) => {
+          //forEach(answerTrue, async (loser) => {
+          for (const player of currentPlayers) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
@@ -134,8 +137,8 @@ class Trivia extends Command {
           return message.channel.send(username + " won the Trivia!");
         }
 
-        message.channel.send("Next Question will start in 15 Seconds!");
-        new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
+        message.channel.send("Next Question will start in 30 Seconds!");
+        new moment.duration(30, "seconds").timer({loop: false, start: true}, async () => {
           await this.trivia(message, currentPlayers);
         });
       });

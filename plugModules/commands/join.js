@@ -18,7 +18,7 @@ module.exports = function Command(bot) {
       } else if (isObject(dj) && dj.id === rawData.from.id) {
         this.reply(lang.join.isPlaying, {}, 6e4);
         return true;
-      } else if (bot.plug.getWaitListPosition(rawData.from.id) >= 1 && bot.plug.getWaitListPosition(rawData.from.id) <= 5) {
+      } else if (bot.plug.getWaitListPosition(rawData.from.id) >= 0 && bot.plug.getWaitListPosition(rawData.from.id) <= 5) {
         this.reply(lang.join.closeToPlaying, {}, 6e4);
         return true;
       }

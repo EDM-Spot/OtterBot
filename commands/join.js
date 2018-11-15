@@ -39,7 +39,7 @@ class Ping extends Command {
         return message.reply("Trivia is not running!");
       } else if (isObject(dj) && dj.id === userID) {
         return message.reply("You can't join while playing!");
-      } else if (userPos >= 1 && userPos <= 5) {
+      } else if (userPos >= 0 && userPos <= 5) {
         return message.reply("You are too close to DJ.");
       }
 
