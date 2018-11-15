@@ -1,4 +1,5 @@
 const Command = require("../base/Command.js");
+const { each } = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-timer");
@@ -25,23 +26,44 @@ class Trivia extends Command {
     const players = ["314234234", "9695759", "579898790", "476874884"]; //this.client.trivia.players;
 
     //while (players.lenght) {
-      const question = await this.client.triviaUtil.getQuestion();
-      console.log(question);
+    const question = await this.client.triviaUtil.getQuestion();
+    console.log(question);
 
-      const embed = new Discord.RichEmbed()
-        //.setTitle("Title")
-        .setAuthor(question.category, "http://www.iconsalot.com/asset/icons/freepik/customer-service-2/512/question-icon.png")
-        .setColor(0xFF00FF)
-        //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("Difficulty: " + question.difficulty)
-        //.setImage("http://i.imgur.com/yVpymuV.png")
-        //.setThumbnail("http://i.imgur.com/p2qNFag.png")
-        .setTimestamp()
-        //.addField("This is a field title, it can hold 256 characters")
-        .addField("Question", question.question, true);
-      //.addBlankField(true);
+    const embed = new Discord.RichEmbed()
+    //.setTitle("Title")
+      .setAuthor(question.category, "http://www.iconsalot.com/asset/icons/freepik/customer-service-2/512/question-icon.png")
+      .setColor(0xFF00FF)
+    //.setDescription("This is the main body of text, it can hold 2048 characters.")
+      .setFooter("Difficulty: " + question.difficulty)
+    //.setImage("http://i.imgur.com/yVpymuV.png")
+    //.setThumbnail("http://i.imgur.com/p2qNFag.png")
+      .setTimestamp()
+    //.addField("This is a field title, it can hold 256 characters")
+      .addField("Question", question.question, true)
+      .addBlankField(true);
 
-      message.channel.send({embed});
+    const questionMessage = message.channel.send({embed}).then(function(message) {
+      message.react("✅");
+      message.react("❌");
+    }).catch(function() {
+      console.log();
+    });
+
+    new moment.duration(10, "seconds").timer({loop: false, start: true}, async () => {
+      const reactions = questionMessage.reactions;
+
+      each(reactions, (reaction) => {
+        if (reaction.emoji.name === "✅") {
+          console.log("✅");
+          console.log(reaction.users);
+        }
+        else if (reaction.emoji.name === "❌") {
+          console.log("❌");
+          console.log(reaction.users);
+        }
+      });
+    });
+
     //}
   }
 }
