@@ -29,6 +29,12 @@ class Ping extends Command {
       const dj = this.client.plug.getDJ();
       const userPos = this.client.plug.getWaitListPosition(userID);
 
+      const user = this.client.plug.getUser(userDB.get("id"));
+
+      if (!user || typeof user.username !== "string" || !user.username.length) {
+        return message.reply("You're not online on plug!");
+      }
+
       if (!this.client.triviaUtil.check()) {
         return message.reply("Trivia is not running!");
       } else if (isObject(dj) && dj.id === userID) {
