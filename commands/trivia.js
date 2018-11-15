@@ -42,11 +42,12 @@ class Trivia extends Command {
       .addField("Question", question.question, true)
       .addBlankField(true);
 
-    const questionMessage = message.channel.send({embed}).then(function(message) {
-      const collector = message.createReactionCollector((reaction, user) => 
-        user.id === message.author.id &&
-      reaction.emoji.name === "✅" ||
-      reaction.emoji.name === "❌"
+    message.channel.send({embed}).then(function(message) {
+      message.react("✅");
+      message.react("❌");
+      
+      const collector = message.createReactionCollector((reaction) => 
+        reaction.emoji.name === "✅" || reaction.emoji.name === "❌"
       ).once("collect", reaction => {
         const chosen = reaction.emoji.name;
         if (chosen === "✅") {
