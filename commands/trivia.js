@@ -90,33 +90,33 @@ class Trivia extends Command {
         collector.stop();
         message.channel.send("Answer: " + question.correct_answer);
 
-        forEach(currentPlayers, async function(timedOut) {
+        forEach(currentPlayers, async (timedOut) => {
           if (!answerTrue.includes(timedOut) && !answerFalse.includes(timedOut)) {
             currentPlayers = reject(currentPlayers, function(player) { return player === timedOut; });
 
             await this.client.guilds.get("485173051432894489").members.get(timedOut).removeRole("512635547320188928").catch(console.warn);
 
-            const username = await this.client.triviaUtil.getUsername(timedOut[0]);
+            const username = await this.client.triviaUtil.getUsername(timedOut);
             message.channel.send("No Answer in time! " + username + " is out of Trivia!");
           }
         });
 
         if (question.correct_answer) {
-          forEach(answerFalse, async function(loser) {
+          forEach(answerFalse, async (loser) => {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
 
-            const username = await this.client.triviaUtil.getUsername(loser[0]);
+            const username = await this.client.triviaUtil.getUsername(loser);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           });
         } else {
-          forEach(answerTrue, async function(loser) {
+          forEach(answerTrue, async (loser) => {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
 
-            const username = await this.client.triviaUtil.getUsername(loser[0]);
+            const username = await this.client.triviaUtil.getUsername(loser);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           });
         }
