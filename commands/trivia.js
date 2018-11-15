@@ -43,15 +43,6 @@ class Trivia extends Command {
       .addBlankField(true);
 
     const questionMessage = message.channel.send({embed}).then(function(message) {
-      message.react("✅");
-      message.react("❌");
-    }).catch(function() {
-      console.log();
-    });
-
-    console.log(questionMessage);
-
-    new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
       const collector = message.createReactionCollector((reaction, user) => 
         user.id === message.author.id &&
       reaction.emoji.name === "✅" ||
@@ -67,6 +58,12 @@ class Trivia extends Command {
         }
         collector.stop();
       });
+    }).catch(function() {
+      console.log();
+    });
+
+    new moment.duration(15, "seconds").timer({loop: false, start: true}, async () => {
+      console.log("Finished!");
     });
 
     //}
