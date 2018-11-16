@@ -80,7 +80,7 @@ module.exports = function Util(bot) {
 
       const offlineDaysPoints = ((moment().diff(userDB.get("last_seen"), "days") * bot.global.pointsWeight.daysOffline) * 100) + 1;
 
-      const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / totalsongs) * 200));
+      const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / totalsongs) * 100));
 
       const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
