@@ -100,7 +100,7 @@ class Trivia extends Command {
             const username = await this.client.triviaUtil.getUsername(timedOut);
             message.channel.send("No Answer in time! " + username + " is out of Trivia!");
           }
-        });
+        }
 
         if (question.correct_answer) {
           //forEach(answerFalse, async (loser) => {
@@ -111,7 +111,7 @@ class Trivia extends Command {
 
             const username = await this.client.triviaUtil.getUsername(loser);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
-          });
+          }
         } else {
           //forEach(answerTrue, async (loser) => {
           for (const player of currentPlayers) {
@@ -121,7 +121,7 @@ class Trivia extends Command {
 
             const username = await this.client.triviaUtil.getUsername(loser);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
-          });
+          }
         }
 
         if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
