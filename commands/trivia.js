@@ -55,7 +55,7 @@ class Trivia extends Command {
     //.setThumbnail("http://i.imgur.com/p2qNFag.png")
       .setTimestamp()
     //.addField("This is a field title, it can hold 256 characters")
-      .addField("Question", question.question, true)
+      .addField("Question", decodeURI(question.question), true)
       .addBlankField(true);
 
     const answerTrue = [];
