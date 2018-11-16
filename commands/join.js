@@ -58,7 +58,9 @@ class Ping extends Command {
       this.client.triviaUtil.add(userID);
       await this.client.guilds.get("485173051432894489").members.get(message.author.id).addRole("512635547320188928").catch(console.error);
 
-      return true;
+      message.reply("Joined Trivia.");
+
+      return message.delete();
     } catch (e) {
       console.log(e);
     }
