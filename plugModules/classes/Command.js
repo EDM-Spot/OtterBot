@@ -80,7 +80,7 @@ module.exports = class Command {
 
     return true;
   }
-  placeOnCooldown(registeredCommand, success) {
+  async placeOnCooldown(registeredCommand, success) {
     const { id, cooldownType: cdType, cooldownDuration: cdDur } = registeredCommand;
     const { rawData, instance: command, redis } = this;
 
@@ -88,6 +88,7 @@ module.exports = class Command {
 
     console.log("Command: " + registeredCommand);
     console.log("Success: " + success);
+    console.log("Success: " + await success);
 
     return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.from.id, duration);
   }
