@@ -2,7 +2,7 @@ module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["myid"],
     minimumPermission: 0,
-    cooldownType: "perUse",
+    cooldownType: "perUser",
     cooldownDuration: 120,
     parameters: "",
     description: "Check user ID.",
