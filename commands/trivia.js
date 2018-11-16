@@ -1,5 +1,5 @@
 const Command = require("../base/Command.js");
-const { isNil, forEach, reject, size } = require("lodash");
+const { isNil, reject, size } = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-timer");
@@ -10,7 +10,7 @@ class Trivia extends Command {
       name: "trivia",
       description: "Play Trivia.",
       usage: "trivia",
-      permLevel: "Bot Developer"
+      permLevel: "Bot Admin"
     });
   }
 
@@ -23,7 +23,7 @@ class Trivia extends Command {
     startMessage += "Good Luck!";
     message.channel.send(startMessage);
 
-    await this.client.plug.sendChat("@djs Discord Trivia is starting now! The winner gets moved to position 1! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+    await this.client.plug.sendChat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "! The winner gets moved to position 1! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
     this.client.triviaUtil.start();
 
@@ -33,6 +33,7 @@ class Trivia extends Command {
 
     this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
       this.client.triviaUtil.running = false;
+      message.channel.send("<@&512635547320188928> Trivia will now start!");
       await this.trivia(message, this.client.triviaUtil.players);
     });
   }

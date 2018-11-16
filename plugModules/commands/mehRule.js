@@ -15,7 +15,7 @@ module.exports = function Command(bot) {
       this.reply(lang.mehRule, {
         mehs: mehRule,
         hsMehs: hsMehRule,
-      }, 6e4);
+      }, 1);
       return true;
     },
   });

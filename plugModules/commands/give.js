@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["give"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 120,
+    cooldownDuration: 180,
     parameters: "<@username>",
     description: "Gives your positions in the waitlist.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
@@ -40,6 +40,8 @@ module.exports = function Command(bot) {
       const userHaveGives = await bot.redis.findGivePositionTo(user.id);
 
       if (!isNil(userGiving) || !isNil(userHaveGives)) {
+        await bot.redis.removeGivePosition(rawData.from.id, user.id);
+
         this.reply(lang.give.cantGiveAgain, {}, 6e4);
         return false;
       }

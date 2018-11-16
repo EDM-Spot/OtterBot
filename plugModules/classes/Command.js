@@ -1,7 +1,7 @@
 const { get, assign, isNil } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
-const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays"];
+const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays", "meh"];
 const CMD_BANNED = ["cookie", "myprops", "hello", "catfact", "catfacts", "urban", "eta", "sodas", "gif", "myrank"];
 
 module.exports = class Command {
@@ -91,6 +91,9 @@ module.exports = class Command {
   async run() {
     const { rawData, instance: command } = this;
     const { registeredCommand } = command;
+
+    console.log("Command Class: " + command);
+    console.log("Command Class: " + registeredCommand);
 
     await this.handleDeletion();
 
