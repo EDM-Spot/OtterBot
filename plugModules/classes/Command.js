@@ -92,9 +92,6 @@ module.exports = class Command {
     const { rawData, instance: command } = this;
     const { registeredCommand } = command;
 
-    console.log("Command Class: " + command);
-    console.log("Command Class: " + registeredCommand);
-
     await this.handleDeletion();
 
     if (await this.utils.getRole(rawData.from) >= registeredCommand.minimumPermission) {
@@ -104,6 +101,8 @@ module.exports = class Command {
       if (!isBanned) {
         if (!isOnCooldown) {
           const success = registeredCommand.execute.call(this, rawData, command, this.lang.commands);
+
+          console.log("Command Class: " + success);
 
           if (registeredCommand.cooldownType !== "none") {
             await this.placeOnCooldown(registeredCommand, success);

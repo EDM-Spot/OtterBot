@@ -20,8 +20,6 @@ module.exports = class CommandsManager {
   register(command) {
     command.id = this.constructor.generateCommandID(command);
 
-    console.log("Command: " + command);
-
     if (!this.cooldownTypes.includes(command.cooldownType)) return;
 
     if (!this.registeredCommands[command.id]) {
