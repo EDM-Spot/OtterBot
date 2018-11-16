@@ -5,7 +5,7 @@ module.exports = (client) => {
   class TriviaUtil {
     constructor() {
       this.token = "92e8423b62804fa8ca655ca697a0d669bdcf6e8645dfe1fce03d77a28b02a86f";
-      this.baseURL = `https://opentdb.com/api.php?amount=50&type=boolean&token=${this.token}`;
+      this.baseURL = `https://opentdb.com/api.php?amount=50&type=boolean&encode=url3986&token=${this.token}`;
       this.resetURL = `https://opentdb.com/api_token.php?command=reset&token=${this.token}`;
 
       this.players = [];
@@ -52,6 +52,8 @@ module.exports = (client) => {
       }
 
       return request[method.toLowerCase()](this.baseURL, options).catch(async (err) => {
+        console.warn("Trivia Debug");
+        console.warn(err);
         if (err.code === 4) {
           try {
             await this.resetToken();
