@@ -5,7 +5,7 @@ module.exports = (client) => {
   class TriviaUtil {
     constructor() {
       this.token = "92e8423b62804fa8ca655ca697a0d669bdcf6e8645dfe1fce03d77a28b02a86f";
-      this.baseURL = `https://opentdb.com/api.php?amount=50&type=boolean&encode=url3986&token=${this.token}`;
+      this.baseURL = `https://opentdb.com/api.php?amount=1&type=boolean&encode=url3986&token=${this.token}`;
       this.resetURL = `https://opentdb.com/api_token.php?command=reset&token=${this.token}`;
 
       this.players = [];
@@ -51,29 +51,28 @@ module.exports = (client) => {
         options.body = body;
       }
 
-      return request[method.toLowerCase()](this.baseURL, options).catch(async (err) => {
-        console.warn("Trivia Debug");
-        console.warn(err);
-        if (err.code === 4) {
-          try {
-            await this.resetToken();
-          } catch (error) {
-            console.warn(`Failed to reset token - ${error.message}`);
-            return false;
-          }
-
-          return await this.getQuestion();
-        }
-        
+      return request[method.toLowerCase()](this.baseURL, options).catch(async (err) => {     
         console.warn("[!] Trivia Util Error");
         console.warn(err);
       });
     }
 
     async getQuestion() {
-      return this.req("GET", null, { }).then((res) => {
+      return this.req("GET", null, { }).then(async (res) => {
         if (isObject(get(res, "results[0]"))) {
           return get(res, "results[0]", {});
+        }
+
+        if (get(res, "response_code") === 4) {
+          try {
+            console.log("Reseting trivia token");
+            await this.resetToken();
+          } catch (error) {
+            console.warn(`Failed to reset token - ${error.message}`);
+            return false;
+          }
+
+          return this.getQuestion();
         }
 
         throw Error(`[!] Unexpected Opentdb Response\n${JSON.stringify(res, null, 4)}`);
