@@ -104,7 +104,7 @@ class Trivia extends Command {
 
         if (question.correct_answer) {
           //forEach(answerFalse, async (loser) => {
-          for (const player of currentPlayers) {
+          for (const loser of currentPlayers) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
@@ -114,7 +114,7 @@ class Trivia extends Command {
           }
         } else {
           //forEach(answerTrue, async (loser) => {
-          for (const player of currentPlayers) {
+          for (const loser of currentPlayers) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
