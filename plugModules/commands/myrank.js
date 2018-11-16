@@ -37,7 +37,7 @@ module.exports = function Command(bot) {
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((((" + totalWootsPointsSQL + " + " + totalGrabsPointsSQL + ") / (" + totalMehsPointsSQL + " + 1)) - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")) * ((CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 100))) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((((" + totalWootsPointsSQL + " + " + totalGrabsPointsSQL + ") / (" + totalMehsPointsSQL + " + 1)) - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")) * ((CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 200))) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"

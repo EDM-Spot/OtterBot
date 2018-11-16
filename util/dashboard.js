@@ -533,7 +533,7 @@ module.exports = (client) => {
       where: { skipped: false }
     });
 
-    const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 100)))";
+    const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 200)))";
 
     const djRank = await client.db.models.plays.findAll({
       attributes: ["plays.dj",
