@@ -124,7 +124,11 @@ class Trivia extends Command {
           }
         }
 
-        if (!currentPlayers.length) return message.channel.send("Too bad no one won the Trivia!");
+        if (!currentPlayers.length) {
+          this.client.triviaUtil.end();
+          return message.channel.send("Too bad no one won the Trivia!");
+        }
+
         if (size(currentPlayers) === 1) {
           const username = await this.client.triviaUtil.getUsername(currentPlayers[0]);
 

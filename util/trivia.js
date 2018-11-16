@@ -13,6 +13,7 @@ module.exports = (client) => {
     
     start() {
       this.running = true;
+      this.players = [];
     }
 
     end() {
