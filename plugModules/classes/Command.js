@@ -84,11 +84,11 @@ module.exports = class Command {
     const { id, cooldownType: cdType, cooldownDuration: cdDur } = registeredCommand;
     const { rawData, instance: command, redis } = this;
 
-    const duration = success ? cdDur : Math.max(Math.floor(cdDur / 2), 1);
+    const successBool = await success;
 
-    console.log("Command: " + registeredCommand);
-    console.log("Success: " + success);
-    console.log("Success: " + await success);
+    const duration = successBool ? cdDur : 1;
+
+    if (!successBool) await this.bot.plug.moderateDeleteChat(rawData.id);
 
     return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.from.id, duration);
   }
