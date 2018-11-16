@@ -86,6 +86,9 @@ module.exports = class Command {
 
     const duration = success ? cdDur : Math.max(Math.floor(cdDur / 2), 1);
 
+    console.log("Command: " + registeredCommand);
+    console.log("Success: " + success);
+
     return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.from.id, duration);
   }
   async run() {
@@ -101,8 +104,6 @@ module.exports = class Command {
       if (!isBanned) {
         if (!isOnCooldown) {
           const success = registeredCommand.execute.call(this, rawData, command, this.lang.commands);
-
-          console.log("Command Class: " + success);
 
           if (registeredCommand.cooldownType !== "none") {
             await this.placeOnCooldown(registeredCommand, success);
