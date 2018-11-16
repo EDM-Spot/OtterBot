@@ -1,5 +1,5 @@
 const Command = require("../base/Command.js");
-const { isNil, forEach, reject, size } = require("lodash");
+const { isNil, reject, size } = require("lodash");
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-timer");
@@ -10,7 +10,7 @@ class Trivia extends Command {
       name: "trivia",
       description: "Play Trivia.",
       usage: "trivia",
-      permLevel: "Bot Developer"
+      permLevel: "Bot Admin"
     });
   }
 
@@ -23,7 +23,7 @@ class Trivia extends Command {
     startMessage += "Good Luck!";
     message.channel.send(startMessage);
 
-    await this.client.plug.sendChat("@djs Discord Trivia is starting now! The winner gets moved to position 1! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+    await this.client.plug.sendChat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "! The winner gets moved to position 1! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
     this.client.triviaUtil.start();
 
@@ -33,6 +33,7 @@ class Trivia extends Command {
 
     this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
       this.client.triviaUtil.running = false;
+      message.channel.send("<@&512635547320188928> Trivia will now start!");
       await this.trivia(message, this.client.triviaUtil.players);
     });
   }
@@ -54,7 +55,7 @@ class Trivia extends Command {
     //.setThumbnail("http://i.imgur.com/p2qNFag.png")
       .setTimestamp()
     //.addField("This is a field title, it can hold 256 characters")
-      .addField("Question", question.question, true)
+      .addField("Question", decodeURI(question.question), true)
       .addBlankField(true);
 
     const answerTrue = [];
@@ -104,7 +105,7 @@ class Trivia extends Command {
 
         if (question.correct_answer) {
           //forEach(answerFalse, async (loser) => {
-          for (const loser of currentPlayers) {
+          for (const loser of answerFalse) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);
@@ -114,7 +115,7 @@ class Trivia extends Command {
           }
         } else {
           //forEach(answerTrue, async (loser) => {
-          for (const loser of currentPlayers) {
+          for (const loser of answerTrue) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
 
             await this.client.guilds.get("485173051432894489").members.get(loser).removeRole("512635547320188928").catch(console.warn);

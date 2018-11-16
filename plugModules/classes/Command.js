@@ -1,7 +1,7 @@
 const { get, assign, isNil } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
-const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays"];
+const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays", "meh"];
 const CMD_BANNED = ["cookie", "myprops", "hello", "catfact", "catfacts", "urban", "eta", "sodas", "gif", "myrank"];
 
 module.exports = class Command {
@@ -80,11 +80,15 @@ module.exports = class Command {
 
     return true;
   }
-  placeOnCooldown(registeredCommand, success) {
+  async placeOnCooldown(registeredCommand, success) {
     const { id, cooldownType: cdType, cooldownDuration: cdDur } = registeredCommand;
     const { rawData, instance: command, redis } = this;
 
-    const duration = success ? cdDur : Math.max(Math.floor(cdDur / 2), 1);
+    const successBool = await success;
+
+    const duration = successBool ? cdDur : 1;
+
+    if (!successBool) await this.bot.plug.moderateDeleteChat(rawData.id);
 
     return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.from.id, duration);
   }
