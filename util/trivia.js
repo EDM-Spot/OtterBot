@@ -103,7 +103,7 @@ module.exports = (client) => {
 
     async getToken() {
       return request(this.newURL).then((res) => {
-        console.log(isNil(get(res, "token"));
+        console.log(isNil(get(res, "token")));
         console.log(get(res, "token"));
         if (!isNil(get(res, "token"))) {
           this.token = get(res, "token");
