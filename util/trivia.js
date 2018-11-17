@@ -1,4 +1,4 @@
-const { isNil, isObject, get, merge, map } = require("lodash");
+const { isNil, isObject, get, merge } = require("lodash");
 const request = require("request-promise");
 
 module.exports = (client) => {
@@ -102,10 +102,15 @@ module.exports = (client) => {
     }
 
     async getToken() {
-      return request(this.newURL).then((res) => {
+      const options = merge({}, {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      });
+
+      return request(this.newURL, options).then((res) => {
         console.log(get(res, "response_code"));
-        console.log(map(res, "token")[0]);
-        console.log(map(res, "token"));
         console.log(get(res, "token"));
         if (!isNil(get(res, "token"))) {
           this.token = get(res, "token");
