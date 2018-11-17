@@ -4,9 +4,10 @@ const request = require("request-promise");
 module.exports = (client) => {
   class TriviaUtil {
     constructor() {
-      this.token = "92e8423b62804fa8ca655ca697a0d669bdcf6e8645dfe1fce03d77a28b02a86f";
+      this.token = undefined;
       this.baseURL = `https://opentdb.com/api.php?amount=1&type=boolean&encode=url3986&token=${this.token}`;
       this.resetURL = `https://opentdb.com/api_token.php?command=reset&token=${this.token}`;
+      this.newURL = "https://opentdb.com/api_token.php?command=request";
 
       this.players = [];
       this.timer = undefined;
@@ -63,6 +64,18 @@ module.exports = (client) => {
           return get(res, "results[0]", {});
         }
 
+        if (get(res, "response_code") === 3) {
+          try {
+            console.log("Getting new trivia token");
+            this.token = await this.getToken();
+          } catch (error) {
+            console.warn(`Failed to get new token - ${error.message}`);
+            return false;
+          }
+
+          return this.getQuestion();
+        }
+
         if (get(res, "response_code") === 4) {
           try {
             console.log("Reseting trivia token");
@@ -82,6 +95,19 @@ module.exports = (client) => {
     async resetToken() {
       return request(this.resetURL).catch(async (err) => {
         console.warn("[!] Trivia Token Reset Error");
+        console.warn(err);
+      });
+    }
+
+    async getToken() {
+      return request(this.newURL).then(async (res) => {
+        console.log("New Token " + res);
+        if (!isNil(get(res, "token"))) {
+          console.log("New Token " + get(res, "token"));
+          return get(res, "token", {});
+        }
+      }).catch(async (err) => {
+        console.warn("[!] Trivia New Token Error");
         console.warn(err);
       });
     }
