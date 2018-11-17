@@ -156,8 +156,8 @@ module.exports = function Command(bot) {
   
           if (!isNil(SoundCloudMediaData)) {
             const fullTitle = SoundCloudMediaData.title;
-            const songAuthor = null;
-            const songTitle = null;
+            let songAuthor = null;
+            let songTitle = null;
 
             try {
               songAuthor = fullTitle.split(" - ")[0].trim();
