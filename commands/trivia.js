@@ -47,7 +47,7 @@ class Trivia extends Command {
 
     const embed = new Discord.RichEmbed()
     //.setTitle("Title")
-      .setAuthor(question.category, "http://www.iconsalot.com/asset/icons/freepik/customer-service-2/512/question-icon.png")
+      .setAuthor(decodeURIComponent(question.category), "http://www.iconsalot.com/asset/icons/freepik/customer-service-2/512/question-icon.png")
       .setColor(0x3AE200)
     //.setDescription("This is the main body of text, it can hold 2048 characters.")
       .setFooter("Difficulty: " + question.difficulty)
@@ -76,11 +76,15 @@ class Trivia extends Command {
         const user = reaction.users.last();
         const chosen = reaction.emoji.name;
 
+        console.log(user + " chose: " + reaction.emoji);
+
         if (currentPlayers.includes(user.id)) {
           if (!answerTrue.includes(user.id) && !answerFalse.includes(user.id)) {
             if (chosen === "✅") {
+              console.log(user + " true");
               answerTrue.push(user.id);
             } else if (chosen === "❌") {
+              console.log(user + " false");
               answerFalse.push(user.id);
             }
           }
@@ -102,6 +106,11 @@ class Trivia extends Command {
             message.channel.send("No Answer in time! " + username + " is out of Trivia!");
           }
         }
+
+        console.log("////////////////////answerFalse//////////////////////");
+        console.log(answerFalse);
+        console.log("////////////////////answerTrue//////////////////////");
+        console.log(answerTrue);
 
         if (question.correct_answer) {
           //forEach(answerFalse, async (loser) => {
