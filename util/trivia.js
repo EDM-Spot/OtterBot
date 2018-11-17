@@ -68,7 +68,7 @@ module.exports = (client) => {
         if (get(res, "response_code") === 3) {
           try {
             console.log("Getting new trivia token");
-            this.token = await this.getToken();
+            await this.getToken();
             console.log("Got: " + this.token);
           } catch (error) {
             console.warn(`Failed to get new token - ${error.message}`);
@@ -95,19 +95,20 @@ module.exports = (client) => {
     }
 
     async resetToken() {
-      return request(this.resetURL + this.token).catch(async (err) => {
+      return request(this.resetURL + this.token).catch((err) => {
         console.warn("[!] Trivia Token Reset Error");
         console.warn(err);
       });
     }
 
     async getToken() {
-      return request(this.newURL).then(async (res) => {
-        console.log(get(res, "token[0]"));
+      return request(this.newURL).then((res) => {
+        console.log(isNil(get(res, "token"));
         console.log(get(res, "token"));
-        if (!isNil(get(res, "token[0]"))) {
-          console.log("New Token " + get(res, "token[0]"));
-          return get(res, "token[0]", {});
+        if (!isNil(get(res, "token"))) {
+          this.token = get(res, "token");
+          console.log("New Token " + get(res, "token"));
+          return get(res, "token", {});
         }
 
         throw Error(`[!] Unexpected Opentdb get token Response\n${JSON.stringify(res, null, 4)}`);
