@@ -59,7 +59,6 @@ module.exports = (client) => {
     }
 
     async getQuestion() {
-      console.log("Current Token: " + this.token);
       return this.req("GET", null, { }).then(async (res) => {
         if (isObject(get(res, "results[0]"))) {
           return get(res, "results[0]", {});
@@ -69,7 +68,6 @@ module.exports = (client) => {
           try {
             console.log("Getting new trivia token");
             await this.getToken();
-            console.log("Got: " + this.token);
           } catch (error) {
             console.warn(`Failed to get new token - ${error.message}`);
             return false;
@@ -110,11 +108,8 @@ module.exports = (client) => {
       });
 
       return request(this.newURL, options).then((res) => {
-        console.log(get(res, "response_code"));
-        console.log(get(res, "token"));
         if (!isNil(get(res, "token"))) {
           this.token = get(res, "token");
-          console.log("New Token " + get(res, "token"));
           return get(res, "token", {});
         }
 
