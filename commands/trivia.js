@@ -31,7 +31,7 @@ class Trivia extends Command {
       message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
     });
 
-    this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
+    this.timer = new moment.duration(10, "seconds").timer({loop: false, start: true}, async () => {
       this.client.triviaUtil.running = false;
       message.channel.send("<@&512635547320188928> Trivia will now start!");
       await this.trivia(message, this.client.triviaUtil.players);

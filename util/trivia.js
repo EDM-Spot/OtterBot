@@ -59,7 +59,9 @@ module.exports = (client) => {
     }
 
     async getQuestion() {
+      console.log("Current Token: " + this.token);
       return this.req("GET", null, { }).then(async (res) => {
+        console.log("Data: " + res);
         if (isObject(get(res, "results[0]"))) {
           return get(res, "results[0]", {});
         }
