@@ -17,7 +17,11 @@ module.exports = function Command(bot) {
         where: { skipped: false }
       });
 
-      const totalusers = await bot.db.models.users.count();
+      const totalusers = await bot.db.models.users.count({
+        include: [{
+          model: bot.db.models.users
+        }]
+      });
 
       const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + bot.global.pointsWeight.ban + ")";
       const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
