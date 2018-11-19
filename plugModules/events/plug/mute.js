@@ -8,11 +8,17 @@ module.exports = function Event(bot, platform) {
     run: async (data) => {
       if (isNil(data)) return;
 
-      await bot.db.models.bans.create({
-        id: data.user.id,
-        type: "MUTE",
-        duration: data.duration,
-      });
+      try {
+        await bot.db.models.bans.create({
+          id: data.user.id,
+          type: "MUTE",
+          duration: data.duration,
+        });
+      }
+      catch (err) {
+        console.warn(err);
+        console.log(data);
+      }
 
       if (data.moderator.id === bot.plug.getSelf().id) return;
 

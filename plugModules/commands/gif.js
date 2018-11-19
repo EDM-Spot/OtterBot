@@ -18,7 +18,7 @@ module.exports = function Command(bot) {
 
       if (isNil(gif) || gif.data.length < 0) return false;
 
-      if (gif.data.length < 10) {
+      if (gif.data.length <= 10) {
         randomNumb = Math.floor(Math.random() * gif.data.length) + 0;
       }
 
