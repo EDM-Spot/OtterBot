@@ -17,12 +17,6 @@ module.exports = function Command(bot) {
         where: { skipped: false }
       });
 
-      const totalusers = await bot.db.models.users.count({
-        include: [{
-          model: bot.db.models.plays
-        }]
-      });
-
       const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + bot.global.pointsWeight.ban + ")";
       const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
       const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + bot.global.pointsWeight.wlban + ")";
@@ -120,7 +114,7 @@ module.exports = function Command(bot) {
       //const totalpoints = bot.utils.numberWithCommas(Math.round(points));
 
       //this.reply(lang.myrank.result, { rank, totalpoints }, 6e4);
-      this.reply(lang.myrank.result, { rank, totalusers }, 6e4);
+      this.reply(lang.myrank.result, { rank }, 6e4);
       return true;
     },
   });
