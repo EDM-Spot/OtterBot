@@ -19,7 +19,7 @@ module.exports = function Command(bot) {
 
       const totalusers = await bot.db.models.users.count({
         include: [{
-          model: bot.db.models.users
+          model: bot.db.models.plays
         }]
       });
 
