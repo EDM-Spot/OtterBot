@@ -118,7 +118,7 @@ class Trivia extends Command {
 
         console.log(question);
 
-        if (question.correct_answer) {
+        if (question.correct_answer === "True") {
           //forEach(answerFalse, async (loser) => {
           for (const loser of answerFalse) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
@@ -128,7 +128,7 @@ class Trivia extends Command {
             const username = await this.client.triviaUtil.getUsername(loser);
             message.channel.send("Wrong Answer! " + username + " is out of Trivia!");
           }
-        } else {
+        } else if (question.correct_answer === "False") {
           //forEach(answerTrue, async (loser) => {
           for (const loser of answerTrue) {
             currentPlayers = reject(currentPlayers, function(player) { return player === loser; });
