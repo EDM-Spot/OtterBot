@@ -45,9 +45,6 @@ class Trivia extends Command {
 
     const question = await this.client.triviaUtil.getQuestion();
 
-    console.log("//////////////////////NEW QUESTION////////////////////////////////////////////");
-    console.log(question);
-
     const embed = new Discord.RichEmbed()
     //.setTitle("Title")
       .setAuthor(decodeURIComponent(question.category), "http://www.iconsalot.com/asset/icons/freepik/customer-service-2/512/question-icon.png")
@@ -79,16 +76,11 @@ class Trivia extends Command {
         const user = reaction.users.last();
         const chosen = reaction.emoji.name;
 
-        console.log(user + " chose: " + reaction.emoji);
-        console.log("Answer is: " +  question.correct_answer);
-
         if (currentPlayers.includes(user.id)) {
           if (!answerTrue.includes(user.id) && !answerFalse.includes(user.id)) {
             if (chosen === "✅") {
-              console.log(user + " true");
               answerTrue.push(user.id);
             } else if (chosen === "❌") {
-              console.log(user + " false");
               answerFalse.push(user.id);
             }
           }
@@ -110,13 +102,6 @@ class Trivia extends Command {
             message.channel.send("No Answer in time! " + username + " is out of Trivia!");
           }
         }
-
-        console.log("////////////////////answerFalse//////////////////////");
-        console.log(answerFalse);
-        console.log("////////////////////answerTrue//////////////////////");
-        console.log(answerTrue);
-
-        console.log(question);
 
         if (question.correct_answer === "True") {
           //forEach(answerFalse, async (loser) => {
@@ -156,8 +141,6 @@ class Trivia extends Command {
 
           return message.channel.send(username + " won the Trivia!");
         }
-
-        console.log("//////////////////////QUESTION ENDED////////////////////////////////////////////");
 
         message.channel.send("Next Question will start in 30 Seconds!");
         new moment.duration(30, "seconds").timer({loop: false, start: true}, async () => {

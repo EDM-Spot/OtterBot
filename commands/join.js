@@ -37,6 +37,8 @@ class Ping extends Command {
         return message.reply("You're not online on plug!");
       }
 
+      console.log(userPos);
+
       if (!this.client.triviaUtil.check()) {
         return message.reply("Trivia is not running!");
       } else if (isObject(dj) && dj.id === userID) {
