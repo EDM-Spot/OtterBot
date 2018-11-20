@@ -28,10 +28,10 @@ class Ping extends Command {
 
       const userID = userDB.get("discord");
 
-      const dj = this.client.plug.getDJ();
-      const userPos = this.client.plug.getWaitListPosition(userID);
-
       const user = this.client.plug.getUser(userDB.get("id"));
+
+      const dj = this.client.plug.getDJ();
+      const userPos = this.client.plug.getWaitListPosition(user.id);
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         return message.reply("You're not online on plug!");
@@ -41,7 +41,7 @@ class Ping extends Command {
 
       if (!this.client.triviaUtil.check()) {
         return message.reply("Trivia is not running!");
-      } else if (isObject(dj) && dj.id === userID) {
+      } else if (isObject(dj) && dj.id === user.id) {
         return message.reply("You can't join while playing!");
       } else if (userPos >= 0 && userPos <= 5) {
         return message.reply("You are too close to DJ.");
@@ -49,7 +49,7 @@ class Ping extends Command {
 
       if (this.client.triviaUtil.players.includes(userID)) return true;
 
-      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
+      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: user.id }, defaults: { id: user.id } });
 
       const props = inst.get("props");
 
