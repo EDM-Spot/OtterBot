@@ -14,7 +14,7 @@ module.exports = function Command(bot) {
 
       console.log(args);
 
-      const buyType = args.slice(1).shift();
+      const buyType = args[0];
       const url = args.slice(2).join(" ");
 
       console.log(buyType);
