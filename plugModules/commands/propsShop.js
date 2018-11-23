@@ -1,4 +1,7 @@
 const { isNil } = require("lodash");
+const { ROOM_ROLE } = require("plugapi");
+const fs = require("fs");
+const probe = require("probe-image-size");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -31,7 +34,38 @@ module.exports = function Command(bot) {
           return true;
         }
 
-        await bot.shop.saveImage(id, url);
+        probe(url).then(async result => {
+          let free = false;
+          const type = result.type;
+          const width = result.width;
+          const height = result.height;
+  
+          if (width != 65 ||height != 65) {
+            await bot.plug.sendChat("Badge should be 65x65");
+            return false;
+          }
+  
+          if (type != "jpg" && type != "jpeg" && type != "png" && type != "gif") {
+            await bot.plug.sendChat("Image not recognized");
+            return false;
+          }
+  
+          if (type === "gif" && rawData.from.role < ROOM_ROLE.RESIDENTDJ) {
+            await bot.plug.sendChat("Only RDJ+ can have gifs");
+            return false;
+          }
+
+          if (!fs.existsSync(__dirname + `/../../dashboard/public/images/badges/${id}.${type}`) && rawData.from.role >= ROOM_ROLE.BOUNCER) {
+            free = true;
+          }
+  
+          const options = {
+            url: url,
+            dest: `./dashboard/public/images/badges/${id}.${type}`
+          };
+
+          await bot.shop.saveImage(id, options, type, free);
+        });
 
         return true;
       }
