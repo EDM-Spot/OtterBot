@@ -17,16 +17,14 @@ module.exports = function Util(bot) {
       let completeFile = null;
 
       for (const user of users) {
-        const idMap = user.map(instance => instance.get("id"));
-        const badgesMap = user.map(instance => instance.get("badge"));
-
-        const formatID = idMap.map(id => `.id-${id}`);
-        const formatBadge = badgesMap.map(badge => `https://edmspot.tk/public/images/badges/${badge}`);
+        console.log(user);
+        const id = user.get("id");
+        const badge = user.get("badge");
 
         const setTemplate = template
           .replace(/\t/g, "")
-          .replace(/.id-USERID/g, formatID)
-          .replace(/%%BADGE%%/g, formatBadge);
+          .replace(/.id-USERID/g, `.id-${id}`)
+          .replace(/%%BADGE%%/g, `https://edmspot.tk/public/images/badges/${badge}`);
 
         console.log(setTemplate);
         completeFile += setTemplate;
