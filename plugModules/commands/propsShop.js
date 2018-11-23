@@ -39,8 +39,10 @@ module.exports = function Command(bot) {
           const type = result.type;
           const width = result.width;
           const height = result.height;
+
+          console.log(result);
   
-          if (width != 65 ||height != 65) {
+          if (width != 65 || height != 65) {
             await bot.plug.sendChat("Badge should be 65x65");
             return false;
           }
