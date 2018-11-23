@@ -15,6 +15,8 @@ module.exports = function Command(bot) {
       const buyType = args[0];
       const url = args[1];
 
+      console.log(url);
+
       if (isNil(buyType) || isNil(url)) {
         return false;
       }
