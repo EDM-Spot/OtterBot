@@ -14,6 +14,8 @@ module.exports = function Util(bot) {
       const template = await fs.readFile(__dirname + "/../data/badge-template.scss", "utf8");
       const users = await bot.db.models.users.findAll({ where: { badge: { [Op.not]: null } }, attributes: ["id", "badge"] });
 
+      let completeFile = null;
+
       for (const user of users) {
         const idMap = user.map(instance => instance.get("id"));
         const badgesMap = user.map(instance => instance.get("badge"));
@@ -26,8 +28,13 @@ module.exports = function Util(bot) {
           .replace(/.id-USERID/g, formatID)
           .replace(/%%BADGE%%/g, formatBadge);
 
-        await fs.outputFile(__dirname + `/../../dashboard/public/css/${user.get("id")}.scss`, setTemplate);
+        console.log(setTemplate);
+        completeFile += setTemplate;
       }
+
+      console.log(completeFile);
+
+      await fs.outputFile(__dirname + "/../../dashboard/public/css/badges.scss", completeFile);
 
       // build scss and minify it
       gulp.task("default", gulpfile.scss);
