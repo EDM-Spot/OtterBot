@@ -1,6 +1,5 @@
 const { isNil } = require("lodash");
 const { ROOM_ROLE } = require("plugapi");
-const fs = require("fs");
 const probe = require("probe-image-size");
 
 module.exports = function Command(bot) {
@@ -28,6 +27,7 @@ module.exports = function Command(bot) {
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 
         const props = inst.get("props");
+        const badge = inst.get("badge");
 
         if (props < 100) {
           this.reply(lang.join.noProps, {}, 6e4);
@@ -55,11 +55,9 @@ module.exports = function Command(bot) {
             return false;
           }
 
-          if (!fs.existsSync(__dirname + `/../../dashboard/public/images/badges/${id}.${type}`) && rawData.from.role >= ROOM_ROLE.BOUNCER) {
+          if (isNil(badge) && rawData.from.role >= ROOM_ROLE.BOUNCER) {
             free = true;
           }
-
-          console.log(fs.existsSync(__dirname + `/../../dashboard/public/images/badges/${id}.${type}`));
   
           const options = {
             url: url,
