@@ -1,7 +1,7 @@
 $badge: '%%BADGE%%';
 
 #chat-messages {
-    .id-%%ID%% {
+    &.id-%%ID%% {
         .badge-box:hover {
             width: 65px;
             height: 65px;
