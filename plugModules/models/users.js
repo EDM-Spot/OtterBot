@@ -37,6 +37,10 @@ module.exports = async function Model(bot, sequelize) {
       type: sequelize.BIGINT,
       allowNull: true,
     },
+    badge: {
+      type: sequelize.STRING,
+      allowNull: true,
+    },
   });
 
   await Users.sync();

@@ -1,0 +1,12 @@
+#user-rollover.id-%%ID%% .badge-box > i.bdg
+.id-%%ID%% > .badge-box > i.bdg
+{
+	background-image: url(%%BADGE%%);
+}
+
+.id-%%ID%% > .badge-box:hover
+{
+	width: 65px;
+	height: 65px;
+	transition: 0.4s;
+}
