@@ -5,9 +5,9 @@ const probe = require("probe-image-size");
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["buy", "shop"],
-    minimumPermission: 5000,
+    minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 1,
+    cooldownDuration: 120,
     deleteInstantly: true,
     parameters: "[badge <Image>]",
     description: "Props Shop",
