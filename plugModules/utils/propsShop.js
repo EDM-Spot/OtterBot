@@ -16,8 +16,7 @@ module.exports = function Util(bot) {
         console.log(filename);
 
         if (free === "false") {
-          //await inst.decrement("props", { by: 100 });
-          console.log("IT WAS FREE");
+          await inst.decrement("props", { by: 100 });
         }
 
         await bot.db.models.users.update(
