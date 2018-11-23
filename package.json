@@ -5,6 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "assets": "node ./node_modules/gulp/bin/gulp.js",
     "start": "node index.js",
     "postinstall": "node util/setup.js"
   },
@@ -36,6 +37,10 @@
     "express-passport": "^0.1.0",
     "express-session": "^1.15.6",
     "fs-extra": "^7.0.1",
+    "gulp": "^4.0.0",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
     "helmet": "^3.15.0",
     "ioredis": "^4.2.2",
     "klaw": "^3.0.0",
