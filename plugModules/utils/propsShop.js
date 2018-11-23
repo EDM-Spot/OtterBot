@@ -47,6 +47,8 @@ module.exports = function Util(bot) {
             { badge: `${id}.${type}` },
             { where: { id: id }, defaults: { id: id }}
           );
+
+          await bot.utils.generateBadges();
         }).catch((err) => {
           console.warn(err);
         });
