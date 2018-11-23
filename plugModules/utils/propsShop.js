@@ -43,10 +43,10 @@ module.exports = function Util(bot) {
 
           //await inst.decrement("props", { by: 100 });
 
-          //await bot.db.models.users.update(
-            //{ badge: filename },
-            //{ where: { id: id }, defaults: { id: id }}
-          //);
+          await bot.db.models.users.update(
+            { badge: `${id}.${type}` },
+            { where: { id: id }, defaults: { id: id }}
+          );
         }).catch((err) => {
           console.warn(err);
         });

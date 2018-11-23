@@ -12,13 +12,8 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) {
       const { id } = rawData.from;
 
-      console.log(args);
-
       const buyType = args[0];
       const url = args[1];
-
-      console.log(buyType);
-      console.log(url);
 
       if (isNil(buyType) || isNil(url)) {
         return false;
