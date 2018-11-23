@@ -1,7 +1,7 @@
 $badge: '%%BADGE%%';
 
 #chat-messages {
-    &.id-%%ID%% {
+    .id-USERID {
         .badge-box:hover {
             width: 65px;
             height: 65px;
@@ -11,7 +11,7 @@ $badge: '%%BADGE%%';
 }
 
 #user-rollover {
-    &.id-%%ID%% {
+    &.id-USERID {
         .badge-box i.bdg {
             background-image: url($badge);
             background-size: cover;
@@ -26,7 +26,7 @@ $badge: '%%BADGE%%';
 }
 
 #chat-messages {
-    .id-%%ID%% {
+    .id-USERID {
         .badge-box i.bdg {
             background-image: url($badge);
             background-size: cover;

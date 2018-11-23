@@ -22,7 +22,7 @@ module.exports = function Util(bot) {
 
       template = template
         .replace(/\t/g, "")
-        .replace(/&\.id-%%ID%%/g, formatID)
+        .replace(/&\.id-USERID/g, formatID)
         .replace(/%%BADGE%%/g, formatBadge);
 
       await fs.outputFile(__dirname + "/../../dashboard/public/css/badges.scss", template);
