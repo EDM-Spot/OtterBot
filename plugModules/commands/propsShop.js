@@ -58,6 +58,8 @@ module.exports = function Command(bot) {
           if (!fs.existsSync(__dirname + `/../../dashboard/public/images/badges/${id}.${type}`) && rawData.from.role >= ROOM_ROLE.BOUNCER) {
             free = true;
           }
+
+          console.log(fs.existsSync(__dirname + `/../../dashboard/public/images/badges/${id}.${type}`));
   
           const options = {
             url: url,
