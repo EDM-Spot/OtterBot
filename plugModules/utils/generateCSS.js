@@ -17,7 +17,7 @@ module.exports = function Util(bot) {
       const idMap = badges.map(instance => instance.get("id"));
       const badgesMap = badges.map(instance => instance.get("badge"));
 
-      const formatID = idMap.map(id => `& .id-${id}`).join(", ");
+      const formatID = idMap.map(id => `&.id-${id}`).join(", ");
       const formatBadge = badgesMap.map(badge => `https://edmspot.tk/public/images/badges/${badge}`).join(", ");
 
       template = template
