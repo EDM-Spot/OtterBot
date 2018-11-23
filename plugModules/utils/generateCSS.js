@@ -14,7 +14,7 @@ module.exports = function Util(bot) {
       const template = await fs.readFile(__dirname + "/../data/badge-template.scss", "utf8");
       const users = await bot.db.models.users.findAll({ where: { badge: { [Op.not]: null } }, attributes: ["id", "badge"] });
 
-      let completeFile = null;
+      let completeFile = "";
 
       for (const user of users) {
         console.log(user);
