@@ -17,7 +17,6 @@ module.exports = function Util(bot) {
       let completeFile = "";
 
       for (const user of users) {
-        console.log(user);
         const id = user.get("id");
         const badge = user.get("badge");
 
@@ -26,11 +25,8 @@ module.exports = function Util(bot) {
           .replace(/.id-USERID/g, `.id-${id}`)
           .replace(/%%BADGE%%/g, `https://edmspot.tk/public/images/badges/${badge}`);
 
-        console.log(setTemplate);
         completeFile += setTemplate;
       }
-
-      console.log(completeFile);
 
       await fs.outputFile(__dirname + "/../../dashboard/public/css/badges.scss", completeFile);
 
