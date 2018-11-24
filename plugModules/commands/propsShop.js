@@ -27,11 +27,6 @@ module.exports = function Command(bot) {
         const props = inst.get("props");
         const badge = inst.get("badge");
 
-        if (props < 100) {
-          this.reply(lang.propsShop.noProps, {}, 6e4);
-          return true;
-        }
-
         probe(url).then(async result => {
           let free = false;
           const type = result.type;
@@ -57,6 +52,11 @@ module.exports = function Command(bot) {
 
           if (isNil(badge) && rawData.from.role >= ROOM_ROLE.BOUNCER) {
             free = true;
+          } else {
+            if (props < 100) {
+              this.reply(lang.propsShop.noProps, {}, 6e4);
+              return true;
+            }
           }
   
           const options = {

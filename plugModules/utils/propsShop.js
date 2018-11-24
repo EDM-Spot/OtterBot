@@ -15,7 +15,7 @@ module.exports = function Util(bot) {
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
         console.log(free);
         
-        if (free === "false") {
+        if (!free) {
           await inst.decrement("props", { by: 100 });
           console.log("-100 Props");
         }
