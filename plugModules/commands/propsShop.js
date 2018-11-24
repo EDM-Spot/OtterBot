@@ -17,8 +17,6 @@ module.exports = function Command(bot) {
       const buyType = args[0];
       const url = args[1];
 
-      console.log(url);
-
       if (isNil(buyType) || isNil(url)) {
         return false;
       }
@@ -30,7 +28,7 @@ module.exports = function Command(bot) {
         const badge = inst.get("badge");
 
         if (props < 100) {
-          this.reply(lang.join.noProps, {}, 6e4);
+          this.reply(lang.propsShop.noProps, {}, 6e4);
           return true;
         }
 
@@ -43,17 +41,17 @@ module.exports = function Command(bot) {
           console.log(result);
   
           if (width != 65 || height != 65) {
-            await bot.plug.sendChat("Badge should be 65x65");
+            this.reply(lang.propsShop.imageSize, {}, 6e4);
             return false;
           }
   
           if (type != "jpg" && type != "jpeg" && type != "png" && type != "gif") {
-            await bot.plug.sendChat("Image not recognized");
+            this.reply(lang.propsShop.imageType, {}, 6e4);
             return false;
           }
   
           if (type === "gif" && rawData.from.role < ROOM_ROLE.RESIDENTDJ) {
-            await bot.plug.sendChat("Only RDJ+ can have gifs");
+            this.reply(lang.propsShop.imageRDJ, {}, 6e4);
             return false;
           }
 

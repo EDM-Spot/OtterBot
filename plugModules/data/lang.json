@@ -106,6 +106,12 @@
       "isPlaying": "You can't play the roulette while DJing!",
       "closeToPlaying": "You're too close to DJing to join!"
     },
+    "propsShop": {
+      "noProps": "You do not have enough props!",
+      "imageSize": "Badge Image should be 65x65 px",
+      "imageType": "Image Extension should be jpg, png or gif.",
+      "imageRDJ": "GIF Bagde is only avaiable to RDJ+."
+    },
     "dc": {
       "noRecentDisconnection": "You haven't disconnected recently.",
       "isPlaying": "You cannot use !dc while you're DJing.",

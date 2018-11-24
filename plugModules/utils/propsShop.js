@@ -11,12 +11,13 @@ module.exports = function Util(bot) {
         return;
       }
 
-      download.image(options).then(async ({ filename, image }) => {
+      download.image(options).then(async ({ filename, image }) => { // eslint-disable-line no-unused-vars
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
-        console.log(filename);
-
+        console.log(free);
+        
         if (free === "false") {
           await inst.decrement("props", { by: 100 });
+          console.log("-100 Props");
         }
 
         await bot.db.models.users.update(
@@ -24,7 +25,7 @@ module.exports = function Util(bot) {
           { where: { id: id }, defaults: { id: id }}
         );
 
-        await bot.plug.sendChat("Thanks for the purchase.");
+        await bot.plug.sendChat("Thanks for your Badge purchase!");
 
         await bot.utils.generateBadges();
       }).catch((err) => {
