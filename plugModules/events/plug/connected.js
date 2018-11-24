@@ -26,7 +26,9 @@ module.exports = function Event(bot, filename, platform) {
       var randomTimedText = [
         "Join our Discord https://discord.gg/GETaTWm",
         "Feel free to visit our website here: https://edmspot.tk/",
-        "Don't forget to read our Rules https://edmspot.tk/rules"
+        "Don't forget to read our Rules https://edmspot.tk/rules",
+        "Want a custom Badge? See how here: https://goo.gl/6rorFB",
+        "Link your account with discord to be able to play discord games and more! See how here: https://goo.gl/MCPYvB"
       ];
 
       new moment.duration(80, "minutes").timer({loop: true, start: true}, async () => {
