@@ -96,7 +96,7 @@ module.exports = function Util(bot) {
           const tolerance = 10;
           const userPoints = points + tolerance;
 
-          if ((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) {
+          if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
             await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
 
             if (!isNil(userDB.get("discord"))) {
@@ -133,7 +133,7 @@ module.exports = function Util(bot) {
             const tolerance = 10;
             const userPoints = points + tolerance;
 
-            if ((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) {
+            if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
               await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
   
               if (!isNil(userDB.get("discord"))) {
