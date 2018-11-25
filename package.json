@@ -59,7 +59,7 @@
     "pg": "^7.6.1",
     "plugapi": "^5.1.0",
     "probe-image-size": "^4.0.0",
-    "qs": "^6.5.2",
+    "qs": "^6.6.0",
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
