@@ -1,6 +1,6 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <% if(user) { %>
-  <% if(user.id === bot.appInfo.owner.id) { %>
+  <% if(user.id === bot.appInfo.owner.id || bot.config.admins.includes(user.id)) { %>
     <div class="jumbotron" style="padding-top: 20px;">
       <div class="row justify-content-center d-flex">
         <h4><i class="fas fa-comments"></i> Plug Chat </h4>

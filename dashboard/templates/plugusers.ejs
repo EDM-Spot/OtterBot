@@ -1,6 +1,6 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <% if(user) { %>
-  <% if(user.id === bot.appInfo.owner.id) { %>
+  <% if(user.id === bot.appInfo.owner.id || bot.config.admins.includes(user.id)) { %>
     <div class="jumbotron" style="padding-top: 20px;">
       <div class="row">
         Woots: <input type="number" id="woots" value="<%= bot.global.pointsWeight.woots %>">
