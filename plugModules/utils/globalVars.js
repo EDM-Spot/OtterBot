@@ -3,6 +3,7 @@ module.exports = function Util(bot) {
     constructor() {
       this.ignoreHistoryNext = false;
       this.isSkippedByTimeGuard = false;
+      this.isSkippedByMehGuard = false;
 
       this.pointsWeight = {
         woots: 1.42,

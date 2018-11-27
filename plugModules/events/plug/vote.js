@@ -15,6 +15,8 @@ module.exports = function Event(bot, filename, platform) {
       const mehPercent = Math.round((mehCount / usersCount) * 100);
 
       if (mehPercent >= 6) {
+        bot.global.isSkippedByMehGuard = true;
+        
         await bot.plug.sendChat(`@${dj.username} ` + bot.lang.mehSkip);
         await bot.plug.moderateForceSkip();
       }

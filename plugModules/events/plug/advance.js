@@ -198,6 +198,11 @@ module.exports = function Event(bot, filename, platform) {
           bot.global.isSkippedByTimeGuard = false;
         }
 
+        if (bot.global.isSkippedByMehGuard) {
+          lastPlaySkipped = false;
+          bot.global.isSkippedByMehGuard = false;
+        }
+
         // keep track of played media in the room
         await bot.db.models.plays.create({
           cid: lastPlay.media.cid,
