@@ -35,6 +35,7 @@
     "rcs": "Want custom emotes and more customizability for plug.dj? Get the RCS Extension/Script! https://rcs.radiant.dj %%MENTION%%",
     "emotes": "You can find the emotes here: https://rcs.radiant.dj/emotes / https://emotes.tastycat.org / https://www.twitchmetrics.net/emotes %%MENTION%%",
     "myID": "Your ID is %%ID%%",
+    "joined": "You Joined this community %%JOINED%%",
     "discord": "Join EDM Spot's Official Discord: https://discord.gg/GETaTWm",
     "app": "plug.dj has Official apps for both iOS and Android! Check out their Blog post: https://blog.plug.dj/2017/03/mobile-app-release/ %%MENTION%%",
     "xp": "you have %%POINTS%% XP!",
