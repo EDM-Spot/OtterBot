@@ -29,11 +29,9 @@ module.exports = function Event(bot, filename, platform) {
 
       bot.channels.get("486637288923725824").send({embed});
 
-      console.log(data.users.map((item) => { if (item.user != null) { return `${item.user.id}`; }}));
-      console.log(data);
-      console.log(data.users.map((item) => { if (item.user != null) { return `${item.id}`; }}));
+      console.log(data.users.map((item) => { if (item.user != null) { return `${item.user.id}`; }})[0]);
 
-      await bot.utils.updateRDJ(data.users.map((item) => { if (item.user != null) { return `${item.user.id}`; }}));
+      await bot.utils.updateRDJ(data.users.map((item) => { if (item.user != null) { return `${item.user.id}`; }})[0]);
     },
     init() {
       bot.plug.on(this.name, this.run);
