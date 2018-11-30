@@ -1,5 +1,6 @@
 const { isObject, isNaN } = require("lodash");
 const { ROOM_ROLE } = require("plugapi");
+const moment = require("moment");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -53,6 +54,9 @@ module.exports = function Command(bot) {
           return true;
         }
         case "start": {
+          const day = moment().isoWeekday();
+          const isWeekend = (day === 5) || (day === 6) || (day === 7);
+
           if (await bot.russianRoulette.check()) {
             this.reply(lang.russianroulette.started, {}, 6e4);
             return true;
@@ -68,7 +72,7 @@ module.exports = function Command(bot) {
             return true;
           }
 
-          let duration = 60;
+          let duration = 120;
 
           if (args.length) {
             const specifiedDuration = parseInt(args.shift(), 10);
@@ -84,11 +88,11 @@ module.exports = function Command(bot) {
           let price = 1;
 
           if (args.length) {
-            const specifiedPrice = parseInt(args.shift(), 10);
+            let specifiedPrice = parseInt(args.shift(), 10);
 
-            //if (specifiedPrice === 0) {
-            //   specifiedPrice = 1;
-            //}
+            if (specifiedPrice === 0) {
+              specifiedPrice = 1;
+            }
 
             if (isNaN(specifiedPrice) && specifiedPrice <= 100) {
               this.reply(lang.russianroulette.invalidPrice, {}, 6e4);
@@ -98,8 +102,17 @@ module.exports = function Command(bot) {
             price = specifiedPrice;
           }
 
+          if (isWeekend) {
+            price = 0;
+          }
+
           await bot.russianRoulette.start(duration, price);
-          this.reply(lang.russianroulette.starting, {}, duration * 1e3);
+
+          if (isWeekend) {
+            await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.startingWeekend, {}), duration * 1e3);
+          }
+          
+          await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.starting, {}), duration * 1e3);
 
           await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.info, {
             duration,
