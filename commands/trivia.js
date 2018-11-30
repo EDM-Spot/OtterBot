@@ -15,6 +15,10 @@ class Trivia extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
+    if (await this.client.roulette.check() || await this.client.russianroulette.check() || this.client.triviaUtil.check()) {
+      return true;
+    }
+    
     let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. \n";
     startMessage += "You will be warned 30 seconds before it starts. \n";
     startMessage += "Press ✅ or ❌ to answer the question. The trivia will continue until only one stays. \n";
@@ -32,7 +36,6 @@ class Trivia extends Command {
     });
 
     this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
-      this.client.triviaUtil.running = false;
       message.channel.send("<@&512635547320188928> Trivia will now start!");
       await this.trivia(message, this.client.triviaUtil.players);
     });
