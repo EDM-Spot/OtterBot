@@ -5,7 +5,7 @@ const moment = require("moment");
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["russianroulette", "rr"],
-    minimumPermission: 3000,
+    minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,
     parameters: "<check|end|start [duration] [price]>",
@@ -54,6 +54,7 @@ module.exports = function Command(bot) {
           return true;
         }
         case "start": {
+          const waitlist = bot.plug.getWaitList();
           const day = moment().isoWeekday();
           const isWeekend = (day === 5) || (day === 6) || (day === 7);
 
@@ -70,6 +71,11 @@ module.exports = function Command(bot) {
               remaining: Math.ceil(cooldown / 60),
             });
             return true;
+          }
+
+          if (waitlist.length < 15) {
+            this.reply(lang.russianroulette.invalidWaitlist, {}, 6e4);
+            return false;
           }
 
           let duration = 120;

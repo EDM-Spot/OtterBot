@@ -54,6 +54,7 @@ module.exports = function Command(bot) {
           return true;
         }
         case "start": {
+          const waitlist = bot.plug.getWaitList();
           const day = moment().isoWeekday();
           const isWeekend = (day === 5) || (day === 6) || (day === 7);
 
@@ -70,6 +71,11 @@ module.exports = function Command(bot) {
               remaining: Math.ceil(cooldown / 60),
             });
             return true;
+          }
+
+          if (waitlist.length < 10) {
+            this.reply(lang.roulette.invalidWaitlist, {}, 6e4);
+            return false;
           }
 
           let duration = 60;
