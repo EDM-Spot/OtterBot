@@ -4,6 +4,7 @@
   "exceedstimeguard": "your media exceeds the defined maximum length (6m30s)!",
   "blacklisted": "your media is Blacklisted!",
   "advanceprops": "%%USER%% got %%PROPS%% prop%%PLURAL%% for the song they just played.",
+  "advanceholiday": ":christmasballs1: %%USER%% got %%RANDOM%% :fplcandy: for the theme song played. :christmasballs1:",
   "pointsMilestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",
   "mehSkip": "your media received too many Mehs.",
   "stuckSkip": "Song stuck, force skipping...",
@@ -64,6 +65,10 @@
       "given": "You have given away %%PROPS%% prop%%PLURAL%%!",
       "noneGiven": "You have not given props to anyone yet! Use !props to do so.",
       "noProps": "You don't have any props! Play a song to get some."
+    },
+    "myevent": {
+      "result": "You have %%CURRENCY%% :fplcandy:",
+      "noCurrency": "You don't have any :fplcandy:! Play a THEME song to get some."
     },
     "myrank": {
       "result": "You're currently ranked at position %%RANK%%."

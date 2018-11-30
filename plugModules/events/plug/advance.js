@@ -251,6 +251,24 @@ module.exports = function Event(bot, filename, platform) {
 
         // if they weren't skipped they deserve XP equivalent to the votes
         if (!lastPlaySkipped) {
+          if (bot.global.isHolidaySong) {
+            const random = Math.floor(Math.random()*(3-1+1)+1);
+  
+            const [holidayUser] = await bot.db.models.holiday.findOrCreate({
+              where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id },
+            });
+  
+            await holidayUser.increment("played", { by: 1 });
+            await holidayUser.increment("currency", { by: random });
+  
+            await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceholiday, {
+              random,
+              user: lastPlay.user.username
+            }), data.media.duration * 1e3);
+  
+            bot.global.isHolidaySong = false;
+          }
+          
           // if no props were given, we done here
           if (!props) return;
 

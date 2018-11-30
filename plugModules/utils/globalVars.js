@@ -4,6 +4,7 @@ module.exports = function Util(bot) {
       this.ignoreHistoryNext = false;
       this.isSkippedByTimeGuard = false;
       this.isSkippedByMehGuard = false;
+      this.isHolidaySong = false;
 
       this.pointsWeight = {
         woots: 1.42,
