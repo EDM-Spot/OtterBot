@@ -83,6 +83,11 @@ module.exports = function Command(bot) {
         if (buyGift === "badge") {
           const userMention = rawData.mentions[0];
 
+          if (!isObject(userMention)) {
+            this.reply(lang.userNotFound, {}, 6e4);
+            return false;
+          }
+
           const user = bot.plug.getUser(userMention.id);
       
           if (!isObject(user)) {
