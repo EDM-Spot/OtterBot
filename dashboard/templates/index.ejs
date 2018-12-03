@@ -32,7 +32,21 @@
           <div class="col-md-6">
             <h2>Upcoming Events</h2>
             <hr>
-            <p class="font-italic text-muted">No upcoming events.</p>
+            <!-- <p class="font-italic text-muted">No upcoming events.</p> -->
+            <div class="row row-striped">
+              <div class="col-2 text-right">
+                <h1 class="display-4"><span class="badge badge-primary">21</span></h1>
+                <h2>DEC</h2>
+              </div>
+              <div class="col-10">
+                <h3 class="text-uppercase"><strong>Holiday Party</strong></h3>
+                <ul class="list-inline">
+                  <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i> Friday</li>
+                  <li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i> To be Defined</li>
+                </ul>
+                <p>Join us at the first EDM Spot Event! Have fun and win prizes.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -181,5 +195,7 @@
       }
     ]
   });
+
+  $('#flyerModal').modal();
 </script>
 <% include ./blocks/footer %>
