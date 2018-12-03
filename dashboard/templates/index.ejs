@@ -41,8 +41,8 @@
               <div class="col-10">
                 <h3 class="text-uppercase"><strong>Holiday Party</strong></h3>
                 <ul class="list-inline">
-                  <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i> Friday</li>
-                  <li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i> To be Defined</li>
+                  <li class="list-inline-item"><i class="far fa-calendar"></i> Friday</li>
+                  <li class="list-inline-item"><i class="far fa-clock"></i> To be Defined</li>
                 </ul>
                 <p>Join us at the first EDM Spot Event! Have fun and win prizes.</p>
               </div>
@@ -196,12 +196,14 @@
     ]
   });
 
-  $('#flyerModal').modal();
+  $(window).on('load',function(){
+    $('#flyerModal').modal();
+  });
 </script>
 <div class="modal fade" id="flyerModal" tabindex="-1" role="dialog" aria-labelledby="flyerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <img src="https://cdn.discordapp.com/attachments/485173519911747614/519279738196459520/HolidayParty.png">
+      <img class="img-responsive" src="https://cdn.discordapp.com/attachments/485173519911747614/519279738196459520/HolidayParty.png">
     </div>
   </div>
 </div>
