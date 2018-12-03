@@ -112,11 +112,15 @@ module.exports = function Command(bot) {
             price = 0;
           }
 
+          price = 0;
+
           await bot.russianRoulette.start(duration, price);
 
           if (isWeekend) {
-            await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.startingWeekend, {}), duration * 1e3);
+            //await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.startingWeekend, {}), duration * 1e3);
           }
+
+          await bot.plug.sendChat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
           
           await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.starting, {}), duration * 1e3);
 
