@@ -6,7 +6,7 @@ module.exports = function Util(bot) {
     constructor() {
 
     }
-    async saveImage(id, options, type, free) {
+    async saveImage(id, options, type, free, event = false) {
       if (isNil(options)) {
         return;
       }
@@ -18,6 +18,11 @@ module.exports = function Util(bot) {
         if (!free) {
           await inst.decrement("props", { by: 100 });
           console.log("-100 Props");
+        }
+
+        if (event) {
+          const [eventUser] = await bot.db.models.holiday.findOrCreate({ where: { id }, defaults: { id } });   
+          await eventUser.decrement("currency", { by: 1500 });
         }
 
         await bot.db.models.users.update(

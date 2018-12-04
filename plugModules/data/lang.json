@@ -121,6 +121,12 @@
       "imageType": "Image Extension should be jpg, png or gif.",
       "imageRDJ": "GIF Bagde is only avaiable to RDJ+."
     },
+    "eventShop": {
+      "noCandies": "You do not have enough candies!",
+      "imageSize": "Badge Image should be 65x65 px",
+      "imageType": "Image Extension should be jpg, png or gif.",
+      "imageRDJ": "GIF Bagde is only avaiable to RDJ+."
+    },
     "dc": {
       "noRecentDisconnection": "You haven't disconnected recently.",
       "isPlaying": "You cannot use !dc while you're DJing.",
