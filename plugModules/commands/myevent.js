@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["myevent"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 21600,
+    cooldownDuration: 3600,
     parameters: "",
     description: "Checks how many event currency do you have.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
