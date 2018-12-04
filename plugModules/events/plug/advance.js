@@ -252,7 +252,13 @@ module.exports = function Event(bot, filename, platform) {
         // if they weren't skipped they deserve XP equivalent to the votes
         if (!lastPlaySkipped) {
           if (bot.global.isHolidaySong) {
-            const random = Math.floor(Math.random()*(30-1+1)+1);
+            let random = Math.floor(Math.random()*(30-1+1)+1);
+
+            if (!props) {
+              // No Props
+            } else if (props >= 3) {
+              random = Math.floor(Math.random()*(50-1+1)+1);
+            }
   
             const [holidayUser] = await bot.db.models.holiday.findOrCreate({
               where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id },
@@ -268,7 +274,7 @@ module.exports = function Event(bot, filename, platform) {
   
             bot.global.isHolidaySong = false;
           }
-          
+
           // if no props were given, we done here
           if (!props) return;
 
