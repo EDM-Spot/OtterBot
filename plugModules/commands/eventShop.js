@@ -55,7 +55,7 @@ module.exports = function Command(bot) {
             return false;
           }
 
-          if (currency < 1500) {
+          if (currency < 700) {
             this.reply(lang.eventShop.noCandies, {}, 6e4);
             return true;
           }
@@ -72,7 +72,7 @@ module.exports = function Command(bot) {
       }
 
       if (args.length && buyType === "icon") {
-        if (currency < 2500) {
+        if (currency < 1200) {
           this.reply(lang.eventShop.noCandies, {}, 6e4);
           return true;
         }
@@ -94,7 +94,7 @@ module.exports = function Command(bot) {
       }
 
       if (args.length && buyType === "move") {
-        if (currency < 200) {
+        if (currency < 150) {
           this.reply(lang.eventShop.noCandies, {}, 6e4);
           return true;
         }
