@@ -22,7 +22,7 @@ module.exports = function Util(bot) {
 
         if (event) {
           const [eventUser] = await bot.db.models.holiday.findOrCreate({ where: { id }, defaults: { id } });   
-          await eventUser.decrement("currency", { by: 1500 });
+          await eventUser.decrement("currency", { by: 1200 });
         }
 
         await bot.db.models.users.update(

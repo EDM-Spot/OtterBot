@@ -55,7 +55,7 @@ module.exports = function Command(bot) {
             return false;
           }
 
-          if (currency < 700) {
+          if (currency < 1200) {
             this.reply(lang.eventShop.noCandies, {}, 6e4);
             return true;
           }
@@ -72,12 +72,12 @@ module.exports = function Command(bot) {
       }
 
       if (args.length && buyType === "icon") {
-        if (currency < 1200) {
+        if (currency < 1500) {
           this.reply(lang.eventShop.noCandies, {}, 6e4);
           return true;
         }
 
-        await eventUser.decrement("currency", { by: 2500 });
+        await eventUser.decrement("currency", { by: 1500 });
 
         const embed = new Discord.RichEmbed()
           .setColor(0xFF00FF)
@@ -94,7 +94,7 @@ module.exports = function Command(bot) {
       }
 
       if (args.length && buyType === "move") {
-        if (currency < 150) {
+        if (currency < 200) {
           this.reply(lang.eventShop.noCandies, {}, 6e4);
           return true;
         }
