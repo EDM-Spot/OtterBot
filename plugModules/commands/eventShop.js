@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
     cooldownType: "perUser",
     cooldownDuration: 120,
     deleteInstantly: true,
-    parameters: "[badge <Image>]",
+    parameters: "[badge <Image>] || [icon] || [move]",
     description: "Event Shop",
     async execute(rawData, { args }, lang) {
       const { id } = rawData.from;
