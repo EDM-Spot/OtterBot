@@ -1,7 +1,5 @@
 const moment = require("moment");
-const {
-  isObject, isNil, get, map, sortBy,
-} = require("lodash");
+const { isObject, isNil, get, map, sortBy } = require("lodash");
 
 var savedMessageID;
 var savedMessage;
@@ -72,7 +70,7 @@ module.exports = function Event(bot, filename, platform) {
         console.log(err);
       }
 
-      const blackword = ["nightcore", "bass boosted", "whatsapp", "gemido", "gemidão", "rape"];
+      const blackword = ["nightcore", "nightstep", "bass boosted", "whatsapp", "gemido", "gemidão", "rape"];
 
       for (let i=0; i < blackword.length; i++) {
         var pattern = new RegExp("(<=\\s|\\b)"+ blackword[i] +"(?=[]\\b|\\s|$)");
@@ -200,7 +198,6 @@ module.exports = function Event(bot, filename, platform) {
 
         if (bot.global.isSkippedByMehGuard) {
           lastPlaySkipped = false;
-          bot.global.isSkippedByMehGuard = false;
         }
 
         // keep track of played media in the room
@@ -276,7 +273,10 @@ module.exports = function Event(bot, filename, platform) {
           }
 
           // if no props were given, we done here
-          if (!props) return;
+          if (!props || bot.global.isSkippedByMehGuard) {
+            bot.global.isSkippedByMehGuard = false;
+            return;
+          }
 
           // otherwise, give them the props
           await instance.increment("props", { by: props });
