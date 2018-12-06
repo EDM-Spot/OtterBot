@@ -249,12 +249,19 @@ module.exports = function Event(bot, filename, platform) {
         // if they weren't skipped they deserve XP equivalent to the votes
         if (!lastPlaySkipped) {
           if (bot.global.isHolidaySong) {
+            const day = moment().isoWeekday();
+            const isWeekend = (day === 5) || (day === 6) || (day === 7);
+
             let random = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
 
             if (!props) {
               // No Props
             } else if (props >= 3) {
               random = Math.floor(Math.random() * (60 - 20 + 1)) + 20;
+            }
+
+            if (isWeekend) {
+              random = random * 2;
             }
   
             const [holidayUser] = await bot.db.models.holiday.findOrCreate({

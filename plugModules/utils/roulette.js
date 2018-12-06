@@ -1,4 +1,5 @@
 const { each } = require("lodash");
+const moment = require("moment");
 
 module.exports = function Util(bot) {
   class RouletteUtil {
@@ -82,6 +83,21 @@ module.exports = function Util(bot) {
       if (!user || typeof user.username !== "string" || !user.username.length) {
         this.winner(players.filter(player => player !== winner));
         return;
+      }
+
+      const day = moment().isoWeekday();
+      const isWeekend = (day === 5) || (day === 6) || (day === 7);
+
+      if (isWeekend) {
+        const random = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
+
+        const [holidayUser] = await bot.db.models.holiday.findOrCreate({
+          where: { id: user.id }, defaults: { id: user.id },
+        });
+
+        await holidayUser.increment("currency", { by: random });
+
+        await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
       }
 
       await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.winner, {
