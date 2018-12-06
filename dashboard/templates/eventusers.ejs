@@ -22,11 +22,8 @@
               <%= i + 1 %>
             </td>
             <td class="text-center">
-            <% console.log(event[i].dataValues.user) %>
-            <% console.log(event[i].dataValues.user.users) %>
-            <% console.log(event[i].dataValues.user.dataValues) %>
-              <%= event[i].dataValues.user.dataValues[0].username %>
-          </td>
+              <%= event[i].dataValues.user.dataValues.username %>
+            </td>
             <td class="text-center">
               <%= event[i].dataValues.played %>
             </td>
