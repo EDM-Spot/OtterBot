@@ -306,14 +306,14 @@ module.exports = (client) => {
   });
 
   app.get("/eventusers", async (req, res) => {
-    const instance = await client.db.models.holiday.findAll({
+    const event = await client.db.models.holiday.findAll({
       include: [{
         model: client.db.models.users
       }],
       order: [["currency", "DESC"]]
     });
 
-    renderTemplate(res, req, "eventusers.ejs", { instance });
+    renderTemplate(res, req, "eventusers.ejs", { event });
   });
 
   app.get("/messages", async (req, res) => {
