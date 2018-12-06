@@ -7,10 +7,10 @@ module.exports = function Util(bot) {
       this.isHolidaySong = false;
 
       this.pointsWeight = {
-        woots: 1.5,
-        mehs: 3.9,
-        grabs: 2.3,
-        propsGiven: 0.04,
+        woots: 1.2,
+        mehs: 1.3,
+        grabs: 1.45,
+        propsGiven: 0.05,
         messages: 0.022,
         ban: 1.35,
         wlban: 0.47,
