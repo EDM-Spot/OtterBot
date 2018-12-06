@@ -305,6 +305,17 @@ module.exports = (client) => {
     renderTemplate(res, req, "plugusers.ejs", {});
   });
 
+  app.get("/eventusers", async (req, res) => {
+    const instance = await client.db.models.holiday.findAll({
+      include: [{
+        model: client.db.models.users
+      }],
+      order: [["currency", "DESC"]]
+    });
+
+    renderTemplate(res, req, "eventusers.ejs", { instance });
+  });
+
   app.get("/messages", async (req, res) => {
     const messages = await client.db.models.messages.findAll({
       where: {
