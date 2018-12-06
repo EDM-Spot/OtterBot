@@ -17,7 +17,6 @@
         </thead>
         <tbody>
           <% for (let i = 0; i < event.length; i++) { %>
-          <% console.log(event[i]) %>
           <tr>
             <td class="text-center">
               <%= i + 1 %>
@@ -25,8 +24,8 @@
             <td class="text-center">
             <% console.log(event[i].dataValues.user) %>
             <% console.log(event[i].dataValues.user.users) %>
-            <% console.log(event[i].dataValues.user.users[0]) %>
-              <%= event[i].dataValues.user.users[0].dataValues.username %>
+            <% console.log(event[i].dataValues.users.dataValues) %>
+              <%= event[i].dataValues.users.dataValues.username %>
           </td>
             <td class="text-center">
               <%= event[i].dataValues.played %>
