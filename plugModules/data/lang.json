@@ -198,12 +198,6 @@
       "whenPossible": "when a spot frees up on the wait list",
       "now": "now"
     },
-    "twitchlink": {
-      "info": "If you're a subscriber to Nightblue3, connect your plug.dj and Twitch.tv accounts to receive the Resident DJ role! https://plugdj.info/auth/twitch",
-      "invalidKey": "That key is invalid.",
-      "linked": "Your plug.dj and twitch.tv accounts have been linked.",
-      "linkedWithoutPromoting": "Your accounts have been linked, but since you already have a role, you will not be set to Resident DJ."
-    },
     "queue": {
       "cleared": "The queue was cleared.",
       "current": "Current queue: %%USERS%%",
