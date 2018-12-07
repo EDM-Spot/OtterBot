@@ -23,7 +23,7 @@ class Ping extends Command {
       });
 
       if (isNil(userDB)) {
-        return message.reply("You need to link your account first!");
+        return message.reply("You need to link your account first! Read how here: http://prntscr.com/ls539m");
       }
 
       const userID = userDB.get("discord");
