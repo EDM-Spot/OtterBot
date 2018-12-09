@@ -42,8 +42,8 @@
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "helmet": "^3.15.0",
-    "image-downloader": "^3.4.1",
-    "ioredis": "^4.2.3",
+    "image-downloader": "^3.4.2",
+    "ioredis": "^4.3.0",
     "klaw": "^3.0.0",
     "level-session-store": "^2.1.0",
     "linear-promise-backoff-queue": "^1.0.0",
@@ -66,7 +66,7 @@
     "sequelize": "^4.41.2"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.10.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-react": "^7.11.1"
   }
