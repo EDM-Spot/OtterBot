@@ -130,7 +130,6 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        await bot.wait(2000);
         const getHistory = bot.plug.getHistory();
         const sortHistory = sortBy(getHistory, ["timestamp"]);
         const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
@@ -298,7 +297,7 @@ module.exports = function Event(bot, filename, platform) {
         bot.global.ignoreHistoryNext = false;
         await bot.utils.updateRDJ(lastPlay.user.id);
       } catch (err) {
-        console.error(err);
+        console.warn(err);
       }
     },
     init() {
