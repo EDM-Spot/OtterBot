@@ -93,7 +93,7 @@ module.exports = function Util(bot) {
         if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
         if (user.role === ROOM_ROLE.RESIDENTDJ) {
-          const tolerance = 10;
+          const tolerance = 20;
           const userPoints = points + tolerance;
 
           if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
@@ -130,7 +130,7 @@ module.exports = function Util(bot) {
           if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
           if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
-            const tolerance = 10;
+            const tolerance = 20;
             const userPoints = points + tolerance;
 
             if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
