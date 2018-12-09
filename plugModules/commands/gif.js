@@ -22,6 +22,8 @@ module.exports = function Command(bot) {
         randomNumb = Math.floor(Math.random() * gif.data.length) + 0;
       }
 
+      if (isNil(gif.data[randomNumb])) return false;
+
       this.reply(lang.gif, { url: gif.data[randomNumb].images.downsized.url });
       return true;
     },
