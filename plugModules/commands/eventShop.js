@@ -22,7 +22,7 @@ module.exports = function Command(bot) {
       const buyType = args[0];
       const url = args[1];
 
-      if (isNil(buyType) || isNil(url)) {
+      if (isNil(buyType)) {
         return false;
       }
 
@@ -33,6 +33,10 @@ module.exports = function Command(bot) {
       const currency = eventUser.get("currency");
 
       if (args.length && buyType === "badge") {
+        if (isNil(url)) {
+          return false;
+        }
+
         probe(url).then(async result => {
           const type = result.type;
           const width = result.width;
