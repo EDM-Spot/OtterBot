@@ -22,15 +22,21 @@ module.exports = function Command(bot) {
       const buyType = args[0];
       const url = args[1];
 
+      console.log(buyType);
+
       if (isNil(buyType)) {
         return false;
       }
 
       const [eventUser] = await bot.db.models.holiday.findOrCreate({ where: { id }, defaults: { id } });
 
+      console.log(eventUser);
+
       if (isNil(eventUser)) return false;
 
       const currency = eventUser.get("currency");
+
+      console.log(currency);
 
       if (args.length && buyType === "badge") {
         if (isNil(url)) {
@@ -74,6 +80,8 @@ module.exports = function Command(bot) {
 
         return true;
       }
+
+      console.log(args.length);
 
       if (args.length && buyType === "icon") {
         if (currency < 1500) {
