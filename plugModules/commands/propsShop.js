@@ -34,6 +34,7 @@ module.exports = function Command(bot) {
           const width = result.width;
           const height = result.height;
 
+          console.log(rawData.from.username);
           console.log(result);
   
           if (width != 65 || height != 65) {
