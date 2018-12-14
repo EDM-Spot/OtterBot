@@ -16,7 +16,7 @@ module.exports = function Command(bot) {
       const { id } = rawData.from;
 
       if (rawData.from.role >= ROOM_ROLE.BOUNCER) {
-        return false;
+        //return false;
       }
 
       const buyType = args[0];
