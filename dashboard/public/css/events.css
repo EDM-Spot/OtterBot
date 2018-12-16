@@ -98,3 +98,36 @@
     top: 140px;
     left: 130px;
 }
+
+/* 34187258 - 𝙵𝚛𝚘𝚜𝚝𝚀𝚞𝚎𝚎𝚗 */
+#user-rollover.id-34187258 .meta{
+    height: 166px !important;
+}
+
+[data-cid^="34187258"] .msg .from .un {
+    background-image: url("https://edmspot.tk/public/images/events/xmas2018.png");
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    background-size: 14px auto;
+    top: 2px;
+    z-index: 0;
+    width: 15px;
+    height: 15px;
+    position: relative;
+    padding-left: 19px;
+}
+
+#user-rollover.id-34187258 .meta:before{
+    content: url("https://edmspot.tk/public/images/events/xmas2018.png");
+    top: 140px;
+    left: 109px;
+    position: absolute;
+}
+
+#user-rollover.id-34187258 .meta:after{
+    content: 'Christmas Event 2018';
+    color: #b9290f;
+    position: absolute;
+    top: 140px;
+    left: 130px;
+}
