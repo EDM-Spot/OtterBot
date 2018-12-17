@@ -25,7 +25,7 @@ module.exports = class Command {
   async handleDeletion() {
     const { registeredCommand, name } = this.instance;
 
-    if (get(this.rawData, "user.gRole", 0) >= GLOBAL_ROLES.MODERATOR) return;
+    if (get(this.rawData, "user.gRole", 0) >= GLOBAL_ROLES.AMBASSADOR) return;
 
     if (IMMEDIATE_DELETION.includes(name) || registeredCommand.minimumPermission >= ROOM_ROLE.RESIDENTDJ) {
       await this.bot.plug.moderateDeleteChat(this.rawData.id); //this.rawData.delete();
