@@ -13,11 +13,6 @@ module.exports = function Command(bot) {
 
       let winners = rawData.args.join(" ");
 
-      await bot.db.models.holiday.update(
-        { ticket: true },
-        { where: { ticket: false }, defaults: { ticket: false }}
-      );
-
       const playersBD = await bot.db.models.holiday.findAll({
         where: { ticket: true }
       });
@@ -43,23 +38,17 @@ module.exports = function Command(bot) {
           console.log("User Offline! Picking up someone else...");
 
           players.filter(player => player !== winner);
-          await bot.wait(5000);
         } else {
 
-          //await bot.plug.sendChat("Winner " + i + " - " + user.username);
-          console.log("Winner " + i + " - " + user.username);
-        
+          await bot.plug.sendChat("Winner " + i + " - " + user.username);
+
+          players.filter(player => player !== winner);
           await bot.wait(5000);
 
           i++;
           winners--;
         }
       }
-
-      await bot.db.models.holiday.update(
-        { ticket: false },
-        { where: { ticket: true }, defaults: { ticket: true }}
-      );
 
       return true;
     },
