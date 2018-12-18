@@ -26,7 +26,9 @@ module.exports = function Command(bot) {
 
       if (!isNil(playersBD)) {
         for (const player of playersBD) {
-          players.add(player.id);
+          if (!players.includes(player.id)) {
+            players.push(player.id);
+          }
         }
       }
 
