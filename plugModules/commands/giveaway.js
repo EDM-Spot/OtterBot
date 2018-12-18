@@ -44,16 +44,16 @@ module.exports = function Command(bot) {
 
           players.filter(player => player !== winner);
           await bot.wait(5000);
-          return;
-        }
+        } else {
 
-        //await bot.plug.sendChat("Winner " + i + " - " + user.username);
-        console.log("Winner " + i + " - " + user.username);
+          //await bot.plug.sendChat("Winner " + i + " - " + user.username);
+          console.log("Winner " + i + " - " + user.username);
         
-        await bot.wait(5000);
+          await bot.wait(5000);
 
-        i++;
-        winners--;
+          i++;
+          winners--;
+        }
       }
 
       await bot.db.models.holiday.update(
