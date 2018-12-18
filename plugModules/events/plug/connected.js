@@ -28,8 +28,7 @@ module.exports = function Event(bot, filename, platform) {
         "Feel free to visit our website here: https://edmspot.tk/",
         "Don't forget to read our Rules https://edmspot.tk/rules",
         "Want a custom Badge? See how here: http://prntscr.com/ls533n",
-        "Link your account with discord to be able to play discord games and more! See how here: http://prntscr.com/ls539m",
-        "Join us at our First EDM Spot Event! https://cdn.discordapp.com/attachments/485173519911747614/519279738196459520/HolidayParty.png"
+        "Link your account with discord to be able to play discord games and more! See how here: http://prntscr.com/ls539m"
       ];
 
       new moment.duration(80, "minutes").timer({loop: true, start: true}, async () => {
@@ -38,7 +37,7 @@ module.exports = function Event(bot, filename, platform) {
       });
 
       new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
-        bot.plug.sendChat("The Christmas Event Game has started! Know how to play here: http://prntscr.com/ls52jp");
+        bot.plug.sendChat("Join us at our First EDM Spot Event! To check more details join us at our discord. https://cdn.discordapp.com/attachments/485173519911747614/519279738196459520/HolidayParty.png");
       });
     },
     init() {
