@@ -143,7 +143,7 @@ module.exports = function Command(bot) {
               dest: `./dashboard/public/images/badges/${user.id}.${type}`
             };
   
-            await bot.shop.saveImage(user.id, options, type, false);
+            await bot.shop.saveImage(user.id, options, type, false, buyer);
           });
   
           return true;

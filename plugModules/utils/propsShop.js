@@ -6,7 +6,7 @@ module.exports = function Util(bot) {
     constructor() {
 
     }
-    async saveImage(id, options, type, free, event = false) {
+    async saveImage(id, options, type, free, event = false, gift = undefined) {
       if (isNil(options)) {
         return;
       }
@@ -14,10 +14,15 @@ module.exports = function Util(bot) {
       download.image(options).then(async ({ filename, image }) => { // eslint-disable-line no-unused-vars
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
         console.log(free);
-        
+
         if (!free) {
-          await inst.decrement("props", { by: 100 });
-          console.log("-100 Props");
+          if (isNil(gift)) {
+            await inst.decrement("props", { by: 100 });
+            console.log("-100 Props");
+          } else {
+            await gift.decrement("props", { by: 100 });
+            console.log("GIFT -100 Props");
+          }
         }
 
         if (event) {
