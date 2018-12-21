@@ -32,12 +32,15 @@ module.exports = function Command(bot) {
 
         const props = inst.get("props");
 
-        if (props < bot.roulette.price) {
-          this.reply(lang.join.noProps, {}, 6e4);
-          return true;
-        }
+        if (id == 4866676 || id == 26613571 || id == 41362497) {
+          if (props < bot.roulette.price) {
+            this.reply(lang.join.noProps, {}, 6e4);
+            return true;
+          }
 
-        await inst.decrement("props", { by: bot.roulette.price });
+          await inst.decrement("props", { by: bot.roulette.price });
+        }
+        
         bot.roulette.add(rawData.from.id);
         return true;
       }
@@ -48,12 +51,15 @@ module.exports = function Command(bot) {
 
         const props = inst.get("props");
 
-        if (props < bot.russianRoulette.price) {
-          this.reply(lang.join.noProps, {}, 6e4);
-          return true;
-        }
+        if (id == 4866676 || id == 26613571 || id == 41362497) {
+          if (props < bot.russianRoulette.price) {
+            this.reply(lang.join.noProps, {}, 6e4);
+            return true;
+          }
 
-        await inst.decrement("props", { by: bot.russianRoulette.price });
+          await inst.decrement("props", { by: bot.russianRoulette.price });
+        }
+      
         bot.russianRoulette.add(rawData.from.id);
         return true;
       }
