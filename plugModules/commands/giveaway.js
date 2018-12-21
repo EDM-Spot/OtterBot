@@ -38,9 +38,20 @@ module.exports = function Command(bot) {
 
         if (!user || typeof user.username !== "string" || !user.username.length) {
           //await bot.plug.sendChat("User Offline! Picking up someone else...");
-          console.log("User Offline! Picking up someone else...");
+          const userBD = await bot.db.models.users.findOne({
+            where: {
+              id: winner,
+            },
+          });
+
+          await bot.plug.sendChat("Winner " + i + " - " + userBD.get("username"));
+          console.log(user.id);
 
           players = reject(players, function(player) { return player === winner; });
+          await bot.wait(5000);
+
+          i++;
+          winners--;
         } else {
 
           await bot.plug.sendChat("Winner " + i + " - " + user.username);
