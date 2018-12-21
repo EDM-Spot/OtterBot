@@ -32,7 +32,7 @@ module.exports = function Command(bot) {
 
         const props = inst.get("props");
 
-        if (id == 4866676 || id == 26613571 || id == 41362497) {
+        if (id != 4866676 || id != 26613571 || id != 41362497) {
           if (props < bot.roulette.price) {
             this.reply(lang.join.noProps, {}, 6e4);
             return true;
@@ -51,7 +51,7 @@ module.exports = function Command(bot) {
 
         const props = inst.get("props");
 
-        if (id == 4866676 || id == 26613571 || id == 41362497) {
+        if (id != 4866676 || id != 26613571 || id != 41362497) {
           if (props < bot.russianRoulette.price) {
             this.reply(lang.join.noProps, {}, 6e4);
             return true;
