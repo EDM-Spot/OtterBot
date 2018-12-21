@@ -1,5 +1,6 @@
 const moment = require("moment");
 const { isObject, isNil, get, map, sortBy } = require("lodash");
+const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
 var savedMessageID;
 var savedMessage;
@@ -270,6 +271,19 @@ module.exports = function Event(bot, filename, platform) {
             await holidayUser.increment("played", { by: 1 });
             await holidayUser.increment("currency", { by: random });
   
+            if (lastPlay.user.role <= ROOM_ROLE.RESIDENTDJ) {
+              try {
+                await bot.db.models.holiday.update(
+                  { ticket: true },
+                  { where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id }}
+                );
+              }
+              catch (err) {
+                console.warn(err);
+                console.log(lastPlay.user);
+              }
+            }
+
             await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceholiday, {
               random,
               user: lastPlay.user.username

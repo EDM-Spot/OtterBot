@@ -41,6 +41,7 @@ module.exports = function Command(bot) {
         } else {
 
           await bot.plug.sendChat("Winner " + i + " - " + user.username);
+          console.log(user.id);
 
           players.filter(player => player !== winner);
           await bot.wait(5000);
