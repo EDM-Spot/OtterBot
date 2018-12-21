@@ -1,4 +1,4 @@
-const { isNil } = require("lodash");
+const { isNil, reject } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -10,6 +10,7 @@ module.exports = function Command(bot) {
     description: "Giveaway.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.args.length) return;
+      return;
 
       let winners = rawData.args.join(" ");
 
@@ -17,7 +18,7 @@ module.exports = function Command(bot) {
         where: { ticket: true }
       });
 
-      const players = [];
+      let players = [];
 
       if (!isNil(playersBD)) {
         for (const player of playersBD) {
@@ -30,6 +31,8 @@ module.exports = function Command(bot) {
       let i = 1;
 
       while (winners > 0) {
+        if (players.length <= 0) return;
+        
         const winner = players[Math.floor(Math.random() * players.length)];
         const user = bot.plug.getUser(winner);
 
@@ -37,13 +40,13 @@ module.exports = function Command(bot) {
           //await bot.plug.sendChat("User Offline! Picking up someone else...");
           console.log("User Offline! Picking up someone else...");
 
-          players.filter(player => player !== winner);
+          players = reject(players, function(player) { return player === winner; });
         } else {
 
           await bot.plug.sendChat("Winner " + i + " - " + user.username);
           console.log(user.id);
 
-          players.filter(player => player !== winner);
+          players = reject(players, function(player) { return player === winner; });
           await bot.wait(5000);
 
           i++;

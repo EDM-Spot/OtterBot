@@ -35,10 +35,6 @@ module.exports = function Event(bot, filename, platform) {
         var randomNumber = Math.floor(Math.random() * randomTimedText.length);
         bot.plug.sendChat(randomTimedText[randomNumber]);
       });
-
-      new moment.duration(60, "minutes").timer({loop: true, start: true}, async () => {
-        bot.plug.sendChat("The Event has started! Play a theme song to be able to join our giveaway today. Check discord for more info.");
-      });
     },
     init() {
       bot.plug.on(this.name, this.run);

@@ -271,17 +271,17 @@ module.exports = function Event(bot, filename, platform) {
             await holidayUser.increment("played", { by: 1 });
             await holidayUser.increment("currency", { by: random });
 
-            const user = bot.plug.getUser(lastPlay.user.id);
+            //const user = bot.plug.getUser(lastPlay.user.id);
   
-            console.log(lastPlay.user);
-            console.log(ROOM_ROLE.RESIDENTDJ);
+            //console.log(lastPlay.user);
+            //console.log(ROOM_ROLE.RESIDENTDJ);
             
-            if (user.role <= ROOM_ROLE.RESIDENTDJ) {
-              await bot.db.models.holiday.update(
-                { ticket: true },
-                { where: { id: lastPlay.user.id }}
-              );
-            }
+            //if (user.role <= ROOM_ROLE.RESIDENTDJ) {
+            //  await bot.db.models.holiday.update(
+            //    { ticket: true },
+            //    { where: { id: lastPlay.user.id }}
+            //  );
+            //}
 
             await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceholiday, {
               random,
