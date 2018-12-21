@@ -270,7 +270,13 @@ module.exports = function Event(bot, filename, platform) {
   
             await holidayUser.increment("played", { by: 1 });
             await holidayUser.increment("currency", { by: random });
+
+            if (lastPlay.user.role <= ROOM_ROLE.RESIDENTDJ) {
+              await holidayUser.update({ ticket: true });
+            }
   
+            console.log(lastPlay.user.role);
+            console.log(ROOM_ROLE.RESIDENTDJ);
             if (lastPlay.user.role <= ROOM_ROLE.RESIDENTDJ) {
               await bot.db.models.holiday.update(
                 { ticket: true },
