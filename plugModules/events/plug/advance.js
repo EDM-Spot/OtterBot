@@ -275,7 +275,7 @@ module.exports = function Event(bot, filename, platform) {
               await holidayUser.update({ ticket: true });
             }
   
-            console.log(lastPlay.user.role);
+            console.log(lastPlay.user);
             console.log(ROOM_ROLE.RESIDENTDJ);
             if (lastPlay.user.role <= ROOM_ROLE.RESIDENTDJ) {
               await bot.db.models.holiday.update(
