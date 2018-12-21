@@ -31,13 +31,13 @@ module.exports = function Event(bot, filename, platform) {
         "Link your account with discord to be able to play discord games and more! See how here: http://prntscr.com/ls539m"
       ];
 
-      new moment.duration(80, "minutes").timer({loop: true, start: true}, async () => {
+      new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
         var randomNumber = Math.floor(Math.random() * randomTimedText.length);
         bot.plug.sendChat(randomTimedText[randomNumber]);
       });
 
-      new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
-        bot.plug.sendChat("Join us at our First EDM Spot Event! To check more details join us at our discord. https://cdn.discordapp.com/attachments/485173519911747614/519279738196459520/HolidayParty.png");
+      new moment.duration(60, "minutes").timer({loop: true, start: true}, async () => {
+        bot.plug.sendChat("The Event has started! Play a theme song to be able to join our giveaway today. Check discord for more info.");
       });
     },
     init() {
