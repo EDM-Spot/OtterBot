@@ -272,16 +272,10 @@ module.exports = function Event(bot, filename, platform) {
             await holidayUser.increment("currency", { by: random });
   
             if (lastPlay.user.role <= ROOM_ROLE.RESIDENTDJ) {
-              try {
-                await bot.db.models.holiday.update(
-                  { ticket: true },
-                  { where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id }}
-                );
-              }
-              catch (err) {
-                console.warn(err);
-                console.log(lastPlay.user);
-              }
+              await bot.db.models.holiday.update(
+                { ticket: true },
+                { where: { id: lastPlay.user.id }}
+              );
             }
 
             await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceholiday, {
