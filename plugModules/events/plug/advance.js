@@ -131,6 +131,11 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
+        bot.plug.getHistory(function(media) {
+          console.log(media);
+          console.log(this);
+        });
+
         const getHistory = bot.plug.getHistory();
         const sortHistory = sortBy(getHistory, ["timestamp"]);
         const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
