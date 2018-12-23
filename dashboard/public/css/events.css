@@ -397,7 +397,7 @@
 }
 
 /* 4734845 - Puukjeens */
-#user-rollover.id-3788262 .meta{
+#user-rollover.id-4734845 .meta{
     height: 166px !important;
 }
 
@@ -430,7 +430,7 @@
 }
 
 /* 5859330 - Xiztit */
-#user-rollover.id-3788262 .meta{
+#user-rollover.id-5859330 .meta{
     height: 166px !important;
 }
 
@@ -463,7 +463,7 @@
 }
 
 /* 17379609 - xUnique1k */
-#user-rollover.id-3788262 .meta{
+#user-rollover.id-17379609 .meta{
     height: 166px !important;
 }
 
@@ -488,6 +488,39 @@
 }
 
 #user-rollover.id-17379609 .meta:after{
+    content: 'Christmas Event 2018';
+    color: #b9290f;
+    position: absolute;
+    top: 140px;
+    left: 130px;
+}
+
+/* 5418139 - § Ȼ Ɐ ℞ Ξ Đ */
+#user-rollover.id-5418139 .meta{
+    height: 166px !important;
+}
+
+[data-cid^="5418139"] .msg .from .un {
+    background-image: url("https://edmspot.tk/public/images/events/xmas2018.png");
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    background-size: 14px auto;
+    top: 2px;
+    z-index: 0;
+    width: 15px;
+    height: 15px;
+    position: relative;
+    padding-left: 19px;
+}
+
+#user-rollover.id-5418139 .meta:before{
+    content: url("https://edmspot.tk/public/images/events/xmas2018.png");
+    top: 140px;
+    left: 109px;
+    position: absolute;
+}
+
+#user-rollover.id-5418139 .meta:after{
     content: 'Christmas Event 2018';
     color: #b9290f;
     position: absolute;
