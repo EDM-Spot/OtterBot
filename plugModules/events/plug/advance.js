@@ -253,7 +253,7 @@ module.exports = function Event(bot, filename, platform) {
 
         // if they weren't skipped they deserve XP equivalent to the votes
         if (!lastPlaySkipped) {
-          if (bot.global.isHolidaySong) {
+          /*if (bot.global.isHolidaySong) {
             const day = moment().isoWeekday();
             const isWeekend = (day === 5) || (day === 6) || (day === 7);
 
@@ -294,7 +294,7 @@ module.exports = function Event(bot, filename, platform) {
             }), data.media.duration * 1e3);
   
             bot.global.isHolidaySong = false;
-          }
+          }*/
 
           // if no props were given, we done here
           if (!props || bot.global.isSkippedByMehGuard) {
