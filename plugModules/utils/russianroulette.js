@@ -100,10 +100,12 @@ module.exports = function Util(bot) {
         if (bot.plug.getWaitListPosition(victim) === -1 && (user.role <= ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR)) {
           if (user.role <= ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR) {
             const { role } = user;
-            
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
-            await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
-            await bot.plug.moderateSetRole(user.id, role);
+
+            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE, async function() {
+              await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT, async function() {
+                await bot.plug.moderateSetRole(user.id, role);
+              });
+            });
 
             this.chooseVictim(players.filter(player => player !== victim));
             return;
