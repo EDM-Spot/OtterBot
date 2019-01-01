@@ -13,6 +13,8 @@ module.exports = function Command(bot) {
     parameters: "[badge <Image>] || [icon] || [move]",
     description: "Event Shop",
     async execute(rawData, { args }, lang) {
+      return;
+      
       const { id } = rawData.from;
 
       if (rawData.from.role >= ROOM_ROLE.BOUNCER) {

@@ -8,6 +8,7 @@ module.exports = function Command(bot) {
     description: "Ignore history check next song",
     async execute() {
       return;
+      
       if (!bot.global.isHolidaySong) {
         bot.global.isHolidaySong = true;
         await bot.plug.sendChat("Marked as Theme Song!");

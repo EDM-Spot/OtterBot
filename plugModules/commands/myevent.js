@@ -9,6 +9,8 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Checks how many event currency do you have.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
+      return;
+      
       const id = rawData.from.id;
 
       const [inst] = await bot.db.models.holiday.findOrCreate({ where: { id }, defaults: { id } });
