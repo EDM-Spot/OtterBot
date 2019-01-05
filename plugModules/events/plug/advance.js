@@ -1,6 +1,6 @@
 const moment = require("moment");
 const { isObject, isNil, get, map, sortBy } = require("lodash");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+//const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
 var savedMessageID;
 var savedMessage;
@@ -131,9 +131,12 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getHistory(function(media) {
-          console.log(media);
-          console.log(this);
+        bot.plug.getHistory(function(history) {
+          const sortHistory = sortBy(history, ["timestamp"]);
+          const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
+
+          console.log(lastPlay.media.cid);
+          console.log(this.user.id);
         });
 
         const getHistory = bot.plug.getHistory();
