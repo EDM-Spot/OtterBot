@@ -310,8 +310,6 @@ module.exports = function Event(bot, filename, platform) {
 
           bot.global.ignoreHistoryNext = false;
           await bot.utils.updateRDJ(lastPlay.user.id);
-        }).catch(function(err) {
-          console.warn(err);
         });
       } catch (err) {
         console.warn(err);
