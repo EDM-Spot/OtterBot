@@ -131,131 +131,124 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getHistory(function(history) {
+        bot.plug.getHistory(async function(history) {
           const sortHistory = sortBy(history, ["timestamp"]);
           const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
 
-          console.log(lastPlay.media.cid);
-          console.log(this.user.id);
-        });
 
-        const getHistory = bot.plug.getHistory();
-        const sortHistory = sortBy(getHistory, ["timestamp"]);
-        const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
+          // if plug reset the history or its a brand new room it won't have history
+          if (isNil(lastPlay.media)) return;
 
-        // if plug reset the history or its a brand new room it won't have history
-        if (isNil(lastPlay.media)) return;
+          const lastSaved = await bot.db.models.plays.findAll({
+            order: [["id", "DESC"]],
+            limit: 1,
+          });
 
-        const lastSaved = await bot.db.models.plays.findAll({
-          order: [["id", "DESC"]],
-          limit: 1,
-        });
+          if (!isNil(lastSaved)) {
+            if (lastSaved[0].cid === lastPlay.media.cid) return;
+          }
 
-        if (!isNil(lastSaved)) {
-          if (lastSaved[0].cid === lastPlay.media.cid) return;
-        }
+          //const [lastPlay] = history;
 
-        //const [lastPlay] = history;
+          // reset any DC spots when they start DJing
+          await bot.redis.removeDisconnection(lastPlay.user.id);
+          await bot.redis.removeGivePosition(lastPlay.user.id);
 
-        // reset any DC spots when they start DJing
-        await bot.redis.removeDisconnection(lastPlay.user.id);
-        await bot.redis.removeGivePosition(lastPlay.user.id);
+          let lastSongAuthor = null;
+          let lastSongTitle = null;
 
-        let lastSongAuthor = null;
-        let lastSongTitle = null;
-
-        try {
-          if (get(lastPlay, "media.format", 2) === 1) {
-            const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.media.cid);
+          try {
+            if (get(lastPlay, "media.format", 2) === 1) {
+              const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.media.cid);
   
-            const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
-            const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
-  
-            if ((lastFullTitle.match(/-/g) || []).length === 1) {
-              lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
-              lastSongTitle = lastFullTitle.split(" - ")[1].trim();
-            }
-          } else {
-            const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
-  
-            if (!isNil(lastSoundCloudMediaData)) {
-              const lastFullTitle = lastSoundCloudMediaData.title;
+              const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
+              const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
   
               if ((lastFullTitle.match(/-/g) || []).length === 1) {
                 lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
                 lastSongTitle = lastFullTitle.split(" - ")[1].trim();
               }
-            }
-          }
-        } catch (err) {
-          lastSongAuthor = lastPlay.media.author;
-          lastSongTitle = lastPlay.media.title;
-        }
-
-        if (isNil(lastSongAuthor) || isNil(lastSongTitle)) {
-          lastSongAuthor = lastPlay.media.author;
-          lastSongTitle = lastPlay.media.title;
-        }
-
-        let lastPlaySkipped = lastPlay.score.skipped;
-
-        if (bot.global.isSkippedByTimeGuard) {
-          lastPlaySkipped = false;
-          bot.global.isSkippedByTimeGuard = false;
-        }
-
-        if (bot.global.isSkippedByMehGuard) {
-          lastPlaySkipped = false;
-        }
-
-        // keep track of played media in the room
-        await bot.db.models.plays.create({
-          cid: lastPlay.media.cid,
-          format: lastPlay.media.format,
-          woots: lastPlay.score.positive,
-          grabs: lastPlay.score.grabs,
-          mehs: lastPlay.score.negative,
-          dj: lastPlay.user.id,
-          skipped: lastPlaySkipped > 0,
-          author: `${lastSongAuthor}`,
-          title: `${lastSongTitle}`,
-        });
-
-        // count how many props were given while that media played
-        const props = await bot.db.models.props.count({
-          where: { historyID: `${lastPlay.id}`, dj: lastPlay.user.id },
-        });
-
-        // get an user object for the last DJ
-        const [instance] = await bot.db.models.users.findOrCreate({
-          where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id, username: lastPlay.user.username },
-        });
-
-        const woots = lastPlay.score.positive;
-        const grabs = lastPlay.score.grabs;
-        const mehs = lastPlay.score.negative;
-
-        try {
-          if (!isNil(savedMessageID)) {
-            if (lastPlaySkipped === 1) {
-              bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
-                .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " Skipped!"));
             } else {
-              bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
-                .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
+              const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
+  
+              if (!isNil(lastSoundCloudMediaData)) {
+                const lastFullTitle = lastSoundCloudMediaData.title;
+  
+                if ((lastFullTitle.match(/-/g) || []).length === 1) {
+                  lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
+                  lastSongTitle = lastFullTitle.split(" - ")[1].trim();
+                }
+              }
             }
+          } catch (err) {
+            lastSongAuthor = lastPlay.media.author;
+            lastSongTitle = lastPlay.media.title;
           }
-        
-          bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
-            savedMessageID = m.id;
-            savedMessage = m.content;
-          });
-        } catch (err) {
-          console.log(err);
-        }
 
-        // if they weren't skipped they deserve XP equivalent to the votes
-        if (!lastPlaySkipped) {
+          if (isNil(lastSongAuthor) || isNil(lastSongTitle)) {
+            lastSongAuthor = lastPlay.media.author;
+            lastSongTitle = lastPlay.media.title;
+          }
+
+          let lastPlaySkipped = lastPlay.score.skipped;
+
+          if (bot.global.isSkippedByTimeGuard) {
+            lastPlaySkipped = false;
+            bot.global.isSkippedByTimeGuard = false;
+          }
+
+          if (bot.global.isSkippedByMehGuard) {
+            lastPlaySkipped = false;
+          }
+
+          // keep track of played media in the room
+          await bot.db.models.plays.create({
+            cid: lastPlay.media.cid,
+            format: lastPlay.media.format,
+            woots: lastPlay.score.positive,
+            grabs: lastPlay.score.grabs,
+            mehs: lastPlay.score.negative,
+            dj: lastPlay.user.id,
+            skipped: lastPlaySkipped > 0,
+            author: `${lastSongAuthor}`,
+            title: `${lastSongTitle}`,
+          });
+
+          // count how many props were given while that media played
+          const props = await bot.db.models.props.count({
+            where: { historyID: `${lastPlay.id}`, dj: lastPlay.user.id },
+          });
+
+          // get an user object for the last DJ
+          const [instance] = await bot.db.models.users.findOrCreate({
+            where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id, username: lastPlay.user.username },
+          });
+
+          const woots = lastPlay.score.positive;
+          const grabs = lastPlay.score.grabs;
+          const mehs = lastPlay.score.negative;
+
+          try {
+            if (!isNil(savedMessageID)) {
+              if (lastPlaySkipped === 1) {
+                bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
+                  .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " Skipped!"));
+              } else {
+                bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
+                  .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
+              }
+            }
+        
+            bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
+              savedMessageID = m.id;
+              savedMessage = m.content;
+            });
+          } catch (err) {
+            console.log(err);
+          }
+
+          // if they weren't skipped they deserve XP equivalent to the votes
+          if (!lastPlaySkipped) {
           /*if (bot.global.isHolidaySong) {
             const day = moment().isoWeekday();
             const isWeekend = (day === 5) || (day === 6) || (day === 7);
@@ -299,24 +292,27 @@ module.exports = function Event(bot, filename, platform) {
             bot.global.isHolidaySong = false;
           }*/
 
-          // if no props were given, we done here
-          if (!props || bot.global.isSkippedByMehGuard) {
-            bot.global.isSkippedByMehGuard = false;
-            return;
+            // if no props were given, we done here
+            if (!props || bot.global.isSkippedByMehGuard) {
+              bot.global.isSkippedByMehGuard = false;
+              return;
+            }
+
+            // otherwise, give them the props
+            await instance.increment("props", { by: props });
+
+            await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
+              props,
+              user: lastPlay.user.username,
+              plural: props > 1 ? "s" : "",
+            }), data.media.duration * 1e3);
           }
 
-          // otherwise, give them the props
-          await instance.increment("props", { by: props });
-
-          await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
-            props,
-            user: lastPlay.user.username,
-            plural: props > 1 ? "s" : "",
-          }), data.media.duration * 1e3);
-        }
-
-        bot.global.ignoreHistoryNext = false;
-        await bot.utils.updateRDJ(lastPlay.user.id);
+          bot.global.ignoreHistoryNext = false;
+          await bot.utils.updateRDJ(lastPlay.user.id);
+        }).catch(function(err) {
+          console.warn(err);
+        });
       } catch (err) {
         console.warn(err);
       }
