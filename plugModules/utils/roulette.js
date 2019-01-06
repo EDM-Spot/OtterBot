@@ -97,7 +97,7 @@ module.exports = function Util(bot) {
 
         await holidayUser.increment("currency", { by: random });
 
-        await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
+        //await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
       }
 
       await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.winner, {
