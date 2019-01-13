@@ -131,7 +131,7 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getHistory(async function(history) {
+        await bot.plug.getHistory(async function(history) {
           const sortHistory = sortBy(history, ["timestamp"]);
           const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
 
