@@ -35,6 +35,10 @@ module.exports = function Event(bot, filename, platform) {
         var randomNumber = Math.floor(Math.random() * randomTimedText.length);
         bot.plug.sendChat(randomTimedText[randomNumber]);
       });
+
+      new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
+        bot.utils.timeCover();
+      }
     },
     init() {
       bot.plug.on(this.name, this.run);
