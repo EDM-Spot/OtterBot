@@ -302,7 +302,7 @@ module.exports = (client) => {
   });
 
   app.get("/plugusers", async (req, res) => {
-    renderTemplate(res, req, "plugusers.ejs", {});
+    renderTemplate(res, req, "plugUsers.ejs", {});
   });
 
   app.get("/eventusers", async (req, res) => {
@@ -526,9 +526,9 @@ module.exports = (client) => {
     const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
-    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + client.global.pointsWeight.messages + ")";
+    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + users.points) * " + client.global.pointsWeight.messages + ")";
 
-    const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") * 100) + 1)";
+    const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-users.last_seen) * " + client.global.pointsWeight.daysOffline + ") * 100) + 1)";
 
     const totalsongs = await client.db.models.plays.count({
       where: { skipped: false }
@@ -554,7 +554,10 @@ module.exports = (client) => {
         ), "propsgiven"],
         [literal(
           totalpoints
-        ), "totalpoints"]],
+        ), "totalpoints"],
+        [literal(
+          "(EXTRACT(DAY FROM current_date-users.last_seen))"
+        ), "daysoffline"]],
       include: [{
         model: client.db.models.users,
         attributes: ["username", "id", "last_seen", "points", "props"]

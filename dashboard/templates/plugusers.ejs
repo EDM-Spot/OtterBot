@@ -4,35 +4,27 @@
     <div class="jumbotron" style="padding-top: 20px;">
       <div class="row">
         Woots: <input type="number" id="woots" value="<%= bot.global.pointsWeight.woots %>">
-        <input type="button" value="submit" onclick="">
       </div>
       <div class="row">
         Mehs: <input type="number" id="mehs" value="<%= bot.global.pointsWeight.mehs %>">
-        <input type="button" value="submit" onclick="">
       </div>
       <div class="row">
         Grabs: <input type="number" id="grabs" value="<%= bot.global.pointsWeight.grabs %>">
-        <input type="button" value="submit" onclick="">
       </div>
       <div class="row">
         Props Given: <input type="number" id="propsGiven" value="<%= bot.global.pointsWeight.propsGiven %>">
-        <input type="button" value="submit" onclick="">
       </div>
       <div class="row">
         Messages: <input type="number" id="messages" value="<%= bot.global.pointsWeight.messages %>">
-        <input type="button" value="submit" onclick="">
       </div>
       <div class="row">
         Ban: <input type="number" id="ban" value="<%= bot.global.pointsWeight.ban %>">
-        <input type="button" value="submit" onclick="">
       </div>
       <div class="row">
         WL Ban: <input type="number" id="wlban" value="<%= bot.global.pointsWeight.wlban %>">
-        <input type="button" value="submit" onclick="">
       </div>
       <div class="row">
         Mute: <input type="number" id="mute" value="<%= bot.global.pointsWeight.mute %>">
-        <input type="button" value="submit" onclick="">
       </div>
 
       <div class="row justify-content-center d-flex">
@@ -52,6 +44,7 @@
             <th scope="col" class="text-center">Mehs</th>
             <th scope="col" class="text-center">Grabs</th>
             <th scope="col" class="text-center">Last Seen</th>
+            <th scope="col" class="text-center">Days Offline</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -86,6 +79,7 @@
           { data: "totalmehs" },
           { data: "totalgrabs" },
           { data: "user.last_seen" }
+          { data: "daysoffline" }
         ],
         columnDefs: [
           {
