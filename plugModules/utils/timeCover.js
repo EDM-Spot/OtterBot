@@ -5,7 +5,7 @@ module.exports = function Util(bot) {
     name: "timeCover",
     function: async () => {
       const usersCount = bot.plug.getUsers().length;
-      const modsOnline = await bot.plug.getStaff().join(", ");
+      const modsOnline = bot.plug.getStaff().join(", ");
       
       const embed = new Discord.RichEmbed()
         .setAuthor("Time Cover Utility", "http://icons.iconarchive.com/icons/hamzasaleem/stock-apps-style-2-part-2/64/Time-Machine-icon.png")

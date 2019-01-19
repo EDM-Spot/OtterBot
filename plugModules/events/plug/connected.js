@@ -37,7 +37,7 @@ module.exports = function Event(bot, filename, platform) {
       });
 
       new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
-        bot.utils.timeCover();
+        await bot.utils.timeCover();
       });
     },
     init() {
