@@ -22,6 +22,7 @@ module.exports = function Command(bot) {
             if (offUser[i].role < ROOM_ROLE.BOUNCER || offUser[i].gRole < GLOBAL_ROLES.MODERATOR) {
 
               if (offUser[i].role === ROOM_ROLE.RESIDENTDJ) {
+                console.log(offUser[i].username);
                 bot.utils.updateRDJ(offUser[i].id);
               }
             }
@@ -30,6 +31,7 @@ module.exports = function Command(bot) {
           if (i === offUser.length) clearInterval(interval);
         }, 10000);
       });
+      console.log("Finished");
 
       return true;
     },
