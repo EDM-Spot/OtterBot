@@ -302,7 +302,7 @@ module.exports = (client) => {
   });
 
   app.get("/plugusers", async (req, res) => {
-    renderTemplate(res, req, "plugUsers.ejs", {});
+    renderTemplate(res, req, "plugusers.ejs", {});
   });
 
   app.get("/eventusers", async (req, res) => {
