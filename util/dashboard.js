@@ -556,7 +556,7 @@ module.exports = (client) => {
           totalpoints
         ), "totalpoints"],
         [literal(
-          "(EXTRACT(DAY FROM current_date-users.last_seen))"
+          "(EXTRACT(DAY FROM current_date-last_seen))"
         ), "daysoffline"]],
       include: [{
         model: client.db.models.users,
