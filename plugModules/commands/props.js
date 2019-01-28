@@ -3,7 +3,6 @@ const { isObject, isNil } = require("lodash");
 function generateIdentifier(currentMedia, dj, rawData) {
   if (isNil(dj)) {
     console.warn("Props Error!");
-    console.log(bot.plug.getDJ());
     return null;
   }
   return `historyID-${currentMedia}:dj-${dj.id}:user-${rawData.from.id}`;
