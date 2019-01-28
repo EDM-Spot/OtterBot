@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["plays", "lastplayed"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 10,
+    cooldownDuration: 60,
     parameters: "[YouTube Link|SoundCloud Link]",
     description: "Checks the specified link, or the current media, for the last time it was played in the community.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars

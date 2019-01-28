@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["urban"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 120,
+    cooldownDuration: 180,
     parameters: "<Text>",
     description: "Urban Dictionary.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars

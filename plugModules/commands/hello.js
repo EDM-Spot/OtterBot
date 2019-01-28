@@ -3,7 +3,7 @@ module.exports = function Command(bot) {
     names: ["hello"],
     minimumPermission: 1000,
     cooldownType: "perUse",
-    cooldownDuration: 60,
+    cooldownDuration: 120,
     parameters: "",
     description: "Hello...",
     async execute(rawData) {

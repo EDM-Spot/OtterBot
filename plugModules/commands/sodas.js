@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["sodas"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 120,
+    cooldownDuration: 180,
     parameters: "",
     description: "Get a Random Joke.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars

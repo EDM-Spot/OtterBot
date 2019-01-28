@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["cookie", "cookies"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 120,
+    cooldownDuration: 180,
     parameters: "<@username>",
     description: "Sends the specified user a cookie.",
     async execute(rawData, { args }, lang) {
