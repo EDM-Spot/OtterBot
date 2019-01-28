@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
     names: ["gif"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 180,
+    cooldownDuration: 240,
     parameters: "<Text>",
     description: "Random Gif.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
