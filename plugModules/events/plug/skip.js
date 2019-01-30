@@ -11,7 +11,8 @@ module.exports = function Event(bot, filename, platform) {
 
       if (data.user.id === bot.plug.getSelf().id) return;
 
-      var skippedSong = bot.plug.lastPlay;
+      var skippedSong =  await bot.plug.lastPlay;
+      console.log(skippedSong);
       if (isNil(skippedSong)) return;
 
       const embed = new Discord.RichEmbed()
