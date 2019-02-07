@@ -28,7 +28,8 @@ module.exports = function Event(bot, filename, platform) {
         "Feel free to visit our website here: https://edmspot.tk/",
         "Don't forget to read our Rules https://edmspot.tk/rules",
         "Want a custom Badge? See how here: http://prntscr.com/ls533n",
-        "Link your account with discord to be able to play discord games and more! See how here: http://prntscr.com/ls539m"
+        "Link your account with discord to be able to play discord games and more! See how here: http://prntscr.com/ls539m",
+        "Think you can be a good addition to the staff? Apply here: https://tinyurl.com/edmspotstaffapp"
       ];
 
       new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
