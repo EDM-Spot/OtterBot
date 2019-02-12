@@ -4,40 +4,17 @@ module.exports = function Util(bot) {
   const util = {
     name: "lockskip",
     function: user => new Promise((resolve, reject) => {
-      const shouldCycle = false;
       const waitList = bot.plug.getWaitList();
       const historyEntry = bot.plug.getMedia();
       const dj = bot.plug.getDJ();
 
       const lockSkip = {
         position: 3,
-        withCycle: async () => {
-          await bot.plug.changeDJCycle(true);
-          await bot.plug.moderateForceSkip(function() {
-            //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
-            bot.plug.moderateAddDJ(user.id, function() {
-              bot.plug.moderateMoveDJ(user.id, lockSkip.position);
-            });
-          });
-          //await user.moveInWaitList(lockSkip.position);
-          await bot.plug.changeDJCycle(false);
-          return resolve();
-        },
-        withoutCycle: async () => {
-          await bot.plug.moderateForceSkip(function() {
-            //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
-            bot.plug.moderateAddDJ(user.id, function() {
-              bot.plug.moderateMoveDJ(user.id, lockSkip.position);
-            });
-          });
-          //await user.moveInWaitList(lockSkip.position);
-          return resolve();
-        },
         addingDJ: async () => {
-          await bot.plug.moderateForceSkip(function() {
+          await bot.plug.moderateForceSkip(async function() {
             //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
-            bot.plug.moderateAddDJ(user.id, function() {
-              bot.plug.moderateMoveDJ(user.id, lockSkip.position);
+            await bot.plug.moderateAddDJ(user.id, async function() {
+              await bot.plug.moderateMoveDJ(user.id, lockSkip.position);
             });
           });
           //await user.addToWaitList();
@@ -49,8 +26,8 @@ module.exports = function Util(bot) {
           return resolve();
         },
         skipOnlyAdd: async () => {
-          await bot.plug.moderateForceSkip(function() {
-            bot.plug.moderateAddDJ(user.id);
+          await bot.plug.moderateForceSkip(async function() {
+            await bot.plug.moderateAddDJ(user.id);
           });
           //await user.addToWaitList();
           return resolve();
@@ -59,19 +36,13 @@ module.exports = function Util(bot) {
           try {
             if (!isObject(dj) || !isObject(historyEntry)) {
               return Promise.reject(new Error("[!] No DJ or Media playing."));
-            } else if (!waitList.length && shouldCycle) {
+            } else if (!waitList.length) {
               return this.onlySkip();
-            } else if (!shouldCycle && waitList.length < this.position) {
+            } else if (waitList.length < this.position) {
               return this.skipOnlyAdd();
-            } else if (!shouldCycle && (waitList.length >= 4 && waitList.length <= 45)) {
-              return this.addingDJ();
-            } else if (shouldCycle && (waitList.length >= 4 && waitList.length <= 45)) {
-              return this.withoutCycle();
-            } else if (!shouldCycle) {
-              return this.withCycle();
             }
 
-            return this.withoutCycle();
+            return this.addingDJ();
           } catch (err) {
             console.error("[!] LockSkip Error");
             console.error(err);

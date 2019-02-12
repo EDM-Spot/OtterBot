@@ -74,7 +74,7 @@ module.exports = function Command(bot) {
             return true;
           }
 
-          if (waitlist.length < 15) {
+          if (waitlist.length < 25) {
             this.reply(lang.russianroulette.invalidWaitlist, {}, 6e4);
             return false;
           }
