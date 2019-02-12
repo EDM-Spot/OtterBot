@@ -20,6 +20,11 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const historyID = bot.plug.getHistoryID();
       const dj = bot.plug.getDJ();
+      const timeElapsed = bot.plug.getTimeElapsed();
+
+      if (timeElapsed < 5) {
+        return false;
+      }
 
       const [inst] = await bot.db.models.users.findOrCreate({ where: { id: rawData.from.id }, defaults: { id: rawData.from.id } });
 
