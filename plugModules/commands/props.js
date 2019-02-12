@@ -1,4 +1,5 @@
 const { isObject, isNil } = require("lodash");
+const moment = require("moment");
 
 function generateIdentifier(currentMedia, dj, rawData) {
   if (isNil(dj)) {
@@ -19,12 +20,39 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const historyID = bot.plug.getHistoryID();
       const dj = bot.plug.getDJ();
+
+      const [inst] = await bot.db.models.users.findOrCreate({ where: { id: rawData.from.id }, defaults: { id: rawData.from.id } });
+
+      let propsToGiveLeft = inst.get("props_to_give");
+
+      if (isNil(propsToGiveLeft)) {
+        await bot.db.models.users.update(
+          { props_to_give: 20, last_props_give_reset: moment() },
+          { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
+        );
+
+        propsToGiveLeft = 20;
+      }
+
+      const lastReset = moment().diff(moment(inst.get("last_props_give_reset")), "hours");
+
+      if (lastReset >= 24) {
+        await bot.db.models.users.update(
+          { props_to_give: 20, last_props_give_reset: moment() },
+          { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
+        );
+
+        propsToGiveLeft = 20;
+      }
       
       if (isNil(historyID)) {
         this.reply(lang.props.nothingPlaying, {}, 6e4);
         return false;
       } else if (isObject(dj) && dj.id === rawData.from.id) {
         this.reply(lang.props.propSelf, {}, 6e4);
+        return true;
+      } else if (propsToGiveLeft == 0) {
+        this.reply(lang.props.noPropsToGive, {}, 6e4);
         return true;
       }
       
@@ -37,6 +65,8 @@ module.exports = function Command(bot) {
           identifier: generateIdentifier(historyID, dj, rawData),
         },
       });
+
+      await bot.db.models.users.decrement("props_to_give", { by: 1, where: { id: rawData.from.id } });
       return true;
     },
   });

@@ -41,6 +41,14 @@ module.exports = async function Model(bot, sequelize) {
       type: sequelize.STRING,
       allowNull: true,
     },
+    props_to_give: {
+      type: sequelize.INTEGER,
+      allowNull: true,
+    },
+    last_props_give_reset: {
+      type: sequelize.DATE,
+      allowNull: true,
+    },
   });
 
   await Users.sync();

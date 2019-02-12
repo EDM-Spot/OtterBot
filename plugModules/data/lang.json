@@ -58,7 +58,8 @@
     },
     "props": {
       "nothingPlaying": "There is no song playing to prop!",
-      "propSelf": "We know you love your song, but let others also prop you!"
+      "propSelf": "We know you love your song, but let others also prop you!",
+      "noPropsToGive": "You don't have more props to give today!"
     },
     "myprops": {
       "result": "You have %%PROPS%% prop(s).",
