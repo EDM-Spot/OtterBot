@@ -52,7 +52,7 @@ module.exports = function Command(bot) {
         this.reply(lang.props.propSelf, {}, 6e4);
         return true;
       } else if (propsToGiveLeft == 0) {
-        this.reply(lang.props.noPropsToGive, {}, 6e4);
+        //this.reply(lang.props.noPropsToGive, {}, 6e4);
         return true;
       }
       
