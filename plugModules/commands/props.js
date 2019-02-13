@@ -11,7 +11,7 @@ function generateIdentifier(currentMedia, dj, rawData) {
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["props"],
+    names: ["props", "prop"],
     minimumPermission: 0,
     cooldownType: "perUser",
     cooldownDuration: 60,
