@@ -278,7 +278,7 @@ module.exports = (client) => {
     const instance = await client.db.models.plays.findAll({
       where: {
         created_at: {
-          [Op.gt]: client.moment().subtract(24, "hours").toDate()
+          [Op.gt]: client.moment().subtract(360, "minutes").toDate()
         }
       },
       order: [["created_at", "DESC"]],

@@ -32,22 +32,22 @@ module.exports = function Command(bot) {
 
       if (isNil(propsToGiveLeft)) {
         await bot.db.models.users.update(
-          { props_to_give: 20, last_props_give_reset: moment() },
+          { props_to_give: 100, last_props_give_reset: moment() },
           { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
         );
 
-        propsToGiveLeft = 20;
+        propsToGiveLeft = 100;
       }
 
       const lastReset = moment().diff(moment(inst.get("last_props_give_reset")), "hours");
 
       if (lastReset >= 24) {
         await bot.db.models.users.update(
-          { props_to_give: 20, last_props_give_reset: moment() },
+          { props_to_give: 100, last_props_give_reset: moment() },
           { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
         );
 
-        propsToGiveLeft = 20;
+        propsToGiveLeft = 100;
       }
       
       if (isNil(historyID)) {
