@@ -6,21 +6,23 @@ module.exports = function Util(bot) {
     constructor() {
 
     }
-    async saveImage(id, options, type, free, event = false, gift = undefined) {
+    async saveImage(id, options, type, free, event = false, giftID = null) {
       if (isNil(options)) {
         return;
       }
 
       download.image(options).then(async ({ filename, image }) => { // eslint-disable-line no-unused-vars
-        const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
-        console.log(free);
-
         if (!free) {
-          if (isNil(gift)) {
+          if (isNil(giftID)) {
+            const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
+            console.log(free);
+
             await inst.decrement("props", { by: 100 });
             console.log("-100 Props");
           } else {
-            await gift.decrement("props", { by: 100 });
+            const [buyer] = await bot.db.models.users.findOrCreate({ where: { giftID }, defaults: { giftID } });
+
+            await buyer.decrement("props", { by: 100 });
             console.log("GIFT -100 Props");
           }
         }
