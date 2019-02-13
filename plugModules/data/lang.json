@@ -45,7 +45,7 @@
     "invalidUser": "You specified an invalid user.",
     "commands": "Command List: https://edmspot.tk/plugCommands %%MENTION%%",
     "noPromo": "",
-    "propsInfo": "You give !props to the DJs song if you really love it! Then you can cash in your prop(s) to join some games and use them in the Props Shop.",
+    "propsInfo": "You give !props to the DJs song if you really love it! You can give 50 props daily. You can use your prop(s) to join some games and use them in the Props Shop.",
     "mehRule": "The current song needs %%MEHS%% Mehs to be skipped or %%HSMEHS%% if it's Hardstyle/Hardcore!",
     "ping": {
       "ping": "Pong!",
