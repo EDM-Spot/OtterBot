@@ -323,11 +323,10 @@ module.exports = (client) => {
           [Op.ne]: 40333310
         },
         created_at: {
-          [Op.gt]: client.moment().subtract(1, "months").toDate()
+          [Op.gt]: client.moment().subtract(12, "hours").toDate()
         }
       },
-      order: [["created_at", "DESC"]],
-      limit: 500
+      order: [["created_at", "DESC"]]
     });
 
     renderTemplate(res, req, "messages.ejs", { messages });
