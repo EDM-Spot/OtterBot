@@ -22,7 +22,7 @@ module.exports = function Command(bot) {
       const dj = bot.plug.getDJ();
       const timeElapsed = bot.plug.getTimeElapsed();
 
-      if (timeElapsed < 5) {
+      if (timeElapsed < 10) {
         return false;
       }
 
@@ -32,22 +32,22 @@ module.exports = function Command(bot) {
 
       if (isNil(propsToGiveLeft)) {
         await bot.db.models.users.update(
-          { props_to_give: 50, last_props_give_reset: moment() },
+          { props_to_give: 30, last_props_give_reset: moment() },
           { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
         );
 
-        propsToGiveLeft = 50;
+        propsToGiveLeft = 30;
       }
 
       const lastReset = moment().diff(moment(inst.get("last_props_give_reset")), "hours");
 
       if (lastReset >= 24) {
         await bot.db.models.users.update(
-          { props_to_give: 50, last_props_give_reset: moment() },
+          { props_to_give: 30, last_props_give_reset: moment() },
           { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
         );
 
-        propsToGiveLeft = 50;
+        propsToGiveLeft = 30;
       }
       
       if (isNil(historyID)) {
