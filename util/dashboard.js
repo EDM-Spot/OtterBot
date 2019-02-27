@@ -512,8 +512,8 @@ module.exports = (client) => {
     const totalWootsPoints = "(SUM(plays.woots) * " + client.global.pointsWeight.woots + ")";
     const totalGrabsPoints = "(SUM(plays.grabs) * " + client.global.pointsWeight.grabs + ")";
 
-    const skippedMehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
-    const totalMehsPoints = "(SUM(plays.mehs) + " + skippedMehsPoints + " * " + client.global.pointsWeight.mehs + ")";
+    const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
+    const totalMehsPoints = "(" + MehsPoints + " * " + client.global.pointsWeight.mehs + ")";
 
     const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + client.global.pointsWeight.ban + ")";
 
@@ -547,7 +547,8 @@ module.exports = (client) => {
       attributes: ["plays.dj",
         [fn("SUM", col("plays.woots")
         ), "totalwoots"],
-        [fn("SUM", col("plays.mehs")
+        [literal(
+          "(SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj)"
         ), "totalmehs"],
         [fn("SUM", col("plays.grabs")
         ), "totalgrabs"],
