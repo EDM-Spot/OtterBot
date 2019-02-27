@@ -243,9 +243,6 @@ module.exports = (client) => {
         [literal(
           "(((((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - " + totalMehsPoints + ") / " + totalsongs + ") * 1000)"
         ), "score"]],
-      where: {
-        skipped: false
-      },
       group: ["author", "title"],
       order: [[literal("score"), "DESC"]],
       limit: 10
@@ -514,7 +511,9 @@ module.exports = (client) => {
   app.get("/api/djs", async (req, res) => {
     const totalWootsPoints = "(SUM(plays.woots) * " + client.global.pointsWeight.woots + ")";
     const totalGrabsPoints = "(SUM(plays.grabs) * " + client.global.pointsWeight.grabs + ")";
-    const totalMehsPoints = "(SUM(plays.mehs) * " + client.global.pointsWeight.mehs + ")";
+
+    const skippedMehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
+    const totalMehsPoints = "(SUM(plays.mehs) + " + skippedMehsPoints + " * " + client.global.pointsWeight.mehs + ")";
 
     const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + client.global.pointsWeight.ban + ")";
 
@@ -533,7 +532,16 @@ module.exports = (client) => {
       where: { skipped: false }
     });
 
-    const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 100)))";
+    const totalmehsongs = await client.db.models.plays.count({
+      where: {
+        skipped: true,
+        mehs: {
+          [Op.gt]: 4
+        }
+      }
+    });
+
+    const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / (CAST(" + totalsongs + " as float) + CAST(" + totalmehsongs + " as float))) * 100)))";
 
     const djRank = await client.db.models.plays.findAll({
       attributes: ["plays.dj",

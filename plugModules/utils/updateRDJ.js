@@ -1,6 +1,6 @@
 const { isNil, isNaN, isObject } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
-const { fn, col } = require("sequelize");
+const { Op, fn, col } = require("sequelize");
 const moment = require("moment");
 
 module.exports = function Util(bot) {
@@ -36,6 +36,16 @@ module.exports = function Util(bot) {
         where: { dj: id, skipped: false }
       });
 
+      const playsmehcount = await bot.db.models.plays.count({
+        where: {
+          dj: id,
+          skipped: true,
+          mehs: {
+            [Op.gt]: 4
+          }
+        }
+      });
+
       const bancount = await bot.db.models.bans.count({
         where: { id: id, type: "BAN" }
       });
@@ -52,13 +62,21 @@ module.exports = function Util(bot) {
         attributes: [
           [fn("SUM", col("plays.woots")
           ), "totalwoots"],
-          [fn("SUM", col("plays.mehs")
-          ), "totalmehs"],
           [fn("SUM", col("plays.grabs")
           ), "totalgrabs"]],
         where: {
           dj: id,
           skipped: false
+        },
+        group: ["dj"]
+      });
+
+      const songVotesMehs = await bot.db.models.plays.findAll({
+        attributes: [
+          [fn("SUM", col("plays.mehs")
+          ), "totalmehs"]],
+        where: {
+          dj: id
         },
         group: ["dj"]
       });
@@ -75,12 +93,15 @@ module.exports = function Util(bot) {
       if (!isNil(songvotes[0])) {
         totalWootsPoints = songvotes[0].dataValues.totalwoots * bot.global.pointsWeight.woots;
         totalGrabsPoints = songvotes[0].dataValues.totalgrabs * bot.global.pointsWeight.grabs;
-        totalMehsPoints = songvotes[0].dataValues.totalmehs * bot.global.pointsWeight.mehs;
+      }
+
+      if (!isNil(songVotesMehs[0])) {
+        totalMehsPoints = songVotesMehs[0].dataValues.totalmehs * bot.global.pointsWeight.mehs;
       }
 
       const offlineDaysPoints = ((moment().diff(userDB.get("last_seen"), "days") * bot.global.pointsWeight.daysOffline) * 100) + 1;
 
-      const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / totalsongs) * 100));
+      const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / (totalsongs + playsmehcount)) * 100));
 
       const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
