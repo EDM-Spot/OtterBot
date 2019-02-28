@@ -15,6 +15,15 @@ module.exports = function Util(bot) {
         where: { skipped: false }
       });
 
+      const playsmehcount = await bot.db.models.plays.count({
+        where: {
+          skipped: true,
+          mehs: {
+            [Op.gt]: 4
+          }
+        }
+      });
+
       const totalmessages = await bot.db.models.messages.count({
         where: { id: id, command: false }
       });
@@ -34,16 +43,6 @@ module.exports = function Util(bot) {
 
       const playscount = await bot.db.models.plays.count({
         where: { dj: id, skipped: false }
-      });
-
-      const playsmehcount = await bot.db.models.plays.count({
-        where: {
-          dj: id,
-          skipped: true,
-          mehs: {
-            [Op.gt]: 4
-          }
-        }
       });
 
       const bancount = await bot.db.models.bans.count({
