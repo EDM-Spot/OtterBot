@@ -1,6 +1,5 @@
 const { isNil } = require("lodash");
-const { fn, literal, col } = require("sequelize");
-const moment = require("moment");
+const { Op, literal } = require("sequelize");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
