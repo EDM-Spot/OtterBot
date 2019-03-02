@@ -12,6 +12,7 @@ module.exports = (client) => {
       this.players = [];
       this.timer = undefined;
       this.running = false;
+      this.started = false;
     }
     
     start() {
@@ -21,6 +22,7 @@ module.exports = (client) => {
 
     end() {
       this.running = false;
+      this.started = false;
       this.timer = undefined;
       this.players = [];
 

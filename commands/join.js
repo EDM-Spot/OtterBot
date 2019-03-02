@@ -39,6 +39,8 @@ class Ping extends Command {
 
       if (!this.client.triviaUtil.check()) {
         return message.reply("Trivia is not running!");
+      } else if (this.client.triviaUtil.started) {
+        return message.reply("Trivia already started!");
       } else if (isObject(dj) && dj.id === user.id) {
         return message.reply("You can't join while playing!");
       } else if (userPos >= 0 && userPos <= 5) {
