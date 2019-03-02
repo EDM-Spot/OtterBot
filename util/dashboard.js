@@ -270,6 +270,40 @@ module.exports = (client) => {
 
     renderTemplate(res, req, "blacklist.ejs", { instance });
   });
+  
+  app.get("/songRank", async (req, res) => {
+    const totalsongs = await client.db.models.plays.count({
+      where: { skipped: false }
+    });
+
+    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
+    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
+    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
+    
+    const rank = await client.db.models.plays.findAll({
+      attributes: ["author", "title",
+        [literal(
+          "SUM(woots)"
+        ), "totalwoots"],
+        [literal(
+          "SUM(mehs)"
+        ), "totalmehs"],
+        [literal(
+          "SUM(grabs)"
+        ), "totalgrabs"],
+        [literal(
+          "COUNT(cid)"
+        ), "count"],
+        [literal(
+          "(((((" + totalWootsPoints + " * " + totalGrabsPoints + ") / COUNT(plays.cid)) - " + totalMehsPoints + ") / " + totalsongs + ") * 1000)"
+        ), "score"]],
+      group: ["author", "title"],
+      order: [[literal("score"), "DESC"]],
+      limit: 1000
+    });
+
+    renderTemplate(res, req, "songRank.ejs", { rank });
+  });
 
   app.get("/history", async (req, res) => {
     const instance = await client.db.models.plays.findAll({
