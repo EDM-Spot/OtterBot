@@ -1,6 +1,5 @@
 const { isNil } = require("lodash");
-const { fn, literal, col } = require("sequelize");
-const moment = require("moment");
+const { Op, literal } = require("sequelize");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -17,6 +16,15 @@ module.exports = function Command(bot) {
         where: { skipped: false }
       });
 
+      const totalmehsongs = await bot.db.models.plays.count({
+        where: {
+          skipped: true,
+          mehs: {
+            [Op.gt]: 4
+          }
+        }
+      });
+
       const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + bot.global.pointsWeight.ban + ")";
       const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
       const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + bot.global.pointsWeight.wlban + ")";
@@ -28,14 +36,16 @@ module.exports = function Command(bot) {
   
       const totalWootsPointsSQL = "(SUM(plays.woots) * " + bot.global.pointsWeight.woots + ")";
       const totalGrabsPointsSQL = "(SUM(plays.grabs) * " + bot.global.pointsWeight.grabs + ")";
-      const totalMehsPointsSQL = "(SUM(plays.mehs) * " + bot.global.pointsWeight.mehs + ")";
+      
+      const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
+      const totalMehsPointsSQL = "(" + MehsPoints + " * " + bot.global.pointsWeight.mehs + ")";
   
       const offlineDaysPointsSQL = "(((EXTRACT(DAY FROM current_date-last_seen) * " + bot.global.pointsWeight.daysOffline + ") * 100) + 1)";
 
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((((" + totalWootsPointsSQL + " + " + totalGrabsPointsSQL + ") / (" + totalMehsPointsSQL + " + 1)) - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")) * ((CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 100))) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((((" + totalWootsPointsSQL + " + " + totalGrabsPointsSQL + ") / (" + totalMehsPointsSQL + " + 1)) - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")) * ((CAST(COUNT(plays.cid) as float) / (CAST(" + totalsongs + " as float) + CAST(" + totalmehsongs + " as float))) * 100))) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
