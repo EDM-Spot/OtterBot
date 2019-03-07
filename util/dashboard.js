@@ -222,9 +222,9 @@ module.exports = (client) => {
       where: { skipped: false }
     });
 
-    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
-    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
-    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
+    const totalWootsPoints = "(SUM(plays.woots) * 1.12)";
+    const totalGrabsPoints = "(SUM(plays.grabs) * 1.2)";
+    const totalMehsPoints = "(SUM(plays.mehs) * 1.35)";
 
     const rank = await client.db.models.plays.findAll({
       attributes: ["author", "title",
@@ -276,9 +276,9 @@ module.exports = (client) => {
       where: { skipped: false }
     });
 
-    const totalWootsPoints = "(SUM(plays.woots) * 0.75)";
-    const totalGrabsPoints = "(SUM(plays.grabs) * 3.5)";
-    const totalMehsPoints = "(SUM(plays.mehs) * 8.75)";
+    const totalWootsPoints = "(SUM(plays.woots) * 1.12)";
+    const totalGrabsPoints = "(SUM(plays.grabs) * 1.2)";
+    const totalMehsPoints = "(SUM(plays.mehs) * 1.35)";
     
     const rank = await client.db.models.plays.findAll({
       attributes: ["author", "title",
