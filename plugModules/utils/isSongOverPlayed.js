@@ -67,7 +67,7 @@ module.exports = function Util(bot) {
         return true;
       }
 
-      return undefined;
+      return false;
     },
   };
 
