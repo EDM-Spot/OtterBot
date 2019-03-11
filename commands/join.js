@@ -14,7 +14,7 @@ class Ping extends Command {
     try {
       message.delete();
       
-      const price = 0;
+      const price = 1;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {

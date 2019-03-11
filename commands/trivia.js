@@ -19,7 +19,7 @@ class Trivia extends Command {
       return true;
     }
     
-    let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. \n";
+    let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. Costs 1 Prop. \n";
     startMessage += "You will be warned 30 seconds before it starts. \n";
     startMessage += "Press ✅ or ❌ to answer the question. The trivia will continue until only one stays. \n";
     startMessage += "You have 15 Seconds to answer when questions shows up. \n";
