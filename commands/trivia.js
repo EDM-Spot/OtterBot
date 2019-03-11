@@ -38,7 +38,13 @@ class Trivia extends Command {
     this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
       this.client.triviaUtil.started = true;
       message.channel.send("<@&512635547320188928> Trivia will now start!");
-      await this.trivia(message, this.client.triviaUtil.players);
+
+      if (this.client.triviaUtil.players.length > 1) {
+        await this.trivia(message, this.client.triviaUtil.players);
+      } else {
+        message.channel.send("Trivia cannot be started with only 1 Player!");
+        this.client.triviaUtil.end();
+      }
     });
   }
 
