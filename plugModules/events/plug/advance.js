@@ -18,6 +18,8 @@ module.exports = function Event(bot, filename, platform) {
       let songAuthor = null;
       let songTitle = null;
 
+      let skipped = false;
+
       try {
         if (get(data, "media.format", 2) === 1) {
           const YouTubeMediaData = await bot.youtube.getMedia(data.media.cid);
@@ -78,7 +80,11 @@ module.exports = function Event(bot, filename, platform) {
         
         if (pattern.test(songAuthor.toLowerCase()) || pattern.test(songTitle.toLowerCase())) {
           await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
-          await bot.plug.moderateForceSkip();
+
+          if (!skipped) {
+            await bot.plug.moderateForceSkip();
+            skipped = true;
+          }
         }
       }
 
@@ -86,12 +92,20 @@ module.exports = function Event(bot, filename, platform) {
 
       if (isObject(blacklisted)) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
-        await bot.plug.moderateForceSkip();
+        
+        if (!skipped) {
+          await bot.plug.moderateForceSkip();
+          skipped = true;
+        }
       }
 
       if (isObject(data.currentDJ) && data.media.duration >= 390) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
-        await bot.utils.lockskip(data.currentDJ);
+        
+        if (!skipped) {
+          await bot.utils.lockskip(data.currentDJ);
+          skipped = true;
+        }
       }
 
       const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, data.media.cid);
@@ -104,7 +118,11 @@ module.exports = function Event(bot, filename, platform) {
                 time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
               }));
               //await bot.plug.sendChat("!plays");
-              await bot.plug.moderateForceSkip();
+              
+              if (!skipped) {
+                await bot.plug.moderateForceSkip();
+                skipped = true;
+              }
             } else {
               await bot.plug.sendChat(bot.utils.replace(bot.lang.maybeHistorySkip, {
                 cid: map(songHistory, "cid")[0],
@@ -124,7 +142,11 @@ module.exports = function Event(bot, filename, platform) {
           await bot.plug.sendChat(bot.lang.stuckSkip);
 
           bot.global.isSkippedByTimeGuard = true;
-          await bot.plug.moderateForceSkip();
+          
+          if (!skipped) {
+            await bot.plug.moderateForceSkip();
+            skipped = true;
+          }
         }
       }, (data.media.duration + 10) * 1e3);
 
@@ -308,6 +330,7 @@ module.exports = function Event(bot, filename, platform) {
             }), data.media.duration * 1e3);
           }
 
+          skipped = false;
           bot.global.ignoreHistoryNext = false;
           await bot.utils.updateRDJ(lastPlay.user.id);
         });
