@@ -13,11 +13,13 @@ module.exports = (client) => {
       this.timer = undefined;
       this.running = false;
       this.started = false;
+      this.propsStored = 0;
     }
     
     start() {
       this.running = true;
-      this.players = [];
+      this.propsStored = 0;
+      //this.players = [];
     }
 
     end() {
@@ -25,6 +27,7 @@ module.exports = (client) => {
       this.started = false;
       this.timer = undefined;
       this.players = [];
+      this.propsStored = 0;
 
       return true;
     }
