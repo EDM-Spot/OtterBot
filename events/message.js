@@ -96,7 +96,7 @@ This command requires level ${this.client.levelCache[cmd.conf.permLevel]} (${cmd
     }
     
     // If the command exists, **AND** the user has permission, run it.
-    this.client.logger.log(`${this.client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`, "cmd");
+    //this.client.logger.log(`${this.client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`, "cmd");
     cmd.run(message, args, level);
   }
 };
