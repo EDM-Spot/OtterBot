@@ -5,9 +5,9 @@ const {
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["blocked", "check"],
-    minimumPermission: 2000,
-    cooldownType: "perUse",
-    cooldownDuration: 10,
+    minimumPermission: 0,
+    cooldownType: "perUser",
+    cooldownDuration: 60,
     parameters: "[YouTube Link]",
     description: "Checks if media is unavailable in any sort of way",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
