@@ -16,10 +16,12 @@ module.exports = (client) => {
       this.propsStored = 0;
     }
     
-    start() {
+    async start() {
       this.running = true;
       this.propsStored = 0;
       //this.players = [];
+
+      await client.redis.placeCommandOnCooldown("discord", "trivia@start", "perUse", 1, 3600);
     }
 
     end() {
@@ -166,9 +168,9 @@ module.exports = (client) => {
         return null;
       }
 
-      await client.plug.sendChat("@" + plugUser.username + " Won the Discord Trivia! Moving to 1...");
+      await client.plug.sendChat("@" + plugUser.username + " Won the Discord Trivia! Moving to 3...");
   
-      return client.queue.add(plugUser, 1);
+      return client.queue.add(plugUser, 3);
     }
   }
 

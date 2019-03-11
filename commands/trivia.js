@@ -23,13 +23,13 @@ class Trivia extends Command {
     startMessage += "You will be warned 30 seconds before it starts. \n";
     startMessage += "Press ✅ or ❌ to answer the question. The trivia will continue until only one stays. \n";
     startMessage += "You have 15 Seconds to answer when questions shows up. \n";
-    startMessage += "The Winner will be moved to position 1 so don't forget to stay on plug. \n";
+    startMessage += "The Winner will be moved to position 3 so don't forget to stay on plug. \n";
     startMessage += "Good Luck!";
     message.channel.send(startMessage);
 
-    await this.client.plug.sendChat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "! The winner gets moved to position 1! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+    await this.client.plug.sendChat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "! The winner gets moved to position 3! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
-    this.client.triviaUtil.start();
+    await this.client.triviaUtil.start();
 
     new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
       message.channel.send("<@&512635547320188928> 30 Seconds left until start!");

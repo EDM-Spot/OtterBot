@@ -16,6 +16,12 @@ class Ping extends Command {
       
       if (!args.length) { return; }
 
+      const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "trivia@start", "perUse");
+
+      if (cooldown != -2) {
+        return message.reply("Hold on! The last Trivia was " + Math.floor((3600 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to start another Trivia.");
+      }
+
       const price = parseInt(args.pop(), 10);
 
       if (isNaN(price) || price < 1 || price > 3) {
@@ -63,7 +69,7 @@ class Ping extends Command {
 
       if (this.client.triviaUtil.propsStored == 0) {
         message.channel.send("Someone paid to start a Trivia! Use `-triviapay 1-3` to use your props to start the Trivia.");
-        await this.client.plug.sendChat("@djs Someone paid to start a Trivia! Use `-triviapay 1-3` to use your props to start the Trivia. \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+        await this.client.plug.sendChat("Someone paid to start a Trivia! Use `-triviapay 1-3` in discord to use your props to start the Trivia. \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
       }
 
       this.client.triviaUtil.propsStored += price;
