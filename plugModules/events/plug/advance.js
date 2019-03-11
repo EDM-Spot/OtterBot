@@ -99,6 +99,17 @@ module.exports = function Event(bot, filename, platform) {
         }
       }
 
+      const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, data.media.cid);
+
+      if (isOverplayed) {
+        await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
+        
+        if (!skipped) {
+          await bot.plug.moderateForceSkip();
+          skipped = true;
+        }
+      }
+
       if (isObject(data.currentDJ) && data.media.duration >= 390) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
         

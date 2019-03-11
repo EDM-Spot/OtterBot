@@ -3,6 +3,7 @@
   "discordStartup": "`Bot is now running!`",
   "exceedstimeguard": "your media exceeds the defined maximum length (6m30s)!",
   "blacklisted": "your media is Blacklisted!",
+  "overplayed": "your media is Overplayed!",
   "advanceprops": "%%USER%% got %%PROPS%% prop%%PLURAL%% for the song they just played.",
   "advanceholiday": "%%USER%% got %%RANDOM%% :fplcandy: for the theme song played.",
   "pointsMilestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",

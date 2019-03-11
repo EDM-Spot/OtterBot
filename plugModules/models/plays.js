@@ -68,6 +68,7 @@ module.exports = async function Model(bot, sequelize) {
 
   bot.db.models.plays = Plays;
   bot.db.models.plays.belongsTo(bot.db.models.blacklist, {foreignKey: "cid", sourceKey: "cid"});
+  bot.db.models.plays.belongsTo(bot.db.models.overplayedlist, {foreignKey: "cid", sourceKey: "cid"});
   bot.db.models.plays.belongsTo(bot.db.models.users, {foreignKey: "dj", sourceKey: "id"});
 
   return Plays;
