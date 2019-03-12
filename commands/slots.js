@@ -110,8 +110,8 @@ class Slots extends Command {
       const payout = price * points;
 
       embed.addField(
-        points ? message.author.username + ", You have won!" : message.author.username + ", You have lost!",
-        points ? `You have earned ${payout} Props` : "Better luck next time!"
+        points ? `${message.author.username}, You have won!` : `${message.author.username}, You have lost!`,
+        points ? `You have earned ${payout} Props` : `Lost ${price} Props. Better luck next time!`
       );
 
       await inst.increment("props", { by: payout });
