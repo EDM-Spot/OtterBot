@@ -24,7 +24,7 @@ const symbols = [
 class Slots extends Command {
   constructor(client) {
     super(client, {
-      name: "Slots",
+      name: "slots",
       description: "Bet Props in the Slot Machine",
       usage: "slots 3-20",
       permLevel: "Bot Admin"
