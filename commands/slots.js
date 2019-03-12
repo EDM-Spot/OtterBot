@@ -77,7 +77,8 @@ class Slots extends Command {
       const machine = new SlotMachine(3, symbols);
       const results = machine.play();
 
-      console.log(results.lines);
+      console.log(results.lines.slice(-2)[0]);
+      console.log(results.lines[0].symbols.map(s => s.display).join(" "));
 
       const embed = new Discord.RichEmbed();
       const dollarSigns = "   💲 💲 💲   ";
