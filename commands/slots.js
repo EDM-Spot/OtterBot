@@ -11,11 +11,11 @@ const symbols = [
   new SlotSymbol("grape", { display: "🍇", points: 1, weight: 100 }),
   new SlotSymbol("orange", { display: "🍊", points: 1, weight: 100 }),
   new SlotSymbol("cherry", { display: "🍒", points: 1, weight: 100 }),
-  new SlotSymbol("wild", { display: "❔", points: 1, weight: 40, wildcard: true }),
+  new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true }),
   new SlotSymbol("bell", { display: "🔔", points: 2, weight: 40 }),
   new SlotSymbol("clover", { display: "🍀", points: 3, weight: 35 }),
   new SlotSymbol("music", { display: "🎵", points: 1, weight: 50 }),
-  new SlotSymbol("dj", { display: "🎧", points: 1, weight: 35 }),
+  new SlotSymbol("dj", { display: "🎧", points: 1, weight: 10 }),
   new SlotSymbol("heart", { display: "❤", points: 4, weight: 30 }),
   new SlotSymbol("money", { display: "💰", points: 5, weight: 25 }),
   new SlotSymbol("diamond", { display: "💎", points: 10, weight: 3 }),
@@ -60,8 +60,6 @@ class Slots extends Command {
         return message.reply("You need to link your account first! Read how here: http://prntscr.com/ls539m");
       }
 
-      const userID = userDB.get("discord");
-
       const user = this.client.plug.getUser(userDB.get("id"));
 
       const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: user.id }, defaults: { id: user.id } });
@@ -72,24 +70,42 @@ class Slots extends Command {
         return message.reply("You don't have enough props.");
       }
 
-      await inst.decrement("props", { by: 0 });
+      await inst.decrement("props", { by: price });
 
       const machine = new SlotMachine(3, symbols);
       const results = machine.play();
 
-      console.log(results.lines.slice(-2)[0]);
-      console.log(results.lines[0].symbols.map(s => s.display).join(" "));
+      let moveTo3 = false;
+      let moveDown3 = false;
 
       const embed = new Discord.RichEmbed();
       const dollarSigns = "   💲 💲 💲   ";
 
       embed.description = (results.lines.slice(-2)[0].isWon ? "\n↘" : "\n⬛") + dollarSigns + (results.lines.slice(-1)[0].isWon ? "↙" : "⬛");
 
+      if (results.lines.slice(-2)[0].isWon && results.lines.slice(-2)[0].symbols.map(s => s.name).includes("dj")) {
+        moveTo3 = true;
+      } else if (results.lines.slice(-2)[0].isWon && results.lines.slice(-2)[0].symbols.map(s => s.name).includes("music")) {
+        moveDown3 = true;
+      }
+
       for (let i = 0; i < results.lines.length - 2; i++) {
         embed.description += (results.lines[i].isWon ? "\n➡   " : "\n⬛   ") + results.lines[i].symbols.map(s => s.display).join(" ") + (results.lines[i].isWon ? "   ⬅" : "   ⬛");
+
+        if (results.lines[i].isWon && results.lines[i].symbols.map(s => s.name).includes("dj")) {
+          moveTo3 = true;
+        } else if (results.lines[i].isWon && results.lines[i].symbols.map(s => s.name).includes("music")) {
+          moveDown3 = true;
+        }
       }
 
       embed.description += (results.lines.slice(-1)[0].isWon ? "\n↗" : "\n⬛") + dollarSigns + (results.lines.slice(-2)[0].isWon ? "↖" : "⬛");
+
+      if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("dj")) {
+        moveTo3 = true;
+      } else if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("music")) {
+        moveDown3 = true;
+      }
 
       const points = results.lines.reduce((total, line) => total + line.points, 0);
       const payout = price * points;
@@ -99,55 +115,30 @@ class Slots extends Command {
         points ? `You have earned ${payout} Props` : "Better luck next time!"
       );
 
-      await inst.increment("props", { by: 0 });
-
-      //await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", 1, 3600);
-
-      return message.channel.send({ embed });
-
-
-
-
+      await inst.increment("props", { by: payout });
 
       const dj = this.client.plug.getDJ();
       const userPos = this.client.plug.getWaitListPosition(user.id);
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
-        return message.reply("You're not online on plug!");
+        message.reply("You're not online on plug! Can't Move.");
       }
 
-      if (this.client.triviaUtil.started) {
-        return message.reply("Trivia already started!");
-      } else if (isObject(dj) && dj.id === user.id) {
-        return message.reply("You can't join while playing!");
-      } else if (userPos >= 0 && userPos <= 5) {
-        return message.reply("You are too close to DJ.");
+      if ((isObject(dj) && dj.id !== user.id) || (userPos >= 5)) {
+        if (moveTo3) {
+          await this.client.plug.sendChat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
+
+          this.client.queue.add(user, 3);
+        } else if (moveDown3) {
+          await this.client.plug.sendChat("@" + user.username + " Won 3 Spots in the Slot Machine! Moving Down 3...");
+
+          this.client.queue.add(user, userPos - 3);
+        }
       }
 
-      if (this.client.triviaUtil.propsStored == 0) {
-        message.channel.send("Someone paid to start a Trivia! Use `-triviapay 1-3` to use your props to start the Trivia.");
-        await this.client.plug.sendChat("Someone paid to start a Trivia! Use `-triviapay 1-3` in discord to use your props to start the Trivia. \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
-      }
+      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", 1, 3600);
 
-      this.client.triviaUtil.propsStored += price;
-
-      if (this.client.triviaUtil.propsStored >= 10) {
-        const cmd = this.client.commands.get("trivia") || this.client.commands.get(this.client.aliases.get("trivia"));
-        if (!cmd) return;
-
-        cmd.run(message, "", "Bot Admin");
-      }
-
-      if (this.client.triviaUtil.propsStored < 10) {
-        message.channel.send(this.client.triviaUtil.propsStored + "/10 to start the Trivia!");
-      }
-
-      if (this.client.triviaUtil.players.includes(userID)) return message.reply("Paid more " + price + " Props.");
-
-      this.client.triviaUtil.add(userID);
-      await this.client.guilds.get("485173051432894489").members.get(message.author.id).addRole("512635547320188928").catch(console.error);
-
-      return message.reply("Paid " + price + " Props And Joined Next Trivia.");
+      return message.channel.send({ embed });
     } catch (e) {
       console.log(e);
     }
