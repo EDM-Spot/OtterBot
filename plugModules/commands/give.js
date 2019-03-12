@@ -42,8 +42,8 @@ module.exports = function Command(bot) {
       if (!isNil(userGiving) || !isNil(userHaveGives)) {
         await bot.redis.removeGivePosition(rawData.from.id, user.id);
 
-        this.reply(lang.give.cantGiveAgain, {}, 6e4);
-        return false;
+        //this.reply(lang.give.cantGiveAgain, {}, 6e4);
+        //return false;
       }
 
       await bot.redis.registerGivePosition(rawData.from.id, user.id, userPosition);
