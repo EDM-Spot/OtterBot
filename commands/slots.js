@@ -61,7 +61,7 @@ class Slots extends Command {
 
       const user = this.client.plug.getUser(userDB.get("id"));
 
-      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: user.id }, defaults: { id: user.id } });
+      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
 
       const props = inst.get("props");
 
@@ -121,9 +121,7 @@ class Slots extends Command {
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         message.reply("You're not online on plug! Can't Move.");
-      }
-
-      if ((isObject(dj) && dj.id !== user.id) || (userPos >= 5)) {
+      } else if ((isObject(dj) && dj.id !== user.id) || (userPos >= 5)) {
         if (moveTo3) {
           await this.client.plug.sendChat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
 
