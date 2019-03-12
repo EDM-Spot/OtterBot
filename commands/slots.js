@@ -97,7 +97,7 @@ class Slots extends Command {
 
       await inst.increment("props", { by: 0 });
 
-      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", 1, 7200);
+      //await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", 1, 7200);
 
       return message.channel.send({ embed });
 
