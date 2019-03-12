@@ -19,8 +19,12 @@ module.exports = function Command(bot) {
     description: "Gives props to the current DJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const historyID = bot.plug.getHistoryID();
-      const dj = bot.plug.getDJ();
+      let dj = bot.plug.getDJ();
       const timeElapsed = bot.plug.getTimeElapsed();
+
+      if (isNil(dj)) {
+        dj = bot.plug.getDJ();
+      }
 
       if (timeElapsed < 10) {
         return false;
