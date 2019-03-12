@@ -14,8 +14,8 @@ const symbols = [
   new SlotSymbol("wild", { display: "❔", points: 1, weight: 40, wildcard: true }),
   new SlotSymbol("bell", { display: "🔔", points: 2, weight: 40 }),
   new SlotSymbol("clover", { display: "🍀", points: 3, weight: 35 }),
-  new SlotSymbol("music", { display: "🎵", points: 0, weight: 50 }),
-  new SlotSymbol("dj", { display: "🎧", points: 0, weight: 35 }),
+  new SlotSymbol("music", { display: "🎵", points: 1, weight: 50 }),
+  new SlotSymbol("dj", { display: "🎧", points: 1, weight: 35 }),
   new SlotSymbol("heart", { display: "❤", points: 4, weight: 30 }),
   new SlotSymbol("money", { display: "💰", points: 5, weight: 25 }),
   new SlotSymbol("diamond", { display: "💎", points: 10, weight: 3 }),
@@ -41,7 +41,7 @@ class Slots extends Command {
       const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "slots@play", "perUser");
 
       if (cooldown != -2) {
-        return message.reply("Hold on! You already played Slots " + Math.floor((7200 - cooldown) / 120) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 120) + " minute(s) to play again.");
+        return message.reply("Hold on! You already played Slots " + Math.floor((3600 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
       }
 
       const price = parseInt(args.pop(), 10);
@@ -77,6 +77,8 @@ class Slots extends Command {
       const machine = new SlotMachine(3, symbols);
       const results = machine.play();
 
+      console.log(results.lines);
+
       const embed = new Discord.RichEmbed();
       const dollarSigns = "   💲 💲 💲   ";
 
@@ -92,13 +94,13 @@ class Slots extends Command {
       const payout = price * points;
 
       embed.addField(
-        points ? "You have won!" : "You have lost!",
-        points ? `You have earned ${payout.toLocaleString()} Props` : "Better luck next time!"
+        points ? message.author.username + ", You have won!" : message.author.username + ", You have lost!",
+        points ? `You have earned ${payout} Props` : "Better luck next time!"
       );
 
       await inst.increment("props", { by: 0 });
 
-      //await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", 1, 7200);
+      //await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", 1, 3600);
 
       return message.channel.send({ embed });
 
