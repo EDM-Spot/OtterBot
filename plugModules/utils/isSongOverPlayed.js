@@ -21,7 +21,6 @@ module.exports = function Util(bot) {
       
       if (isObject(songOverPlayed)) {
         const timePassed = bot.moment().diff(bot.moment(songOverPlayed.created_at), "days");
-        console.log("Overplayed TimePassed " + timePassed);
         
         if (timePassed <= 3) {
           return true;
@@ -55,7 +54,7 @@ module.exports = function Util(bot) {
           }
         }
       }
-      console.log("Overplayed PlayedCount " + playedCount);
+      
       if (playedCount > 5) {
         await bot.db.models.overplayedlist.findOrCreate({
           where: { cid: cid },

@@ -100,7 +100,6 @@ module.exports = function Event(bot, filename, platform) {
       }
 
       const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, data.media.cid);
-      console.log("Is Overplayed? " + isOverplayed);
 
       if (isOverplayed) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
