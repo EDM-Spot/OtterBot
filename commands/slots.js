@@ -1,5 +1,6 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/slots.js
 const Command = require("../base/Command.js");
+const Discord = require("discord.js");
 const { isNil, isNaN, isObject } = require("lodash");
 const { SlotMachine, SlotSymbol } = require("slot-machine");
 
@@ -76,7 +77,7 @@ class Slots extends Command {
       const machine = new SlotMachine(3, symbols);
       const results = machine.play();
 
-      const embed = this.client.util.embed();
+      const embed = new Discord.RichEmbed();
       const dollarSigns = "   💲 💲 💲   ";
 
       embed.description = (results.lines.slice(-2)[0].isWon ? "\n↘" : "\n⬛") + dollarSigns + (results.lines.slice(-1)[0].isWon ? "↙" : "⬛");
