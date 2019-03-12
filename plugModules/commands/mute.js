@@ -1,4 +1,4 @@
-const { isObject, isNil } = require("lodash");
+const { isObject, isEmpty } = require("lodash");
 const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 const Discord = require("discord.js");
 
@@ -64,7 +64,7 @@ module.exports = function Command(bot) {
         reason = rawData.args.slice(1).join(" ");
       }
 
-      if (isNil(reason)) {
+      if (isEmpty(reason)) {
         this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }
