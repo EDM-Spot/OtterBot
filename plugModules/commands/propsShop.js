@@ -132,6 +132,7 @@ module.exports = function Command(bot) {
             const [buyer] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
   
             const props = buyer.get("props");
+            const buyerID = buyer.get("id");
   
             if (props < 100) {
               this.reply(lang.propsShop.noProps, {}, 6e4);
@@ -143,7 +144,7 @@ module.exports = function Command(bot) {
               dest: `./dashboard/public/images/badges/${user.id}.${type}`
             };
   
-            await bot.shop.saveImage(user.id, options, type, false, buyer.id);
+            await bot.shop.saveImage(user.id, options, type, false, buyerID);
           });
   
           return true;
