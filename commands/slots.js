@@ -27,7 +27,7 @@ class Slots extends Command {
     super(client, {
       name: "slots",
       description: "Bet Props in the Slot Machine",
-      usage: "slots 3-20"
+      usage: "slots 1-20"
     });
   }
 
@@ -45,7 +45,7 @@ class Slots extends Command {
 
       const price = parseInt(args.pop(), 10);
 
-      if (isNaN(price) || price < 3 || price > 20) {
+      if (isNaN(price) || price < 1 || price > 20) {
         return false;
       }
 
