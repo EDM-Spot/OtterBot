@@ -1,12 +1,12 @@
 const Command = require("../base/Command.js");
 const { isNil, isObject } = require("lodash");
 
-class Ping extends Command {
+class Join extends Command {
   constructor(client) {
     super(client, {
       name: "join",
       description: "Join Trivia.",
-      usage: "join",
+      usage: "join"
     });
   }
 
@@ -69,4 +69,4 @@ class Ping extends Command {
   }
 }
 
-module.exports = Ping;
+module.exports = Join;

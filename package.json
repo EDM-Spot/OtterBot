@@ -63,7 +63,8 @@
     "readline-sync": "1.4.9",
     "request": "2.88.0",
     "request-promise": "4.2.2",
-    "sequelize": "4.42.0"
+    "sequelize": "4.42.0",
+    "slot-machine": "^2.1.0"
   },
   "devDependencies": {
     "eslint": "5.13.0",
