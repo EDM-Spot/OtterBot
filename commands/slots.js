@@ -117,7 +117,7 @@ class Slots extends Command {
       await inst.increment("props", { by: payout });
 
       const dj = this.client.plug.getDJ();
-      const userPos = this.client.plug.getWaitListPosition(user.id);
+      const userPos = this.client.plug.getWaitListPosition(userDB.get("id"));
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         message.reply("You're not online on plug! Can't Move.");
