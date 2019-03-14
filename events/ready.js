@@ -31,6 +31,8 @@ module.exports = class {
     require("../util/dashboard.js")(this.client);
 
     require("../util/trivia.js")(this.client);
+
+    require("../util/poker.js")(this.client);
     
     // Set the game as the default help command + guild count.
     // NOTE: This is also set in the guildCreate and guildDelete events!
