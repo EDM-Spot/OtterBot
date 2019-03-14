@@ -16,7 +16,7 @@ module.exports = (client) => {
       this.started = false;
       this.minPlayers = 2;
       this.maxPlayers = 8;
-      this.entryFee = 20;
+      this.entryFee = 10;
 
       this.currentRound = 0;
       this.tableCards = [];
@@ -61,11 +61,11 @@ module.exports = (client) => {
           text,
           `**${this.currentPlayer.user.tag}** has a balance of **${this.playerBalances.get(this.currentPlayer.id)}** Props`,
           "",
-          `Type \`${prefix}poker bet <amount>\` to bet.`,
-          `Type \`${prefix}poker check\` to check.`,
-          `Type \`${prefix}poker fold\` to fold.`,
-          `Type \`${prefix}poker allIn\` to go all-in.`,
-          `Type \`${prefix}poker skip\` to skip after an all-in.`
+          `Type \`${prefix}p bet <amount>\` to bet.`,
+          `Type \`${prefix}p check\` to check.`,
+          `Type \`${prefix}p fold\` to fold.`,
+          `Type \`${prefix}p allIn\` to go all-in.`,
+          `Type \`${prefix}p skip\` to skip after an all-in.`
         ]);
 
       const options = { embed };
@@ -87,6 +87,10 @@ module.exports = (client) => {
       return client.channels.get(this.channel).send(`${this.currentPlayer}, it is your turn!`, options);
     }
 
+    checkGame() {
+      return this.running;
+    }
+
     async startGame() {
       const promises = [];
 
@@ -99,7 +103,7 @@ module.exports = (client) => {
 
         const imagePromise = Deck.drawCards(cards);
         const embed = new Discord.RichEmbed()
-          .addField("Game Started", `A poker game has started in ${this.channel}.`)
+          .addField("Game Started", `A poker game has started in ${client.channels.get(this.channel).name}.`)
           .addField("Your Cards", cards.map(card => `${card.toEmojiForm()}\u2000(${card})`))
           .setImage("attachment://cards.png");
 
@@ -141,6 +145,9 @@ module.exports = (client) => {
             "Everyone decided to fold!",
             `**${this.getPlayer(0).user.tag}** wins **${this.tableMoney}** Props`
           ]);
+
+        console.log("WINNER?");
+        console.log(this.getPlayer(0).user.tag);
 
         //const bal = this.client.profiles.get(this.getPlayer(0).user.id, "balance", 0);
         //await this.client.profiles.set(this.getPlayer(0).user.id, "balance", bal + payout);
@@ -188,10 +195,15 @@ module.exports = (client) => {
         ]);
 
       for (const winner of winners) {
-        console.log(winner);
+        console.log("WINNERS");
+        console.log(winner.tag);
         //const bal = this.client.profiles.get(winner.id, "balance", 0);
         //await this.client.profiles.set(winner.id, "balance", bal + payout); // eslint-disable-line no-await-in-loop
       }
+
+      console.log("Finishing Poker");
+      this.running = false;
+      this.started = false;
 
       embed.addField("Hands", hands.map(hand => {
         const name = client.users.get(hand.player).tag;
@@ -261,6 +273,8 @@ module.exports = (client) => {
     async fold(timeout = false) {
       const player = this.currentPlayer;
       this.players.delete(player.id);
+
+      await this.guild.get("485173051432894489").members.get(player.id).removeRole("512635547320188928").catch(console.warn);
 
       this.currentTurn -= 1;
 

@@ -15,7 +15,7 @@ class Trivia extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check()) {
+    if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
       return true;
     }
     
@@ -27,7 +27,9 @@ class Trivia extends Command {
     startMessage += "Good Luck!";
     message.channel.send(startMessage);
 
-    await this.client.plug.sendChat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "! The winner gets moved to position 3! \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+    await this.client.plug.sendChat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "!");
+    await this.client.plug.sendChat("The winner gets moved to position 3!");
+    await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
     await this.client.triviaUtil.start();
 

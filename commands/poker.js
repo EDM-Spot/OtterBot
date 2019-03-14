@@ -7,7 +7,7 @@ require("moment-timer");
 class Poker extends Command {
   constructor(client) {
     super(client, {
-      name: "poker",
+      name: "p",
       description: "Start Poker Game",
       usage: "['start', 'join', 'bet', 'check', 'fold', 'skip', 'allin']"
     });
@@ -26,7 +26,7 @@ class Poker extends Command {
         return false;
       }
 
-      const price = 20;
+      const price = 0;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -47,26 +47,34 @@ class Poker extends Command {
           const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "poker@play", "perUse");
 
           if (cooldown != -2) {
-            //return message.reply("Hold on! Poker runned " + Math.floor((3600 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
+            return message.reply("Hold on! Poker runned " + Math.floor((3600 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
           }
 
-          if (isNaN(price) || price < 1 || price > 20) {
+          if (isNaN(price)) {
             return false;
           }
 
-          message.channel.send([
-            "!!!TESTING!!! NO PROPS USED",
-            "A new poker game has been created.",
-            `A maximum of ${this.client.pokerUtil.maxPlayers} players can play.`,
-            "The game will start in 1 minutes.",
-            "Join the game with `-poker join`!"
-          ]);
+          if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
+            return true;
+          }
+
+          let startMessage = "A new poker game has been created. Costs 0 Props to enter and gives 10 Props to play. \n";
+          startMessage += "You will be warned 30 seconds before it starts. \n";
+          startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
+          startMessage += "The game will start in 5 minutes. Join the game with `-p join` \n";
+          startMessage += "Good Luck!";
+          message.channel.send(startMessage);
+
+          await this.client.plug.sendChat("@djs Discord Poker is starting now in channel #" + message.channel.name + "!");
+          await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
           this.client.pokerUtil.running = true;
 
-          await this.client.plug.sendChat("Discord Poker Game is starting now in channel #" + message.channel.name + "!");
+          new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+            message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          });
 
-          this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
+          this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
             if (this.client.pokerUtil.startingPlayers.length < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
             } else {
@@ -80,7 +88,7 @@ class Poker extends Command {
           return true;
         }
         case "join": {
-          if (!this.client.pokerUtil.running) {
+          if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
           } else if (this.client.pokerUtil.started) {
             return message.reply("Poker already started!");
@@ -96,7 +104,7 @@ class Poker extends Command {
             return message.reply("You don't have enough props.");
           }
 
-          await inst.decrement("props", { by: 0 });
+          await inst.decrement("props", { by: price });
 
           this.client.pokerUtil.players.add(userID);
           this.client.pokerUtil.startingPlayers.add(userID);
@@ -105,7 +113,7 @@ class Poker extends Command {
           return message.reply("Joined Poker.");
         }
         case "bet": {
-          if (!this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
           }
           
@@ -126,7 +134,7 @@ class Poker extends Command {
           return this.client.pokerUtil.bet(amount);
         }
         case "check": {
-          if (!this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
           }
           
@@ -137,14 +145,14 @@ class Poker extends Command {
           return this.client.pokerUtil.check();
         }
         case "fold": {
-          if (!this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
           }
           
           return this.client.pokerUtil.fold();
         }
         case "skip": {
-          if (!this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
           }
           
@@ -155,7 +163,7 @@ class Poker extends Command {
           return this.client.pokerUtil.skip();
         }
         case "allin": {
-          if (!this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
           }
           
