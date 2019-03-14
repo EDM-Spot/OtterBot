@@ -274,7 +274,7 @@ module.exports = (client) => {
       const player = this.currentPlayer;
       this.players.delete(player.id);
 
-      await this.guild.get("485173051432894489").members.get(player.id).removeRole("512635547320188928").catch(console.warn);
+      await this.guild.members.get(player.id).removeRole("512635547320188928").catch(console.warn);
 
       this.currentTurn -= 1;
 

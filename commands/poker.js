@@ -20,11 +20,11 @@ class Poker extends Command {
       
       if (!args.length) { return; }
 
-      const params = ["start", "join", "bet", "check", "fold", "skip", "allin"];
+      const params = ["start", "join", "bet", "check", "fold", "skip", "allin", "reset"];
       const param = `${args.shift()}`.toLowerCase();
 
       if (!params.includes(param)) {
-        return false;
+        return message.reply(`Invalid Param: ${param}`);
       }
 
       const price = 0;
