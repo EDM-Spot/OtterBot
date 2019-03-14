@@ -56,13 +56,16 @@ class Poker extends Command {
           }
 
           message.reply([
+            "!!!TESTING!!! NO PROPS USED",
             "A new poker game has been created.",
             `A maximum of ${this.client.pokerUtil.maxPlayers} players can play.`,
-            "The game will start in 5 minutes.",
+            "The game will start in 1 minutes.",
             "Join the game with `-poker join`!"
           ]);
 
-          this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
+          await this.client.plug.sendChat("Discord Poker Game is starting now in channel #" + message.channel.name + "!");
+
+          this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
             this.client.pokerUtil.started = true;
             await this.client.pokerUtil.startGame();
           });
