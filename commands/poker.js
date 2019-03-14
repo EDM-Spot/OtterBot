@@ -88,7 +88,7 @@ class Poker extends Command {
             return message.reply("The game is Full!");
           }
 
-          if (this.client.pokerUtil.startingPlayers.includes(userID)) return true;
+          if (this.client.pokerUtil.startingPlayers.has(userID)) return true;
 
           const props = inst.get("props");
 
