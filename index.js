@@ -17,6 +17,8 @@ const Redis = require("ioredis");
 const Sequelize = require("sequelize");
 const plugModuleManager = require("./plugModules");
 
+const Deck = require("./util/poker/deck.js");
+
 class Bot extends Discord.Client {
   constructor(options) {
     super(options);
@@ -270,6 +272,8 @@ const init = async () => {
   client.login(client.config.token);
   
   // End top-level async/await function.
+
+  await Deck.loadAssets();
 };
 
 init();
