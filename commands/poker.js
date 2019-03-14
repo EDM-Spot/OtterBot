@@ -67,7 +67,7 @@ class Poker extends Command {
           await this.client.plug.sendChat("Discord Poker Game is starting now in channel #" + message.channel.name + "!");
 
           this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
-            if (this.client.pokerUtil.startingPlayers.size < this.client.pokerUtil.minPlayers) {
+            if (this.client.pokerUtil.startingPlayers.length < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
             } else {
               this.client.pokerUtil.started = true;

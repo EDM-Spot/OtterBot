@@ -66,7 +66,7 @@ class Deck {
     const height = 212;
     const width = 138 * cards.length;
 
-    const canvas = new Canvas(width, height);
+    const canvas = Canvas.createCanvas(width, height);
     const ctx = canvas.getContext("2d");
 
     for (const [i, card] of cards.entries()) {
