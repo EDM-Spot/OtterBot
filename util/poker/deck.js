@@ -49,7 +49,6 @@ class Deck {
     for (let i = 0; i < cardAmount; i++) {
       const promise = new Promise((resolve, reject) => {
         fs.readFile(__dirname + `/resources/${i}.png`, (err, buffer) => {
-          console.log(i);
           if (err) return reject(err);
           return resolve(buffer);
         });

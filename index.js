@@ -308,6 +308,19 @@ Object.defineProperty(Array.prototype, "random", {
   }
 });
 
+Object.defineProperty(String.prototype, "capitalize", {
+  value: function capitalize() {
+    return this[0].toUpperCase() + this.slice(1);
+  }
+});
+
+Object.defineProperty(Number.prototype, "plural", {
+  value: function plural(singularText, pluralText, withNumber = false) {
+    if (Math.abs(this) === 1) return (withNumber ? this : "") + singularText;
+    return (withNumber ? this : "") + pluralText;
+  }
+});
+
 // These 2 process methods will catch exceptions and give *more details* about the error and stack trace.
 process.on("uncaughtException", (err) => {
   const errorMsg = err.stack.replace(new RegExp(process.cwd().replace(/\\/g,"\\\\"), "g"), ".");
