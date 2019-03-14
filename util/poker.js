@@ -1,6 +1,6 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/games/PokerGame.js
 const Discord = require("discord.js");
-const Deck = require("./poker_utils/deck.js");
+const Deck = require("./poker/deck.js");
 const { Hand } = require("pokersolver");
 
 module.exports = (client) => {
@@ -11,8 +11,8 @@ module.exports = (client) => {
       this.players = [];
       this.startingPlayers = [];
       this.started = false;
-      this.minPlayers = 2,
-      this.maxPlayers = 8,
+      this.minPlayers = 2;
+      this.maxPlayers = 8;
 
       this.currentRound = 0;
       this.tableCards = [];
