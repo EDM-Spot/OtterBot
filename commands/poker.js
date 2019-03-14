@@ -54,7 +54,7 @@ class Poker extends Command {
             return false;
           }
 
-          message.reply([
+          message.channel.send([
             "!!!TESTING!!! NO PROPS USED",
             "A new poker game has been created.",
             `A maximum of ${this.client.pokerUtil.maxPlayers} players can play.`,
@@ -62,11 +62,17 @@ class Poker extends Command {
             "Join the game with `-poker join`!"
           ]);
 
+          this.client.pokerUtil.running = true;
+
           await this.client.plug.sendChat("Discord Poker Game is starting now in channel #" + message.channel.name + "!");
 
           this.timer = new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
-            this.client.pokerUtil.started = true;
-            await this.client.pokerUtil.startGame();
+            if (this.client.pokerUtil.startingPlayers.size < this.client.pokerUtil.minPlayers) {
+              message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
+            } else {
+              this.client.pokerUtil.started = true;
+              await this.client.pokerUtil.startGame();
+            }
           });
 
           await this.client.redis.placeCommandOnCooldown("discord", "poker@play", "perUse", 3600);
@@ -74,8 +80,12 @@ class Poker extends Command {
           return true;
         }
         case "join": {
-          if (this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.running) {
+            return message.reply("Poker is not running!");
+          } else if (this.client.pokerUtil.started) {
             return message.reply("Poker already started!");
+          } else if (this.client.pokerUtil.startingPlayers.length >= this.client.pokerUtil.maxPlayers) {
+            return message.reply("The game is Full!");
           }
 
           if (this.client.pokerUtil.startingPlayers.includes(userID)) return true;

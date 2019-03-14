@@ -10,6 +10,7 @@ module.exports = (client) => {
 
       this.players = [];
       this.startingPlayers = [];
+      this.running = false;
       this.started = false;
       this.minPlayers = 2;
       this.maxPlayers = 8;
