@@ -14,7 +14,7 @@ class Card {
   }
 
   get image() {
-    const Deck = require("./Deck");
+    const Deck = require("./deck.js");
     return Deck.CARD_IMAGES[this.id];
   }
 
