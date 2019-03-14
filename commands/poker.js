@@ -1,6 +1,7 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
-const { isNil, isNaN } = require("lodash");
+const { isNil, isNaN, isObject } = require("lodash");
+const { ROOM_ROLE } = require("plugapi");
 const moment = require("moment");
 require("moment-timer");
 
@@ -168,6 +169,15 @@ class Poker extends Command {
           }
           
           return this.client.pokerUtil.allIn();
+        }
+        case "reset": {
+          const user = this.client.plug.getUser(userDB.get("id"));
+
+          if (!isObject(user) || await this.client.utils.getRole(user) <= ROOM_ROLE.MANAGER) return false;
+
+          await this.client.redis.removeCommandFromCoolDown("discord", "poker@play", "perUse");
+
+          return message.reply("The cooldown for poker has been reset!");
         }
         default:
           return false;
