@@ -9,8 +9,7 @@ class Poker extends Command {
     super(client, {
       name: "poker",
       description: "Start Poker Game",
-      usage: "['start', 'join', 'bet', 'check', 'fold', 'skip', 'allin']",
-      permLevel: "Bot Admin"
+      usage: "['start', 'join', 'bet', 'check', 'fold', 'skip', 'allin']"
     });
   }
 
