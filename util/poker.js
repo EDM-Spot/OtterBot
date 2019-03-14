@@ -6,6 +6,8 @@ const { Hand } = require("pokersolver");
 module.exports = (client) => {
   class PokerUtil {
     constructor() {
+      this.guild = client.guilds.get("485173051432894489");
+
       this.deck = new Deck().fill().shuffle();
 
       this.players = new Set();
@@ -43,7 +45,7 @@ module.exports = (client) => {
         playerIDs.next();
       }
 
-      return client.guild.member(playerIDs.next().value);
+      return this.guild.member(playerIDs.next().value);
     }
 
     get previousBet() {
