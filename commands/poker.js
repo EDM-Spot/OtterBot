@@ -98,8 +98,8 @@ class Poker extends Command {
 
           await inst.decrement("props", { by: 0 });
 
-          this.client.pokerUtil.players.push(userID);
-          this.client.pokerUtil.startingPlayers.push(userID);
+          this.client.pokerUtil.players.add(userID);
+          this.client.pokerUtil.startingPlayers.add(userID);
           await this.client.guilds.get("485173051432894489").members.get(message.author.id).addRole("512635547320188928").catch(console.error);
 
           return message.reply("Joined Poker.");
