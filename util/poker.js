@@ -16,6 +16,7 @@ module.exports = (client) => {
       this.started = false;
       this.minPlayers = 2;
       this.maxPlayers = 8;
+      this.entryFee = 20;
 
       this.currentRound = 0;
       this.tableCards = [];
