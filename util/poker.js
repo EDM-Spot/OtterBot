@@ -1,3 +1,4 @@
+// Original Version https://github.com/1Computer1/kaado/blob/master/src/games/PokerGame.js
 const Discord = require("discord.js");
 const Deck = require("./poker/deck.js");
 const { Hand } = require("pokersolver");
@@ -5,7 +6,7 @@ const { Hand } = require("pokersolver");
 module.exports = (client) => {
   class PokerUtil {
     constructor() {
-      this.deck = new Deck().fill().shuffle();
+      this.deck = undefined;
 
       this.players = [];
       this.startingPlayers = [];
@@ -30,7 +31,7 @@ module.exports = (client) => {
       this.channel = "485927387079639051";
     }
     
-    currentPlayer() {
+    get currentPlayer() {
       return this.getPlayer(this.currentTurn);
     }
 
@@ -44,7 +45,7 @@ module.exports = (client) => {
       return client.guild.member(playerIDs.next().value);
     }
 
-    previousBet() {
+    get previousBet() {
       return this.previousBets[0];
     }
 

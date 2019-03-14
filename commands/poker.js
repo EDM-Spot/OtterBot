@@ -1,4 +1,4 @@
-// Original Version https://github.com/1Computer1/kaado/blob/master/src/games/PokerGame.js
+// Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
 const { isNil, isNaN } = require("lodash");
 const moment = require("moment");
