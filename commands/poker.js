@@ -16,7 +16,7 @@ class Poker extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      message.delete();
+      //message.delete();
       
       if (!args.length) { return; }
 
@@ -75,7 +75,7 @@ class Poker extends Command {
             message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
           });
 
-          this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
+          new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
             if (this.client.pokerUtil.startingPlayers.length < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
             } else {

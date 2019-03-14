@@ -34,6 +34,29 @@ module.exports = (client) => {
 
       this.channel = "485927387079639051";
     }
+
+    end() {
+      this.players = new Set();
+      this.startingPlayers = new Set();
+      this.running = false;
+      this.started = false;
+
+      this.currentRound = 0;
+      this.tableCards = [];
+      this.tableMoney = 0;
+
+      this.currentTurn = 0;
+      this.turnTimer = null;
+      this.playerCards = new Map();
+      this.playerBalances = new Map();
+      this.allInPlayers = new Set();
+
+      this.totalBets = new Map();
+      this.roundBets = new Map();
+      this.previousBets = [];
+
+      return true;
+    }
     
     get currentPlayer() {
       return this.getPlayer(this.currentTurn);
@@ -217,6 +240,8 @@ module.exports = (client) => {
       embed
         .setImage("attachment://cards.png")
         .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
+
+      this.end();
 
       return client.channels.get(this.channel).send({
         embed,
