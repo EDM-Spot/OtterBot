@@ -184,6 +184,7 @@ module.exports = (client) => {
         ]);
 
       for (const winner of winners) {
+        console.log(winner);
         //const bal = this.client.profiles.get(winner.id, "balance", 0);
         //await this.client.profiles.set(winner.id, "balance", bal + payout); // eslint-disable-line no-await-in-loop
       }
@@ -370,74 +371,6 @@ module.exports = (client) => {
       return client.channels.get(this.channel).send(this.currentRound === 1 ? "Three cards have been drawn." : "A card has been drawn.");
     }
   }
-
-  PokerUtil.ID = "poker";
-
-  PokerUtil.BLURB = [
-    "Texas Hold'em Poker",
-    [
-      "Poker! Everyone loves poker! Play with friends!",
-      "Don't bet away all of your money!",
-      "Cards are Touhou themed for extra cuteness!",
-      "",
-      "Play now by using `{p}poker`.",
-      "Get more info at `{p}help poker`."
-    ]
-  ];
-
-  PokerUtil.DESCRIPTION = [
-    [
-      "About",
-      [
-        "To play poker, simply use `{p}poker start <amount>`.",
-        "There can be a minimum of 2 players, and a maximum of 8.",
-        "The `<amount>` is how much Props you want each player to bring in."
-      ]
-    ],
-    [
-      "Actions",
-      [
-        "While in-game, you can take the following actions on your turn:",
-        "",
-        "`{p}p bet <amount>` to bet.",
-        "`{p}p check` to check.",
-        "`{p}p fold` to fold.",
-        "`{p}p allIn` to go all-in.",
-        "`{p}p skip` to skip after an all-in."
-      ]
-    ],
-    [
-      "Poker Hands",
-      [
-        "**Royal Flush**",
-        "A, K, Q, J, and 10 of the same suit.",
-        "",
-        "**Straight Flush**",
-        "Five cards in sequence of the same suit.",
-        "",
-        "**Four of a Kind**",
-        "Four cards of the same rank.",
-        "",
-        "**Full House**",
-        "Three of a kind and a pair.",
-        "",
-        "**Flush**",
-        "Five cards of the same suit, not in sequence.",
-        "",
-        "**Straight**",
-        "Five cards in sequence, not of same suit.",
-        "",
-        "**Three of a Kind**",
-        "Three cards of the same rank.",
-        "",
-        "**Two Pair**",
-        "Two different pairs.",
-        "",
-        "**Pair**",
-        "Two cards of the same rank."
-      ]
-    ]
-  ];
 
   client.pokerUtil = new PokerUtil();
 };
