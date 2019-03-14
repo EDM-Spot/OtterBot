@@ -202,8 +202,8 @@ module.exports = (client) => {
       }
 
       console.log("Finishing Poker");
-      this.running = false;
-      this.started = false;
+      //this.running = false;
+      //this.started = false;
 
       embed.addField("Hands", hands.map(hand => {
         const name = client.users.get(hand.player).tag;
