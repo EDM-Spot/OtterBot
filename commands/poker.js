@@ -64,7 +64,7 @@ class Poker extends Command {
 
           this.timer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
             this.client.pokerUtil.started = true;
-            this.client.pokerUtil.startGame();
+            await this.client.pokerUtil.startGame();
           });
 
           await this.client.redis.placeCommandOnCooldown("discord", "poker@play", "perUse", 3600);
