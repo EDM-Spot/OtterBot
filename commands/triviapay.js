@@ -69,7 +69,8 @@ class TriviaPay extends Command {
 
       if (this.client.triviaUtil.propsStored == 0) {
         message.channel.send("Someone paid to start a Trivia! Use `-triviapay 1-3` to use your props to start the Trivia.");
-        await this.client.plug.sendChat("Someone paid to start a Trivia! Use `-triviapay 1-3` in discord to use your props to start the Trivia. \n Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+        await this.client.plug.sendChat("Someone paid to start a Trivia! Use `-triviapay 1-3` in discord to use your props to start the Trivia.");
+        await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
       }
 
       this.client.triviaUtil.propsStored += price;
@@ -83,6 +84,7 @@ class TriviaPay extends Command {
 
       if (this.client.triviaUtil.propsStored < 10) {
         message.channel.send(this.client.triviaUtil.propsStored + "/10 to start the Trivia!");
+        await this.client.plug.sendChat(this.client.triviaUtil.propsStored + "/10 to start the Trivia!");
       }
 
       if (this.client.triviaUtil.players.includes(userID)) return message.reply("Paid more " + price + " Props.");
