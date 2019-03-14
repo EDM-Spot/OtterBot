@@ -8,8 +8,8 @@ module.exports = (client) => {
     constructor() {
       this.deck = new Deck().fill().shuffle();
 
-      this.players = new Map();
-      this.startingPlayers = new Map();
+      this.players = new Set();
+      this.startingPlayers = new Set();
       this.running = false;
       this.started = false;
       this.minPlayers = 2;
