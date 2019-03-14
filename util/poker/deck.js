@@ -1,5 +1,5 @@
 const Canvas = require("canvas");
-const Card = require("./Card");
+const Card = require("./card.js");
 const fs = require("fs");
 
 module.exports = (client) => {
