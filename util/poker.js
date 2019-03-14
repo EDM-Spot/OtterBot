@@ -1,4 +1,3 @@
-// Original Version https://github.com/1Computer1/kaado/blob/master/src/games/PokerGame.js
 const Discord = require("discord.js");
 const Deck = require("./poker/deck.js");
 const { Hand } = require("pokersolver");
@@ -31,7 +30,7 @@ module.exports = (client) => {
       this.channel = "485927387079639051";
     }
     
-    get currentPlayer() {
+    currentPlayer() {
       return this.getPlayer(this.currentTurn);
     }
 
@@ -45,7 +44,7 @@ module.exports = (client) => {
       return client.guild.member(playerIDs.next().value);
     }
 
-    get previousBet() {
+    previousBet() {
       return this.previousBets[0];
     }
 
@@ -123,7 +122,7 @@ module.exports = (client) => {
         }
       }, 60000);
 
-      return client.channels.get(this.channel).send("The poker game has started!");
+      return this.send("The poker game has started!", false);
     }
 
     async endGame() {
@@ -337,7 +336,7 @@ module.exports = (client) => {
       }
 
       this.incrementTurn();
-      return client.channels.get(this.channel).send("The round continues...");
+      return this.send("The round continues...", false);
     }
 
     processNextRound() {
@@ -368,7 +367,7 @@ module.exports = (client) => {
       this.roundBets = new Map();
 
       this.currentRound += 1;
-      return client.channels.get(this.channel).send(this.currentRound === 1 ? "Three cards have been drawn." : "A card has been drawn.");
+      return this.send(this.currentRound === 1 ? "Three cards have been drawn." : "A card has been drawn.");
     }
   }
 
