@@ -6,7 +6,6 @@ const { SlotMachine, SlotSymbol } = require("slot-machine");
 
 const symbols = [
   new SlotSymbol("lemon", { display: "🍋", points: 1, weight: 100 }),
-  new SlotSymbol("watermelon", { display: "🍉", points: 1, weight: 100 }),
   new SlotSymbol("apple", { display: "🍎", points: 1, weight: 100 }),
   new SlotSymbol("grape", { display: "🍇", points: 1, weight: 100 }),
   new SlotSymbol("orange", { display: "🍊", points: 1, weight: 100 }),
@@ -18,8 +17,8 @@ const symbols = [
   new SlotSymbol("dj", { display: "🎧", points: 1, weight: 10 }),
   new SlotSymbol("heart", { display: "❤", points: 4, weight: 30 }),
   new SlotSymbol("money", { display: "💰", points: 5, weight: 25 }),
-  new SlotSymbol("diamond", { display: "💎", points: 10, weight: 3 }),
-  new SlotSymbol("jackpot", { display: "🔅", points: 50, weight: 5})
+  new SlotSymbol("diamond", { display: "💎", points: 10, weight: 5 }),
+  new SlotSymbol("jackpot", { display: "🔅", points: 50, weight: 2})
 ];
 
 class Slots extends Command {
@@ -77,6 +76,11 @@ class Slots extends Command {
 
       let moveTo3 = false;
       let moveDown3 = false;
+
+      const [botUser] = await this.client.db.models.users.findOrCreate({ where: { id: "40333310" }, defaults: { id: "40333310" } });
+      const jackpot = botUser.get("props");
+
+      message.channel.send("Current JackPot: " + jackpot);
 
       const embed = new Discord.RichEmbed();
       const dollarSigns = "   💲 💲 💲   ";
@@ -137,6 +141,13 @@ class Slots extends Command {
 
           this.client.queue.add(user, userPos - 3);
         }
+      }
+
+      if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("jackpot")) {
+        await inst.increment("props", { by: jackpot });
+        await botUser.decrement("props", { by: jackpot });
+
+        message.channel.send("Congratulation!!! You won the JackPot!");
       }
 
       await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 1800);
