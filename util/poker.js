@@ -84,8 +84,8 @@ module.exports = (client) => {
       client.channels.get(this.channel).send("<@&512635547320188928> 30 Seconds left until next Round start!");
       client.channels.get(this.channel).send("Type `-p exit` if you want to leave the table!");
 
-      new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-        if (this.startingPlayers.length < this.minPlayers) {
+      new moment.duration(30, "seconds").timer({loop: false, start: true}, async () => {
+        if (this.startingPlayers.size < this.minPlayers) {
           client.channels.get(this.channel).send(`Not enough players (${this.minPlayers} required) to play this game.`);
           await this.end();
         } else {
@@ -135,7 +135,7 @@ module.exports = (client) => {
           `Type \`${prefix}p exit\` to leave the table.`
         ])
         .setTimestamp()
-        .setFooter(`${this.currentPlayer.username}`, `${playerIcon}`)
+        .setFooter(`${this.currentPlayer.user.username}`, `${playerIcon}`)
         .setColor("#003800");
 
       const options = { embed };
@@ -235,14 +235,15 @@ module.exports = (client) => {
             .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
         }
 
+        options.embed = embed;
+        client.channels.get(this.channel).send(options);
+
         if (this.startingPlayers.size > 1) {
           await this.endCurrent();
         } else {
           await this.end();
         }
-
-        options.embed = embed;
-        return client.channels.get(this.channel).send(options);
+        return;
       }
 
       const hands = [];
@@ -287,13 +288,7 @@ module.exports = (client) => {
         .setImage("attachment://cards.png")
         .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
 
-      if (this.startingPlayers.size > 1) {
-        await this.endCurrent();
-      } else {
-        await this.end();
-      }
-
-      return client.channels.get(this.channel).send({
+      client.channels.get(this.channel).send({
         embed,
         files: [
           {
@@ -302,6 +297,13 @@ module.exports = (client) => {
           }
         ]
       });
+
+      if (this.startingPlayers.size > 1) {
+        await this.endCurrent();
+      } else {
+        await this.end();
+      }
+      return;
     }
 
     async bet(amount) {

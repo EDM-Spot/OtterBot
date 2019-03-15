@@ -76,8 +76,8 @@ class Poker extends Command {
           });
 
           new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
-            console.log(this.client.pokerUtil.startingPlayers.length);
-            if (this.client.pokerUtil.startingPlayers.length < this.client.pokerUtil.minPlayers) {
+            console.log(this.client.pokerUtil.startingPlayers.size);
+            if (this.client.pokerUtil.startingPlayers.size < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
               await this.client.pokerUtil.end();
             } else {
@@ -95,7 +95,7 @@ class Poker extends Command {
             return message.reply("Poker is not running!");
           } else if (this.client.pokerUtil.started) {
             return message.reply("Poker already started!");
-          } else if (this.client.pokerUtil.startingPlayers.length >= this.client.pokerUtil.maxPlayers) {
+          } else if (this.client.pokerUtil.startingPlayers.size >= this.client.pokerUtil.maxPlayers) {
             return message.reply("The game is Full!");
           }
 
@@ -127,6 +127,13 @@ class Poker extends Command {
             return false;
           }
 
+          console.log(this.client.pokerUtil.currentPlayer.id);
+          console.log(userID);
+
+          if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+            return message.reply("You gone all-in! You can only skip at this point!");
+          }
+
           if (this.client.pokerUtil.playerBalances.get(this.client.pokerUtil.currentPlayer.id) + (this.client.pokerUtil.roundBets.get(this.client.pokerUtil.currentPlayer.id) || 0) - amount < 0) {
             return message.reply("You do not have enough Props to bet!");
           }
@@ -140,6 +147,10 @@ class Poker extends Command {
         case "check": {
           if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
+          }
+
+          if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+            return message.reply("You gone all-in! You can only skip at this point!");
           }
           
           if (this.client.pokerUtil.previousBet) {
@@ -169,6 +180,10 @@ class Poker extends Command {
         case "allin": {
           if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
+          }
+
+          if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+            return message.reply("You gone all-in! You can only skip at this point!");
           }
           
           return this.client.pokerUtil.allIn();

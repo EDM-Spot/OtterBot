@@ -110,12 +110,10 @@ class Slots extends Command {
       const points = results.lines.reduce((total, line) => total + line.points, 0);
       const payout = price * points;
 
-      embed.addBlankField(true);
       embed.addField(
         points ? "You have won!" : "You have lost!",
         points ? `You have earned ${payout} Props` : `Lost ${price} Props. Better luck next time!`
       );
-      embed.addBlankField(true);
 
       embed.setTitle("🎰 Slot Machine 🎰");
       embed.setTimestamp();
