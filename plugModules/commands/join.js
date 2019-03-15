@@ -39,6 +39,7 @@ module.exports = function Command(bot) {
           }
 
           await inst.decrement("props", { by: bot.roulette.price });
+          await bot.db.models.users.increment("props", { by: bot.roulette.price, where: { id: "40333310" } });
         }
         
         bot.roulette.add(rawData.from.id);
@@ -58,6 +59,7 @@ module.exports = function Command(bot) {
           }
 
           await inst.decrement("props", { by: bot.russianRoulette.price });
+          await bot.db.models.users.increment("props", { by: bot.russianRoulette.price, where: { id: "40333310" } });
         }
       
         bot.russianRoulette.add(rawData.from.id);

@@ -58,6 +58,7 @@ class Join extends Command {
       }
 
       await inst.decrement("props", { by: price });
+      await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
 
       this.client.triviaUtil.add(userID);
       await this.client.guilds.get("485173051432894489").members.get(message.author.id).addRole("512635547320188928").catch(console.error);

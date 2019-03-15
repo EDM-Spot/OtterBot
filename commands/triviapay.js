@@ -66,6 +66,7 @@ class TriviaPay extends Command {
       }
 
       await inst.decrement("props", { by: price });
+      await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
 
       if (this.client.triviaUtil.propsStored == 0) {
         message.channel.send("Someone paid to start a Trivia! Use `-triviapay 1-3` to use your props to start the Trivia.");

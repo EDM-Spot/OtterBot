@@ -18,11 +18,13 @@ module.exports = function Util(bot) {
             console.log(free);
 
             await inst.decrement("props", { by: 100 });
+            await bot.db.models.users.increment("props", { by: 100, where: { id: "40333310" } });
             console.log("-100 Props");
           } else {
             const [buyer] = await bot.db.models.users.findOrCreate({ where: { giftID }, defaults: { giftID } });
 
             await buyer.decrement("props", { by: 100 });
+            await bot.db.models.users.increment("props", { by: 100, where: { id: "40333310" } });
             console.log("GIFT -100 Props");
           }
         }

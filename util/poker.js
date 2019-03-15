@@ -119,7 +119,7 @@ module.exports = (client) => {
 
     async send(text, withCards = true) {
       const prefix = "-";
-      const playerIcon = this.currentPlayer.displayAvatarURL;
+      const playerIcon = this.currentPlayer.user.displayAvatarURL;
 
       const embed = new Discord.RichEmbed()
         .setTitle("♥️♣️ Poker ♠️♦️")
@@ -135,7 +135,7 @@ module.exports = (client) => {
           `Type \`${prefix}p exit\` to leave the table.`
         ])
         .setTimestamp()
-        .setFooter(this.currentPlayer.username, `${playerIcon}`)
+        .setFooter(`${this.currentPlayer.username}`, `${playerIcon}`)
         .setColor("#003800");
 
       const options = { embed };

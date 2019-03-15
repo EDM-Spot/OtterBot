@@ -76,6 +76,7 @@ class Poker extends Command {
           });
 
           new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
+            console.log(this.client.pokerUtil.startingPlayers.length);
             if (this.client.pokerUtil.startingPlayers.length < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
               await this.client.pokerUtil.end();
@@ -107,6 +108,7 @@ class Poker extends Command {
           }
 
           await inst.decrement("props", { by: price });
+          await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
 
           this.client.pokerUtil.players.add(userID);
           this.client.pokerUtil.startingPlayers.add(userID);

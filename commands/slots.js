@@ -70,6 +70,7 @@ class Slots extends Command {
       }
 
       await inst.decrement("props", { by: price });
+      await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
 
       const machine = new SlotMachine(3, symbols);
       const results = machine.play();
@@ -109,10 +110,12 @@ class Slots extends Command {
       const points = results.lines.reduce((total, line) => total + line.points, 0);
       const payout = price * points;
 
+      embed.addBlankField(true);
       embed.addField(
-        points ? `${message.author.username}, You have won!` : `${message.author.username}, You have lost!`,
+        points ? "You have won!" : "You have lost!",
         points ? `You have earned ${payout} Props` : `Lost ${price} Props. Better luck next time!`
       );
+      embed.addBlankField(true);
 
       embed.setTitle("🎰 Slot Machine 🎰");
       embed.setTimestamp();
