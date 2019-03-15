@@ -191,6 +191,10 @@ class Poker extends Command {
             this.client.pokerUtil.startingPlayers.delete(userDB.get("id"));
             return message.reply("You left the table!");
           }
+
+          if (this.client.pokerUtil.currentPlayer.id != userID) {
+            return message.reply("It's not your turn!");
+          }
           
           return this.client.pokerUtil.exit();
         }
