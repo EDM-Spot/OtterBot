@@ -16,7 +16,6 @@ module.exports = (client) => {
       this.started = false;
       this.minPlayers = 2;
       this.maxPlayers = 8;
-      this.entryFee = 1000;
 
       this.currentRound = 0;
       this.tableCards = [];
@@ -35,7 +34,11 @@ module.exports = (client) => {
       this.channel = "485927387079639051";
     }
 
-    end() {
+    async end() {
+      for (const playerID of this.players) {
+        await this.guild.members.get(playerID).removeRole("512635547320188928").catch(console.warn);
+      }
+
       this.players = new Set();
       this.startingPlayers = new Set();
       this.running = false;
@@ -118,7 +121,9 @@ module.exports = (client) => {
       const promises = [];
 
       for (const playerID of this.players) {
-        this.playerBalances.set(playerID, this.entryFee);
+        const userDB = await this.client.db.models.users.findOne({ where: { discord: playerID } });
+
+        this.playerBalances.set(playerID, userDB.get("props"));
 
         const cards = this.deck.draw(2);
         this.playerCards.set(playerID, cards);
@@ -169,11 +174,8 @@ module.exports = (client) => {
             `**${this.getPlayer(0).user.tag}** wins **${this.tableMoney}** Props`
           ]);
 
-        console.log("WINNER?");
-        console.log(this.getPlayer(0).user.tag);
-
-        //const bal = this.client.profiles.get(this.getPlayer(0).user.id, "balance", 0);
-        //await this.client.profiles.set(this.getPlayer(0).user.id, "balance", bal + payout);
+        const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: this.getPlayer(0).user.id }, defaults: { id: this.getPlayer(0).user.id } });
+        //await inst.increment("props", { by: payout });
 
         const options = {};
 
@@ -188,6 +190,8 @@ module.exports = (client) => {
             .setImage("attachment://cards.png")
             .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
         }
+
+        await this.end();
 
         options.embed = embed;
         return client.channels.get(this.channel).send(options);
@@ -218,15 +222,9 @@ module.exports = (client) => {
         ]);
 
       for (const winner of winners) {
-        console.log("WINNERS");
-        console.log(winner.tag);
-        //const bal = this.client.profiles.get(winner.id, "balance", 0);
-        //await this.client.profiles.set(winner.id, "balance", bal + payout); // eslint-disable-line no-await-in-loop
+        const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: winner.id }, defaults: { id: winner.id } });
+        //await inst.increment("props", { by: payout });
       }
-
-      console.log("Finishing Poker");
-      //this.running = false;
-      //this.started = false;
 
       embed.addField("Hands", hands.map(hand => {
         const name = client.users.get(hand.player).tag;
@@ -241,7 +239,7 @@ module.exports = (client) => {
         .setImage("attachment://cards.png")
         .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
 
-      this.end();
+      await this.end();
 
       return client.channels.get(this.channel).send({
         embed,
@@ -276,6 +274,9 @@ module.exports = (client) => {
         `**${player.user.tag}** has bet **${amount}** Props`,
         `The total pool is now **${this.tableMoney}** Props`
       ]);
+
+      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: player.id }, defaults: { id: player.id } });
+      //await inst.decrement("props", { by: amount });
 
       return this.processNextTurn();
     }
@@ -323,16 +324,17 @@ module.exports = (client) => {
     async allIn() {
       const player = this.currentPlayer;
       const prevBet = this.totalBets.get(player.id);
+      const props = this.playerBalances.get(player.id);
 
       this.allInPlayers.add(player.id);
       this.playerBalances.set(player.id, 0);
-      this.roundBets.set(player.id, this.entryFee);
-      this.totalBets.set(player.id, this.entryFee);
+      this.roundBets.set(player.id, props);
+      this.totalBets.set(player.id, props);
 
       this.tableMoney -= prevBet;
-      this.tableMoney += this.entryFee;
+      this.tableMoney += props;
 
-      this.previousBets.unshift(this.entryFee);
+      this.previousBets.unshift(props);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
       await client.channels.get(this.channel).send([
@@ -340,18 +342,22 @@ module.exports = (client) => {
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
+      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: player.id }, defaults: { id: player.id } });
+      //await inst.decrement("props", { by: props });
+
       return this.processNextTurn();
     }
 
     async skip() {
       const player = this.currentPlayer;
+      const props = this.playerBalances.get(player.id);
 
       await client.channels.get(this.channel).send([
         `**${player.user.tag}** had gone all-in and is skipping their turn.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
 
-      this.previousBets.unshift(this.entryFee);
+      this.previousBets.unshift(props);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
       return this.processNextTurn();

@@ -59,7 +59,7 @@ class Poker extends Command {
             return true;
           }
 
-          let startMessage = "A new poker game has been created. Costs 0 Props to enter and gives 10 Props to play. \n";
+          let startMessage = "A new poker game has been created. Entry Fee: 0 Props. \n";
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 5 minutes. Join the game with `-p join` \n";
