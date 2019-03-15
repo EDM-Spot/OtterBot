@@ -66,7 +66,7 @@ class Poker extends Command {
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          await this.client.plug.sendChat("@djs Discord Poker is starting now in channel #" + message.channel.name + "!");
+          await this.client.plug.sendChat("Discord Poker is starting now in channel #" + message.channel.name + "!");
           await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
           this.client.pokerUtil.running = true;
