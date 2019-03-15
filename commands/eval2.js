@@ -1,7 +1,7 @@
 const Command = require("../base/Command.js");
 const { inspect } = require("util");
 
-class Eval extends Command {
+class Eval2 extends Command {
   constructor(client) {
     super(client, {
       name: "eval2",
@@ -100,4 +100,4 @@ class Eval extends Command {
   }
 }
 
-module.exports = Eval;
+module.exports = Eval2;
