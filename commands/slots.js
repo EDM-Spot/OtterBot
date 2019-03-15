@@ -80,7 +80,7 @@ class Slots extends Command {
       const [botUser] = await this.client.db.models.users.findOrCreate({ where: { id: "40333310" }, defaults: { id: "40333310" } });
       const jackpot = botUser.get("props");
 
-      message.channel.send("Current JackPot: " + jackpot);
+      message.channel.send("Current JackPot: " + jackpot + " Props");
 
       const embed = new Discord.RichEmbed();
       const dollarSigns = "   💲 💲 💲   ";

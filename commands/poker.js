@@ -72,7 +72,7 @@ class Poker extends Command {
           this.client.pokerUtil.running = true;
 
           //new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-            //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
           //});
 
           new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
@@ -126,15 +126,13 @@ class Poker extends Command {
             return false;
           }
 
-          if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+          if (this.client.pokerUtil.currentPlayer.id != userID) {
+            return message.reply("It's not your turn!");
+          } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
-          }
-
-          if (this.client.pokerUtil.playerBalances.get(this.client.pokerUtil.currentPlayer.id) + (this.client.pokerUtil.roundBets.get(this.client.pokerUtil.currentPlayer.id) || 0) - amount < 0) {
+          } else if (this.client.pokerUtil.playerBalances.get(this.client.pokerUtil.currentPlayer.id) + (this.client.pokerUtil.roundBets.get(this.client.pokerUtil.currentPlayer.id) || 0) - amount < 0) {
             return message.reply("You do not have enough Props to bet!");
-          }
-
-          if (amount !== this.client.pokerUtil.previousBet && amount < this.client.pokerUtil.previousBet * 2) {
+          } else if (amount !== this.client.pokerUtil.previousBet && amount < this.client.pokerUtil.previousBet * 2) {
             return message.reply(`You need to bet equal or at least twice the previous bet of **${this.client.pokerUtil.previousBet}** Props`);
           }
 
@@ -145,11 +143,11 @@ class Poker extends Command {
             return message.reply("Poker is not running!");
           }
 
-          if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+          if (this.client.pokerUtil.currentPlayer.id != userID) {
+            return message.reply("It's not your turn!");
+          } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
-          }
-          
-          if (this.client.pokerUtil.previousBet) {
+          } else if (this.client.pokerUtil.previousBet) {
             return message.reply("You can only bet, fold, or go all-in at this point!");
           }
 
@@ -158,6 +156,8 @@ class Poker extends Command {
         case "fold": {
           if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
+          } else if (this.client.pokerUtil.currentPlayer.id != userID) {
+            return message.reply("It's not your turn!");
           }
           
           return this.client.pokerUtil.fold();
@@ -165,9 +165,9 @@ class Poker extends Command {
         case "skip": {
           if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
-          }
-          
-          if (!this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+          } else if (this.client.pokerUtil.currentPlayer.id != userID) {
+            return message.reply("It's not your turn!");
+          } else if (!this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You cannot skip unless you have gone all-in.");
           }
 
@@ -176,9 +176,9 @@ class Poker extends Command {
         case "allin": {
           if (!this.client.pokerUtil.checkGame()) {
             return message.reply("Poker is not running!");
-          }
-
-          if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+          } else if (this.client.pokerUtil.currentPlayer.id != userID) {
+            return message.reply("It's not your turn!");
+          } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
           }
           
