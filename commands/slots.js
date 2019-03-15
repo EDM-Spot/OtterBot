@@ -114,6 +114,11 @@ class Slots extends Command {
         points ? `You have earned ${payout} Props` : `Lost ${price} Props. Better luck next time!`
       );
 
+      embed.setTitle("🎰 Slot Machine 🎰");
+      embed.setTimestamp();
+      embed.setFooter(message.author.username, `${message.author.displayAvatarURL}`);
+      embed.setColor("#e6f90e");
+
       await inst.increment("props", { by: payout });
 
       const dj = this.client.plug.getDJ();

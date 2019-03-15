@@ -119,8 +119,10 @@ module.exports = (client) => {
 
     async send(text, withCards = true) {
       const prefix = "-";
+      const playerIcon = this.currentPlayer.displayAvatarURL;
 
       const embed = new Discord.RichEmbed()
+        .setTitle("♥️♣️ Poker ♠️♦️")
         .addField(`Round ${this.currentRound + 1}`, [
           text,
           `**${this.currentPlayer.user.tag}** has a balance of **${this.playerBalances.get(this.currentPlayer.id)}** Props`,
@@ -131,7 +133,10 @@ module.exports = (client) => {
           `Type \`${prefix}p allIn\` to go all-in.`,
           `Type \`${prefix}p skip\` to skip after an all-in.`,
           `Type \`${prefix}p exit\` to leave the table.`
-        ]);
+        ])
+        .setTimestamp()
+        .setFooter(this.currentPlayer.username, `${playerIcon}`)
+        .setColor("#003800");
 
       const options = { embed };
 
