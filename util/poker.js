@@ -174,7 +174,7 @@ module.exports = (client) => {
             `**${this.getPlayer(0).user.tag}** wins **${this.tableMoney}** Props`
           ]);
 
-        const [inst] = await client.db.models.users.findOrCreate({ where: { id: this.getPlayer(0).user.id }, defaults: { id: this.getPlayer(0).user.id } });
+        const [inst] = await client.db.models.users.findOrCreate({ where: { discord: this.getPlayer(0).user.id }, defaults: { discord: this.getPlayer(0).user.id } });
         //await inst.increment("props", { by: payout });
 
         const options = {};
@@ -222,7 +222,7 @@ module.exports = (client) => {
         ]);
 
       for (const winner of winners) {
-        const [inst] = await client.db.models.users.findOrCreate({ where: { id: winner.id }, defaults: { id: winner.id } });
+        const [inst] = await client.db.models.users.findOrCreate({ where: { discord: winner.id }, defaults: { discord: winner.id } });
         //await inst.increment("props", { by: payout });
       }
 
@@ -275,7 +275,7 @@ module.exports = (client) => {
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
-      const [inst] = await client.db.models.users.findOrCreate({ where: { id: player.id }, defaults: { id: player.id } });
+      const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
       //await inst.decrement("props", { by: amount });
 
       return this.processNextTurn();
@@ -342,7 +342,7 @@ module.exports = (client) => {
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
-      const [inst] = await client.db.models.users.findOrCreate({ where: { id: player.id }, defaults: { id: player.id } });
+      const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
       //await inst.decrement("props", { by: props });
 
       return this.processNextTurn();
