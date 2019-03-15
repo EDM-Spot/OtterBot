@@ -2,6 +2,8 @@
 const Discord = require("discord.js");
 const Deck = require("./poker/deck.js");
 const { Hand } = require("pokersolver");
+const moment = require("moment");
+require("moment-timer");
 
 module.exports = (client) => {
   class PokerUtil {
@@ -60,6 +62,42 @@ module.exports = (client) => {
 
       return true;
     }
+
+    async endCurrent() {
+      this.players = new Set();
+      this.running = false;
+
+      this.currentRound = 0;
+      this.tableCards = [];
+      this.tableMoney = 0;
+
+      this.currentTurn = 0;
+      this.turnTimer = null;
+      this.playerCards = new Map();
+      this.playerBalances = new Map();
+      this.allInPlayers = new Set();
+
+      this.totalBets = new Map();
+      this.roundBets = new Map();
+      this.previousBets = [];
+
+      client.channels.get(this.channel).send("<@&512635547320188928> 30 Seconds left until next Round start!");
+      client.channels.get(this.channel).send("Type `-p exit` if you want to leave the table!");
+
+      new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+        if (this.startingPlayers.length < this.minPlayers) {
+          client.channels.get(this.channel).send(`Not enough players (${this.minPlayers} required) to play this game.`);
+          await this.end();
+        } else {
+          this.players = this.startingPlayers;
+          this.running = true;
+
+          await this.startGame();
+        }
+      });
+
+      return true;
+    }
     
     get currentPlayer() {
       return this.getPlayer(this.currentTurn);
@@ -91,7 +129,8 @@ module.exports = (client) => {
           `Type \`${prefix}p check\` to check.`,
           `Type \`${prefix}p fold\` to fold.`,
           `Type \`${prefix}p allIn\` to go all-in.`,
-          `Type \`${prefix}p skip\` to skip after an all-in.`
+          `Type \`${prefix}p skip\` to skip after an all-in.`,
+          `Type \`${prefix}p exit\` to leave the table.`
         ]);
 
       const options = { embed };
@@ -191,7 +230,11 @@ module.exports = (client) => {
             .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
         }
 
-        await this.end();
+        if (this.startingPlayers.size > 1) {
+          await this.endCurrent();
+        } else {
+          await this.end();
+        }
 
         options.embed = embed;
         return client.channels.get(this.channel).send(options);
@@ -239,7 +282,11 @@ module.exports = (client) => {
         .setImage("attachment://cards.png")
         .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
 
-      await this.end();
+      if (this.startingPlayers.size > 1) {
+        await this.endCurrent();
+      } else {
+        await this.end();
+      }
 
       return client.channels.get(this.channel).send({
         embed,
@@ -300,7 +347,7 @@ module.exports = (client) => {
       const player = this.currentPlayer;
       this.players.delete(player.id);
 
-      await this.guild.members.get(player.id).removeRole("512635547320188928").catch(console.warn);
+      //await this.guild.members.get(player.id).removeRole("512635547320188928").catch(console.warn);
 
       this.currentTurn -= 1;
 
@@ -359,6 +406,32 @@ module.exports = (client) => {
 
       this.previousBets.unshift(props);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
+
+      return this.processNextTurn();
+    }
+
+    async exit() {
+      const player = this.currentPlayer;
+      this.players.delete(player.id);
+      this.players.startingPlayers(player.id);
+
+      await this.guild.members.get(player.id).removeRole("512635547320188928").catch(console.warn);
+
+      this.currentTurn -= 1;
+
+      if (this.roundBets.has(player.id)) {
+        const betIndex = this.previousBets.indexOf(this.roundBets.get(player.id));
+        this.previousBets.splice(betIndex, 1);
+      }
+
+      await client.channels.get(this.channel).send([
+        `**${player.user.tag}** left the table.`,
+        `The total pool is currently **${this.tableMoney}** Props`
+      ]);
+
+      if (this.players.size === 1) {
+        return this.endGame();
+      }
 
       return this.processNextTurn();
     }

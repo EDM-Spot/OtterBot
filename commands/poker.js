@@ -20,7 +20,7 @@ class Poker extends Command {
       
       if (!args.length) { return; }
 
-      const params = ["start", "join", "bet", "check", "fold", "skip", "allin", "reset"];
+      const params = ["start", "join", "bet", "check", "fold", "skip", "allin", "reset", "exit"];
       const param = `${args.shift()}`.toLowerCase();
 
       if (!params.includes(param)) {
@@ -170,6 +170,16 @@ class Poker extends Command {
           }
           
           return this.client.pokerUtil.allIn();
+        }
+        case "exit": {
+          if (!this.client.pokerUtil.started) {
+            return message.reply("Poker is not running!");
+          } else if (!this.client.pokerUtil.checkGame()) {
+            this.client.pokerUtil.startingPlayers.delete(userDB.get("id"));
+            return message.reply("You left the table!");
+          }
+          
+          return this.client.pokerUtil.exit();
         }
         case "reset": {
           const user = this.client.plug.getUser(userDB.get("id"));
