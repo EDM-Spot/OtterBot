@@ -62,21 +62,20 @@ class Poker extends Command {
           let startMessage = "A new poker game has been created. Entry Fee: 0 Props. \n";
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
-          startMessage += "The game will start in 5 minutes. Join the game with `-p join` \n";
+          startMessage += "The game will start in 1 minutes. Join the game with `-p join` \n";
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          await this.client.plug.sendChat("Discord Poker will start in 5 minutes in channel #" + message.channel.name + "!");
+          await this.client.plug.sendChat("Discord Poker will start in 1 minutes in channel #" + message.channel.name + "!");
           await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
           this.client.pokerUtil.running = true;
 
-          new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-            message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
-          });
+          //new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+            //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          //});
 
-          new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
-            console.log(this.client.pokerUtil.startingPlayers.size);
+          new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
             if (this.client.pokerUtil.startingPlayers.size < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
               await this.client.pokerUtil.end();
@@ -126,9 +125,6 @@ class Poker extends Command {
           if (isNaN(amount)) {
             return false;
           }
-
-          console.log(this.client.pokerUtil.currentPlayer.id);
-          console.log(userID);
 
           if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");

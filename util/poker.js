@@ -420,7 +420,7 @@ module.exports = (client) => {
     async exit() {
       const player = this.currentPlayer;
       this.players.delete(player.id);
-      this.players.startingPlayers(player.id);
+      this.startingPlayers.delete(player.id);
 
       await this.guild.members.get(player.id).removeRole("512635547320188928").catch(console.warn);
 
