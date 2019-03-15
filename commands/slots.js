@@ -39,7 +39,7 @@ class Slots extends Command {
       const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "slots@play", "perUser", message.author.id);
 
       if (cooldown != -2) {
-        return message.reply("Hold on! You already played Slots " + Math.floor((1800 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
+        return message.reply("Hold on! You already played Slots " + Math.floor((900 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
       }
 
       const price = parseInt(args.pop(), 10);
@@ -150,7 +150,7 @@ class Slots extends Command {
         message.channel.send("Congratulation!!! You won the JackPot!");
       }
 
-      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 1800);
+      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 900);
 
       return message.channel.send({ embed });
     } catch (e) {

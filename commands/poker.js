@@ -16,7 +16,7 @@ class Poker extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      //message.delete();
+      message.delete();
       
       if (!args.length) { return; }
 
