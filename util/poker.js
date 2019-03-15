@@ -125,7 +125,7 @@ module.exports = (client) => {
         .setTitle("♥️♣️ Poker ♠️♦️")
         .addField(`Round ${this.currentRound + 1}`, [
           text,
-          `**${this.currentPlayer.user.tag}** has a balance of **${this.playerBalances.get(this.currentPlayer.id)}** Props`,
+          `**${this.currentPlayer.user.username}** has a balance of **${this.playerBalances.get(this.currentPlayer.id)}** Props`,
           "",
           `Type \`${prefix}p bet <amount>\` to bet.`,
           `Type \`${prefix}p check\` to check.`,
@@ -215,7 +215,7 @@ module.exports = (client) => {
         const embed = new Discord.RichEmbed()
           .addField("Game Results", [
             "Everyone decided to fold!",
-            `**${this.getPlayer(0).user.tag}** wins **${this.tableMoney}** Props`
+            `**${this.getPlayer(0).user.username}** wins **${this.tableMoney}** Props`
           ]);
 
         const [inst] = await client.db.models.users.findOrCreate({ where: { discord: this.getPlayer(0).user.id }, defaults: { discord: this.getPlayer(0).user.id } });
@@ -265,7 +265,7 @@ module.exports = (client) => {
       const embed = new Discord.RichEmbed()
         .addField("Game Results", [
           winners.length.plural("The winner is...", "The winners are..."),
-          `**${winners.map(w => w.tag).join("**, **")}**`,
+          `**${winners.map(w => w.username).join("**, **")}**`,
           "",
           `${winners.length.plural("They have", "Each winner has")} won **${payout}** Props`
         ]);
@@ -325,7 +325,7 @@ module.exports = (client) => {
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
       await client.channels.get(this.channel).send([
-        `**${player.user.tag}** has bet **${amount}** Props`,
+        `**${player.user.username}** has bet **${amount}** Props`,
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
@@ -343,7 +343,7 @@ module.exports = (client) => {
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
       await client.channels.get(this.channel).send([
-        `**${player.user.tag}** has decided to check.`,
+        `**${player.user.username}** has decided to check.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
 
@@ -364,7 +364,7 @@ module.exports = (client) => {
       }
 
       await client.channels.get(this.channel).send([
-        `**${player.user.tag}** has ${timeout ? "been forced" : "decided"} to fold.`,
+        `**${player.user.username}** has ${timeout ? "been forced" : "decided"} to fold.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
 
@@ -392,7 +392,7 @@ module.exports = (client) => {
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
       await client.channels.get(this.channel).send([
-        `**${player.user.tag}** has gone all-in!`,
+        `**${player.user.username}** has gone all-in!`,
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
@@ -407,7 +407,7 @@ module.exports = (client) => {
       const props = this.playerBalances.get(player.id);
 
       await client.channels.get(this.channel).send([
-        `**${player.user.tag}** had gone all-in and is skipping their turn.`,
+        `**${player.user.username}** had gone all-in and is skipping their turn.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
 
@@ -432,7 +432,7 @@ module.exports = (client) => {
       }
 
       await client.channels.get(this.channel).send([
-        `**${player.user.tag}** left the table.`,
+        `**${player.user.username}** left the table.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
 
