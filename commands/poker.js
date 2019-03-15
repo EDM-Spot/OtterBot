@@ -78,6 +78,7 @@ class Poker extends Command {
           new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
             if (this.client.pokerUtil.startingPlayers.length < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
+              await this.client.pokerUtil.end();
             } else {
               this.client.pokerUtil.started = true;
               await this.client.pokerUtil.startGame();
