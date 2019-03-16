@@ -186,7 +186,7 @@ class Poker extends Command {
           return this.client.pokerUtil.allIn();
         }
         case "exit": {
-          if (!this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.checkGame() && !this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           } else if (!this.client.pokerUtil.checkGame()) {
             this.client.pokerUtil.startingPlayers.delete(userID);

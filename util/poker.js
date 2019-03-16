@@ -219,7 +219,7 @@ module.exports = (client) => {
           ]);
 
         const [inst] = await client.db.models.users.findOrCreate({ where: { discord: this.getPlayer(0).user.id }, defaults: { discord: this.getPlayer(0).user.id } });
-        //await inst.increment("props", { by: payout });
+        await inst.increment("props", { by: this.tableMoney });
 
         const options = {};
 
@@ -272,7 +272,7 @@ module.exports = (client) => {
 
       for (const winner of winners) {
         const [inst] = await client.db.models.users.findOrCreate({ where: { discord: winner.id }, defaults: { discord: winner.id } });
-        //await inst.increment("props", { by: payout });
+        await inst.increment("props", { by: payout });
       }
 
       embed.addField("Hands", hands.map(hand => {
@@ -330,7 +330,7 @@ module.exports = (client) => {
       ]);
 
       const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
-      //await inst.decrement("props", { by: amount });
+      await inst.decrement("props", { by: amount });
 
       return this.processNextTurn();
     }
@@ -397,7 +397,7 @@ module.exports = (client) => {
       ]);
 
       const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
-      //await inst.decrement("props", { by: props });
+      await inst.decrement("props", { by: props });
 
       return this.processNextTurn();
     }
