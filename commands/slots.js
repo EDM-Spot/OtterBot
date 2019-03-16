@@ -126,20 +126,22 @@ class Slots extends Command {
 
       await inst.increment("props", { by: payout });
 
-      const dj = this.client.plug.getDJ();
-      const userPos = this.client.plug.getWaitListPosition(userDB.get("id"));
+      if (moveTo3 || moveDown3) {
+        const dj = this.client.plug.getDJ();
+        const userPos = this.client.plug.getWaitListPosition(userDB.get("id"));
 
-      if (!user || typeof user.username !== "string" || !user.username.length) {
-        message.reply("You're not online on plug! Can't Move.");
-      } else if ((isObject(dj) && dj.id !== user.id) || (userPos >= 5)) {
-        if (moveTo3) {
-          await this.client.plug.sendChat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
+        if (!user || typeof user.username !== "string" || !user.username.length) {
+          message.reply("You're not online on plug! Can't Move.");
+        } else if ((isObject(dj) && dj.id !== user.id) || (userPos >= 5)) {
+          if (moveTo3) {
+            await this.client.plug.sendChat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
 
-          this.client.queue.add(user, 3);
-        } else if (moveDown3) {
-          await this.client.plug.sendChat("@" + user.username + " Won 3 Spots in the Slot Machine! Moving Down 3...");
+            this.client.queue.add(user, 3);
+          } else if (moveDown3) {
+            await this.client.plug.sendChat("@" + user.username + " Won 3 Spots in the Slot Machine! Moving Down 3...");
 
-          this.client.queue.add(user, userPos - 3);
+            this.client.queue.add(user, userPos - 3);
+          }
         }
       }
 
