@@ -37,7 +37,7 @@ module.exports = (client) => {
     }
 
     async end() {
-      for (const playerID of this.players) {
+      for (const playerID of this.startingPlayers) {
         await this.guild.members.get(playerID).removeRole("512635547320188928").catch(console.warn);
       }
 
