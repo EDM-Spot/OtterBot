@@ -203,7 +203,7 @@ class Poker extends Command {
           return this.client.pokerUtil.exit();
         }
         case "reset": {
-          const user = this.client.plug.getUser(userID);
+          const user = this.client.plug.getUser(userDB.get("id"));
 
           if (!isObject(user) || await this.client.utils.getRole(user) <= ROOM_ROLE.MANAGER) return false;
 
