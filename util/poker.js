@@ -84,8 +84,6 @@ module.exports = (client) => {
       client.channels.get(this.channel).send("<@&512635547320188928> 30 Seconds left until next Round start!");
       client.channels.get(this.channel).send("Type `-p exit` if you want to leave the table!");
 
-      console.log(this.startingPlayers.size);
-
       new moment.duration(30, "seconds").timer({loop: false, start: true}, async () => {
         if (this.startingPlayers.size < this.minPlayers) {
           client.channels.get(this.channel).send(`Not enough players (${this.minPlayers} required) to continue this game.`);
