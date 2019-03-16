@@ -56,7 +56,7 @@ module.exports = function Command(bot) {
         case "start": {
           const waitlist = bot.plug.getWaitList();
           const day = moment().isoWeekday();
-          const isWeekend = (day === 5) || (day === 6) || (day === 7);
+          const isWeekend = (day === 6) || (day === 7);
           //const isDecember = (moment().month() === 11);
 
           if (await bot.roulette.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
