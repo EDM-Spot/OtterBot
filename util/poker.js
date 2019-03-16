@@ -88,7 +88,7 @@ module.exports = (client) => {
 
       new moment.duration(30, "seconds").timer({loop: false, start: true}, async () => {
         if (this.startingPlayers.size < this.minPlayers) {
-          client.channels.get(this.channel).send(`Not enough players (${this.minPlayers} required) to play this game.`);
+          client.channels.get(this.channel).send(`Not enough players (${this.minPlayers} required) to continue this game.`);
           await this.end();
         } else {
           this.players = this.startingPlayers;

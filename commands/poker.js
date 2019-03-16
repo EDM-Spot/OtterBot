@@ -192,7 +192,7 @@ class Poker extends Command {
 
             console.log(this.client.pokerUtil.startingPlayers.size);
 
-            await this.guild.members.get(userID).removeRole("512635547320188928").catch(console.warn);
+            await this.client.guilds.get("485173051432894489").members.get(userID).removeRole("512635547320188928").catch(console.warn);
 
             return message.reply("You left the table!");
           }
