@@ -190,7 +190,7 @@ class Poker extends Command {
           } else if (!this.client.pokerUtil.checkGame()) {
             this.client.pokerUtil.startingPlayers.delete(userID);
 
-            console.log(this.startingPlayers.size);
+            console.log(this.client.pokerUtil.startingPlayers.size);
 
             await this.guild.members.get(userID).removeRole("512635547320188928").catch(console.warn);
 
