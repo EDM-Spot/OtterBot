@@ -90,7 +90,7 @@ class Poker extends Command {
           return true;
         }
         case "join": {
-          if (!this.client.pokerUtil.checkGame() || !this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.checkGame() && !this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           } else if (this.client.pokerUtil.startingPlayers.size >= this.client.pokerUtil.maxPlayers) {
             return message.reply("The game is Full!");
@@ -117,7 +117,7 @@ class Poker extends Command {
           return message.reply("Joined Poker.");
         }
         case "bet": {
-          if (!this.client.pokerUtil.checkGame() || !this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           }
           
@@ -140,7 +140,7 @@ class Poker extends Command {
           return this.client.pokerUtil.bet(amount);
         }
         case "check": {
-          if (!this.client.pokerUtil.checkGame() || !this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           }
 
@@ -155,7 +155,7 @@ class Poker extends Command {
           return this.client.pokerUtil.check();
         }
         case "fold": {
-          if (!this.client.pokerUtil.checkGame() || !this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           } else if (this.client.pokerUtil.currentPlayer.id != userID) {
             return message.reply("It's not your turn!");
@@ -164,7 +164,7 @@ class Poker extends Command {
           return this.client.pokerUtil.fold();
         }
         case "skip": {
-          if (!this.client.pokerUtil.checkGame() || !this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           } else if (this.client.pokerUtil.currentPlayer.id != userID) {
             return message.reply("It's not your turn!");
@@ -175,7 +175,7 @@ class Poker extends Command {
           return this.client.pokerUtil.skip();
         }
         case "allin": {
-          if (!this.client.pokerUtil.checkGame() || !this.client.pokerUtil.started) {
+          if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           } else if (this.client.pokerUtil.currentPlayer.id != userID) {
             return message.reply("It's not your turn!");
