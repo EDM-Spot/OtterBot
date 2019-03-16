@@ -27,7 +27,7 @@ class Poker extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 0;
+      const price = 1;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -59,7 +59,7 @@ class Poker extends Command {
             return true;
           }
 
-          let startMessage = "A new poker game has been created. Entry Fee: 0 Props. \n";
+          let startMessage = "A new poker game has been created. Entry Fee: 1 Prop. \n";
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 5 minutes. Join the game with `-p join` \n";
