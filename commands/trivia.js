@@ -139,6 +139,9 @@ class Trivia extends Command {
 
         if (!currentPlayers.length) {
           this.client.triviaUtil.end();
+
+          await this.client.redis.removeCommandFromCoolDown("discord", "trivia@start", "perUse");
+
           return message.channel.send("Too bad no one won the Trivia!");
         }
 

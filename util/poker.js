@@ -65,7 +65,7 @@ module.exports = (client) => {
 
     async endCurrent() {
       this.players = new Set();
-      this.running = false;
+      this.started = false;
 
       this.currentRound = 0;
       this.tableCards = [];
@@ -90,7 +90,7 @@ module.exports = (client) => {
           await this.end();
         } else {
           this.players = this.startingPlayers;
-          this.running = true;
+          this.started = true;
 
           await this.startGame();
         }
