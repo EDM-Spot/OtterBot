@@ -62,20 +62,20 @@ class Poker extends Command {
           let startMessage = "A new poker game has been created. Entry Fee: 0 Props. \n";
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
-          startMessage += "The game will start in 1 minutes. Join the game with `-p join` \n";
+          startMessage += "The game will start in 5 minutes. Join the game with `-p join` \n";
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          await this.client.plug.sendChat("Discord Poker will start in 1 minutes in channel #" + message.channel.name + "!");
+          await this.client.plug.sendChat("Discord Poker will start in 5 minutes in channel #" + message.channel.name + "!");
           await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
           this.client.pokerUtil.running = true;
 
-          //new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-          //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
-          //});
+          new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+            message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          });
 
-          new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
+          new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
             if (this.client.pokerUtil.startingPlayers.size < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
               await this.client.pokerUtil.end();
@@ -188,7 +188,12 @@ class Poker extends Command {
           if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           } else if (!this.client.pokerUtil.checkGame()) {
-            this.client.pokerUtil.startingPlayers.delete(userDB.get("id"));
+            this.client.pokerUtil.startingPlayers.delete(userID);
+
+            console.log(this.startingPlayers.size);
+
+            await this.guild.members.get(userID).removeRole("512635547320188928").catch(console.warn);
+
             return message.reply("You left the table!");
           }
 
@@ -199,7 +204,7 @@ class Poker extends Command {
           return this.client.pokerUtil.exit();
         }
         case "reset": {
-          const user = this.client.plug.getUser(userDB.get("id"));
+          const user = this.client.plug.getUser(userID);
 
           if (!isObject(user) || await this.client.utils.getRole(user) <= ROOM_ROLE.MANAGER) return false;
 
