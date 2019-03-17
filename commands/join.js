@@ -14,7 +14,14 @@ class Join extends Command {
     try {
       message.delete();
       
-      const price = 1;
+      const day = moment().isoWeekday();
+      const isWeekend = (day === 6) || (day === 7);
+
+      let price = 1;
+    
+      if (isWeekend) {
+        price = 0;
+      }
 
       const userDB = await this.client.db.models.users.findOne({
         where: {

@@ -18,8 +18,17 @@ class Trivia extends Command {
     if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
       return true;
     }
+
+    const day = moment().isoWeekday();
+    const isWeekend = (day === 6) || (day === 7);
+
+    let price = "Costs 1 Prop.";
     
-    let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. Costs 1 Prop. \n";
+    if (isWeekend) {
+      price = "FREE Weekends enabled!";
+    }
+
+    let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. " + price + " \n";
     startMessage += "You will be warned 30 seconds before it starts. \n";
     startMessage += "Press ✅ or ❌ to answer the question. The trivia will continue until only one stays. \n";
     startMessage += "You have 15 Seconds to answer when questions shows up. \n";
