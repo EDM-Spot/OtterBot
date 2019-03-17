@@ -78,7 +78,7 @@
     "roulette": {
       "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",
       "invalidParam": "You specified an invalid parameter! You can use: check, start, end, reset",
-      "started": "A roulette is running right now, silly!",
+      "started": "A Game is already running right now!",
       "notRunning": "I'm not running a roulette right now.",
       "stopped": "Hold your typing! The roulette was interrupted.",
       "starting": "@djs Roulette is starting! Use !join to play!",
@@ -96,7 +96,7 @@
     "russianroulette": {
       "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",
       "invalidParam": "You specified an invalid parameter! You can use: check, start, end, reset",
-      "started": "A Russian roulette is running right now, silly!",
+      "started": "A Game is already running right now!",
       "notRunning": "I'm not running a russian roulette right now.",
       "stopped": "Hold your typing! The russian roulette was interrupted.",
       "starting": "@djs A Russian Roulette is starting! Use !join to play! Join at your OWN RISK!",

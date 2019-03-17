@@ -16,6 +16,10 @@ class TriviaPay extends Command {
       
       if (!args.length) { return; }
 
+      if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
+        return message.reply("There's a Game running already!");
+      }
+
       const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "trivia@start", "perUse");
 
       if (cooldown != -2) {

@@ -56,7 +56,7 @@ class Poker extends Command {
           }
 
           if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
-            return true;
+            return message.reply("There's a Game running already!");
           }
 
           let startMessage = "A new poker game has been created. Entry Fee: 1 Prop. \n";
