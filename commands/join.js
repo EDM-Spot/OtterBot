@@ -1,5 +1,6 @@
 const Command = require("../base/Command.js");
 const { isNil, isObject } = require("lodash");
+const moment = require("moment");
 
 class Join extends Command {
   constructor(client) {
