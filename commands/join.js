@@ -1,6 +1,5 @@
 const Command = require("../base/Command.js");
 const { isNil, isObject } = require("lodash");
-const moment = require("moment");
 
 class Join extends Command {
   constructor(client) {
@@ -15,14 +14,7 @@ class Join extends Command {
     try {
       message.delete();
       
-      const day = moment().isoWeekday();
-      const isWeekend = (day === 6) || (day === 7);
-
-      let price = 1;
-    
-      if (isWeekend) {
-        price = 0;
-      }
+      const price = 1;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -39,12 +31,11 @@ class Join extends Command {
       const user = this.client.plug.getUser(userDB.get("id"));
 
       const dj = this.client.plug.getDJ();
+      const userPos = this.client.plug.getWaitListPosition(user.id);
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         return message.reply("You're not online on plug!");
       }
-
-      const userPos = this.client.plug.getWaitListPosition(user.id);
 
       if (!this.client.triviaUtil.check()) {
         return message.reply("Trivia is not running!");

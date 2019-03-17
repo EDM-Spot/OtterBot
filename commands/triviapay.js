@@ -16,10 +16,6 @@ class TriviaPay extends Command {
       
       if (!args.length) { return; }
 
-      if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
-        return message.reply("There's a Game running already!");
-      }
-
       const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "trivia@start", "perUse");
 
       if (cooldown != -2) {
@@ -47,12 +43,11 @@ class TriviaPay extends Command {
       const user = this.client.plug.getUser(userDB.get("id"));
 
       const dj = this.client.plug.getDJ();
+      const userPos = this.client.plug.getWaitListPosition(user.id);
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         return message.reply("You're not online on plug!");
       }
-
-      const userPos = this.client.plug.getWaitListPosition(user.id);
 
       if (this.client.triviaUtil.started) {
         return message.reply("Trivia already started!");

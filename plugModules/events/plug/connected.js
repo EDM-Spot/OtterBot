@@ -11,6 +11,8 @@ module.exports = function Event(bot, filename, platform) {
       await bot.wait(2000);
 
       await bot.plug.sendChat(bot.lang.startup);
+      
+      await bot.utils.otterDJ().then(res => res.join());
 
       await bot.lottery.start();
 
@@ -35,6 +37,10 @@ module.exports = function Event(bot, filename, platform) {
       new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
         var randomNumber = Math.floor(Math.random() * randomTimedText.length);
         bot.plug.sendChat(randomTimedText[randomNumber]);
+      });
+
+      new moment.duration(24, "hours").timer({loop: true, start: true}, async () => {
+        await bot.utils.otterDJ().then(res => res.update(100));
       });
 
       new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
