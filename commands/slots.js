@@ -8,17 +8,19 @@ const symbols = [
   new SlotSymbol("lemon", { display: "🍋", points: 1, weight: 100 }),
   new SlotSymbol("apple", { display: "🍎", points: 1, weight: 100 }),
   new SlotSymbol("grape", { display: "🍇", points: 1, weight: 100 }),
+  new SlotSymbol("watermelon", { display: "🍉", points: 1, weight: 100 }),
   new SlotSymbol("orange", { display: "🍊", points: 1, weight: 100 }),
   new SlotSymbol("cherry", { display: "🍒", points: 1, weight: 100 }),
-  new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true }),
-  new SlotSymbol("bell", { display: "🔔", points: 2, weight: 40 }),
-  new SlotSymbol("clover", { display: "🍀", points: 3, weight: 35 }),
-  new SlotSymbol("music", { display: "🎵", points: 1, weight: 50 }),
-  new SlotSymbol("dj", { display: "🎧", points: 1, weight: 10 }),
+  new SlotSymbol("bell", { display: "🔔", points: 2, weight: 80 }),
+  new SlotSymbol("speaker", { display: "🔊", points: 2, weight: 60 }),
+  new SlotSymbol("clover", { display: "🍀", points: 3, weight: 45 }),
+  new SlotSymbol("music", { display: "🎵", points: 2, weight: 35 }),
   new SlotSymbol("heart", { display: "❤", points: 4, weight: 30 }),
   new SlotSymbol("money", { display: "💰", points: 5, weight: 25 }),
+  new SlotSymbol("dj", { display: "🎧", points: 2, weight: 15 }),
   new SlotSymbol("diamond", { display: "💎", points: 10, weight: 5 }),
-  new SlotSymbol("jackpot", { display: "🔅", points: 50, weight: 2})
+  new SlotSymbol("jackpot", { display: "🔅", points: 50, weight: 2}),
+  new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true })
 ];
 
 class Slots extends Command {
@@ -75,7 +77,8 @@ class Slots extends Command {
       const results = machine.play();
 
       let moveTo3 = false;
-      let moveDown3 = false;
+      let moveDown5 = false;
+      let moveDown2 = false;
 
       const [botUser] = await this.client.db.models.users.findOrCreate({ where: { id: "40333310" }, defaults: { id: "40333310" } });
       const jackpot = botUser.get("props");
@@ -90,7 +93,9 @@ class Slots extends Command {
       if (results.lines.slice(-2)[0].isWon && results.lines.slice(-2)[0].symbols.map(s => s.name).includes("dj")) {
         moveTo3 = true;
       } else if (results.lines.slice(-2)[0].isWon && results.lines.slice(-2)[0].symbols.map(s => s.name).includes("music")) {
-        moveDown3 = true;
+        moveDown5 = true;
+      } else if (results.lines.slice(-2)[0].isWon && results.lines.slice(-2)[0].symbols.map(s => s.name).includes("speaker")) {
+        moveDown2 = true;
       }
 
       for (let i = 0; i < results.lines.length - 2; i++) {
@@ -99,7 +104,9 @@ class Slots extends Command {
         if (results.lines[i].isWon && results.lines[i].symbols.map(s => s.name).includes("dj")) {
           moveTo3 = true;
         } else if (results.lines[i].isWon && results.lines[i].symbols.map(s => s.name).includes("music")) {
-          moveDown3 = true;
+          moveDown5 = true;
+        } else if (results.lines[i].isWon && results.lines[i].symbols.map(s => s.name).includes("speaker")) {
+          moveDown2 = true;
         }
       }
 
@@ -108,7 +115,9 @@ class Slots extends Command {
       if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("dj")) {
         moveTo3 = true;
       } else if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("music")) {
-        moveDown3 = true;
+        moveDown5 = true;
+      } else if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("speaker")) {
+        moveDown2 = true;
       }
 
       const points = results.lines.reduce((total, line) => total + line.points, 0);
@@ -126,21 +135,25 @@ class Slots extends Command {
 
       await inst.increment("props", { by: payout });
 
-      if (moveTo3 || moveDown3) {
+      if (moveTo3 || moveDown5 || moveDown2) {
         const dj = this.client.plug.getDJ();
         const userPos = this.client.plug.getWaitListPosition(userDB.get("id"));
 
         if (!user || typeof user.username !== "string" || !user.username.length) {
           message.reply("You're not online on plug! Can't Move.");
-        } else if ((isObject(dj) && dj.id !== user.id) || (userPos >= 5)) {
-          if (moveTo3) {
+        } else if (isObject(dj) && dj.id !== user.id) {
+          if (moveTo3 && userPos >= 4) {
             await this.client.plug.sendChat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
 
             this.client.queue.add(user, 3);
-          } else if (moveDown3) {
-            await this.client.plug.sendChat("@" + user.username + " Won 3 Spots in the Slot Machine! Moving Down 3...");
+          } else if (moveDown5 && userPos >= 6) {
+            await this.client.plug.sendChat("@" + user.username + " Won 5 Spots in the Slot Machine! Moving Down 5...");
 
-            this.client.queue.add(user, userPos - 3);
+            this.client.queue.add(user, userPos - 5);
+          } else if (moveDown2 && userPos >= 3) {
+            await this.client.plug.sendChat("@" + user.username + " Won 2 Spots in the Slot Machine! Moving Down 2...");
+
+            this.client.queue.add(user, userPos - 2);
           }
         }
       }
