@@ -182,6 +182,13 @@ class Poker extends Command {
           } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
           }
+
+          const props = inst.get("props");
+
+          if (props == 0) {
+            message.reply("You have 0 props.");
+            return this.client.pokerUtil.exit();
+          }
           
           return this.client.pokerUtil.allIn();
         }

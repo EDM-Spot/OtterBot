@@ -377,19 +377,36 @@ module.exports = (client) => {
 
     async allIn() {
       const player = this.currentPlayer;
-      const prevBet = this.totalBets.get(player.id);
+
+      const prevBal = this.playerBalances.get(player.id);
+      const prevBet = this.roundBets.get(player.id) || 0;
       const props = this.playerBalances.get(player.id);
 
       this.allInPlayers.add(player.id);
-      this.playerBalances.set(player.id, 0);
+      this.playerBalances.set(player.id, prevBal + prevBet - props);
       this.roundBets.set(player.id, props);
-      this.totalBets.set(player.id, props);
+      this.totalBets.set(player.id, this.totalBets.get(player.id) - prevBet + props);
 
       this.tableMoney -= prevBet;
       this.tableMoney += props;
 
       this.previousBets.unshift(props);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
+
+      //const player = this.currentPlayer;
+      //const prevBet = this.totalBets.get(player.id);
+      //const props = this.playerBalances.get(player.id);
+
+      //this.allInPlayers.add(player.id);
+      //this.playerBalances.set(player.id, 0);
+      //this.roundBets.set(player.id, props);
+      //this.totalBets.set(player.id, props);
+
+      //this.tableMoney -= prevBet;
+      //this.tableMoney += props;
+
+      //this.previousBets.unshift(props);
+      //if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
       await client.channels.get(this.channel).send([
         `**${player.user.username}** has gone all-in!`,
@@ -463,6 +480,10 @@ module.exports = (client) => {
 
       if (this.previousBets.length === this.players.size && new Set(this.previousBets).size === 1) {
         return this.processNextRound();
+      }
+
+      if (this.allInPlayers.has(player.id)) {
+        this.skip();
       }
 
       this.incrementTurn();
