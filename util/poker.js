@@ -468,9 +468,10 @@ module.exports = (client) => {
     }
 
     processNextTurn() {
+      const player = this.currentPlayer;
+      
       clearTimeout(this.turnTimer);
       this.turnTimer = setTimeout(() => {
-        const player = this.currentPlayer;
         if (this.allInPlayers.has(player.id)) {
           this.skip();
         } else {
