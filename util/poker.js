@@ -84,7 +84,7 @@ module.exports = (client) => {
       client.channels.get(this.channel).send("<@&512635547320188928> 30 Seconds left until next Round start!");
       client.channels.get(this.channel).send("Type `-p exit` if you want to leave the table!");
 
-      new moment.duration(30, "seconds").timer({loop: false, start: true}, async () => {
+      new moment.duration(30, "seconds").timer({ loop: false, start: true }, async () => {
         if (this.startingPlayers.size < this.minPlayers) {
           client.channels.get(this.channel).send(`Not enough players (${this.minPlayers} required) to continue this game.`);
           await this.end();
@@ -98,7 +98,7 @@ module.exports = (client) => {
 
       return true;
     }
-    
+
     get currentPlayer() {
       return this.getPlayer(this.currentTurn);
     }
@@ -377,36 +377,19 @@ module.exports = (client) => {
 
     async allIn() {
       const player = this.currentPlayer;
-
-      const prevBal = this.playerBalances.get(player.id);
-      const prevBet = this.roundBets.get(player.id) || 0;
+      const prevBet = this.totalBets.get(player.id);
       const props = this.playerBalances.get(player.id);
 
       this.allInPlayers.add(player.id);
-      this.playerBalances.set(player.id, prevBal + prevBet - props);
+      this.playerBalances.set(player.id, 0);
       this.roundBets.set(player.id, props);
-      this.totalBets.set(player.id, this.totalBets.get(player.id) - prevBet + props);
+      this.totalBets.set(player.id, props);
 
       this.tableMoney -= prevBet;
       this.tableMoney += props;
 
       this.previousBets.unshift(props);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
-
-      //const player = this.currentPlayer;
-      //const prevBet = this.totalBets.get(player.id);
-      //const props = this.playerBalances.get(player.id);
-
-      //this.allInPlayers.add(player.id);
-      //this.playerBalances.set(player.id, 0);
-      //this.roundBets.set(player.id, props);
-      //this.totalBets.set(player.id, props);
-
-      //this.tableMoney -= prevBet;
-      //this.tableMoney += props;
-
-      //this.previousBets.unshift(props);
-      //if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
       await client.channels.get(this.channel).send([
         `**${player.user.username}** has gone all-in!`,
@@ -469,7 +452,7 @@ module.exports = (client) => {
 
     processNextTurn() {
       const player = this.currentPlayer;
-      
+
       clearTimeout(this.turnTimer);
       this.turnTimer = setTimeout(() => {
         if (this.allInPlayers.has(player.id)) {
@@ -483,11 +466,12 @@ module.exports = (client) => {
         return this.processNextRound();
       }
 
+      this.incrementTurn();
+
       if (this.allInPlayers.has(player.id)) {
-        this.skip();
+        return this.skip();
       }
 
-      this.incrementTurn();
       return this.send("The round continues...", false);
     }
 
