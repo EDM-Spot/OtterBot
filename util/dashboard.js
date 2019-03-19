@@ -354,7 +354,7 @@ module.exports = (client) => {
           [Op.ne]: 40333310
         },
         created_at: {
-          [Op.gt]: client.moment().subtract(12, "hours").toDate()
+          [Op.gt]: client.moment().subtract(1, "weeks").toDate()
         }
       },
       order: [["created_at", "DESC"]]
