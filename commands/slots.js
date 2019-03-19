@@ -19,7 +19,7 @@ const symbols = [
   new SlotSymbol("money", { display: "💰", points: 5, weight: 25 }),
   new SlotSymbol("dj", { display: "🎧", points: 2, weight: 15 }),
   new SlotSymbol("diamond", { display: "💎", points: 10, weight: 5 }),
-  new SlotSymbol("jackpot", { display: "🔅", points: 50, weight: 2}),
+  new SlotSymbol("jackpot", { display: "🃏", points: 50, weight: 2}),
   new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true })
 ];
 
@@ -79,6 +79,7 @@ class Slots extends Command {
       let moveTo3 = false;
       let moveDown5 = false;
       let moveDown2 = false;
+      let wonJackPot = false;
 
       const [botUser] = await this.client.db.models.users.findOrCreate({ where: { id: "40333310" }, defaults: { id: "40333310" } });
       const jackpot = botUser.get("props");
@@ -97,6 +98,10 @@ class Slots extends Command {
       } else if (results.lines.slice(-2)[0].isWon && results.lines.slice(-2)[0].symbols.map(s => s.name).includes("speaker")) {
         moveDown2 = true;
       }
+      
+      if (results.lines.slice(-2)[0].isWon && results.lines.slice(-2)[0].symbols.map(s => s.name).includes("jackpot")) {
+        wonJackPot = true;
+      }
 
       for (let i = 0; i < results.lines.length - 2; i++) {
         embed.description += (results.lines[i].isWon ? "\n➡   " : "\n⬛   ") + results.lines[i].symbols.map(s => s.display).join(" ") + (results.lines[i].isWon ? "   ⬅" : "   ⬛");
@@ -108,6 +113,10 @@ class Slots extends Command {
         } else if (results.lines[i].isWon && results.lines[i].symbols.map(s => s.name).includes("speaker")) {
           moveDown2 = true;
         }
+        
+        if (results.lines[i].isWon && results.lines[i].symbols.map(s => s.name).includes("jackpot")) {
+          wonJackPot = true;
+        }
       }
 
       embed.description += (results.lines.slice(-1)[0].isWon ? "\n↗" : "\n⬛") + dollarSigns + (results.lines.slice(-2)[0].isWon ? "↖" : "⬛");
@@ -118,6 +127,10 @@ class Slots extends Command {
         moveDown5 = true;
       } else if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("speaker")) {
         moveDown2 = true;
+      }
+
+      if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("jackpot")) {
+        wonJackPot = true;
       }
 
       const points = results.lines.reduce((total, line) => total + line.points, 0);
@@ -158,7 +171,7 @@ class Slots extends Command {
         }
       }
 
-      if (results.lines.slice(-1)[0].isWon && results.lines.slice(-1)[0].symbols.map(s => s.name).includes("jackpot")) {
+      if (wonJackPot) {
         await inst.increment("props", { by: jackpot });
         await botUser.decrement("props", { by: jackpot });
 
