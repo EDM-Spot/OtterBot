@@ -9,7 +9,7 @@ class Poker extends Command {
   constructor(client) {
     super(client, {
       name: "p",
-      description: "Start Poker Game",
+      description: "Start a Texas Hold'em Poker Game",
       usage: "['start', 'join', 'bet', 'check', 'fold', 'skip', 'allin']"
     });
   }
@@ -59,14 +59,14 @@ class Poker extends Command {
             return message.reply("There's a Game running already!");
           }
 
-          let startMessage = "A new poker game has been created. Entry Fee: 1 Prop. \n";
+          let startMessage = "A new Texas Hold'em Poker Game has been created. Entry Fee: 1 Prop. \n";
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 5 minutes. Join the game with `-p join` \n";
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          await this.client.plug.sendChat("Discord Poker will start in 5 minutes in channel #" + message.channel.name + "!");
+          await this.client.plug.sendChat("Discord Texas Hold'em Poker will start in 5 minutes in channel #" + message.channel.name + "!");
           await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
           this.client.pokerUtil.running = true;

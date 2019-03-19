@@ -122,7 +122,7 @@ module.exports = (client) => {
       const playerIcon = this.currentPlayer.user.displayAvatarURL;
 
       const embed = new Discord.RichEmbed()
-        .setTitle("♥️♣️ Poker ♠️♦️")
+        .setTitle("♥️♣️ Texas Hold'em Poker ♠️♦️")
         .addField(`Round ${this.currentRound + 1}`, [
           text,
           `**${this.currentPlayer.user.username}** has a balance of **${this.playerBalances.get(this.currentPlayer.id)}** Props`,
