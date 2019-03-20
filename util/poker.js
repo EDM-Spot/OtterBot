@@ -128,6 +128,7 @@ module.exports = (client) => {
           `**${this.currentPlayer.user.username}** has a balance of **${this.playerBalances.get(this.currentPlayer.id)}** Props`,
           "",
           `Type \`${prefix}p bet <amount>\` to bet.`,
+          `Type \`${prefix}p call\` to match the last bet. **Last Bet: ${this.previousBet} Props**`,
           `Type \`${prefix}p check\` to check.`,
           `Type \`${prefix}p fold\` to fold.`,
           `Type \`${prefix}p allIn\` to go all-in.`,

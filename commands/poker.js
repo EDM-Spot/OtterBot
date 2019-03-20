@@ -139,6 +139,29 @@ class Poker extends Command {
 
           return this.client.pokerUtil.bet(amount);
         }
+        case "call": {
+          if (!this.client.pokerUtil.started) {
+            return message.reply("Poker is not running!");
+          }
+          
+          const amount = this.client.pokerUtil.previousBet;
+
+          if (isNaN(amount)) {
+            return false;
+          }
+
+          if (this.client.pokerUtil.currentPlayer.id != userID) {
+            return message.reply("It's not your turn!");
+          } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
+            return message.reply("You gone all-in! You can only skip at this point!");
+          } else if (this.client.pokerUtil.playerBalances.get(this.client.pokerUtil.currentPlayer.id) + (this.client.pokerUtil.roundBets.get(this.client.pokerUtil.currentPlayer.id) || 0) - amount < 0) {
+            return message.reply("You do not have enough Props to bet!");
+          } else if (amount !== this.client.pokerUtil.previousBet && amount < this.client.pokerUtil.previousBet * 2) {
+            return message.reply(`You need to bet equal or at least twice the previous bet of **${this.client.pokerUtil.previousBet}** Props`);
+          }
+
+          return this.client.pokerUtil.bet(amount);
+        }
         case "check": {
           if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
