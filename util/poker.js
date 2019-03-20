@@ -154,6 +154,10 @@ module.exports = (client) => {
           .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
       }
 
+      if (this.allInPlayers.has(this.currentPlayer.id)) {
+        return this.skip();
+      }
+
       return client.channels.get(this.channel).send(`${this.currentPlayer}, it is your turn!`, options);
     }
 
@@ -451,10 +455,9 @@ module.exports = (client) => {
     }
 
     processNextTurn() {
-      const player = this.currentPlayer;
-
       clearTimeout(this.turnTimer);
       this.turnTimer = setTimeout(() => {
+        const player = this.currentPlayer;
         if (this.allInPlayers.has(player.id)) {
           this.skip();
         } else {
@@ -467,11 +470,6 @@ module.exports = (client) => {
       }
 
       this.incrementTurn();
-
-      if (this.allInPlayers.has(player.id)) {
-        return this.skip();
-      }
-
       return this.send("The round continues...", false);
     }
 
