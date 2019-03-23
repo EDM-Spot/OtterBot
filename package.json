@@ -61,7 +61,7 @@
     "plugapi": "git+ssh://git@github.com/plugCubed/plugAPI.git#8af3f67",
     "pokersolver": "^2.1.2",
     "probe-image-size": "^4.0.0",
-    "qs": "^6.6.0",
+    "qs": "^6.7.0",
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
