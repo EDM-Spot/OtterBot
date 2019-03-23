@@ -6,20 +6,19 @@ const { SlotMachine, SlotSymbol } = require("slot-machine");
 
 const symbols = [
   new SlotSymbol("lemon", { display: "🍋", points: 1, weight: 100 }),
-  new SlotSymbol("apple", { display: "🍎", points: 1, weight: 100 }),
   new SlotSymbol("grape", { display: "🍇", points: 1, weight: 100 }),
   new SlotSymbol("watermelon", { display: "🍉", points: 1, weight: 100 }),
   new SlotSymbol("orange", { display: "🍊", points: 1, weight: 100 }),
   new SlotSymbol("cherry", { display: "🍒", points: 1, weight: 100 }),
-  new SlotSymbol("bell", { display: "🔔", points: 2, weight: 80 }),
-  new SlotSymbol("speaker", { display: "🔊", points: 2, weight: 60 }),
-  new SlotSymbol("clover", { display: "🍀", points: 3, weight: 45 }),
-  new SlotSymbol("music", { display: "🎵", points: 2, weight: 35 }),
+  new SlotSymbol("speaker", { display: "🔊", points: 2, weight: 95 }),
+  new SlotSymbol("bell", { display: "🔔", points: 3, weight: 80 }),
+  new SlotSymbol("clover", { display: "🍀", points: 4, weight: 45 }),
+  new SlotSymbol("music", { display: "🎵", points: 3, weight: 35 }),
   new SlotSymbol("heart", { display: "❤", points: 4, weight: 30 }),
-  new SlotSymbol("money", { display: "💰", points: 5, weight: 25 }),
-  new SlotSymbol("dj", { display: "🎧", points: 2, weight: 15 }),
-  new SlotSymbol("diamond", { display: "💎", points: 10, weight: 5 }),
-  new SlotSymbol("jackpot", { display: "🃏", points: 50, weight: 2}),
+  new SlotSymbol("money", { display: "💰", points: 6, weight: 25 }),
+  new SlotSymbol("dj", { display: "🎧", points: 7, weight: 15 }),
+  new SlotSymbol("diamond", { display: "💎", points: 50, weight: 5 }),
+  new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 2}),
   new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true })
 ];
 
