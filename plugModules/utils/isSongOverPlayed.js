@@ -22,7 +22,7 @@ module.exports = function Util(bot) {
       if (isObject(songOverPlayed)) {
         const timePassed = bot.moment().diff(bot.moment(songOverPlayed.created_at), "days");
         
-        if (timePassed <= 3) {
+        if (timePassed <= 5) {
           return true;
         }
         else {
@@ -33,7 +33,7 @@ module.exports = function Util(bot) {
 
       if (!isNil(songHistory)) {
         for (let i = 0; i < songHistory.length; i++) {
-          const playedMinutes = bot.moment().diff(bot.moment(songHistory[i].created_at), "weeks");
+          const playedWeeks = bot.moment().diff(bot.moment(songHistory[i].created_at), "weeks");
 
           if (!isNil(songHistory[i].title)) {
             const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
@@ -42,7 +42,7 @@ module.exports = function Util(bot) {
             const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
             const savedTitle = songHistory[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
 
-            if (playedMinutes <= 1) {
+            if (playedWeeks <= 2) {
               if (songHistory[i].cid === cid) {
                 // Song Played | Same ID
                 playedCount++;
@@ -55,7 +55,7 @@ module.exports = function Util(bot) {
         }
       }
       
-      if (playedCount > 5) {
+      if (playedCount > 8) {
         await bot.db.models.overplayedlist.findOrCreate({
           where: { cid: cid },
           defaults: {
