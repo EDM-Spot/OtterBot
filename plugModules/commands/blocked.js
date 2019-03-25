@@ -59,7 +59,7 @@ module.exports = function Command(bot) {
       }
 
       const regionRestriction = get(YouTubeMediaData, "contentDetails.regionRestriction");
-      const MINIMUM_COUNTRIES_ALLOWED = 96;
+      const MINIMUM_COUNTRIES_ALLOWED = 6;
 
       const allowed = get(regionRestriction, "allowed", []);
       const blocked = get(regionRestriction, "blocked", []);
@@ -69,18 +69,18 @@ module.exports = function Command(bot) {
       
       if (isObject(regionRestriction) && arraysCheck) {
         if (isArray(denied) && denied.length >= MINIMUM_COUNTRIES_ALLOWED) {
-          this.reply(lang.check.blockedTooMany, { count: denied.length || 149, which }, 6e4);
+          this.reply(lang.check.blockedTooMany, { count: denied.length || 195, which }, 6e4);
           return true;
         } else if (isArray(blocked) && blocked.length >= MINIMUM_COUNTRIES_ALLOWED) {
-          this.reply(lang.check.blockedTooMany, { count: blocked.length || 149, which }, 6e4);
+          this.reply(lang.check.blockedTooMany, { count: blocked.length || 195, which }, 6e4);
           return true;	
         } else if (isArray(allowed) && allowed.length <= MINIMUM_COUNTRIES_ALLOWED) {	
-          this.reply(lang.check.blockedTooMany, { count: allowed.length || 149, which }, 6e4);
+          this.reply(lang.check.blockedTooMany, { count: allowed.length || 195, which }, 6e4);
           return true;
         } else if (isArray(denied) && denied.length <= MINIMUM_COUNTRIES_ALLOWED) {
-          if (denied.length >= 20) {
+          if (denied.length <= 6) {
             this.reply(lang.check.blockedIn, {
-              countries: [...denied.splice(0, 20), `and ${denied.length} more.`].join(", "),
+              countries: [...denied.splice(0, 6)].join(", "),
               which,
             }, 6e4);
             return true;
@@ -89,9 +89,9 @@ module.exports = function Command(bot) {
           this.reply(lang.check.blockedIn, { countries: denied.join(", "), which }, 6e4);
           return true;
         } else if (isArray(blocked) && blocked.length <= MINIMUM_COUNTRIES_ALLOWED) {
-          if (blocked.length >= 20) {
+          if (blocked.length <= 6) {
             this.reply(lang.check.blockedIn, {
-              countries: [...blocked.splice(0, 20), `and ${blocked.length} more.`].join(", "),
+              countries: [...blocked.splice(0, 6)].join(", "),
               which,
             }, 6e4);
             return true;
@@ -100,9 +100,9 @@ module.exports = function Command(bot) {
           this.reply(lang.check.blockedIn, { countries: blocked.join(", "), which }, 6e4);
           return true;
         } else if (isArray(allowed) && allowed.length >= MINIMUM_COUNTRIES_ALLOWED) {	
-          if (allowed.length >= 20) {	
+          if (allowed.length <= 191) {	
             this.reply(lang.check.blockedIn, {	
-              countries: [...allowed.splice(0, 20), `and ${allowed.length} more.`].join(", "),	
+              countries: `${195 - allowed.length} countries.`,	
               which,	
             }, 6e4);	
             return true;	
