@@ -58,7 +58,7 @@ module.exports = function Event(bot, platform) {
       if (rawData.from.role >= ROOM_ROLE.RESIDENTDJ || rawData.from.gRole >= GLOBAL_ROLES.MODERATOR) {
         if (dubtrack.test(rawData.message) || plug.test(rawData.message)) {
           bot.plug.moderateDeleteChat(rawData.id);
-          await bot.plug.moderateBanUser(rawData.from.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, bot.plug.BAN.PERMA);
+          //await bot.plug.moderateBanUser(rawData.from.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, bot.plug.BAN.PERMA);
 
           const embed = new Discord.RichEmbed()
             .setAuthor(rawData.from.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
@@ -66,9 +66,7 @@ module.exports = function Event(bot, platform) {
             .setFooter("By OtterBot")
             .setTimestamp()
             .addField("ID", rawData.from.id, true)
-            .addField("Type", "Ban", true)
-            .addField("Time", "Permanent", true)
-            .addField("Reason", "Promote other room", false)
+            .addField("Warning", "Promote other room", false)
             .addField("Message", rawData.message, false);
 
           bot.channels.get("485173444330258454").send({embed});
