@@ -17,7 +17,7 @@ module.exports = function Command(bot) {
         const offUser = data.filter(u => u.role === ROOM_ROLE.RESIDENTDJ);
 
         var i = 0;
-        var interval = setInterval(function() {
+        var interval = setInterval(async function() {
           if (!isNil(offUser[i])) {
             if (offUser[i].role < ROOM_ROLE.BOUNCER || offUser[i].gRole < GLOBAL_ROLES.MODERATOR) {
 
