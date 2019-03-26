@@ -23,7 +23,7 @@ module.exports = function Command(bot) {
 
               if (offUser[i].role === ROOM_ROLE.RESIDENTDJ) {
                 console.log(offUser[i].username);
-                bot.utils.updateRDJ(offUser[i].id);
+                await bot.utils.updateRDJ(offUser[i].id);
               }
             }
           }
