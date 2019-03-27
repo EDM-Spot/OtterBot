@@ -111,13 +111,12 @@ module.exports = function Event(bot, filename, platform) {
       }
 
       if (isObject(data.currentDJ) && data.media.duration >= 390) {
-        if (data.media.duration < 480) {
-          const seconds = data.media.duration - 390;
+        const [user] = await bot.db.models.users.findOrCreate({ where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id } });
+        const seconds = data.media.duration - 390;
 
-          const [user] = await bot.db.models.users.findOrCreate({ where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id } });
+        if (data.media.duration <= 480 && props >= seconds) {
           await user.decrement("props", { by: seconds });
-
-          await bot.plug.sendChat(`${data.currentDJ.username} paid ${seconds} to play this song!`);
+          await bot.plug.sendChat(`${data.currentDJ.username} paid ${seconds} Props to play this song!`);
         } else {
           await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
 

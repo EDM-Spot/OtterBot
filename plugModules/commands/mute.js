@@ -64,7 +64,7 @@ module.exports = function Command(bot) {
         reason = rawData.args.slice(1).join(" ");
       }
 
-      if (isEmpty(reason)) {
+      if (isEmpty(reason) || reason.trim() === '') {
         this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }
@@ -91,9 +91,11 @@ module.exports = function Command(bot) {
       if (user.role < ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR) {
         const { role } = user;
         
-        await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
-        await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, apiDuration);
-        await bot.plug.moderateSetRole(user.id, role);
+        await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE, async function() {
+          await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, apiDuration, async function() {
+            await bot.plug.moderateSetRole(user.id, role);
+          });
+        });
         
         this.reply(lang.moderation.effective, {
           mod: rawData.from.username,
