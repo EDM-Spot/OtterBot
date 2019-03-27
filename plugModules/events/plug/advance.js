@@ -65,7 +65,7 @@ module.exports = function Event(bot, filename, platform) {
         if (!isNil(bot.user)) {
           bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
             type: "LISTENING"
-          }).catch(function(error) {
+          }).catch(function (error) {
             console.log(error);
           });
         }
@@ -75,9 +75,9 @@ module.exports = function Event(bot, filename, platform) {
 
       const blackword = ["nightcore", "nightstep", "bass boosted", "whatsapp", "gemido", "gemidão", "rape"];
 
-      for (let i=0; i < blackword.length; i++) {
-        var pattern = new RegExp("(<=\\s|\\b)"+ blackword[i] +"(?=[]\\b|\\s|$)");
-        
+      for (let i = 0; i < blackword.length; i++) {
+        var pattern = new RegExp("(<=\\s|\\b)" + blackword[i] + "(?=[]\\b|\\s|$)");
+
         if (pattern.test(songAuthor.toLowerCase()) || pattern.test(songTitle.toLowerCase())) {
           await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
 
@@ -88,11 +88,11 @@ module.exports = function Event(bot, filename, platform) {
         }
       }
 
-      const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid }});
+      const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid } });
 
       if (isObject(blacklisted)) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
-        
+
         if (!skipped) {
           await bot.plug.moderateForceSkip();
           skipped = true;
@@ -103,7 +103,7 @@ module.exports = function Event(bot, filename, platform) {
 
       if (isOverplayed) {
         await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
-        
+
         if (!skipped) {
           await bot.plug.moderateForceSkip();
           skipped = true;
@@ -111,11 +111,18 @@ module.exports = function Event(bot, filename, platform) {
       }
 
       if (isObject(data.currentDJ) && data.media.duration >= 390) {
-        await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
-        
-        if (!skipped) {
-          await bot.utils.lockskip(data.currentDJ);
-          skipped = true;
+        if (data.media.duration < 480) {
+          const seconds = data.media.duration - 390;
+
+          const [user] = await bot.db.models.users.findOrCreate({ where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id } });
+          await user.decrement("props", { by: seconds });
+        } else {
+          await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
+
+          if (!skipped) {
+            await bot.utils.lockskip(data.currentDJ);
+            skipped = true;
+          }
         }
       }
 
@@ -129,7 +136,7 @@ module.exports = function Event(bot, filename, platform) {
                 time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
               }));
               //await bot.plug.sendChat("!plays");
-              
+
               if (!skipped) {
                 await bot.plug.moderateForceSkip();
                 skipped = true;
@@ -153,7 +160,7 @@ module.exports = function Event(bot, filename, platform) {
           await bot.plug.sendChat(bot.lang.stuckSkip);
 
           bot.global.isSkippedByTimeGuard = true;
-          
+
           if (!skipped) {
             await bot.plug.moderateForceSkip();
             skipped = true;
@@ -164,7 +171,7 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getHistory(async function(history) {
+        bot.plug.getHistory(async function (history) {
           const sortHistory = sortBy(history, ["timestamp"]);
           const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
 
@@ -193,20 +200,20 @@ module.exports = function Event(bot, filename, platform) {
           try {
             if (get(lastPlay, "media.format", 2) === 1) {
               const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.media.cid);
-  
+
               const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
               const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
-  
+
               if ((lastFullTitle.match(/-/g) || []).length === 1) {
                 lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
                 lastSongTitle = lastFullTitle.split(" - ")[1].trim();
               }
             } else {
               const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
-  
+
               if (!isNil(lastSoundCloudMediaData)) {
                 const lastFullTitle = lastSoundCloudMediaData.title;
-  
+
                 if ((lastFullTitle.match(/-/g) || []).length === 1) {
                   lastSongAuthor = lastFullTitle.split(" - ")[0].trim();
                   lastSongTitle = lastFullTitle.split(" - ")[1].trim();
@@ -271,7 +278,7 @@ module.exports = function Event(bot, filename, platform) {
                   .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
               }
             }
-        
+
             bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
               savedMessageID = m.id;
               savedMessage = m.content;
@@ -282,48 +289,48 @@ module.exports = function Event(bot, filename, platform) {
 
           // if they weren't skipped they deserve XP equivalent to the votes
           if (!lastPlaySkipped) {
-          /*if (bot.global.isHolidaySong) {
-            const day = moment().isoWeekday();
-            const isWeekend = (day === 5) || (day === 6) || (day === 7);
-
-            let random = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
-
-            if (!props) {
-              // No Props
-            } else if (props >= 3) {
-              random = Math.floor(Math.random() * (60 - 20 + 1)) + 20;
-            }
-
-            if (isWeekend) {
-              random = random * 2;
-            }
+            /*if (bot.global.isHolidaySong) {
+              const day = moment().isoWeekday();
+              const isWeekend = (day === 5) || (day === 6) || (day === 7);
   
-            const [holidayUser] = await bot.db.models.holiday.findOrCreate({
-              where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id },
-            });
+              let random = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
   
-            await holidayUser.increment("played", { by: 1 });
-            await holidayUser.increment("currency", { by: random });
-
-            //const user = bot.plug.getUser(lastPlay.user.id);
+              if (!props) {
+                // No Props
+              } else if (props >= 3) {
+                random = Math.floor(Math.random() * (60 - 20 + 1)) + 20;
+              }
   
-            //console.log(lastPlay.user);
-            //console.log(ROOM_ROLE.RESIDENTDJ);
-            
-            //if (user.role <= ROOM_ROLE.RESIDENTDJ) {
-            //  await bot.db.models.holiday.update(
-            //    { ticket: true },
-            //    { where: { id: lastPlay.user.id }}
-            //  );
-            //}
-
-            await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceholiday, {
-              random,
-              user: lastPlay.user.username
-            }), data.media.duration * 1e3);
+              if (isWeekend) {
+                random = random * 2;
+              }
+    
+              const [holidayUser] = await bot.db.models.holiday.findOrCreate({
+                where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id },
+              });
+    
+              await holidayUser.increment("played", { by: 1 });
+              await holidayUser.increment("currency", { by: random });
   
-            bot.global.isHolidaySong = false;
-          }*/
+              //const user = bot.plug.getUser(lastPlay.user.id);
+    
+              //console.log(lastPlay.user);
+              //console.log(ROOM_ROLE.RESIDENTDJ);
+              
+              //if (user.role <= ROOM_ROLE.RESIDENTDJ) {
+              //  await bot.db.models.holiday.update(
+              //    { ticket: true },
+              //    { where: { id: lastPlay.user.id }}
+              //  );
+              //}
+  
+              await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceholiday, {
+                random,
+                user: lastPlay.user.username
+              }), data.media.duration * 1e3);
+    
+              bot.global.isHolidaySong = false;
+            }*/
 
             // if no props were given, we done here
             if (!props || bot.global.isSkippedByMehGuard) {
