@@ -113,6 +113,7 @@ module.exports = function Event(bot, filename, platform) {
       if (isObject(data.currentDJ) && data.media.duration >= 390) {
         const [user] = await bot.db.models.users.findOrCreate({ where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id } });
         const seconds = data.media.duration - 390;
+        const props = user.get("props");
 
         if (data.media.duration <= 480 && props >= seconds) {
           await user.decrement("props", { by: seconds });
