@@ -8,53 +8,61 @@ module.exports = function Command(bot) {
     minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,
-    parameters: "<@username> [s|h|hour|short|l|d|day|long|f|p|perma|forever]",
-    description: "Bans the specified user from using specific commands for the specified duration (hour, day or forever) or defaults to hour.",
+    parameters: "<@username> [s|h|hour|short|l|d|day|long|f|p|perma|forever] <reason>",
+    description: "Bans the specified user from using specific commands for the specified duration (hour, day or forever).",
     async execute(rawData, { args, name }, lang) {
-      if (!args.length || args.join(" ").charAt(0) !== "@") {
+      if (!rawData.mentions.length || rawData.mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      let banDuration = args.pop();
-      const durations = {
-        s: "h",
-        h: "h",
-        hour: "h",
-        short: "h",
-        l: "d",
-        d: "d",
-        day: "d",
-        long: "d",
-        f: "f",
-        p: "f",
-        perma: "f",
-        forever: "f",
-      };
-
-      if (!Object.keys(durations).includes(banDuration)) {
-        args.push(banDuration);
-        banDuration = "h";
-      }
-
-      if (!args.length || args.join(" ").charAt(0) !== "@") {
-        this.reply(lang.invalidUser, {}, 6e4);
-        return false;
-      }
-
-      const username = args.join(" ").substr(1);
-      const users = bot.plug.getUsers();
-      const user = users.filter(u => u.username.toLowerCase() === username.toLowerCase())[0] ||
-				users.filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
-
+      const user = rawData.mentions[0];
+      
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
       } else if (user.id === rawData.from.id) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if (user.role >= ROOM_ROLE.BOUNCER && rawData.from.role <= ROOM_ROLE.BOUNCER) {
+      } else if ((user.role >= ROOM_ROLE.BOUNCER && rawData.from.role < ROOM_ROLE.MANAGER) || user.gRole >= GLOBAL_ROLES.MODERATOR) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
+        return false;
+      }
+
+      const durationArgs = rawData.args.slice(1).shift();
+      let apiDuration;
+      let timeSelected = true;
+      let reason;
+
+      switch (durationArgs) {
+        case "hour":
+        case "h":
+          apiDuration = "h";
+          break;
+        case "day":
+        case "d":
+          apiDuration = "d";
+          break;
+        case "perma":
+        case "p":
+          apiDuration = "f";
+          break;
+        default:
+          apiDuration = "h";
+          timeSelected = false;
+          break;
+      }
+
+      if (timeSelected) {
+        reason = rawData.args.slice(2).join(" ");
+      }
+      else
+      {
+        reason = rawData.args.slice(1).join(" ");
+      }
+
+      if (isEmpty(reason) || reason.trim() === '' || reason.length < 2) {
+        this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }
       
@@ -70,7 +78,8 @@ module.exports = function Command(bot) {
       //.addField("This is a field title, it can hold 256 characters")
         .addField("ID", user.id, true)
         .addField("Type", "CMD Ban", true)
-        .addField("Time", banDuration, true)
+        .addField("Time", apiDuration, true)
+        .addField("Reason", reason, false);
       //.addBlankField(true);
 
       bot.channels.get("485173444330258454").send({embed});
@@ -80,7 +89,7 @@ module.exports = function Command(bot) {
         where: {
           id: user.id,
           time: bot.moment(),
-          duration: banDuration,
+          duration: apiDuration,
         },
         defaults: { id: user.id },
       });
