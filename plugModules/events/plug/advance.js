@@ -116,6 +116,8 @@ module.exports = function Event(bot, filename, platform) {
 
           const [user] = await bot.db.models.users.findOrCreate({ where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id } });
           await user.decrement("props", { by: seconds });
+
+          await bot.plug.sendChat(`${data.currentDJ.username} paid ${seconds} to play this song!`);
         } else {
           await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
 
