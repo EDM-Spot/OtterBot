@@ -24,7 +24,7 @@ module.exports = function Command(bot) {
       } else if (user.id === rawData.from.id) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if ((user.role >= ROOM_ROLE.BOUNCER && rawData.from.role <= ROOM_ROLE.MANAGER) || user.gRole >= GLOBAL_ROLES.MODERATOR) {
+      } else if ((user.role >= ROOM_ROLE.BOUNCER && rawData.from.role < ROOM_ROLE.MANAGER) || user.gRole >= GLOBAL_ROLES.MODERATOR) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
         return false;
       }
@@ -61,7 +61,7 @@ module.exports = function Command(bot) {
         reason = rawData.args.slice(1).join(" ");
       }
 
-      if (isEmpty(reason) || reason.trim() === '') {
+      if (isEmpty(reason) || reason.trim() === '' || reason.length < 2) {
         this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }

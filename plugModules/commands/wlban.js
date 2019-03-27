@@ -4,12 +4,12 @@ const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["mute"],
+    names: ["wlban"],
     minimumPermission: 2000,
     cooldownType: "none",
     cooldownDuration: 0,
-    parameters: "<@username> [15|s|short|30|m|medium|45|l|long] <reason>",
-    description: "Mutes the specified user for the specified duration, or defaults to 15 minutes.",
+    parameters: "<@username> [s|short|h|hour|d|day|p|perma] <reason>",
+    description: "Bans the specified user for the specified duration from the WaitList.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.mentions.length || rawData.mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
@@ -35,23 +35,24 @@ module.exports = function Command(bot) {
       let reason;
 
       switch (durationArgs) {
-        case "15":
-        case "s":
         case "short":
-          apiDuration = bot.plug.MUTE.SHORT;
+        case "s":
+          apiDuration = bot.plug.WLBAN.SHORT;
           break;
-        case "30":
-        case "m":
-        case "medium":
-          apiDuration = bot.plug.MUTE.MEDIUM;
+        case "hour":
+        case "h":
+          apiDuration = bot.plug.WLBAN.MEDIUM;
           break;
-        case "45":
-        case "l":
-        case "long":
-          apiDuration = bot.plug.MUTE.LONG;
+        case "day":
+        case "d":
+          apiDuration = bot.plug.WLBAN.LONG;
+          break;
+        case "perma":
+        case "p":
+          apiDuration = bot.plug.WLBAN.PERMA;
           break;
         default:
-          apiDuration = bot.plug.MUTE.SHORT;
+          apiDuration = bot.plug.WLBAN.SHORT;
           timeSelected = false;
           break;
       }
@@ -80,33 +81,15 @@ module.exports = function Command(bot) {
         .setTimestamp()
         //.addField("This is a field title, it can hold 256 characters")
         .addField("ID", user.id, true)
-        .addField("Type", "Mute", true)
+        .addField("Type", "WLBan", true)
         .addField("Time", apiDuration, true)
         .addField("Reason", reason, false);
       //.addBlankField(true);
 
       bot.channels.get("485173444330258454").send({embed});
       bot.channels.get("486637288923725824").send({embed});
-      
-      if (user.role < ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR) {
-        const { role } = user;
-        
-        await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE, async function() {
-          await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, apiDuration, async function() {
-            await bot.plug.moderateSetRole(user.id, role);
-          });
-        });
-        
-        this.reply(lang.moderation.effective, {
-          mod: rawData.from.username,
-          command: `!${name}`,
-          user: user.username,
-        });
-        
-        return true;
-      }
 
-      await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, apiDuration);
+      await bot.plug.moderateWaitListBan(user.id, bot.plug.WLBAN_REASON.NEGATAIVE_ATTITUDE, apiDuration);
       this.reply(lang.moderation.effective, {
         mod: rawData.from.username,
         command: `!${name}`,
