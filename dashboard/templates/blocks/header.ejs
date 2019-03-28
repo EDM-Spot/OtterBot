@@ -57,6 +57,7 @@
                 </div>
             </li>
             <li class="nav-item"><a class="nav-link" href="/stats">Stats</a></li>
+            <li class="nav-item"><a class="nav-link" href="/faq">FAQ</a></li>
             <% if(user) { %>
               <% if(user.id === bot.appInfo.owner.id || bot.config.admins.includes(user.id)) { %>
                 <li class="nav-item dropdown">
