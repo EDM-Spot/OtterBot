@@ -63,14 +63,14 @@ module.exports = function Command(bot) {
             if (playsCount < 1) {
               this.reply(lang.plays.lastPlaySkippedWas, {
                 which: lang.plays.current,
-                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
               return true;
             }
 
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.current,
-              time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+              time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               count: playsCount,
             }, 6e4);
             return true;
@@ -79,7 +79,7 @@ module.exports = function Command(bot) {
               this.reply(lang.plays.maybeLastPlayWas, {
                 which: lang.plays.current,
                 cid: map(songHistory, "cid")[0],
-                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
               return true;
             }
@@ -124,7 +124,7 @@ module.exports = function Command(bot) {
             if (playsCount < 1) {
               this.reply(lang.plays.lastPlaySkippedWas, {
                 which: lang.plays.specified,
-                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
               if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
 
@@ -133,7 +133,7 @@ module.exports = function Command(bot) {
 
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
-              time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+              time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               count: playsCount,
             }, 6e4);
             if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
@@ -144,7 +144,7 @@ module.exports = function Command(bot) {
               this.reply(lang.plays.maybeLastPlayWas, {
                 which: lang.plays.specified,
                 cid: map(songHistory, "cid")[0],
-                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
               if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
               
@@ -187,7 +187,7 @@ module.exports = function Command(bot) {
                 if (playsCount < 1) {
                   this.reply(lang.plays.lastPlaySkippedWas, {
                     which: lang.plays.specified,
-                    time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                    time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   }, 6e4);
                   if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
 
@@ -196,7 +196,7 @@ module.exports = function Command(bot) {
                 
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,
-                  time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                  time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   count: playsCount,
                 }, 6e4);
                 if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
@@ -207,7 +207,7 @@ module.exports = function Command(bot) {
                   this.reply(lang.plays.maybeLastPlayWas, {
                     which: lang.plays.specified,
                     cid: map(songHistory, "cid")[0],
-                    time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                    time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   }, 6e4);
                   if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
                   

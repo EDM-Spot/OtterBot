@@ -14,7 +14,7 @@ module.exports = function Command(bot) {
 
       const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 
-      const joined = inst.get("created_at");
+      const joined = inst.get("createdAt");
 
       if (isNil(joined)) {
         return false;

@@ -253,7 +253,7 @@ module.exports = (client) => {
 
   app.get("/blacklist", async (req, res) => {
     const instance = await client.db.models.blacklist.findAll({
-      //attributes: ["id", "cid", "moderator", "created_at",
+      //attributes: ["id", "cid", "moderator", "createdAt",
       //  [literal(
       //    "(SELECT users.username FROM users WHERE users.id = blacklist.moderator)"
       //  ), "username"],
@@ -308,11 +308,11 @@ module.exports = (client) => {
   app.get("/history", async (req, res) => {
     const instance = await client.db.models.plays.findAll({
       where: {
-        created_at: {
+        createdAt: {
           [Op.gt]: client.moment().subtract(360, "minutes").toDate()
         }
       },
-      order: [["created_at", "DESC"]],
+      order: [["createdAt", "DESC"]],
     });
 
     renderTemplate(res, req, "history.ejs", { instance });
@@ -357,11 +357,11 @@ module.exports = (client) => {
         id: {
           [Op.ne]: 40333310
         },
-        created_at: {
+        createdAt: {
           [Op.gt]: client.moment().subtract(1, "weeks").toDate()
         }
       },
-      order: [["created_at", "DESC"]]
+      order: [["createdAt", "DESC"]]
     });
 
     renderTemplate(res, req, "messages.ejs", { messages });

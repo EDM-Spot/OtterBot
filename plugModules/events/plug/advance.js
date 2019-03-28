@@ -137,7 +137,7 @@ module.exports = function Event(bot, filename, platform) {
           if (songHistory.skip) {
             if (!songHistory.maybe) {
               await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
-                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }));
               //await bot.plug.sendChat("!plays");
 
@@ -148,7 +148,7 @@ module.exports = function Event(bot, filename, platform) {
             } else {
               await bot.plug.sendChat(bot.utils.replace(bot.lang.maybeHistorySkip, {
                 cid: map(songHistory, "cid")[0],
-                time: bot.moment(map(songHistory, "created_at")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }));
             }
           }

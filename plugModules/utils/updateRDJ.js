@@ -128,7 +128,7 @@ module.exports = function Util(bot) {
             }));
           }
         } else {
-          const joined = moment().diff(userDB.get("created_at"), "months");
+          const joined = moment().diff(userDB.get("createdAt"), "months");
 
           if ((points >= 100 && joined >= 1 && playscount >= 150) || (points >= 50 && joined >= 1 && playscount >= 250)) {
             await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
@@ -165,7 +165,7 @@ module.exports = function Util(bot) {
               }));
             }
           } else {
-            const joined = moment().diff(userDB.get("created_at"), "months");
+            const joined = moment().diff(userDB.get("createdAt"), "months");
   
             if ((points >= 100 && joined >= 1 && playscount >= 150) || (points >= 50 && joined >= 1 && playscount >= 250)) {
               await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);

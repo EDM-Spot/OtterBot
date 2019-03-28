@@ -7,7 +7,7 @@ module.exports = function Util(bot) {
       if (isNil(cid)) return;
 
       const songHistory = await bot.db.models.plays.findAll({
-        order: [["created_at", "DESC"]],
+        order: [["createdAt", "DESC"]],
       });
 
       if (isNil(songAuthor) || isNil(songTitle)) {
@@ -17,7 +17,7 @@ module.exports = function Util(bot) {
 
       if (!isNil(songHistory)) {
         for (let i = 0; i < songHistory.length; i++) {
-          const playedMinutes = bot.moment().diff(bot.moment(songHistory[i].created_at), "minutes");
+          const playedMinutes = bot.moment().diff(bot.moment(songHistory[i].createdAt), "minutes");
 
           if (!isNil(songHistory[i].title)) {
             const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
