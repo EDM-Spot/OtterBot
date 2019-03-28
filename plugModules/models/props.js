@@ -17,6 +17,7 @@ module.exports = async function Model(bot, sequelize) {
     historyID: {
       type: sequelize.STRING,
       allowNull: false,
+      field: "historyID",
     },
     identifier: {
       type: sequelize.STRING,
