@@ -38,6 +38,7 @@ class Bot extends Discord.Client {
     this.Redis = new Redis(this.config.db.redis);
     this.db = new Sequelize(Object.assign(this.config.db.sequelize, {
       logging: false,
+      operatorsAliases: false,
       define: {
         timestamps: true,
         underscored: true,
