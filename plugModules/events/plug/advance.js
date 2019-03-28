@@ -115,9 +115,11 @@ module.exports = function Event(bot, filename, platform) {
         const seconds = data.media.duration - 390;
         const props = user.get("props");
 
-        if (data.media.duration <= 480 && props >= seconds) {
-          await user.decrement("props", { by: seconds });
-          await bot.plug.sendChat(`${data.currentDJ.username} paid ${seconds} Props to play this song!`);
+        const propsToPay = Math.ceil(seconds / 5);
+
+        if (data.media.duration <= 480 && props >= propsToPay) {
+          await user.decrement("props", { by: propsToPay });
+          await bot.plug.sendChat(`${data.currentDJ.username} paid ${propsToPay} Props to play this song!`);
         } else {
           await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
 
