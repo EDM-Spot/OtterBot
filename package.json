@@ -65,7 +65,7 @@
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sequelize": "^5.2.3",
+    "sequelize": "^5.2.6",
     "slot-machine": "^2.1.0"
   },
   "devDependencies": {

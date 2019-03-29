@@ -1,3 +1,5 @@
+const { isNil } = require("lodash");
+
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["faq", "pi"],
