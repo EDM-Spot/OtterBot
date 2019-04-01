@@ -1,0 +1,4 @@
+#user-rollover.can-skip .actions .skip,
+.community__player-item.skip.rs-skip-button {
+    display: none !important;
+}
