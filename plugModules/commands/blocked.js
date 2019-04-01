@@ -54,7 +54,7 @@ module.exports = function Command(bot) {
       const embeddable = get(YouTubeMediaData, "status.embeddable");
 
       if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
-        this.reply(lang.check.mediaUnavaialble, { which }, 6e4);
+        this.reply(lang.check.mediaUnavailable, { which }, 6e4);
         return true;
       }
 
