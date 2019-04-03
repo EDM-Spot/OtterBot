@@ -26,14 +26,14 @@
   "homepage": "https://github.com/EDM-Spot/OtterBot#readme",
   "dependencies": {
     "better-sqlite-pool": "^0.2.2",
-    "bluebird": "^3.5.3",
+    "bluebird": "^3.5.4",
     "body-parser": "^1.18.3",
     "canvas": "^2.4.1",
     "chalk": "^2.4.2",
     "compose-function": "^3.0.3",
     "discord.js": "^11.4.2",
     "ejs": "^2.6.1",
-    "enmap": "^4.8.1",
+    "enmap": "^4.8.2",
     "express": "^4.16.4",
     "express-passport": "^0.1.0",
     "express-session": "^1.15.6",
@@ -65,11 +65,11 @@
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sequelize": "^5.2.6",
+    "sequelize": "^5.2.11",
     "slot-machine": "^2.1.0"
   },
   "devDependencies": {
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-react": "^7.12.4"
   }

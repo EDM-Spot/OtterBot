@@ -8,7 +8,6 @@ const symbols = [
   new SlotSymbol("lemon", { display: "🍋", points: 1, weight: 100 }),
   new SlotSymbol("grape", { display: "🍇", points: 1, weight: 100 }),
   new SlotSymbol("watermelon", { display: "🍉", points: 1, weight: 100 }),
-  new SlotSymbol("orange", { display: "🍊", points: 1, weight: 100 }),
   new SlotSymbol("cherry", { display: "🍒", points: 1, weight: 100 }),
   new SlotSymbol("speaker", { display: "🔊", points: 2, weight: 95 }),
   new SlotSymbol("bell", { display: "🔔", points: 3, weight: 80 }),
