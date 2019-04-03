@@ -8,6 +8,8 @@ module.exports = function Event(bot, platform) {
     run: async (data) => {
       if (isNil(data)) return;
 
+      console.log(data);
+
       await bot.db.models.bans.create({
         id: data.user.id,
         type: "WLBAN",
