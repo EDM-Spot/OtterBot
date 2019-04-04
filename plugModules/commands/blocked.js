@@ -80,7 +80,7 @@ module.exports = function Command(bot) {
         } else if (isArray(denied) && denied.length <= MINIMUM_COUNTRIES_ALLOWED) {
           if (denied.length <= 6) {
             this.reply(lang.check.blockedIn, {
-              countries: [...denied.splice(0, 6)].join(", "),
+              countries: denied.length || 0,
               which,
             }, 6e4);
             return true;
@@ -91,7 +91,7 @@ module.exports = function Command(bot) {
         } else if (isArray(blocked) && blocked.length <= MINIMUM_COUNTRIES_ALLOWED) {
           if (blocked.length <= 6) {
             this.reply(lang.check.blockedIn, {
-              countries: [...blocked.splice(0, 6)].join(", "),
+              countries: blocked.length || 0,
               which,
             }, 6e4);
             return true;
@@ -102,12 +102,12 @@ module.exports = function Command(bot) {
         } else if (isArray(allowed) && allowed.length >= MINIMUM_COUNTRIES_ALLOWED) {	
           if (allowed.length <= 191) {	
             this.reply(lang.check.blockedIn, {	
-              countries: `${195 - allowed.length} countries.`,	
+              countries: `${195 - allowed.length}`,	
               which,	
             }, 6e4);	
             return true;	
           }
-          this.reply(lang.check.blockedIn, { countries: allowed.join(", "), which }, 6e4);	
+          this.reply(lang.check.blockedIn, { countries: `${195 - allowed.length}`, which }, 6e4);	
           return true;
         }
       }

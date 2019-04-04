@@ -160,7 +160,7 @@
       "mediaUnavailable": "The %%WHICH%% media seems to be unavailable.",
       "plausible": "Something seems wrong with that media, I'd avoid playing it.",
       "blockedTooMany": "The %%WHICH%% media is blocked in too many countries (%%COUNT%%).",
-      "blockedIn": "The %%WHICH%% media is blocked on: %%COUNTRIES%%",
+      "blockedIn": "The %%WHICH%% media is blocked on %%COUNTRIES%% countries.",
       "allowedOnlyIn": "The %%WHICH%% media is only allowed on: %%COUNTRIES%%",
       "sendLink": "You can check it here https://polsy.org.uk/stuff/ytrestrict.cgi?ytid="
     },
