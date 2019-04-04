@@ -12,6 +12,7 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) {
       if (!args.length) {
         const currentMedia = bot.plug.getMedia();
+        const dj = bot.plug.getDJ();
 
         if (!isObject(currentMedia)) {
           this.reply(lang.blacklist.nothingPlaying, {}, 6e4);
