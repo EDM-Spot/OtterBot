@@ -11,29 +11,32 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       if (!args.length) {
         const currentMedia = bot.plug.getMedia();
+        const dj = bot.plug.getDJ();
 
         if (!isObject(currentMedia)) {
           this.reply(lang.plays.nothingPlaying, {}, 6e4);
           return false;
         }
 
+        if (rawData.from.id == dj.id) { return false; }
+
         let songAuthor = null;
         let songTitle = null;
-  
+
         try {
           if (get(currentMedia, "format", 2) === 1) {
             const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.cid);
-  
+
             const fullTitle = get(YouTubeMediaData, "snippet.title");
-  
+
             songAuthor = fullTitle.split(" - ")[0].trim();
             songTitle = fullTitle.split(" - ")[1].trim();
           } else {
             const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.cid);
-  
+
             if (!isNil(SoundCloudMediaData)) {
               const fullTitle = SoundCloudMediaData.title;
-  
+
               songAuthor = fullTitle.split(" - ")[0].trim();
               songTitle = fullTitle.split(" - ")[1].trim();
             }
@@ -43,12 +46,12 @@ module.exports = function Command(bot) {
           songAuthor = currentMedia.author;
           songTitle = currentMedia.title;
         }
-  
+
         if (isNil(songAuthor) || isNil(songTitle)) {
           songAuthor = currentMedia.author;
           songTitle = currentMedia.title;
         }
-  
+
         const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, currentMedia.cid);
 
         if (isNil(songHistory)) {
@@ -100,7 +103,7 @@ module.exports = function Command(bot) {
 
         try {
           const fullTitle = get(YouTubeMediaData, "snippet.title");
-  
+
           songAuthor = fullTitle.split(" - ")[0].trim();
           songTitle = fullTitle.split(" - ")[1].trim();
         }
@@ -147,7 +150,7 @@ module.exports = function Command(bot) {
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
               if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
-              
+
               return true;
             }
           }
@@ -160,7 +163,7 @@ module.exports = function Command(bot) {
 
         if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
           const SoundCloudMediaData = await bot.soundcloud.getTrack(soundcloudMedia.id);
-  
+
           if (!isNil(SoundCloudMediaData)) {
             const fullTitle = SoundCloudMediaData.title;
             let songAuthor = null;
@@ -193,7 +196,7 @@ module.exports = function Command(bot) {
 
                   return true;
                 }
-                
+
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,
                   time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
@@ -210,7 +213,7 @@ module.exports = function Command(bot) {
                     time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   }, 6e4);
                   if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
-                  
+
                   return true;
                 }
               }
