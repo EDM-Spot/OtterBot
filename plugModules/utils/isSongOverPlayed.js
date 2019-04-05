@@ -9,7 +9,12 @@ module.exports = function Util(bot) {
       let playedCount = 0;
 
       const songHistory = await bot.db.models.plays.findAll({
+        where: { skipped: false },
         order: [["createdAt", "DESC"]],
+      });
+
+      const totalPlays = await client.db.models.plays.count({
+        where: { cid: cid, skipped: false },
       });
 
       if (isNil(songAuthor) || isNil(songTitle)) {
@@ -20,9 +25,9 @@ module.exports = function Util(bot) {
       const songOverPlayed = await bot.db.models.overplayedlist.findOne({ where: { cid: cid }});
       
       if (isObject(songOverPlayed)) {
-        const timePassed = bot.moment().diff(bot.moment(songOverPlayed.createdAt), "days");
+        const timePassed = bot.moment().diff(bot.moment(songOverPlayed.createdAt), "weeks");
         
-        if (timePassed <= 5) {
+        if (timePassed <= 1) {
           return true;
         }
         else {
@@ -33,7 +38,7 @@ module.exports = function Util(bot) {
 
       if (!isNil(songHistory)) {
         for (let i = 0; i < songHistory.length; i++) {
-          const playedWeeks = bot.moment().diff(bot.moment(songHistory[i].createdAt), "weeks");
+          const playedMonths = bot.moment().diff(bot.moment(songHistory[i].createdAt), "months");
 
           if (!isNil(songHistory[i].title)) {
             const currentAuthor = songAuthor.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
@@ -42,7 +47,7 @@ module.exports = function Util(bot) {
             const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
             const savedTitle = songHistory[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
 
-            if (playedWeeks <= 2) {
+            if (playedMonths <= 1) {
               if (songHistory[i].cid === cid) {
                 // Song Played | Same ID
                 playedCount++;
@@ -55,7 +60,13 @@ module.exports = function Util(bot) {
         }
       }
       
-      if (playedCount > 8) {
+      let toSkip = 8;
+
+      if (totalPlays >= 50){
+        toSkip = 5;
+      }
+
+      if (playedCount > toSkip) {
         await bot.db.models.overplayedlist.findOrCreate({
           where: { cid: cid },
           defaults: {
