@@ -1,0 +1,56 @@
+<%- include('blocks/header', {bot, user, path}) %>
+<div class="jumbotron" style="padding-top: 20px;">
+  <h1>History</h1>
+  <hr>
+  <table class="table table-hover" id="searchTableHistory2">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center">ID</th>
+        <th scope="col" class="text-center">Title</th>
+        <th scope="col" class="text-center">Skipped</th>
+        <th scope="col" class="text-center">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let i = 0; i < instance.length; i++) { %>
+      <tr>
+        <td class="text-center">
+          <%= instance[i].dataValues.cid %>
+        </td>
+        <td class="text-center">
+          <%= instance[i].dataValues.author %> - <%= instance[i].dataValues.title %>
+        </td>
+        <td class="text-center">
+          <%= instance[i].dataValues.skipped %>
+        </td>
+        <td class="text-center">
+          <%= instance[i].dataValues.createdAt %>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript">
+  $('#searchTableHistory2').DataTable({
+    "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
+        "<'row'<'col-12'tr>>" +
+        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+    colReorder: true,
+    fixedHeader: true,
+    responsive: false,
+    "pageLength": 100,
+    "autoWidth": true,
+    "processing": true,
+    "searchHighlight": true,
+    "lengthChange": false,
+    "ordering": false,
+
+    "select": {
+        "style": 'single',
+        "blurable": true
+    },
+  });
+</script>
+<% include ./blocks/footer %>

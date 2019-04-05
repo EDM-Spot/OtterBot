@@ -318,6 +318,19 @@ module.exports = (client) => {
     renderTemplate(res, req, "history.ejs", { instance });
   });
 
+  app.get("/history2", async (req, res) => {
+    const instance = await client.db.models.plays.findAll({
+      where: {
+        createdAt: {
+          [Op.gt]: client.moment().subtract(1, "months").toDate()
+        }
+      },
+      order: [["createdAt", "DESC"]],
+    });
+
+    renderTemplate(res, req, "history2.ejs", { instance });
+  });
+
   app.get("/rules", (req, res) => {
     renderTemplate(res, req, "rules.ejs");
   });
