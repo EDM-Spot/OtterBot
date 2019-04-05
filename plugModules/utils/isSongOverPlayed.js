@@ -13,7 +13,7 @@ module.exports = function Util(bot) {
         order: [["createdAt", "DESC"]],
       });
 
-      const totalPlays = await client.db.models.plays.count({
+      const totalPlays = await bot.db.models.plays.count({
         where: { cid: cid, skipped: false },
       });
 
