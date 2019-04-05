@@ -10,12 +10,12 @@ module.exports = function Util(bot) {
         woots: 1.12,
         mehs: 1.35,
         grabs: 1.2,
-        propsGiven: 0.021,
-        messages: 0.02,
-        ban: 1.4,
-        wlban: 0.6,
-        mute: 0.35,
-        daysOffline: 0.16
+        propsGiven: 0.023,
+        messages: 0.015,
+        ban: 2.2,
+        wlban: 1.6,
+        mute: 1.15,
+        daysOffline: 0.17
       };
     }
   }

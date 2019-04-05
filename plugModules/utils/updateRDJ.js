@@ -25,7 +25,7 @@ module.exports = function Util(bot) {
       });
 
       const totalmessages = await bot.db.models.messages.count({
-        where: { id: id, command: false }
+        where: { id: id, command: false, deleted_by: null }
       });
 
       const userDB = await bot.db.models.users.findOne({

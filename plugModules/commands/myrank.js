@@ -32,7 +32,7 @@ module.exports = function Command(bot) {
       const totalbansSQL = "((" + bancountSQL + " + " + mutecountSQL + " + " + wlbancountSQL + ") * 100)";
   
       const propsGivenPointsSQL = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + bot.global.pointsWeight.propsGiven + ")";
-      const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + bot.global.pointsWeight.messages + ")";
+      const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + bot.global.pointsWeight.messages + ")";
   
       const totalWootsPointsSQL = "(SUM(plays.woots) * " + bot.global.pointsWeight.woots + ")";
       const totalGrabsPointsSQL = "(SUM(plays.grabs) * " + bot.global.pointsWeight.grabs + ")";

@@ -562,7 +562,7 @@ module.exports = (client) => {
     const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
-    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false) + points) * " + client.global.pointsWeight.messages + ")";
+    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + client.global.pointsWeight.messages + ")";
 
     const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") * 100) + 1)";
 
@@ -593,7 +593,7 @@ module.exports = (client) => {
         [fn("COUNT", col("plays.cid")
         ), "playscount"],
         [literal(
-          "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false)"
+          "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL)"
         ), "totalmessages"],
         [literal(
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
