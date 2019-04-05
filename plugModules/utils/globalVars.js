@@ -12,9 +12,9 @@ module.exports = function Util(bot) {
         grabs: 1.2,
         propsGiven: 0.023,
         messages: 0.015,
-        ban: 2.2,
-        wlban: 1.6,
-        mute: 1.15,
+        ban: 1.9,
+        wlban: 1.1,
+        mute: 0.55,
         daysOffline: 0.17
       };
     }
