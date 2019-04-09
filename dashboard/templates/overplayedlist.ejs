@@ -1,14 +1,12 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <div class="jumbotron" style="padding-top: 20px;">
-  <h1>Blacklist</h1>
+  <h1>Overplayed List</h1>
   <hr>
-  <table class="table table-hover" id="searchTableBlacklist">
+  <table class="table table-hover" id="searchTableOverplayed">
     <thead>
       <tr>
-        <th scope="col" class="text-center">Preview</th>
         <th scope="col" class="text-center">ID</th>
         <th scope="col" class="text-center">Title</th>
-        <th scope="col" class="text-center">Blacklisted By</th>
         <th scope="col" class="text-center">Date</th>
       </tr>
     </thead>
@@ -16,27 +14,11 @@
       <% for (let i = 0; i < instance.length; i++) { %>
       <tr>
         <td class="text-center">
-        <% if (instance[i].dataValues.plays[0]) { %>
-          <% if (instance[i].dataValues.plays[0].dataValues.format === 1) { %>
-            <a href="http://www.youtube.com/watch?v=<%= instance[i].dataValues.cid %>">
-              <img border="0" src="https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/youtube-64.png" width="64" height="64">
-            </a>
-          <% } %>
-        <% } %>
-        </td>
-        <td class="text-center">
             <%= instance[i].dataValues.cid %>
         </td>
         <td class="text-center">
           <% if (instance[i].dataValues.plays[0]) { %>
             <%= instance[i].dataValues.plays[0].dataValues.author %> - <%= instance[i].dataValues.plays[0].dataValues.title %>
-          <% } %>
-        </td>
-        <td class="text-center">
-          <% if (instance[i].dataValues.users[0]) { %>
-            <%= instance[i].dataValues.users[0].dataValues.username %>
-          <% } else { %>
-            <%= instance[i].dataValues.moderator %>
           <% } %>
         </td>
         <td class="text-center">
@@ -48,7 +30,7 @@
   </table>
 </div>
 <script type="text/javascript">
-  $('#searchTableBlacklist').DataTable({
+  $('#searchTableOverplayed').DataTable({
     "dom": "<'card-body pl-0 pr-0 pt-0'<'row align-items-center'<'col-12 col-md-6'B><'col-6'f>>>" +
         "<'row'<'col-12'tr>>" +
         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",

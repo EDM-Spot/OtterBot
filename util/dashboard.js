@@ -270,6 +270,16 @@ module.exports = (client) => {
 
     renderTemplate(res, req, "blacklist.ejs", { instance });
   });
+
+  app.get("/overplayedlist", async (req, res) => {
+    const instance = await client.db.models.overplayedlist.findAll({
+      include: [{
+        model: client.db.models.plays
+      }]
+    });
+
+    renderTemplate(res, req, "overplayedlist.ejs", { instance });
+  });
   
   app.get("/songRank", async (req, res) => {
     const totalsongs = await client.db.models.plays.count({
@@ -321,6 +331,7 @@ module.exports = (client) => {
   app.get("/history2", async (req, res) => {
     const instance = await client.db.models.plays.findAll({
       where: {
+        skipped: false,
         createdAt: {
           [Op.gt]: client.moment().subtract(1, "months").toDate()
         }

@@ -60,10 +60,10 @@ module.exports = function Util(bot) {
         }
       }
       
-      let toSkip = 8;
+      let toSkip = 10;
 
       if (totalPlays >= 50){
-        toSkip = 5;
+        toSkip = 8;
       }
 
       if (playedCount > toSkip) {
