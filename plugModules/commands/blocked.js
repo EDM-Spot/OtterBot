@@ -79,6 +79,8 @@ module.exports = function Command(bot) {
           return true;
         } else if (isArray(denied) && denied.length <= MINIMUM_COUNTRIES_ALLOWED) {
           if (denied.length <= 6) {
+            console.log(denied);
+            console.log(denied.length);
             this.reply(lang.check.blockedIn, {
               countries: denied.length || 0,
               which,
@@ -90,6 +92,8 @@ module.exports = function Command(bot) {
           return true;
         } else if (isArray(blocked) && blocked.length <= MINIMUM_COUNTRIES_ALLOWED) {
           if (blocked.length <= 6) {
+            console.log(blocked);
+            console.log(blocked.length);
             this.reply(lang.check.blockedIn, {
               countries: blocked.length || 0,
               which,
