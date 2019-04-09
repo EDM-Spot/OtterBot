@@ -77,12 +77,12 @@ module.exports = function Command(bot) {
         } else if (isArray(allowed) && allowed.length <= MINIMUM_COUNTRIES_ALLOWED) {	
           this.reply(lang.check.blockedTooMany, { count: allowed.length || 195, which }, 6e4);
           return true;
-        } else if (isArray(denied) && denied.length <= MINIMUM_COUNTRIES_ALLOWED) {
+        } else if (isArray(denied) && denied.length <= MINIMUM_COUNTRIES_ALLOWED && denied.length > 0) {
           if (denied.length <= 6) {
             console.log(denied);
             console.log(denied.length);
             this.reply(lang.check.blockedIn, {
-              countries: denied.length || 0,
+              countries: denied.length,
               which,
             }, 6e4);
             return true;
@@ -90,12 +90,12 @@ module.exports = function Command(bot) {
 
           this.reply(lang.check.blockedIn, { countries: denied.join(", "), which }, 6e4);
           return true;
-        } else if (isArray(blocked) && blocked.length <= MINIMUM_COUNTRIES_ALLOWED) {
+        } else if (isArray(blocked) && blocked.length <= MINIMUM_COUNTRIES_ALLOWED && blocked.length > 0) {
           if (blocked.length <= 6) {
             console.log(blocked);
             console.log(blocked.length);
             this.reply(lang.check.blockedIn, {
-              countries: blocked.length || 0,
+              countries: blocked.length,
               which,
             }, 6e4);
             return true;
