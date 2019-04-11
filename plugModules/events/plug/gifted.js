@@ -2,7 +2,7 @@ const { isNil } = require("lodash");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: bot.plug.events.GIFTED,
+    name: bot.plug.events.GIFTED_EARN,
     platform,
     run: async (data) => {
       if (isNil(data)) return;
