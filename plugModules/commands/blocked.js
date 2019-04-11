@@ -74,36 +74,17 @@ module.exports = function Command(bot) {
         } else if (isArray(blocked) && blocked.length >= MINIMUM_COUNTRIES_ALLOWED) {
           this.reply(lang.check.blockedTooMany, { count: blocked.length, which }, 6e4);
           return true;
-        } else if (isArray(allowed) && allowed.length <= MINIMUM_COUNTRIES_ALLOWED) {
-          this.reply(lang.check.blockedTooMany, { count: allowed.length, which }, 6e4);
+        } else if (isArray(allowed) && allowed.length <= 231 && allowed.length > 0) {
+          this.reply(lang.check.blockedTooMany, { count: `${245 - allowed.length}`, which }, 6e4);
           return true;
         } else if (isArray(denied) && denied.length <= MINIMUM_COUNTRIES_ALLOWED && denied.length > 0) {
-          if (denied.length <= 6) {
-            this.reply(lang.check.blockedIn, {
-              countries: denied.length,
-              which,
-            }, 6e4);
-            return true;
-          }
-
-          this.reply(lang.check.blockedIn, { countries: denied.join(", "), which }, 6e4);
+          this.reply(lang.check.blockedIn, { countries: denied.length, which, }, 6e4);
           return true;
         } else if (isArray(blocked) && blocked.length <= MINIMUM_COUNTRIES_ALLOWED && blocked.length > 0) {
-          if (blocked.length <= 6) {
-            this.reply(lang.check.blockedIn, {
-              countries: blocked.length,
-              which,
-            }, 6e4);
-            return true;
-          }
-
-          this.reply(lang.check.blockedIn, { countries: blocked.join(", "), which }, 6e4);
+          this.reply(lang.check.blockedIn, { countries: blocked.length, which }, 6e4);
           return true;
-        } else if (isArray(allowed) && allowed.length >= MINIMUM_COUNTRIES_ALLOWED && allowed.length <= 231) {
-          this.reply(lang.check.blockedIn, {
-            countries: `${245 - allowed.length}`,
-            which,
-          }, 6e4);
+        } else if (isArray(allowed) && allowed.length > 231) {
+          this.reply(lang.check.blockedIn, { countries: `${245 - allowed.length}`, which, }, 6e4);
           return true;
         }
       }
