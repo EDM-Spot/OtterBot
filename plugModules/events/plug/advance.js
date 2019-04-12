@@ -30,9 +30,9 @@ module.exports = function Event(bot, filename, platform) {
           const uploadStatus = get(YouTubeMediaData, "status.uploadStatus");
           const privacyStatus = get(YouTubeMediaData, "status.privacyStatus");
           const embeddable = get(YouTubeMediaData, "status.embeddable");
-
+    
           if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
-            await bot.plug.sendChat(bot.utils.replace(bot.check.mediaUnavaialble, { which: "current" }));
+            await bot.plug.sendChat(bot.utils.replace(bot.check.mediaUnavailable, { which: "current" }));
           }
 
           if ((fullTitle.match(/-/g) || []).length === 1) {
@@ -65,7 +65,7 @@ module.exports = function Event(bot, filename, platform) {
         if (!isNil(bot.user)) {
           bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
             type: "LISTENING"
-          }).catch(function (error) {
+          }).catch(function(error) {
             console.log(error);
           });
         }
@@ -175,7 +175,7 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getHistory(async function (history) {
+        bot.plug.getHistory(async function(history) {
           const sortHistory = sortBy(history, ["timestamp"]);
           const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
 
