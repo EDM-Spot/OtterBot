@@ -22,7 +22,7 @@ class Trivia extends Command {
     const day = moment().isoWeekday();
     const isWeekend = (day === 6) || (day === 7);
 
-    let price = "Costs 1 Prop.";
+    let price = "Costs 3 Prop.";
     
     if (isWeekend) {
       price = "FREE Weekends enabled!";

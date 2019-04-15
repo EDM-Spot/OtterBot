@@ -18,7 +18,7 @@ class Join extends Command {
       const day = moment().isoWeekday();
       const isWeekend = (day === 6) || (day === 7);
 
-      let price = 1;
+      let price = 3;
     
       if (isWeekend) {
         price = 0;
