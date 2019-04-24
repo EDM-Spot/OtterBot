@@ -14,7 +14,7 @@ module.exports = function Util(bot) {
       const day = moment().isoWeekday();
       const isWeekend = (day === 6) || (day === 7);
 
-      if (await this.roulette.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
+      if (await this.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
         return;
       }
 
