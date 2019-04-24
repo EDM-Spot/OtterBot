@@ -12,8 +12,6 @@ module.exports = function Event(bot, filename, platform) {
 
       await bot.plug.sendChat(bot.lang.startup);
 
-      await bot.lottery.start();
-
       const user = bot.plug.getUsers();
       for (var i = 0; i < user.lenght; i++) {
         await bot.db.models.users.findOrCreate({
@@ -33,7 +31,7 @@ module.exports = function Event(bot, filename, platform) {
         "Play Slot Machine with -slots 1-3 in Discord! https://discord.gg/GETaTWm"
       ];
 
-      new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
+      new moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
         var randomNumber = Math.floor(Math.random() * randomTimedText.length);
         bot.plug.sendChat(randomTimedText[randomNumber]);
       });
@@ -41,6 +39,12 @@ module.exports = function Event(bot, filename, platform) {
       new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
         await bot.utils.timeCover();
       });
+
+      new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
+        await bot.roulette.autoStart();
+      });
+
+      await bot.lottery.start();
     },
     init() {
       bot.plug.on(this.name, this.run);

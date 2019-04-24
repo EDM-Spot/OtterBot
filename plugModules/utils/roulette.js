@@ -9,6 +9,34 @@ module.exports = function Util(bot) {
       this.duration = undefined;
       this.players = [];
     }
+    async autoStart() {
+      const waitlist = bot.plug.getWaitList();
+      const day = moment().isoWeekday();
+      const isWeekend = (day === 6) || (day === 7);
+
+      if (await this.roulette.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
+        return;
+      }
+
+      const cooldown = await bot.redis.getCommandOnCoolDown("plug", "roulette@start", "perUse");
+
+      if (cooldown != -2) {
+        return;
+      }
+
+      if (waitlist.length < 15) {
+        return;
+      }
+
+      const duration = 60;
+      let price = 1;
+
+      if (isWeekend) {
+        price = 0;
+      }
+
+      await this.start(duration, price);
+    }
     async start(duration, price) {
       this.running = true;
       this.duration = duration;
