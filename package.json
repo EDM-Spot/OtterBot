@@ -33,7 +33,7 @@
     "compose-function": "^3.0.3",
     "discord.js": "^11.4.2",
     "ejs": "^2.6.1",
-    "enmap": "^4.8.4",
+    "enmap": "^4.8.5",
     "express": "^4.16.4",
     "express-passport": "^0.1.0",
     "express-session": "^1.16.1",
@@ -65,7 +65,7 @@
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sequelize": "^5.7.6",
+    "sequelize": "^5.8.2",
     "slot-machine": "^2.1.0"
   },
   "devDependencies": {
