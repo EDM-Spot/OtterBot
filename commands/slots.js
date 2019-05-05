@@ -5,18 +5,16 @@ const { isNil, isNaN, isObject } = require("lodash");
 const { SlotMachine, SlotSymbol } = require("slot-machine");
 
 const symbols = [
-  new SlotSymbol("lemon", { display: "🍋", points: 1, weight: 100 }),
   new SlotSymbol("watermelon", { display: "🍉", points: 1, weight: 100 }),
   new SlotSymbol("cherry", { display: "🍒", points: 1, weight: 100 }),
   new SlotSymbol("speaker", { display: "🔊", points: 2, weight: 95 }),
   new SlotSymbol("bell", { display: "🔔", points: 3, weight: 80 }),
-  new SlotSymbol("clover", { display: "🍀", points: 4, weight: 45 }),
-  new SlotSymbol("music", { display: "🎵", points: 3, weight: 35 }),
-  new SlotSymbol("money", { display: "💰", points: 6, weight: 25 }),
-  new SlotSymbol("dj", { display: "🎧", points: 7, weight: 15 }),
-  new SlotSymbol("diamond", { display: "💎", points: 50, weight: 5 }),
-  new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 2}),
-  new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true })
+  new SlotSymbol("clover", { display: "🍀", points: 4, weight: 55 }),
+  new SlotSymbol("music", { display: "🎵", points: 3, weight: 45 }),
+  new SlotSymbol("dj", { display: "🎧", points: 7, weight: 25 }),
+  new SlotSymbol("diamond", { display: "💎", points: 50, weight: 10 }),
+  new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 4}),
+  new SlotSymbol("wild", { display: "❔", points: 1, weight: 35, wildcard: true })
 ];
 
 class Slots extends Command {
