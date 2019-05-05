@@ -85,7 +85,7 @@ module.exports = function Event(bot, filename, platform) {
             await bot.plug.sendChat("!bl");
 
             if (blackword[i] == "gemido" || blackword[i] == "gemidão" || blackword[i] == "rape") {
-              await bot.plug.sendChat(`!ban ${data.currentDJ.username} p Playing Ear Rape`);
+              await bot.plug.sendChat(`!ban @${data.currentDJ.username} p Playing Ear Rape`);
             }
 
             skipped = true;
