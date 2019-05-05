@@ -76,13 +76,18 @@ module.exports = function Event(bot, filename, platform) {
       const blackword = ["nightcore", "nightstep", "bass boosted", "whatsapp", "gemido", "gemidão", "rape"];
 
       for (let i = 0; i < blackword.length; i++) {
-        var pattern = new RegExp("(<=\\s|\\b)" + blackword[i] + "(?=[]\\b|\\s|$)");
+        var pattern = new RegExp("\\b" + blackword[i] + "\\b");
 
         if (pattern.test(songAuthor.toLowerCase()) || pattern.test(songTitle.toLowerCase())) {
-          await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
+          //await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
 
           if (!skipped) {
-            await bot.plug.moderateForceSkip();
+            await bot.plug.sendChat("!bl");
+
+            if (blackword[i] == "gemido" || blackword[i] == "gemidão" || blackword[i] == "rape") {
+              await bot.plug.sendChat(`!ban ${data.currentDJ.username} p Playing Ear Rape`);
+            }
+
             skipped = true;
           }
         }
