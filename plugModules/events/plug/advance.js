@@ -96,9 +96,9 @@ module.exports = function Event(bot, filename, platform) {
       const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: data.media.cid } });
 
       if (isObject(blacklisted)) {
-        await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
-
         if (!skipped) {
+          await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
+
           await bot.plug.moderateForceSkip();
           skipped = true;
         }
@@ -107,9 +107,9 @@ module.exports = function Event(bot, filename, platform) {
       const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, data.media.cid);
 
       if (isOverplayed) {
-        await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
-
         if (!skipped) {
+          await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
+
           await bot.plug.moderateForceSkip();
           skipped = true;
         }
@@ -126,9 +126,9 @@ module.exports = function Event(bot, filename, platform) {
           await user.decrement("props", { by: propsToPay });
           await bot.plug.sendChat(`${data.currentDJ.username} paid ${propsToPay} Props to play this song!`);
         } else {
-          await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
-
           if (!skipped) {
+            await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
+            
             await bot.utils.lockskip(data.currentDJ);
             skipped = true;
           }
@@ -141,12 +141,11 @@ module.exports = function Event(bot, filename, platform) {
         if (!isNil(songHistory)) {
           if (songHistory.skip) {
             if (!songHistory.maybe) {
-              await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
-                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-              }));
-              //await bot.plug.sendChat("!plays");
-
               if (!skipped) {
+                await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
+                  time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                }));
+                
                 await bot.plug.moderateForceSkip();
                 skipped = true;
               }
@@ -166,11 +165,11 @@ module.exports = function Event(bot, filename, platform) {
         const currentMedia = bot.plug.getMedia();
 
         if (savedID === get(currentMedia, "id")) {
-          await bot.plug.sendChat(bot.lang.stuckSkip);
-
-          bot.global.isSkippedByTimeGuard = true;
-
           if (!skipped) {
+            await bot.plug.sendChat(bot.lang.stuckSkip);
+
+            bot.global.isSkippedByTimeGuard = true;
+            
             await bot.plug.moderateForceSkip();
             skipped = true;
           }
