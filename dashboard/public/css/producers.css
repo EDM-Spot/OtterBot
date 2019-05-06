@@ -395,3 +395,91 @@
     top: 0px;
     left: 0px;
 }
+
+/* 38728299 - Sagiebearppp */
+#user-rollover.id-38728299 .meta{
+    height: 166px !important;
+}
+
+#chat .cm.message[data-cid^="38728299"] .msg .from .un {
+    background-image: url("https://edm-spot.github.io/icons/producer.png");
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    background-size: 14px auto;
+    top: 2px;
+    z-index: 0;
+    width: 15px;
+    height: 15px;
+    position: relative;
+    padding-left: 19px;
+}
+
+#user-rollover.id-38728299 .meta:before{
+    content: url("https://edm-spot.github.io/icons/producer.png");
+    top: 140px;
+    left: 109px;
+    position: absolute;
+}
+
+#user-rollover.id-38728299 .meta:after{
+    content: 'Verified Producer';
+    color: #5740d0;
+    position: absolute;
+    top: 140px;
+    left: 130px;
+}
+
+#chat-messages .rs-log-now-playing.id-38728299 .badge-box i.bdg {
+    background-image: url("https://edm-spot.github.io/icons/producerbadge.png") !important;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    background-position: initial;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+/* 3962093 - Sagiebearppp */
+#user-rollover.id-3962093 .meta{
+    height: 166px !important;
+}
+
+#chat .cm.message[data-cid^="3962093"] .msg .from .un {
+    background-image: url("https://edm-spot.github.io/icons/producer.png");
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    background-size: 14px auto;
+    top: 2px;
+    z-index: 0;
+    width: 15px;
+    height: 15px;
+    position: relative;
+    padding-left: 19px;
+}
+
+#user-rollover.id-3962093 .meta:before{
+    content: url("https://edm-spot.github.io/icons/producer.png");
+    top: 140px;
+    left: 109px;
+    position: absolute;
+}
+
+#user-rollover.id-3962093 .meta:after{
+    content: 'Verified Producer';
+    color: #5740d0;
+    position: absolute;
+    top: 140px;
+    left: 130px;
+}
+
+#chat-messages .rs-log-now-playing.id-3962093 .badge-box i.bdg {
+    background-image: url("https://edm-spot.github.io/icons/producerbadge.png") !important;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    background-position: initial;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
