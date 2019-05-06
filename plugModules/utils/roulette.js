@@ -38,14 +38,14 @@ module.exports = function Util(bot) {
       await this.start(duration, price);
 
       if (isWeekend) {
-        await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.startingWeekend, {}), duration * 1e3);
+        await bot.plug.sendChat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {}), duration * 1e3);
       }
 
-      await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.starting, {}), duration * 1e3);
+      await bot.plug.sendChat(bot.utils.replace(bot.lang.commands.roulette.starting, {}), duration * 1e3);
 
-      await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.info, {
+      await bot.plug.sendChat(bot.utils.replace(bot.lang.commands.roulette.info, {
         duration,
-        price: price === 0 ? bot.lang.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
+        price: price === 0 ? bot.lang.commands.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
       }), duration * 1e3);
     }
     async start(duration, price) {
