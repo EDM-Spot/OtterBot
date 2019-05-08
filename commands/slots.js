@@ -11,10 +11,10 @@ const symbols = [
   new SlotSymbol("bell", { display: "🔔", points: 3, weight: 80 }),
   new SlotSymbol("clover", { display: "🍀", points: 4, weight: 55 }),
   new SlotSymbol("music", { display: "🎵", points: 3, weight: 45 }),
-  new SlotSymbol("dj", { display: "🎧", points: 7, weight: 25 }),
+  new SlotSymbol("dj", { display: "🎧", points: 7, weight: 35 }),
   new SlotSymbol("diamond", { display: "💎", points: 50, weight: 10 }),
   new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 4}),
-  new SlotSymbol("wild", { display: "❔", points: 1, weight: 35, wildcard: true })
+  new SlotSymbol("wild", { display: "❔", points: 1, weight: 40, wildcard: true })
 ];
 
 class Slots extends Command {
@@ -35,7 +35,7 @@ class Slots extends Command {
       const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "slots@play", "perUser", message.author.id);
 
       if (cooldown != -2) {
-        return message.reply("Hold on! You already played Slots " + Math.floor((900 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
+        return message.reply("Hold on! You already played Slots " + Math.floor((300 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
       }
 
       const price = parseInt(args.pop(), 10);
@@ -172,7 +172,7 @@ class Slots extends Command {
         message.channel.send("Congratulation!!! You won the JackPot!");
       }
 
-      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 900);
+      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 300);
 
       return message.channel.send({ embed });
     } catch (e) {
