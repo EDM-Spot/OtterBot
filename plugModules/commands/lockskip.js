@@ -1,10 +1,11 @@
 const { isObject } = require("lodash");
+const { ROOM_ROLE } = require("plugapi");
 const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["lockskip", "ls"],
-    minimumPermission: 2000,
+    minimumPermission: 0,
     cooldownType: "perUse",
     cooldownDuration: 4,
     parameters: "",
@@ -12,6 +13,10 @@ module.exports = function Command(bot) {
     async execute(rawData, { name }, lang) {
       const dj = bot.plug.getDJ();
       const currentMedia = bot.plug.getMedia();
+      const timeElapsed = bot.plug.getTimeElapsed();
+
+      if (rawData.from.id != dj.id) { return false; }
+      if ((rawData.from.role < ROOM_ROLE.BOUNCER) && (timeElapsed > 10)) { return false; }
 
       const embed = new Discord.RichEmbed()
       //.setTitle("Title")
