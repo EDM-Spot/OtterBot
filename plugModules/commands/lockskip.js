@@ -15,7 +15,7 @@ module.exports = function Command(bot) {
       const currentMedia = bot.plug.getMedia();
       const timeElapsed = bot.plug.getTimeElapsed();
 
-      if (rawData.from.id != dj.id) { return false; }
+      if ((rawData.from.role < ROOM_ROLE.BOUNCER) && (rawData.from.id != dj.id)) { return false; }
       if ((rawData.from.role < ROOM_ROLE.BOUNCER) && (timeElapsed > 10)) { return false; }
 
       const embed = new Discord.RichEmbed()
