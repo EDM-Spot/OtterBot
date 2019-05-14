@@ -79,7 +79,7 @@ class TriviaPay extends Command {
 
       if (this.client.triviaUtil.propsStored == 0) {
         message.channel.send("Someone paid to start a Trivia in 5 Minutes! Use `-triviapay 1-3` to use your props to start the Trivia Now.");
-        await this.client.plug.sendChat("Someone paid to start a Trivia in 5 Minutes! Use `-triviapay 1-3` in discord to use your props to start the Trivia Now.");
+        await this.client.plug.sendChat("@djs Someone paid to start a Trivia in 5 Minutes! Use `-triviapay 1-3` in discord to use your props to start the Trivia Now.");
         await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
 
         startingTimer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
