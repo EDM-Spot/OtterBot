@@ -8,9 +8,11 @@ const gulpfile = require("../../gulpfile.js");
 const { Op } = require("sequelize");
 
 module.exports = function Util(bot) {
-  const util = {
-    name: "generateBadges",
-    function: async () => {
+  class GenerateCSS {
+    constructor() {
+
+    }
+    async generateBadges() {
       const template = await fs.readFile(__dirname + "/../data/badge-template.scss", "utf8");
       const users = await bot.db.models.users.findAll({ where: { badge: { [Op.not]: null } }, attributes: ["id", "badge"] });
 
@@ -35,8 +37,34 @@ module.exports = function Util(bot) {
       gulp.task("default")();
 
       return template;
-    },
-  };
+    }
 
-  bot.utils.register(util);
+    async generateProducers() {
+      const template = await fs.readFile(__dirname + "/../data/producer-template.scss", "utf8");
+      const users = await bot.db.models.users.findAll({ where: { producer: { [Op.eq]: true } }, attributes: ["id", "producer"] });
+
+      let completeFile = "";
+
+      for (const user of users) {
+        const id = user.get("id");
+
+        const setTemplate = template
+          .replace(/\t/g, "")
+          .replace(/.id-USERID/g, `.id-${id}`)
+          .replace(/%%USERID%%/g, `${id}`);
+
+        completeFile += setTemplate;
+      }
+
+      await fs.outputFile(__dirname + "/../../dashboard/public/css/producers.scss", completeFile);
+
+      // build scss and minify it
+      gulp.task("default", gulpfile.scss);
+      gulp.task("default")();
+
+      return template;
+    }
+  }
+
+  bot.generateCSS = new GenerateCSS();
 };

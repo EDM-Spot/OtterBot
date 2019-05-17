@@ -49,6 +49,11 @@ module.exports = async function Model(bot, sequelize) {
       type: sequelize.DATE,
       allowNull: true,
     },
+    producer: {
+      type: sequelize.BOOLEAN,
+      defaultValue: false,
+      allowNull: true,
+    },
   });
 
   await Users.sync();

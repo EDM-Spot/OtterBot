@@ -1,14 +1,14 @@
 module.exports = function Command(bot) {
   bot.plugCommands.register({
-    names: ["badgereload"],
+    names: ["producerreload"],
     minimumPermission: 4000,
     cooldownType: "perUse",
     cooldownDuration: 10,
     parameters: "",
-    description: "Reloads the Badges CSS.",
+    description: "Reloads the Producers CSS.",
     async execute() {
-      await bot.generateCSS.generateBadges();
-      await bot.plug.sendChat("Badges CSS Reloaded.");
+      await bot.generateCSS.generateProducers();
+      await bot.plug.sendChat("Producers CSS Reloaded.");
       return true;
     },
   });

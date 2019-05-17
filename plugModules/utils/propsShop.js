@@ -41,7 +41,7 @@ module.exports = function Util(bot) {
 
         await bot.plug.sendChat("Thanks for your Badge purchase!");
 
-        await bot.utils.generateBadges();
+        await bot.generateCSS.generateBadges();
       }).catch((err) => {
         console.warn(err);
       });
