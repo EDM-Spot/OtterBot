@@ -104,6 +104,23 @@ class Bot extends Discord.Client {
     return permlvl;
   }
 
+  checklevel(id) {
+    const guild = client.guilds.get("485173051432894489");
+    const member = client.guilds.get("485173051432894489").members.get(id);
+    const settings = client.getSettings("485173051432894489");
+
+    const managerRole = guild.roles.find(r => r.name.toLowerCase() === settings.adminRole.toLowerCase());
+    const bouncerRole = guild.roles.find(r => r.name.toLowerCase() === settings.modRole.toLowerCase());
+
+    if (guild.client.appInfo.owner.id === id) return 10;
+    if (client.config.admins.includes(id)) return 9;
+    if (client.config.support.includes(id)) return 8;
+    if (guild.owner.user.id === id) return 4;
+    if (member.roles.has(managerRole.id)) return 3;
+    if (member.roles.has(bouncerRole.id)) return 2;
+    return 1;
+  }
+
   /* 
   COMMAND LOAD AND UNLOAD
   

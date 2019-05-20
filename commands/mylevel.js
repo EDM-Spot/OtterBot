@@ -12,7 +12,7 @@ class MyLevel extends Command {
 
   async run(message, args, level) {
     const friendly = this.client.config.permLevels.find(l => l.level === level).name;
-    message.reply(`Your permission level is: ${level} - ${friendly}`);
+    message.reply(`Your permission level is: ${this.client.checklevel(message.author.id)} - ${friendly}`);
   }
 }
 
