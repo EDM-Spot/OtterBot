@@ -24,8 +24,8 @@
           <%= instance[i].dataValues.createdAt %>
         </td>
         <td class="text-center">
-          <% if (instance[i].dataValues.users[0]) { %>
-            <%= instance[i].dataValues.users[0].dataValues.username %>
+          <% if (instance[i].dataValues.users) { %>
+            <%= instance[i].dataValues.users.dataValues.username %>
           <% } else { %>
             <%= instance[i].dataValues.dj %>
           <% } %>
