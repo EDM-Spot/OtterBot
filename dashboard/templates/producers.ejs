@@ -1,0 +1,31 @@
+<%- include('blocks/header', {bot, user, path}) %>
+    <div class="jumbotron" style="padding-top: 20px;">
+      <div class="row justify-content-center d-flex">
+        <h4><i class="fas fa-crown"></i> Producers </h4>
+      </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">ID</th>
+            <th scope="col" class="text-center">User</th>
+            <th scope="col" class="text-center">Last Seen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < producers.length; i++) { %>
+            <tr>
+              <td class="text-center">
+                <%= producers[i].dataValues.id %>
+              </td>
+              <td class="text-center">
+                <%= producers[i].dataValues.username %>
+              </td>
+              <td class="text-center">
+                <%= producers[i].dataValues.last_seen %>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+<% include ./blocks/footer %>

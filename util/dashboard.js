@@ -336,6 +336,9 @@ module.exports = (client) => {
           [Op.gt]: client.moment().subtract(1, "months").toDate()
         }
       },
+      include: [{
+        model: client.db.models.users
+      }],
       order: [["createdAt", "DESC"]],
     });
 
@@ -362,6 +365,17 @@ module.exports = (client) => {
 
   app.get("/plugusers", async (req, res) => {
     renderTemplate(res, req, "plugusers.ejs", {});
+  });
+
+  app.get("/producers", async (req, res) => {
+    const producers = await client.db.models.users.findAll({
+      where: {
+        producer: true
+      },
+      order: [["last_seen", "DESC"]]
+    });
+
+    renderTemplate(res, req, "producers.ejs", { producers });
   });
 
   app.get("/eventusers", async (req, res) => {
