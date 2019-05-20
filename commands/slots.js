@@ -165,7 +165,11 @@ class Slots extends Command {
         }
       }
 
-      if (wonJackPot) {
+      const banCount = await this.client.db.models.bans.count({
+        where: { id: user.id }
+      });
+
+      if (wonJackPot && banCount == 0) {
         await inst.increment("props", { by: jackpot });
         await botUser.decrement("props", { by: jackpot });
 
