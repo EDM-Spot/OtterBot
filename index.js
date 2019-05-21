@@ -17,9 +17,6 @@ const Redis = require("ioredis");
 const Sequelize = require("sequelize");
 const plugModuleManager = require("./plugModules");
 
-const ffmpeg = require("fluent-ffmpeg")
-const ffmpegPath = require("ffmpeg-binaries")
-
 const Deck = require("./util/poker/deck.js");
 
 class Bot extends Discord.Client {
@@ -52,8 +49,6 @@ class Bot extends Discord.Client {
         acquire: 20000
       }
     }));
-
-    ffmpeg.setFfmpegPath(ffmpegPath);
 
     //Connect to plug
     this.plug = new PlugAPI({
