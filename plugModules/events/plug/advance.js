@@ -160,14 +160,21 @@ module.exports = function Event(bot, filename, platform) {
         }
       }
 
-      //let dataUrl;
-      //if (data.media.format === 1) {
-      //  dataUrl = `https://www.youtube.com/watch?v=${data.media.cid}`;
-      //} else {
-      //  dataUrl = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`;
-      //}
+      let dataUrl;
+      if (data.media.format === 1) {
+        dataUrl = `https://www.youtube.com/watch?v=${data.media.cid}`;
 
-      //const streamOptions = { seek: data.media.elapsed, volume: 1 };
+        const options = { filter: "audioonly", quality: "highestaudio", begin: moment.duration(bot.getTimeElapsed(), "seconds").format("mm:ss")};
+
+        bot.channels.get("485173051432894493").join()
+          .then(async connection => {
+            const dispatcher = connection.play(await ytdl(dataUrl, options), { type: "opus", passes: 3 })
+              .on("error", error => console.warn(error));
+          })
+          .catch(console.warn);
+      } else {
+        dataUrl = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`;
+      }
 
       //bot.channels.get("485173051432894493").join()
       //  .then(async connection => {
