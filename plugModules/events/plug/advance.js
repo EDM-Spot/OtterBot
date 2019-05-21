@@ -168,7 +168,7 @@ module.exports = function Event(bot, filename, platform) {
 
         bot.channels.get("485173051432894493").join()
           .then(async connection => {
-            connection.playOpusStream(await ytdl(dataUrl, options), { seek: 1, passes: 3 })
+            connection.playOpusStream(await ytdl(dataUrl, options), { volume: 1, passes: 3 })
               .on("error", error => console.warn(error));
           })
           .catch(console.warn);
