@@ -15,7 +15,7 @@ module.exports = class {
 
     // Delete messages in bot only channels
     if (message.channel.id === "486637288923725824" || message.channel.id === "487985043776733185"
-           || message.channel.id === "486125808553820160" || message.channel.id === "536278824753561630") {
+           || message.channel.id === "536278824753561630") {
       message.delete();
       return;
     }
@@ -40,6 +40,20 @@ module.exports = class {
       if (!isNil(userID)) {
         await this.client.db.models.users.increment("points", { by: 1, where: { discord: message.author.id } });
       }
+    }
+
+    if (message.channel.id === "486125808553820160") {
+      const userDB = await this.client.db.models.users.findOne({
+        where: {
+          discord: message.author.id,
+        },
+      });
+
+      //if (isNil(userDB)) {
+      //  return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
+      //} else {
+      //  this.client.plug.sendChat(userDB.get("username") + ": " + message.content);
+      //}
     }
 
     // Grab the settings for this server from the Enmap

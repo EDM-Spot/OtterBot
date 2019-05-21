@@ -51,7 +51,7 @@ class Slots extends Command {
       });
 
       if (isNil(userDB)) {
-        return message.reply("You need to link your account first! Read how here: http://prntscr.com/ls539m");
+        return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
       }
 
       const user = this.client.plug.getUser(userDB.get("id"));
@@ -166,7 +166,7 @@ class Slots extends Command {
       }
 
       const banCount = await this.client.db.models.bans.count({
-        where: { id: user.id }
+        where: { id: userDB.get("id") }
       });
 
       if (wonJackPot && banCount == 0) {

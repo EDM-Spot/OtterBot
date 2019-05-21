@@ -78,6 +78,8 @@ module.exports = function Event(bot, platform) {
         setTimeout(() => bot.plug.moderateDeleteChat(rawData.id), 3e5);
       }
 
+      //bot.channels.get("486125808553820160").send(rawData.from.username + ": " + rawData.message);
+
       if (!commandHandleRegex.test(rawData.message)) {
         if (isNil(bot.lottery.timer)) return;
         if (bot.lottery.timer.isStarted) {

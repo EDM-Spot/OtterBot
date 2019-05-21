@@ -1,7 +1,7 @@
 // This will check if the node version you are running is the required
 // Node version, if it isn't it will throw the following error to inform
 // you.
-if (Number(process.version.slice(1).split(".")[0]) < 8) throw new Error("Node 8.0.0 or higher is required. Update Node on your system.");
+if (Number(process.version.slice(1).split(".")[0]) < 10) throw new Error("Node 10.0.0 or higher is required. Update Node on your system.");
 
 // Load up the discord.js library
 const Discord = require("discord.js");
@@ -16,6 +16,9 @@ const path = require("path");
 const Redis = require("ioredis");
 const Sequelize = require("sequelize");
 const plugModuleManager = require("./plugModules");
+
+const ffmpeg = require("fluent-ffmpeg")
+const ffmpegPath = require("ffmpeg-binaries")
 
 const Deck = require("./util/poker/deck.js");
 
@@ -49,6 +52,8 @@ class Bot extends Discord.Client {
         acquire: 20000
       }
     }));
+
+    ffmpeg.setFfmpegPath(ffmpegPath);
 
     //Connect to plug
     this.plug = new PlugAPI({
