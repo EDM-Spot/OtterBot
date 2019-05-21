@@ -160,21 +160,20 @@ module.exports = function Event(bot, filename, platform) {
         }
       }
 
-      let dataUrl;
+      let stream;
       if (data.media.format === 1) {
-        dataUrl = `https://www.youtube.com/watch?v=${data.media.cid}`;
+        stream = await ytdl(`https://www.youtube.com/watch?v=${data.media.cid}`, { filter: "audioonly", quality: "lowest" });
 
-        const options = { filter: "audioonly", quality: "highestaudio" };
-
-        bot.channels.get("485173051432894493").join()
-          .then(async connection => {
-            connection.playOpusStream(await ytdl(dataUrl, options), { volume: 1, passes: 3 })
-              .on("error", error => console.warn(error));
-          })
-          .catch(console.warn);
       } else {
-        dataUrl = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`;
+        stream = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`; //Not Supported Yet
       }
+
+      bot.channels.get("485173051432894493").join()
+        .then(connection => {
+          connection.playOpusStream(stream, { volume: 1 })
+            .on("error", error => console.warn(error));
+        })
+        .catch(console.warn);
 
       //bot.channels.get("485173051432894493").join()
       //  .then(async connection => {
