@@ -164,7 +164,7 @@ module.exports = function Event(bot, filename, platform) {
       if (data.media.format === 1) {
         dataUrl = `https://www.youtube.com/watch?v=${data.media.cid}`;
 
-        const options = { filter: "audioonly", quality: "highestaudio", begin: moment.duration(bot.getTimeElapsed(), "seconds").format("mm:ss")};
+        const options = { filter: "audioonly", quality: "highestaudio", begin: moment.duration(bot.plug.getTimeElapsed(), "seconds").format("mm:ss")};
 
         bot.channels.get("485173051432894493").join()
           .then(async connection => {
