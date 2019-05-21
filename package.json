@@ -33,7 +33,7 @@
     "canvas": "^2.5.0",
     "chalk": "^2.4.2",
     "compose-function": "^3.0.3",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "^11.5.0",
     "ejs": "^2.6.1",
     "enmap": "^4.8.7",
     "erlpack": "github:discordapp/erlpack",
