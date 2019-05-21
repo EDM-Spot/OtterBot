@@ -40,7 +40,7 @@
     "express": "^4.17.0",
     "express-passport": "^0.1.0",
     "express-session": "^1.16.1",
-    "ffmpeg-binaries": "^4.0.0",
+    "ffmpeg-static": "^2.4.0",
     "fs-extra": "^8.0.1",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.2.0",
