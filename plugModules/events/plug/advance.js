@@ -1,6 +1,6 @@
 const moment = require("moment");
 const { isObject, isNil, get, map, sortBy } = require("lodash");
-const ytdl = require("ytdl-core-discord");
+//const ytdl = require("ytdl-core-discord");
 //const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
 var savedMessageID;
@@ -160,20 +160,19 @@ module.exports = function Event(bot, filename, platform) {
         }
       }
 
-      let stream;
-      if (data.media.format === 1) {
-        stream = await ytdl(`https://www.youtube.com/watch?v=${data.media.cid}`, { filter: "audioonly", quality: "lowest" });
+      //let stream;
+      //if (data.media.format === 1) {
+        //stream = await ytdl(`https://www.youtube.com/watch?v=${data.media.cid}`, { filter: "audioonly", quality: "lowest" });
 
-      } else {
-        stream = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`; //Not Supported Yet
-      }
-
-      bot.channels.get("485173051432894493").join()
-        .then(connection => {
-          connection.playOpusStream(stream, { volume: 1 })
-            .on("error", error => console.warn(error));
-        })
-        .catch(console.warn);
+        //bot.channels.get("485173051432894493").join()
+        //  .then(connection => {
+        //    connection.playOpusStream(stream, { volume: 1 })
+        //      .on("error", error => console.warn(error));
+        //  })
+        //  .catch(console.warn);
+      //} else {
+        //stream = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`; //Not Supported Yet
+      //}
 
       //bot.channels.get("485173051432894493").join()
       //  .then(async connection => {
