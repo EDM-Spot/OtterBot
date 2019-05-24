@@ -162,16 +162,16 @@ module.exports = function Event(bot, filename, platform) {
 
       //let stream;
       //if (data.media.format === 1) {
-        //stream = await ytdl(`https://www.youtube.com/watch?v=${data.media.cid}`, { filter: "audioonly", quality: "lowest" });
+      //stream = await ytdl(`https://www.youtube.com/watch?v=${data.media.cid}`, { filter: "audioonly", quality: "lowest" });
 
-        //bot.channels.get("485173051432894493").join()
-        //  .then(connection => {
-        //    connection.playOpusStream(stream, { volume: 1 })
-        //      .on("error", error => console.warn(error));
-        //  })
-        //  .catch(console.warn);
+      //bot.channels.get("485173051432894493").join()
+      //  .then(connection => {
+      //    connection.playOpusStream(stream, { volume: 1 })
+      //      .on("error", error => console.warn(error));
+      //  })
+      //  .catch(console.warn);
       //} else {
-        //stream = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`; //Not Supported Yet
+      //stream = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`; //Not Supported Yet
       //}
 
       //bot.channels.get("485173051432894493").join()
@@ -364,17 +364,17 @@ module.exports = function Event(bot, filename, platform) {
             // if no props were given, we done here
             if (!props || bot.global.isSkippedByMehGuard) {
               bot.global.isSkippedByMehGuard = false;
-              return;
             }
-
+            else {
             // otherwise, give them the props
-            await instance.increment("props", { by: props });
+              await instance.increment("props", { by: props });
 
-            await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
-              props,
-              user: lastPlay.user.username,
-              plural: props > 1 ? "s" : "",
-            }), data.media.duration * 1e3);
+              await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
+                props,
+                user: lastPlay.user.username,
+                plural: props > 1 ? "s" : "",
+              }), data.media.duration * 1e3);
+            }
           }
 
           skipped = false;
