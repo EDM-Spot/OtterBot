@@ -1,11 +1,11 @@
 #user-rollover {
-    .id-USERID .meta {
+    &.id-USERID .meta {
         height: 166px !important;
     }
 }
 
 #user-rollover {
-    .id-USERID {
+    &.id-USERID {
         .meta:before {
             content: url("https://edm-spot.github.io/icons/producer.png");
             top: 140px;
@@ -16,7 +16,7 @@
 }
 
 #user-rollover {
-    .id-USERID {
+    &.id-USERID {
         .meta:after {
             content: 'Verified Producer';
             color: #5740d0;
@@ -28,7 +28,7 @@
 }
 
 #chat {
-    .cm.message[data-cid^='%%USERID%%'] {
+    .cm.message[data-cid^="%%USERID%%"] {
         .msg .from .un {
             background-image: url("https://edm-spot.github.io/icons/producer.png");
             background-repeat: no-repeat;
@@ -46,7 +46,7 @@
 
 #chat-messages {
     .rs-log-now-playing {
-        .id-USERID {
+        &.id-USERID {
             .badge-box i.bdg {
                 background-image: url("https://edm-spot.github.io/icons/producerbadge.png") !important;
                 background-size: cover;
