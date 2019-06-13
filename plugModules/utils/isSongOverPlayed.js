@@ -62,7 +62,7 @@ module.exports = function Util(bot) {
       
       let toSkip = 10;
 
-      if (totalPlays >= 50){
+      if (totalPlays >= 50) {
         toSkip = 8;
       }
 

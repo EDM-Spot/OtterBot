@@ -364,8 +364,7 @@ module.exports = function Event(bot, filename, platform) {
             // if no props were given, we done here
             if (!props || bot.global.isSkippedByMehGuard) {
               bot.global.isSkippedByMehGuard = false;
-            }
-            else {
+            } else {
             // otherwise, give them the props
               await instance.increment("props", { by: props });
 

@@ -52,6 +52,8 @@ class Link extends Command {
         }
       }
 
+      await this.client.generateCSS.generateIcons();
+
       await message.reply(message.author.username + " linked with plug Account: " + user.get("username"));
     } catch (e) {
       console.log(e);
