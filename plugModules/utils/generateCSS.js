@@ -85,7 +85,7 @@ module.exports = function Util(bot) {
           let content = "";
 
           if (!isNil(discord)) {
-            iconList.push(__dirname + "/../../dashboard/public/images/discord.png");
+            iconList.push(__dirname + "/../../dashboard/public/images/icons/discord.png");
             content = "Discord Linked";
           }
 
