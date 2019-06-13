@@ -99,7 +99,7 @@ module.exports = function Util(bot) {
             }
           }
 
-          mergeImg(iconList).then((img) => {
+          await mergeImg(iconList).then((img) => {
             img.write(__dirname + `/../../dashboard/public/images/icons/${id}.png`);
           });
 
