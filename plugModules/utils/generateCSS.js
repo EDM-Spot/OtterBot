@@ -93,7 +93,7 @@ module.exports = function Util(bot) {
             iconList.push(__dirname + "/../../dashboard/public/images/events/xmas2018.png");
 
             if (!isNil(discord)) {
-              content += " \A Christmas Event 2018";
+              content += " \\A Christmas Event 2018";
             } else {
               content = "Christmas Event 2018";
             }
