@@ -99,8 +99,10 @@ module.exports = function Util(bot) {
             }
           }
 
-          await mergeImg(iconList).then((img) => {
-            img.write(__dirname + `/../../dashboard/public/images/icons/${id}.png`);
+          console.log(iconList);
+
+          await mergeImg(iconList).then(async (img) => {
+            await img.write(__dirname + `/../../dashboard/public/images/icons/${id}.png`, () => console.log("done"));
           });
 
           const setTemplate = template
