@@ -37,6 +37,7 @@ module.exports = function Command(bot) {
           );
 
           await bot.generateCSS.generateProducers();
+          await bot.generateCSS.generateIcons();
 
           this.reply("User Added To Producers", {}, 6e4);
           return true;
@@ -48,6 +49,7 @@ module.exports = function Command(bot) {
           );
 
           await bot.generateCSS.generateProducers();
+          await bot.generateCSS.generateIcons();
 
           this.reply("User Removed From Producers", {}, 6e4);
           return true;

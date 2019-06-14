@@ -74,17 +74,16 @@ module.exports = function Util(bot) {
       const users = await bot.db.models.users.findAll({ attributes: ["id", "discord", "producer"] });
 
       let completeFile = "";
-      let padding = 0;
-      let count = 0;
 
       for (const user of users) {
         const id = user.get("id");
         const discord = user.get("discord");
         const producer = user.get("producer");
 
-        console.log(producer);
+        let padding = 0;
+        let count = 0;
 
-        if (!isNil(discord) || xmas2018.includes(id) || !isNil(producer)) {
+        if (!isNil(discord) || xmas2018.includes(id) || (!isNil(producer) && producer)) {
           const iconList = [];
           let content = "";
 
@@ -99,7 +98,7 @@ module.exports = function Util(bot) {
             iconList.push(__dirname + "/../../dashboard/public/images/icons/discord.png");
             content = "Discord Linked";
 
-            if (!isNil(producer)) {
+            if ((!isNil(producer) && producer)) {
               content += " \\A Discord Linked";
             } else {
               content = "Discord Linked";
@@ -111,7 +110,7 @@ module.exports = function Util(bot) {
           if (xmas2018.includes(id)) {
             iconList.push(__dirname + "/../../dashboard/public/images/events/xmas2018.png");
 
-            if (!isNil(producer) || !isNil(discord)) {
+            if ((!isNil(producer) && producer) || !isNil(discord)) {
               content += " \\A Christmas Event 2018";
             } else {
               content = "Christmas Event 2018";
