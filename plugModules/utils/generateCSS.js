@@ -52,8 +52,7 @@ module.exports = function Util(bot) {
 
         const setTemplate = template
           .replace(/\t/g, "")
-          .replace(/.id-USERID/g, `.id-${id}`)
-          .replace(/%%USERID%%/g, `${id}`);
+          .replace(/.id-USERID/g, `.id-${id}`);
 
         completeFile += setTemplate;
       }
@@ -72,45 +71,78 @@ module.exports = function Util(bot) {
 
       const xmas2018 = [13585808, 4093788, 4473380, 34187258, 23408147, 4070111, 8203880, 21703169, 5220843, 4866676, 4890141, 3788262, 4734845, 5859330, 17379609, 5418139, 5264274, 12758208];
 
-      const users = await bot.db.models.users.findAll({ attributes: ["id", "discord"] });
+      const users = await bot.db.models.users.findAll({ attributes: ["id", "discord", "producer"] });
 
       let completeFile = "";
+      let padding = 0;
+      let count = 0;
 
       for (const user of users) {
         const id = user.get("id");
         const discord = user.get("discord");
+        const producer = user.get("producer");
 
-        if (!isNil(discord) || xmas2018.includes(id)) {
+        console.log(producer);
+
+        if (!isNil(discord) || xmas2018.includes(id) || !isNil(producer)) {
           const iconList = [];
           let content = "";
+
+          if (!isNil(producer)) {
+            iconList.push(__dirname + "/../../dashboard/public/images/icons/producer.png");
+            content = "Verified Producer";
+
+            count++;
+          }
 
           if (!isNil(discord)) {
             iconList.push(__dirname + "/../../dashboard/public/images/icons/discord.png");
             content = "Discord Linked";
+
+            if (!isNil(producer)) {
+              content += " \\A Discord Linked";
+            } else {
+              content = "Discord Linked";
+            }
+
+            count++;
           }
 
           if (xmas2018.includes(id)) {
             iconList.push(__dirname + "/../../dashboard/public/images/events/xmas2018.png");
 
-            if (!isNil(discord)) {
+            if (!isNil(producer) || !isNil(discord)) {
               content += " \\A Christmas Event 2018";
             } else {
               content = "Christmas Event 2018";
             }
+
+            count++;
           }
 
-          console.log(iconList);
-
-          await mergeImg(iconList).then(async (img) => {
-            await img.write(__dirname + `/../../dashboard/public/images/icons/${id}.png`, () => console.log("done"));
+          await mergeImg(iconList, {offset: 4}).then(async (img) => {
+            await img.write(__dirname + `/../../dashboard/public/images/icons/${id}.png`);
           });
+
+          await mergeImg(iconList, {direction: true}).then(async (img) => {
+            await img.write(__dirname + `/../../dashboard/public/images/icons/${id}V.png`);
+          });
+
+          padding = 19 * count;
+
+          if (count > 1) {
+            padding = padding + (4 * (count - 1));
+          }
 
           const setTemplate = template
             .replace(/\t/g, "")
             .replace(/.id-USERID/g, `.id-${id}`)
             .replace(/%%USERID%%/g, `${id}`)
             .replace(/%%ICONS%%/g, `https://edmspot.tk/public/images/icons/${id}.png`)
-            .replace(/%%CONTENT%%/g, `${content}`);
+            .replace(/%%ICONSV%%/g, `https://edmspot.tk/public/images/icons/${id}V.png`)
+            .replace(/.id-USERID/g, `.id-${id}`)
+            .replace(/%%CONTENT%%/g, `${content}`)
+            .replace(/%%PADDINGL%%/g, `${padding}px`);
 
           completeFile += setTemplate;
         }
