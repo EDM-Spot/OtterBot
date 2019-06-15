@@ -87,7 +87,7 @@ module.exports = function Util(bot) {
           const iconList = [];
           let content = "";
 
-          if (!isNil(producer)) {
+          if (!isNil(producer) && producer) {
             iconList.push(__dirname + "/../../dashboard/public/images/icons/producer.png");
             content = "Verified Producer";
 
@@ -96,7 +96,6 @@ module.exports = function Util(bot) {
 
           if (!isNil(discord)) {
             iconList.push(__dirname + "/../../dashboard/public/images/icons/discord.png");
-            content = "Discord Linked";
 
             if ((!isNil(producer) && producer)) {
               content += " \\A Discord Linked";
