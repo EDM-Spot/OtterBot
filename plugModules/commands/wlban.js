@@ -65,7 +65,7 @@ module.exports = function Command(bot) {
         reason = rawData.args.slice(1).join(" ");
       }
 
-      if (isEmpty(reason) || reason.trim() === '' || reason.length < 2) {
+      if (isEmpty(reason) || reason.trim() === "" || reason.length < 2) {
         this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }
