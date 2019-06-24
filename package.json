@@ -72,13 +72,13 @@
     "readline-sync": "^1.4.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sequelize": "^5.8.10",
+    "sequelize": "^5.8.12",
     "slot-machine": "^2.1.0",
     "ytdl-core-discord": "^1.0.3"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
+    "eslint": "^6.0.0",
     "eslint-plugin-import": "^2.17.3",
-    "eslint-plugin-react": "^7.13.0"
+    "eslint-plugin-react": "^7.14.1"
   }
 }
