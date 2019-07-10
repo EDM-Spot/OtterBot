@@ -13,6 +13,8 @@ module.exports = function Command(bot) {
       const link = args.shift();
       const cid = bot.youtube.getMediaID(link);
 
+      console.log(cid);
+
       if (!isNil(cid)) {
         const song = await bot.db.models.blacklist.findOne({
           where: {
@@ -46,6 +48,8 @@ module.exports = function Command(bot) {
       } else if (link.includes("soundcloud.com")) {
         const soundcloudMedia = await bot.soundcloud.resolve(link);
 
+        console.log(soundcloudMedia);
+
         if (isNil(soundcloudMedia)) return false;
 
         if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
@@ -54,6 +58,8 @@ module.exports = function Command(bot) {
               cid: soundcloudMedia.id,
             },
           });
+
+          console.log(song);
 
           if (isNil(song)) return false;
 
@@ -70,7 +76,7 @@ module.exports = function Command(bot) {
             //.setThumbnail("http://i.imgur.com/p2qNFag.png")
             .setTimestamp()
             //.addField("This is a field title, it can hold 256 characters")
-            .addField("Added To Blacklist", "SoundCloud", false);
+            .addField("Removed From Blacklist", "SoundCloud", false);
           //.addBlankField(true);
 
           bot.channels.get("486637288923725824").send({ embed });
