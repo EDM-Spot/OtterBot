@@ -13,8 +13,6 @@ module.exports = function Command(bot) {
       const link = args.shift();
       const cid = bot.youtube.getMediaID(link);
 
-      console.log(cid);
-
       if (!isNil(cid)) {
         const song = await bot.db.models.blacklist.findOne({
           where: {
@@ -46,20 +44,17 @@ module.exports = function Command(bot) {
         this.reply(lang.blacklist.deleted, {}, 6e4);
         return true;
       } else if (link.includes("soundcloud.com")) {
-        const soundcloudMedia = await bot.soundcloud.resolve(link);
-
-        console.log(soundcloudMedia);
+        const soundcloudMediaRaw = await bot.soundcloud.resolve(link);
+        const soundcloudMedia = JSON.parse(soundcloudMediaRaw);
 
         if (isNil(soundcloudMedia)) return false;
 
         if (isObject(soundcloudMedia) && has(soundcloudMedia, "id")) {
           const song = await bot.db.models.blacklist.findOne({
             where: {
-              cid: soundcloudMedia.id,
+              cid: `${soundcloudMedia.id}`,
             },
           });
-
-          console.log(song);
 
           if (isNil(song)) return false;
 
@@ -81,7 +76,7 @@ module.exports = function Command(bot) {
 
           bot.channels.get("486637288923725824").send({ embed });
 
-          await bot.db.models.blacklist.destroy({ where: { cid: soundcloudMedia.id } });
+          await bot.db.models.blacklist.destroy({ where: { cid: `${soundcloudMedia.id}` } });
           this.reply(lang.blacklist.deleted, {}, 6e4);
           return true;
         }
