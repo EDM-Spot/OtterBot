@@ -11,6 +11,7 @@ module.exports = (client) => {
 
       this.players = [];
       this.timer = undefined;
+      this.startingTimer = undefined;
       this.running = false;
       this.started = false;
       this.propsStored = 0;
@@ -28,6 +29,7 @@ module.exports = (client) => {
       this.running = false;
       this.started = false;
       this.timer = undefined;
+      this.startingTimer = undefined;
       this.players = [];
       this.propsStored = 0;
 
