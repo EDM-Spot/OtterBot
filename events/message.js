@@ -42,19 +42,19 @@ module.exports = class {
       }
     }
 
-    if (message.channel.id === "486125808553820160") {
-      const userDB = await this.client.db.models.users.findOne({
-        where: {
-          discord: message.author.id,
-        },
-      });
+    //if (message.channel.id === "486125808553820160") {
+    //const userDB = await this.client.db.models.users.findOne({
+    //where: {
+    //discord: message.author.id,
+    //},
+    //});
 
-      //if (isNil(userDB)) {
-      //  return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
-      //} else {
-      //  this.client.plug.sendChat(userDB.get("username") + ": " + message.content);
-      //}
-    }
+    //if (isNil(userDB)) {
+    //  return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
+    //} else {
+    //  this.client.plug.sendChat(userDB.get("username") + ": " + message.content);
+    //}
+    //}
 
     // Grab the settings for this server from the Enmap
     // If there is no guild, get default conf (DMs)

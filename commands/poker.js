@@ -16,7 +16,7 @@ class Poker extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      message.delete();
+      //message.delete();
       
       if (!args.length) { return; }
 
@@ -67,7 +67,7 @@ class Poker extends Command {
           message.channel.send(startMessage);
 
           await this.client.plug.sendChat("Discord Texas Hold'em Poker will start in 1 minute in channel #" + message.channel.name + "!");
-          await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/GETaTWm");
+          await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
           this.client.pokerUtil.running = true;
 

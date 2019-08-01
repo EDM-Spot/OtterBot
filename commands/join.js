@@ -13,7 +13,7 @@ class Join extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      message.delete();
+      //message.delete();
       
       const day = moment().isoWeekday();
       const isWeekend = (day === 6) || (day === 7);
