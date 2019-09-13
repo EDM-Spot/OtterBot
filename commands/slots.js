@@ -7,14 +7,16 @@ const { SlotMachine, SlotSymbol } = require("slot-machine");
 const symbols = [
   new SlotSymbol("watermelon", { display: "🍉", points: 1, weight: 100 }),
   new SlotSymbol("cherry", { display: "🍒", points: 1, weight: 100 }),
-  new SlotSymbol("speaker", { display: "🔊", points: 2, weight: 95 }),
-  new SlotSymbol("bell", { display: "🔔", points: 3, weight: 80 }),
-  new SlotSymbol("clover", { display: "🍀", points: 4, weight: 55 }),
-  new SlotSymbol("music", { display: "🎵", points: 3, weight: 45 }),
-  new SlotSymbol("dj", { display: "🎧", points: 7, weight: 35 }),
-  new SlotSymbol("diamond", { display: "💎", points: 50, weight: 10 }),
-  new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 4}),
-  new SlotSymbol("wild", { display: "❔", points: 1, weight: 40, wildcard: true })
+  new SlotSymbol("orange", { display: "🍊", points: 1, weight: 100 }),
+  new SlotSymbol("grapes", { display: "🍇", points: 1, weight: 100 }),
+  new SlotSymbol("speaker", { display: "🔊", points: 1, weight: 65 }),
+  new SlotSymbol("bell", { display: "🔔", points: 2, weight: 50 }),
+  new SlotSymbol("clover", { display: "🍀", points: 3, weight: 35 }),
+  new SlotSymbol("music", { display: "🎵", points: 3, weight: 30 }),
+  new SlotSymbol("dj", { display: "🎧", points: 5, weight: 15 }),
+  new SlotSymbol("diamond", { display: "💎", points: 50, weight: 5 }),
+  new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 2}),
+  new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true })
 ];
 
 class Slots extends Command {
