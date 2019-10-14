@@ -133,6 +133,84 @@ module.exports = function Command(bot) {
           }), duration * 1e3);
           return true;
         }
+        case "force": {
+          const user = bot.plug.getUser(rawData.from.id);
+
+          if (!isObject(user) || await bot.utils.getRole(user) <= ROOM_ROLE.MANAGER) return false;
+
+          const waitlist = bot.plug.getWaitList();
+          const day = moment().isoWeekday();
+          const isWeekend = (day === 6) || (day === 7);
+
+          if (await bot.roulette.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
+            this.reply(lang.russianroulette.started, {}, 6e4);
+            return true;
+          }
+
+          const cooldown = await bot.redis.getCommandOnCoolDown("plug", "russianroulette@start", "perUse");
+
+          if (cooldown != -2) {
+            this.reply(lang.russianroulette.onCooldown, {
+              elapsed: Math.floor((10800 - cooldown) / 60),
+              remaining: Math.ceil(cooldown / 60),
+            });
+            return true;
+          }
+
+          let duration = 120;
+
+          if (args.length) {
+            const specifiedDuration = parseInt(args.shift(), 10);
+
+            if (isNaN(specifiedDuration) || specifiedDuration < 10 || specifiedDuration > 120) {
+              this.reply(lang.russianroulette.invalidDuration, {}, 6e4);
+              return false;
+            }
+
+            duration = specifiedDuration;
+          }
+
+          let price = 1;
+
+          if (args.length) {
+            let specifiedPrice = parseInt(args.shift(), 10);
+
+            if (specifiedPrice === 0) {
+              specifiedPrice = 1;
+            }
+
+            if (isNaN(specifiedPrice) && specifiedPrice <= 100) {
+              this.reply(lang.russianroulette.invalidPrice, {}, 6e4);
+              return false;
+            }
+
+            price = specifiedPrice;
+          }
+
+          //if (isWeekend || isDecember) {
+          if (isWeekend) {
+            price = 0;
+          }
+
+          await bot.russianRoulette.start(duration, price);
+
+          //if (isWeekend && !isDecember) {
+          if (isWeekend) {
+            await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.startingWeekend, {}), duration * 1e3);
+          }
+
+          //if (isDecember) {
+          //  await bot.plug.sendChat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
+          //}
+          
+          await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.starting, {}), duration * 1e3);
+
+          await bot.plug.sendChat(bot.utils.replace(lang.russianroulette.info, {
+            duration,
+            price: price === 0 ? lang.russianroulette.free : `${price} prop${price > 1 ? "s" : ""}`,
+          }), duration * 1e3);
+          return true;
+        }
         case "end": {
           if (!await bot.russianRoulette.check()) {
             this.reply(lang.russianroulette.notStarted, {}, 6e4);
