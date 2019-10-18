@@ -5,7 +5,7 @@ module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["blacklist", "bl"],
     minimumPermission: 2000,
-    cooldownType: "perUser",
+    cooldownType: "perUse",
     cooldownDuration: 3,
     parameters: "[YouTube Link|SoundCloud Link]",
     description: "Blacklist a song",
