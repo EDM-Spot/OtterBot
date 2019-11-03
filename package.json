@@ -33,7 +33,7 @@
     "compose-function": "^3.0.3",
     "discord.js": "^11.5.1",
     "ejs": "^2.7.1",
-    "enmap": "^5.2.0",
+    "enmap": "^5.2.1",
     "express": "^4.17.1",
     "express-passport": "^0.1.0",
     "express-session": "^1.17.0",
@@ -43,7 +43,7 @@
     "gulp-clean-css": "^4.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
-    "helmet": "^3.21.1",
+    "helmet": "^3.21.2",
     "image-downloader": "^3.5.0",
     "ioredis": "^4.14.1",
     "klaw": "^3.0.0",
@@ -67,11 +67,11 @@
     "readline-sync": "^1.4.10",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "sequelize": "^5.21.0",
+    "sequelize": "^5.21.2",
     "slot-machine": "^2.1.0"
   },
   "devDependencies": {
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react": "^7.16.0"
   }
