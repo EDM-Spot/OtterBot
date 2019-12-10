@@ -3,7 +3,7 @@ module.exports = function Command(bot) {
     names: ["free"],
     minimumPermission: 0,
     cooldownType: "perUser",
-    cooldownDuration: 1440,
+    cooldownDuration: 86400,
     parameters: "",
     description: "XMas Daily Props.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
