@@ -57,7 +57,7 @@ module.exports = function Command(bot) {
           const waitlist = bot.plug.getWaitList();
           const day = moment().isoWeekday();
           const isWeekend = (day === 6) || (day === 7);
-          //const isDecember = (moment().month() === 11);
+          const isDecember = (moment().month() === 11);
 
           if (await bot.roulette.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
             this.reply(lang.roulette.started, {}, 6e4);
@@ -109,21 +109,21 @@ module.exports = function Command(bot) {
             price = specifiedPrice;
           }
 
-          //if (isWeekend || isDecember) {
-          if (isWeekend) {
+          //if (isWeekend) {
+          if (isWeekend || isDecember) {
             price = 0;
           }
 
           await bot.roulette.start(duration, price);
           
-          //if (isWeekend && !isDecember) {
-          if (isWeekend) {
+          //if (isWeekend) {
+          if (isWeekend  && !isDecember) {
             await bot.plug.sendChat(bot.utils.replace(lang.roulette.startingWeekend, {}), duration * 1e3);
           }
 
-          //if (isDecember) {
-          //  await bot.plug.sendChat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
-          //}
+          if (isDecember) {
+            await bot.plug.sendChat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
+          }
 
           await bot.plug.sendChat(bot.utils.replace(lang.roulette.starting, {}), duration * 1e3);
 
