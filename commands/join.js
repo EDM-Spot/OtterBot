@@ -17,10 +17,11 @@ class Join extends Command {
       
       const day = moment().isoWeekday();
       const isWeekend = (day === 6) || (day === 7);
+      const isDecember = (moment().month() === 11);
 
       let price = 3;
     
-      if (isWeekend) {
+      if (isWeekend || isDecember) {
         price = 0;
       }
 

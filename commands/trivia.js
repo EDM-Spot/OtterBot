@@ -21,11 +21,16 @@ class Trivia extends Command {
 
     const day = moment().isoWeekday();
     const isWeekend = (day === 6) || (day === 7);
+    const isDecember = (moment().month() === 11);
 
     let price = "Costs 3 Prop.";
     
     if (isWeekend) {
       price = "FREE Weekends enabled!";
+    }
+
+    if (isDecember) {
+      price = "FREE December!";
     }
 
     let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. " + price + " \n";
