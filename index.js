@@ -208,7 +208,7 @@ class Bot extends Discord.Client {
   async clean(text) {
     if (text && text.constructor.name == "Promise")
       text = await text;
-    if (typeof evaled !== "string")
+    if (typeof text !== "string")
       text = require("util").inspect(text, {depth: 0});
 
     text = text

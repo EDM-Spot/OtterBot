@@ -31,7 +31,7 @@ class Eval extends Command {
         evaled = inspect(evaled);
       }
 
-      const clean = await this.client.clean(this.client, evaled);
+      const clean = await this.client.clean(evaled);
 
       if (isNil(evaled)) {
         message.channel.send("```js\nCommand Executed!\n```");
