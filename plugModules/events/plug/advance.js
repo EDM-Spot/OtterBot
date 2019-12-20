@@ -203,7 +203,7 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        await bot.plug.getRoomHistory().then(async (history) => {
+        bot.plug.getRoomHistory().then(async (history) => {
           console.log([history]);
           const lastPlay = [history].media;
           const lastDJ = [history].getUser();
