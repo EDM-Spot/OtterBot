@@ -11,12 +11,12 @@ module.exports = function Command(bot) {
     parameters: "<@username> [15|s|short|30|m|medium|45|l|long] <reason>",
     description: "Mutes the specified user for the specified duration, or defaults to 15 minutes.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
-      if (!args.length || args.join(' ').charAt(0) !== '@') {
+      if (!args.length || args.join(" ").charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(' ').substr(1));
+      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
@@ -91,17 +91,17 @@ module.exports = function Command(bot) {
       if (user.role < ROLE.BOUNCER && user.gRole < ROLE.SITEMOD) {
         const { role } = user;
         
-				await user.setRole(0);
-				await user.mute(apiDuration, MUTE_REASON.VIOLATING_RULES);
+        await user.setRole(0);
+        await user.mute(apiDuration, MUTE_REASON.VIOLATING_RULES);
         await user.setRole(role);
         
-				this.reply(lang.moderation.effective, {
-					mod: rawData.un,
-					command: `!${name}`,
-					user: user.username,
-				});
-				return true;
-			}
+        this.reply(lang.moderation.effective, {
+          mod: rawData.un,
+          command: `!${name}`,
+          user: user.username,
+        });
+        return true;
+      }
 
       await user.mute(apiDuration, MUTE_REASON.VIOLATING_RULES);
       this.reply(lang.moderation.effective, {

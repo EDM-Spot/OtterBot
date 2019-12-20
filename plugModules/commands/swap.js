@@ -14,8 +14,8 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(" ").substr(1));
-      const user2 = bot.plug.userByName(args.join(" ").substr(2));
+      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
+      const user2 = bot.plug.userByName(args.join(" ").substr(2).trim());
 
       if (!isObject(user) || !isObject(user2)) {
         this.reply(lang.userNotFound, {}, 6e4);

@@ -11,12 +11,12 @@ module.exports = function Command(bot) {
     parameters: "<@username> [s|h|hour|short|l|d|day|long|f|p|perma|forever] <reason>",
     description: "Bans the specified user from using specific commands for the specified duration (hour, day or forever).",
     async execute(rawData, { args, name }, lang) {
-      if (!args.length || args.join(' ').charAt(0) !== '@') {
+      if (!args.length || args.join(" ").charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(' ').substr(1));
+      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
@@ -61,7 +61,7 @@ module.exports = function Command(bot) {
         reason = rawData.args.slice(1).join(" ");
       }
 
-      if (isEmpty(reason) || reason.trim() === '' || reason.length < 2) {
+      if (isEmpty(reason) || reason.trim() === "" || reason.length < 2) {
         this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }

@@ -20,7 +20,7 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(' ').substr(1));
+      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);

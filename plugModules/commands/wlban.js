@@ -11,12 +11,12 @@ module.exports = function Command(bot) {
     parameters: "<@username> [s|short|h|hour|d|day|p|perma] <reason>",
     description: "Bans the specified user for the specified duration from the WaitList.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
-      if (!args.length || args.join(' ').charAt(0) !== '@') {
+      if (!args.length || args.join(" ").charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(' ').substr(1));
+      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
