@@ -9,21 +9,21 @@ module.exports = function Command(bot) {
     parameters: "<@username> <@username>",
     description: "Swap users position.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
-      if (!rawData.mentions.length || rawData.mentions.length !== 2) {
+      if (!args.length || args.join(' ').charAt(0) !== '@' || args.join(' ').charAt(1) !== '@') {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = rawData.mentions[0];
-      const user2 = rawData.mentions[1];
+      const user = bot.plug.userByName(args.join(' ').substr(1));
+      const user2 = bot.plug.userByName(args.join(' ').substr(2));
 
       if (!isObject(user) || !isObject(user2)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
       }
 
-      const userPosition = bot.plug.getWaitListPosition(user.id);
-      const user2Position = bot.plug.getWaitListPosition(user2.id);
+      const userPosition = bot.plug.waitlist().positionOf(user.id);
+      const user2Position = bot.plug.waitlist().positionOf(user2.id);
 
       if (userPosition < 1 || user2Position < 1) {
         this.reply(lang.give.notInList, {}, 6e4);

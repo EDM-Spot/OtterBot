@@ -20,12 +20,12 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const user = rawData.mentions[0];
+      const user = bot.plug.userByName(args.join(' ').substr(1));
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
-      } else if (user.id === rawData.from.id) {
+      } else if (user.id === rawData.uid) {
         return false;
       }
 

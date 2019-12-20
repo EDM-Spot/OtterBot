@@ -1,5 +1,5 @@
 const { isNil, isNaN, isObject } = require("lodash");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { ROLE } = require("miniplug");
 const { Op, fn, col } = require("sequelize");
 const moment = require("moment");
 
@@ -35,7 +35,7 @@ module.exports = function Util(bot) {
       });
 
       if (isNil(userDB)) {
-        await bot.plug.moderateSetRole(id, ROOM_ROLE.NONE);
+        await user.setRole(0);
         return true;
       }
 
@@ -105,25 +105,25 @@ module.exports = function Util(bot) {
       const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
       if (isNaN(points)) {
-        await bot.plug.moderateSetRole(id, ROOM_ROLE.NONE);
+        await user.setRole(0);
         return true;
       }
 
       if (isObject(user)) {
-        if (user.role >= ROOM_ROLE.BOUNCER || user.gRole >= GLOBAL_ROLES.MODERATOR) return false;
+        if (user.role >= ROLE.BOUNCER || user.gRole >= ROLE.SITEMOD) return false;
 
-        if (user.role === ROOM_ROLE.RESIDENTDJ) {
+        if (user.role === ROLE.DJ) {
           const tolerance = 20;
           const userPoints = points + tolerance;
 
           if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE);
+            await user.setRole(0);
 
             if (!isNil(userDB.get("discord"))) {
               await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
             }
 
-            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
+            await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
               user: user.username
             }));
           }
@@ -131,56 +131,58 @@ module.exports = function Util(bot) {
           const joined = moment().diff(userDB.get("createdAt"), "months");
 
           if ((points >= 100 && joined >= 1 && playscount >= 150) || (points >= 50 && joined >= 1 && playscount >= 250)) {
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.RESIDENTDJ);
+            await user.setRole(ROLE.DJ);
 
             if (!isNil(userDB.get("discord"))) {
               await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
             }
 
-            await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
+            await bot.plug.chat(bot.utils.replace(bot.lang.rdjPromoted, {
               user: user.username
             }));
           }
         }
-      } else {
-        bot.plug.getAllStaff(async (err, data) => {
-          const offUser = data.filter(u => u.id === id);
+      } 
+      //TODO: CHECK OFFLINE RDJ's
+      // else {
+      //   bot.plug.getAllStaff(async (err, data) => {
+      //     const offUser = data.filter(u => u.id === id);
 
-          if (isNil(offUser[0])) return false;
-          if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
+      //     if (isNil(offUser[0])) return false;
+      //     if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
 
-          if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
-            const tolerance = 20;
-            const userPoints = points + tolerance;
+      //     if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
+      //       const tolerance = 20;
+      //       const userPoints = points + tolerance;
 
-            if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
-              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
+      //       if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
+      //         await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
   
-              if (!isNil(userDB.get("discord"))) {
-                await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
-              }
+      //         if (!isNil(userDB.get("discord"))) {
+      //           await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
+      //         }
   
-              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
-                user: offUser[0].username
-              }));
-            }
-          } else {
-            const joined = moment().diff(userDB.get("createdAt"), "months");
+      //         await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
+      //           user: offUser[0].username
+      //         }));
+      //       }
+      //     } else {
+      //       const joined = moment().diff(userDB.get("createdAt"), "months");
   
-            if ((points >= 100 && joined >= 1 && playscount >= 150) || (points >= 50 && joined >= 1 && playscount >= 250)) {
-              await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
+      //       if ((points >= 100 && joined >= 1 && playscount >= 150) || (points >= 50 && joined >= 1 && playscount >= 250)) {
+      //         await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
   
-              if (!isNil(userDB.get("discord"))) {
-                await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
-              }
+      //         if (!isNil(userDB.get("discord"))) {
+      //           await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
+      //         }
   
-              await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
-                user: offUser[0].username
-              }));
-            }
-          }
-        });
-      }
+      //         await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
+      //           user: offUser[0].username
+      //         }));
+      //       }
+      //     }
+      //   });
+      // }
 
       return true;
     },

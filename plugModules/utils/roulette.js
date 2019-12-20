@@ -38,12 +38,12 @@ module.exports = function Util(bot) {
       await this.start(duration, price);
 
       if (isWeekend) {
-        await bot.plug.sendChat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {}), duration * 1e3);
+        await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {}), duration * 1e3);
       }
 
-      await bot.plug.sendChat(bot.utils.replace(bot.lang.commands.roulette.starting, {}), duration * 1e3);
+      await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {}), duration * 1e3);
 
-      await bot.plug.sendChat(bot.utils.replace(bot.lang.commands.roulette.info, {
+      await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.info, {
         duration,
         price: price === 0 ? bot.lang.commands.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
       }), duration * 1e3);
@@ -110,14 +110,14 @@ module.exports = function Util(bot) {
     async winner(players) {
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.getUser(winner);
-      const waitlist = bot.plug.getWaitList();
+      const waitlist = bot.plug.waitlist();
 
       if (!players.length && this.end()) {
-        await bot.plug.sendChat(bot.lang.roulette.somethingwrong);
+        await bot.plug.chat(bot.lang.roulette.somethingwrong);
         return;
       }
 
-      const position = this.constructor.position(bot.plug.getWaitListPosition(winner), waitlist.length);
+      const position = this.constructor.position(waitlist.positionOf(winner), waitlist.length);
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         this.winner(players.filter(player => player !== winner));
@@ -139,7 +139,7 @@ module.exports = function Util(bot) {
         //await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
       }
 
-      await bot.plug.sendChat(bot.utils.replace(bot.lang.roulette.winner, {
+      await bot.plug.chat(bot.utils.replace(bot.lang.roulette.winner, {
         winner: user.username,
         position: position,
       }));
@@ -148,7 +148,7 @@ module.exports = function Util(bot) {
     }
     async sort() {
       if (!this.players.length && this.end()) {
-        return bot.plug.sendChat(bot.lang.roulette.noplayers);
+        return bot.plug.chat(bot.lang.roulette.noplayers);
       }
 
       this.running = false;
@@ -157,7 +157,7 @@ module.exports = function Util(bot) {
 
       each(this.players, (player) => {
         if (bot.plug.getUser(player)) {
-          if (bot.plug.getWaitListPosition(player) === -1) {
+          if (waitlist.positionOf(player) === -1) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
             alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));

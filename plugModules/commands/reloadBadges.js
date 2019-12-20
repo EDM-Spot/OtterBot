@@ -8,7 +8,7 @@ module.exports = function Command(bot) {
     description: "Reloads the Badges CSS.",
     async execute() {
       await bot.generateCSS.generateBadges();
-      await bot.plug.sendChat("Badges CSS Reloaded.");
+      await bot.plug.chat("Badges CSS Reloaded.");
       return true;
     },
   });

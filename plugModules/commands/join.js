@@ -10,23 +10,24 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Joins the roulette, if there is one active. This may also charge the user in props if the roulette had a set price.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const dj = bot.plug.getDJ();
-
+      const dj = bot.plug.dj();
+      const waitlist = bot.plug.waitlist();
+      
       if (!await bot.roulette.check() && !await bot.russianRoulette.check()) {
         this.reply(lang.join.noRoulette, {}, 6e4);
         return true;
-      } else if (isObject(dj) && dj.id === rawData.from.id) {
+      } else if (isObject(dj) && dj.id === rawData.uid) {
         this.reply(lang.join.isPlaying, {}, 6e4);
         return true;
-      } else if (bot.plug.getWaitListPosition(rawData.from.id) >= 0 && bot.plug.getWaitListPosition(rawData.from.id) <= 5) {
+      } else if (waitlist.contains(rawData.uid) && waitlist.positionOf(rawData.uid) <= 5) {
         this.reply(lang.join.closeToPlaying, {}, 6e4);
         return true;
       }
 
-      const { id } = rawData.from;
+      const { uid: id } = rawData;
 
       if (bot.roulette.running) {
-        if (bot.roulette.players.includes(rawData.from.id)) return true;
+        if (bot.roulette.players.includes(id)) return true;
 
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 
@@ -42,11 +43,11 @@ module.exports = function Command(bot) {
           await bot.db.models.users.increment("props", { by: bot.roulette.price, where: { id: "40333310" } });
         }
         
-        bot.roulette.add(rawData.from.id);
+        bot.roulette.add(id);
         return true;
       }
       else {
-        if (bot.russianRoulette.players.includes(rawData.from.id)) return true;
+        if (bot.russianRoulette.players.includes(id)) return true;
 
         const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 
@@ -62,7 +63,7 @@ module.exports = function Command(bot) {
           await bot.db.models.users.increment("props", { by: bot.russianRoulette.price, where: { id: "40333310" } });
         }
       
-        bot.russianRoulette.add(rawData.from.id);
+        bot.russianRoulette.add(id);
         return true;
       }
     },

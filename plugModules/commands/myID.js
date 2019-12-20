@@ -7,7 +7,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Check user ID.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
-      const id = rawData.from.id;
+      const id = rawData.uid;
 
       this.reply(lang.myID, { id }, 6e4);
       return true;

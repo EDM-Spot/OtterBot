@@ -39,13 +39,13 @@ class Join extends Command {
 
       const user = this.client.plug.getUser(userDB.get("id"));
 
-      const dj = this.client.plug.getDJ();
+      const dj = this.client.plug.dj();
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         return message.reply("You're not online on plug!");
       }
 
-      const userPos = this.client.plug.getWaitListPosition(user.id);
+      const userPos = this.client.plug.waitlist.positionOf(user.id);
 
       if (!this.client.triviaUtil.check()) {
         return message.reply("Trivia is not running!");

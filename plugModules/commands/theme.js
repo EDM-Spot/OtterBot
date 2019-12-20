@@ -11,12 +11,12 @@ module.exports = function Command(bot) {
       
       if (!bot.global.isHolidaySong) {
         bot.global.isHolidaySong = true;
-        await bot.plug.sendChat("Marked as Theme Song!");
+        await bot.plug.chat("Marked as Theme Song!");
         return true;
       }
       else {
         bot.global.isHolidaySong = false;
-        await bot.plug.sendChat("Unmarked as Theme Song!");
+        await bot.plug.chat("Unmarked as Theme Song!");
         return true;
       }
     },

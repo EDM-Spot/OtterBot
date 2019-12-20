@@ -10,6 +10,7 @@ module.exports = function Command(bot) {
     description: "Giveaway.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       if (!rawData.args.length) return;
+      //NEEDS MINIPLUG FIX
       return;
 
       let winners = rawData.args.join(" ");

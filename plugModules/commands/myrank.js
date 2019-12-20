@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Checks your Rank in the leaderboards.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
-      const id = rawData.from.id;
+      const id = rawData.uid;
 
       const totalsongs = await bot.db.models.plays.count({
         where: { skipped: false }

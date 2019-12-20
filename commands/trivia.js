@@ -41,9 +41,9 @@ class Trivia extends Command {
     startMessage += "Good Luck!";
     message.channel.send(startMessage);
 
-    await this.client.plug.sendChat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "!");
-    await this.client.plug.sendChat("The winner gets moved to position 3!");
-    await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
+    await this.client.plug.chat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "!");
+    await this.client.plug.chat("The winner gets moved to position 3!");
+    await this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
     await this.client.triviaUtil.start();
 

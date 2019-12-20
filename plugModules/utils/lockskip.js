@@ -2,49 +2,61 @@ const { isObject } = require("lodash");
 
 module.exports = function Util(bot) {
   const util = {
-    name: "lockskip",
+    name: 'lockskip',
     function: user => new Promise((resolve, reject) => {
-      const waitList = bot.plug.getWaitList();
-      const historyEntry = bot.plug.getMedia();
-      const dj = bot.plug.getDJ();
+      const shouldCycle = bot.plug.shouldCycle();
+      const waitList = bot.plug.waitlist();
+      const historyEntry = bot.plug.historyEntry();
+      const dj = bot.plug.dj();
 
       const lockSkip = {
         position: 3,
+        withCycle: async () => {
+          await bot.plug.enableCycle();
+          await historyEntry.skip();
+          await user.move(lockSkip.position);
+          await bot.plug.disableCycle();
+          return resolve();
+        },
+        withoutCycle: async () => {
+          await historyEntry.skip();
+          await user.move(lockSkip.position);
+          return resolve();
+        },
         addingDJ: async () => {
-          await bot.plug.moderateForceSkip(async function() {
-            //bot.plug.moderateMoveDJ(user.id, lockSkip.position);
-            await bot.plug.moderateAddDJ(user.id, async function() {
-              await bot.plug.moderateMoveDJ(user.id, lockSkip.position);
-            });
-          });
-          //await user.addToWaitList();
-          //await user.moveInWaitList(lockSkip.position);
+          await historyEntry.skip();
+          await user.add();
+          await user.move(lockSkip.position);
           return resolve();
         },
         onlySkip: async () => {
-          await bot.plug.moderateForceSkip();
+          await historyEntry.skip();
           return resolve();
         },
         skipOnlyAdd: async () => {
-          await bot.plug.moderateForceSkip(async function() {
-            await bot.plug.moderateAddDJ(user.id);
-          });
-          //await user.addToWaitList();
+          await historyEntry.skip();
+          await user.add();
           return resolve();
         },
         run: function RunLockSkip() {
           try {
             if (!isObject(dj) || !isObject(historyEntry)) {
-              return Promise.reject(new Error("[!] No DJ or Media playing."));
-            } else if (!waitList.length) {
+              return Promise.reject(new Error('[!] No DJ or Media playing.'));
+            } else if (!waitList.length && shouldCycle) {
               return this.onlySkip();
-            } else if (waitList.length < this.position) {
+            } else if (!shouldCycle && waitList.length < this.position) {
               return this.skipOnlyAdd();
+            } else if (!shouldCycle && (waitList.length >= 4 && waitList.length <= 45)) {
+              return this.addingDJ();
+            } else if (shouldCycle && (waitList.length >= 4 && waitList.length <= 45)) {
+              return this.withoutCycle();
+            } else if (!shouldCycle) {
+              return this.withCycle();
             }
 
-            return this.addingDJ();
+            return this.withoutCycle();
           } catch (err) {
-            console.error("[!] LockSkip Error");
+            console.error('[!] LockSkip Error');
             console.error(err);
             return reject(err);
           }

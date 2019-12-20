@@ -48,13 +48,13 @@ class TriviaPay extends Command {
 
       const user = this.client.plug.getUser(userDB.get("id"));
 
-      const dj = this.client.plug.getDJ();
+      const dj = this.client.plug.dj();
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
         return message.reply("You're not online on plug!");
       }
 
-      const userPos = this.client.plug.getWaitListPosition(user.id);
+      const userPos = this.client.plug.waitlist.positionOf(user.id);
 
       if (this.client.triviaUtil.started) {
         return message.reply("Trivia already started!");
@@ -77,8 +77,8 @@ class TriviaPay extends Command {
 
       if (this.client.triviaUtil.propsStored == 0) {
         message.channel.send("Someone paid to start a Trivia in 5 Minutes! Use `-triviapay 1-3` to use your props to start the Trivia Now.");
-        await this.client.plug.sendChat("@djs Someone paid to start a Trivia in 5 Minutes! Use `-triviapay 1-3` in discord to use your props to start the Trivia Now.");
-        await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
+        await this.client.plug.chat("@djs Someone paid to start a Trivia in 5 Minutes! Use `-triviapay 1-3` in discord to use your props to start the Trivia Now.");
+        await this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
         this.client.triviaUtil.startingTimer = new moment.duration(5, "minutes").timer({loop: false, start: true}, async () => {
           const cmd = this.client.commands.get("trivia") || this.client.commands.get(this.client.aliases.get("trivia"));
@@ -101,7 +101,7 @@ class TriviaPay extends Command {
 
       if (this.client.triviaUtil.propsStored < 10) {
         message.channel.send(this.client.triviaUtil.propsStored + "/10 to start the Trivia Now!");
-        await this.client.plug.sendChat(this.client.triviaUtil.propsStored + "/10 to start the Trivia Now!");
+        await this.client.plug.chat(this.client.triviaUtil.propsStored + "/10 to start the Trivia Now!");
       }
 
       if (this.client.triviaUtil.players.includes(userID)) return message.reply("Paid more " + price + " Props.");

@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Get a Random Joke.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const sodas = await bot.api.getSodas(rawData.from.username);
+      const sodas = await bot.api.getSodas(rawData.un);
 
       if (isNil(sodas)) return false;
 

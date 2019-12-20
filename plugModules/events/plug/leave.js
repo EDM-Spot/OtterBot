@@ -3,10 +3,10 @@ const moment = require("moment");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: bot.plug.events.USER_LEAVE,
+    name: 'userLeave',
     platform,
     run: async (user) => {
-      if (isNil(user.username) || user.guest || user.id === bot.plug.getSelf().id) return;
+      if (isNil(user.username) || user.guest || user.id === bot.plug.me().id) return;
 
       try {
         await bot.db.models.users.update(

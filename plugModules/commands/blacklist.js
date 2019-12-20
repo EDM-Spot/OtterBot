@@ -11,8 +11,8 @@ module.exports = function Command(bot) {
     description: "Blacklist a song",
     async execute(rawData, { args }, lang) {
       if (!args.length) {
-        const currentMedia = bot.plug.getMedia();
-        const dj = bot.plug.getDJ();
+        const currentMedia = bot.plug.historyEntry();
+        const dj = bot.plug.dj();
 
         if (!isObject(currentMedia)) {
           this.reply(lang.blacklist.nothingPlaying, {}, 6e4);
@@ -23,7 +23,7 @@ module.exports = function Command(bot) {
           where: { cid: currentMedia.cid },
           defaults: {
             cid: currentMedia.cid,
-            moderator: rawData.from.id,
+            moderator: rawData.uid,
           },
         });
 
@@ -32,7 +32,7 @@ module.exports = function Command(bot) {
           .setAuthor(currentMedia.author + " - " + currentMedia.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
           .setColor(0xFF00FF)
           //.setDescription("This is the main body of text, it can hold 2048 characters.")
-          .setFooter("By " + rawData.from.username)
+          .setFooter("By " + rawData.un)
           //.setImage("http://i.imgur.com/yVpymuV.png")
           //.setThumbnail("http://i.imgur.com/p2qNFag.png")
           .setTimestamp()
@@ -45,7 +45,7 @@ module.exports = function Command(bot) {
         bot.channels.get("486637288923725824").send({ embed });
 
         this.reply(lang.blacklist.currentAdded, {}, 6e4);
-        await bot.plug.moderateForceSkip();
+        await currentMedia.skip();
         return true;
       }
 
@@ -57,7 +57,7 @@ module.exports = function Command(bot) {
           where: { cid: cid },
           defaults: {
             cid: cid,
-            moderator: rawData.from.id,
+            moderator: rawData.uid,
           },
         });
 
@@ -69,7 +69,7 @@ module.exports = function Command(bot) {
           .setAuthor(fullTitle, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
           .setColor(0xFF00FF)
           //.setDescription("This is the main body of text, it can hold 2048 characters.")
-          .setFooter("By " + rawData.from.username)
+          .setFooter("By " + rawData.un)
           //.setImage("http://i.imgur.com/yVpymuV.png")
           //.setThumbnail("http://i.imgur.com/p2qNFag.png")
           .setTimestamp()
@@ -92,7 +92,7 @@ module.exports = function Command(bot) {
             where: { cid: `${soundcloudMedia.id}` },
             defaults: {
               cid: `${soundcloudMedia.id}`,
-              moderator: rawData.from.id,
+              moderator: rawData.uid,
             },
           });
 
@@ -104,7 +104,7 @@ module.exports = function Command(bot) {
             .setAuthor(fullTitle, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
             .setColor(0xFF00FF)
             //.setDescription("This is the main body of text, it can hold 2048 characters.")
-            .setFooter("By " + rawData.from.username)
+            .setFooter("By " + rawData.un)
             //.setImage("http://i.imgur.com/yVpymuV.png")
             //.setThumbnail("http://i.imgur.com/p2qNFag.png")
             .setTimestamp()

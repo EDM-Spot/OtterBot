@@ -7,9 +7,9 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Check Bot PP",
     async execute(rawData) { // eslint-disable-line no-unused-vars
-      const me = bot.plug.getSelf();
+      const me = bot.plug.me();
 
-      await bot.plug.sendChat(`I have ${me.pp} PP.`);
+      await bot.plug.chat(`I have ${me.pp} PP.`);
       return true;
     },
   });

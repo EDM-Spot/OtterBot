@@ -2,7 +2,7 @@ const { each } = require("lodash");
 const moment = require("moment");
 require("moment-timer");
 const momentRandom = require("moment-random");
-const { ROOM_ROLE } = require("plugapi");
+const { ROLE } = require("miniplug");
 
 module.exports = function Util(bot) {
   class LotteryUtil {
@@ -62,11 +62,11 @@ module.exports = function Util(bot) {
     }
     async winner(players) {
       if (this.acceptedBool) return;
-      if (bot.plug.getWaitList().length <= 10) return;
+      if (bot.plug.waitlist().length <= 10) return;
 
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.getUser(winner);
-      const userPos = bot.plug.getWaitListPosition(user.id);
+      const userPos = bot.plug.waitlist().positionOf(user.id);
 
       if (!players.length) {
         this.players = [];
@@ -83,19 +83,19 @@ module.exports = function Util(bot) {
         return;
       }
 
-      await bot.redis.removeGivePosition(bot.plug.getSelf().id, user.id);
+      await bot.redis.removeGivePosition(bot.plug.me().id, user.id);
 
-      await bot.plug.sendChat(bot.utils.replace(bot.lang.lotteryWinner, {
+      await bot.plug.chat(bot.utils.replace(bot.lang.lotteryWinner, {
         winner: user.username,
         position: position,
       }));
 
       //bot.queue.add(user, position);
-      await bot.redis.registerGivePosition(bot.plug.getSelf().id, user.id, position);
+      await bot.redis.registerGivePosition(bot.plug.me().id, user.id, position);
 
       this.giveTimer = moment.duration(3, "minutes").timer({loop: false, start: true}, async () => {
-        await bot.plug.sendChat(bot.lang.notAccepted);
-        bot.redis.removeGivePosition(bot.plug.getSelf().id, user.id);
+        await bot.plug.chat(bot.lang.notAccepted);
+        bot.redis.removeGivePosition(bot.plug.me().id, user.id);
         this.winner(players.filter(player => player !== winner));
       }, (120000));
     
@@ -118,10 +118,10 @@ module.exports = function Util(bot) {
 
       each(this.players, (player) => {
         if (bot.plug.getUser(player)) {
-          if (bot.plug.getWaitListPosition(player) === -1 || bot.plug.getUser(player).role >= ROOM_ROLE.BOUNCER) {
+          if (bot.plug.waitlist.positionOf(player) === -1 || bot.plug.getUser(player).role >= ROLE.BOUNCER) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
-            if (bot.plug.getWaitListPosition(player) > 5) {
+            if (bot.plug.waitlist.positionOf(player) > 5) {
               alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
             }
           }

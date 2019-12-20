@@ -1,12 +1,15 @@
 const Discord = require("discord.js");
+const { ROLE } = require("miniplug");
 
 module.exports = function Util(bot) {
   const util = {
     name: "timeCover",
     function: async () => {
-      const usersCount = bot.plug.getUsers().length;
-      const modsOnline = bot.plug.getStaff().join(", ");
-      
+      const usersCount = bot.plug.users().length;
+
+      const users = bot.plug.users();
+      const modsOnline = users.filter(u => u.role === ROLE.DJ || ROLE.BOUNCER || ROLE.MANAGER || ROLE.COHOST || ROLE.HOST).join(", ");
+
       const embed = new Discord.RichEmbed()
         .setAuthor("Time Cover Utility", "http://icons.iconarchive.com/icons/hamzasaleem/stock-apps-style-2-part-2/64/Time-Machine-icon.png")
         .setColor(0xFF00FF)

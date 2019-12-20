@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: bot.plug.events.MODERATE_BAN,
+    name: 'modBan',
     platform,
     run: async (data) => {
       if (isNil(data)) return;
@@ -20,11 +20,11 @@ module.exports = function Event(bot, platform) {
         duration: data.duration,
       });
 
-      if (data.moderator.id === bot.plug.getSelf().id) return;
+      if (data.moderator.id === bot.plug.me().id) return;
 
       const embed = new Discord.RichEmbed()
         //.setTitle("Title")
-        .setAuthor(data.user, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
+        .setAuthor(data.user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)
         //.setDescription("This is the main body of text, it can hold 2048 characters.")
         .setFooter("By " + data.moderator.username)
@@ -41,7 +41,7 @@ module.exports = function Event(bot, platform) {
 
       await bot.redis.removeDisconnection(userID);
 
-      await bot.plug.sendChat(":banhammer:");
+      await bot.plug.chat(":banhammer:");
       await bot.utils.updateRDJ(userID);
     },
     init() {

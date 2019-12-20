@@ -1,5 +1,5 @@
 const { get, assign, isNil } = require("lodash");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { ROLE } = require("miniplug");
 
 const NO_DELETION = ["props"];
 const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays", "meh"];
@@ -15,26 +15,30 @@ module.exports = class Command {
     this.run();
   }
   async reply(string, variables = {}, ttl) {
-    this.bot.plug.sendChat(this.utils.replace(this.lang.commands.default, {
+    const reply = this.bot.plug.chat(this.utils.replace(this.lang.commands.default, {
       command: this.instance.name,
-      user: this.rawData.from.username,
+      user: this.rawData.un,
       message: this.utils.replace(string, variables),
-    }), ttl);
+    }));
+
+    if (ttl) {
+      return reply.delay(ttl).call("delete");
+    }
 
     return true;
   }
   async handleDeletion() {
     const { registeredCommand, name } = this.instance;
 
-    if (get(this.rawData, "user.gRole", 0) >= GLOBAL_ROLES.MODERATOR) return;
+    if (get(this.rawData, "user.gRole", 0) >= ROLE.SITEMOD) return;
     if (NO_DELETION.includes(name)) return;
 
-    if (IMMEDIATE_DELETION.includes(name) || registeredCommand.minimumPermission >= ROOM_ROLE.RESIDENTDJ) {
-      await this.bot.plug.moderateDeleteChat(this.rawData.id); //this.rawData.delete();
+    if (IMMEDIATE_DELETION.includes(name) || registeredCommand.minimumPermission >= ROLE.DJ) {
+      await this.rawData.delete();
     }
 
     this.deletionTimeout = setTimeout(async (rawData) => { // eslint-disable-line no-unused-vars
-      await this.bot.plug.moderateDeleteChat(this.rawData.id);
+      await rawData.delete();
     }, 3e4, this.rawData);
   }
   async isBanned() {
@@ -47,11 +51,11 @@ module.exports = class Command {
 
     const userCmdBanned = await bot.db.models.cmdbans.findOne({
       where: {
-        id: rawData.from.id,
+        id: rawData.uid,
       },
     });
 
-    if (isNil(userCmdBanned))	return false;
+    if (isNil(userCmdBanned)) return false;
 
     const timePassed = bot.moment().diff(bot.moment(userCmdBanned.time), "hours");
 
@@ -76,9 +80,9 @@ module.exports = class Command {
     const { rawData, instance: command, redis } = this;
     const { platform } = command;
 
-    const currentCooldown = await redis.getCommandCooldown(platform, id, cdType, rawData.from.id);
+    const currentCooldown = await redis.getCommandCooldown(platform, id, cdType, rawData.uid);
 
-    if (isNil(currentCooldown))	return false;
+    if (isNil(currentCooldown)) return false;
 
     return true;
   }
@@ -90,9 +94,9 @@ module.exports = class Command {
 
     const duration = successBool ? cdDur : 1;
 
-    if (!successBool) await this.bot.plug.moderateDeleteChat(rawData.id);
+    if (!successBool) await rawData.delete();
 
-    return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.from.id, duration);
+    return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.uid, duration);
   }
   async run() {
     const { rawData, instance: command } = this;
@@ -100,7 +104,7 @@ module.exports = class Command {
 
     await this.handleDeletion();
 
-    if (await this.utils.getRole(rawData.from) >= registeredCommand.minimumPermission) {
+    if (await this.utils.getRole(rawData.user) >= registeredCommand.minimumPermission) {
       const isBanned = await this.isBanned();
       const isOnCooldown = await this.isOnCooldown(registeredCommand);
 

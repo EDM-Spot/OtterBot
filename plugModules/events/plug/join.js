@@ -3,48 +3,47 @@ const moment = require("moment");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: bot.plug.events.USER_JOIN,
+    name: 'userJoin',
     platform,
     run: async (data) => {
-      if (isNil(data.username) || data.guest || data.id === bot.plug.getSelf().id) return;
+      if (isNil(data.username) || data.guest || data.id === bot.plug.me().id) return;
       
       const position = parseInt(await bot.redis.findDisconnection(data.id), 10);
 
-      const user = bot.plug.getUser(data.id);
       await bot.db.models.users.findOrCreate({
-        where: { id: user.id }, defaults: { id: user.id, username: user.username },
+        where: { id: data.id }, defaults: { id: data.id, username: data.username },
       });
       
       try {
         await bot.db.models.users.update(
-          { username: user.username, last_seen: moment() },
-          { where: { id: user.id }, defaults: { id: user.id }}
+          { username: data.username, last_seen: moment() },
+          { where: { id: data.id }, defaults: { id: data.id }}
         );
       }
       catch (err) {
         console.warn(err);
-        console.log(user);
+        console.log(data);
       }
       
       if (isNil(position) || isNaN(position))	return;
 
-      const waitlist = bot.plug.getWaitList();
+      const waitlist = bot.plug.waitlist();
       
-      if (waitlist.length <= position && bot.plug.getWaitListPosition(user.id) === -1) {
-        await bot.plug.sendChat(`@${user.username} ` + bot.lang.commands.dc.waitlistSmaller);
-        bot.queue.add(user, waitlist.length);
-      } else if (bot.plug.getWaitListPosition(user.id) !== -1 && bot.plug.getWaitListPosition(user.id) <= position) {
-        await bot.plug.sendChat(`@${user.username} ` + bot.lang.commands.dc.sameOrLower);
+      if (waitlist.length <= position && !waitlist.contains(user.id)) {
+        await bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.waitlistSmaller);
+        bot.queue.add(data, waitlist.length);
+      } else if (waitlist.contains(user.id) && waitlist.positionOf(user.id) <= position) {
+        await bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.sameOrLower);
       } else {
-        bot.queue.add(user, position);
-        await bot.plug.sendChat(`@${user.username} ` + bot.utils.replace(bot.lang.commands.dc.placeBack, {
+        bot.queue.add(data, position);
+        await bot.plug.chat(`@${data.username} ` + bot.utils.replace(bot.lang.commands.dc.placeBack, {
           position: position,
           when: waitlist.length === 50 ?
             bot.lang.commands.dc.whenPossible : bot.lang.commands.dc.now,
         }));
       }
       
-      await bot.redis.removeDisconnection(user.id);
+      await bot.redis.removeDisconnection(data.id);
     },
     init() {
       bot.plug.on(this.name, this.run);

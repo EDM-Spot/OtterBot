@@ -1,5 +1,5 @@
 const { isObject, isNaN } = require("lodash");
-const { ROOM_ROLE } = require("plugapi");
+const { ROLE } = require("miniplug");
 const moment = require("moment");
 
 module.exports = function Command(bot) {
@@ -45,16 +45,16 @@ module.exports = function Command(bot) {
           return true;
         }
         case "reset": {
-          const user = bot.plug.getUser(rawData.from.id);
+          const user = bot.plug.getUser(rawData.uid);
 
-          if (!isObject(user) || await bot.utils.getRole(user) <= ROOM_ROLE.MANAGER) return false;
+          if (!isObject(user) || await bot.utils.getRole(user) <= ROLE.MANAGER) return false;
 
           await bot.redis.removeCommandFromCoolDown("plug", "roulette@start", "perUse");
           this.reply(lang.roulette.reset, {}, 6e4);
           return true;
         }
         case "start": {
-          const waitlist = bot.plug.getWaitList();
+          const waitlist = bot.plug.waitlist();
           const day = moment().isoWeekday();
           const isWeekend = (day === 6) || (day === 7);
           const isDecember = (moment().month() === 11);
@@ -118,16 +118,16 @@ module.exports = function Command(bot) {
           
           //if (isWeekend) {
           if (isWeekend  && !isDecember) {
-            await bot.plug.sendChat(bot.utils.replace(lang.roulette.startingWeekend, {}), duration * 1e3);
+            await bot.plug.chat(bot.utils.replace(lang.roulette.startingWeekend, {}), duration * 1e3);
           }
 
           if (isDecember) {
-            await bot.plug.sendChat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
+            await bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
           }
 
-          await bot.plug.sendChat(bot.utils.replace(lang.roulette.starting, {}), duration * 1e3);
+          await bot.plug.chat(bot.utils.replace(lang.roulette.starting, {}), duration * 1e3);
 
-          await bot.plug.sendChat(bot.utils.replace(lang.roulette.info, {
+          await bot.plug.chat(bot.utils.replace(lang.roulette.info, {
             duration,
             price: price === 0 ? lang.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
           }), duration * 1e3);

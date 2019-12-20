@@ -1,5 +1,5 @@
 const { isNil } = require("lodash");
-const { ROOM_ROLE } = require("plugapi");
+const { ROLE } = require("miniplug");
 const probe = require("probe-image-size");
 const Discord = require("discord.js");
 
@@ -13,6 +13,7 @@ module.exports = function Command(bot) {
     parameters: "[badge <Image>] || [icon] || [move]",
     description: "Event Shop",
     async execute(rawData, { args }, lang) {
+      //NEEDS MINIPLUG
       return;
       
       const { id } = rawData.from;

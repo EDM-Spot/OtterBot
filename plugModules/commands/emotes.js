@@ -10,17 +10,11 @@ module.exports = function Command(bot) {
     description: "Links with the emotes for RCS.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       const username = args.join(" ").substr(1);
-      const users = bot.plug.getUsers();
+      const users = bot.plug.users();
       const user = users.filter(u => u.username.toLowerCase() === username.toLowerCase())[0] ||
 				users.filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
 
-      let mention = "";
-
-      if (!isNil(user)) {
-        mention = `@${user}`;
-      }
-
-      this.reply(lang.emotes, { mention }, 6e4);
+      this.reply(lang.emotes, { mention: user || '' }, 6e4);
       return true;
     },
   });

@@ -27,7 +27,7 @@ module.exports = function Command(bot) {
       }
 
       const username = args.join(" ").substr(1);
-      const users = bot.plug.getUsers();
+      const users = bot.plug.users();
       const user = users.filter(u => u.username.toLowerCase() === username.toLowerCase())[0] ||
 				users.filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
 
@@ -36,14 +36,14 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const dj = bot.plug.getDJ();
+      const dj = bot.plug.dj();
 
       if (isObject(dj) && dj.id === user.id) {
         this.reply(lang.moderation.isPlaying, {}, 6e4);
         return false;
       }
 
-      const waitlist = bot.plug.getWaitList();
+      const waitlist = bot.plug.waitlist();
 
       bot.queue.add(user, position);
       this.reply(lang.move.willMove, {

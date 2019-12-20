@@ -3,11 +3,11 @@
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: bot.plug.events.CHAT_DELETE,
+    name: 'chatDelete',
     platform,
     _filename: filename,
-    run: async ({ c: cid, mi: deleted_by }) => {
-      await bot.db.models.messages.update({ deleted_by }, { where: { cid } });
+    run: async (del) => {
+      await bot.db.models.messages.update({ deleted_by: del.user.id }, { where: { cid: del.cid } });
 
       //const userDB = await bot.db.models.messages.findOne({ where: { cid: cid }});
 

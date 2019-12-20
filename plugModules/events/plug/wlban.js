@@ -3,12 +3,10 @@ const Discord = require("discord.js");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: bot.plug.events.MODERATE_WLBAN,
+    name: 'modWaitlistBan',
     platform,
     run: async (data) => {
       if (isNil(data)) return;
-
-      console.log(data);
 
       await bot.db.models.bans.create({
         id: data.user.id,
@@ -16,14 +14,14 @@ module.exports = function Event(bot, platform) {
         duration: data.duration,
       });
 
-      if (data.moderator.id === bot.plug.getSelf().id) return;
+      if (data.moderator.id === bot.plug.me().id) return;
 
       const embed = new Discord.RichEmbed()
         //.setTitle("Title")
         .setAuthor(data.user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)
         //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("By " + data.moderator.username)
+        .setFooter("By " + data.moderatorName)
         //.setImage("http://i.imgur.com/yVpymuV.png")
         //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()

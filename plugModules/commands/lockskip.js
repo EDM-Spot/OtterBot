@@ -1,29 +1,24 @@
 const { isObject } = require("lodash");
-const { ROOM_ROLE } = require("plugapi");
 const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
     names: ["lockskip", "ls"],
-    minimumPermission: 0,
+    minimumPermission: 2000,
     cooldownType: "perUse",
     cooldownDuration: 4,
     parameters: "",
     description: "Executes a lockskip, which skips the current DJ and moves them back to the 3rd position to have another try.",
     async execute(rawData, { name }, lang) {
-      const dj = bot.plug.getDJ();
-      const currentMedia = bot.plug.getMedia();
-      const timeElapsed = bot.plug.getTimeElapsed();
-
-      if ((rawData.from.role < ROOM_ROLE.BOUNCER) && (rawData.from.id != dj.id)) { return false; }
-      if ((rawData.from.role < ROOM_ROLE.BOUNCER) && (timeElapsed > 10)) { return false; }
+      const dj = bot.plug.dj();
+			const currentMedia = bot.plug.historyEntry();
 
       const embed = new Discord.RichEmbed()
       //.setTitle("Title")
         .setAuthor(currentMedia.author + " - " + currentMedia.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
         .setColor(0xFF00FF)
       //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("By " + rawData.from.username)
+        .setFooter("By " + rawData.un)
       //.setImage("http://i.imgur.com/yVpymuV.png")
       //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()
@@ -38,7 +33,7 @@ module.exports = function Command(bot) {
       if (isObject(dj) && isObject(currentMedia)) {
         await bot.utils.lockskip(dj);
         this.reply(lang.moderation.effective, {
-          mod: rawData.from.username,
+          mod: rawData.un,
           command: `!${name}`,
           user: dj.username,
         }, 6e4);

@@ -1,5 +1,5 @@
 const { isNil, isObject } = require("lodash");
-const { ROOM_ROLE } = require("plugapi");
+const { ROLE } = require("miniplug");
 const probe = require("probe-image-size");
 
 module.exports = function Command(bot) {
@@ -12,7 +12,7 @@ module.exports = function Command(bot) {
     parameters: "[badge <Image>]",
     description: "Props Shop",
     async execute(rawData, { args, name }, lang) {
-      const { id } = rawData.from;
+      const id = rawData.uid;
 
       const buyType = args[0];
       let url = args[1];
@@ -34,7 +34,7 @@ module.exports = function Command(bot) {
           const width = result.width;
           const height = result.height;
 
-          console.log(rawData.from.username);
+          console.log(rawData.un);
           console.log(result);
   
           if (width != 65 || height != 65) {
@@ -47,12 +47,12 @@ module.exports = function Command(bot) {
             return false;
           }
   
-          if (type === "gif" && rawData.from.role < ROOM_ROLE.RESIDENTDJ) {
+          if (type === "gif" && await bot.utils.getRole(rawData.getUser) < ROLE.DJ) {
             this.reply(lang.propsShop.imageRDJ, {}, 6e4);
             return false;
           }
 
-          if (isNil(badge) && rawData.from.role >= ROOM_ROLE.BOUNCER) {
+          if (isNil(badge) && await bot.utils.getRole(rawData.getUser) >= ROLE.BOUNCER) {
             free = true;
           } else {
             if (props < 100) {
@@ -60,7 +60,7 @@ module.exports = function Command(bot) {
               return true;
             }
           }
-  
+
           const options = {
             url: url,
             dest: `./dashboard/public/images/badges/${id}.${type}`
@@ -82,19 +82,12 @@ module.exports = function Command(bot) {
         }
 
         if (buyGift === "badge") {
-          const userMention = rawData.mentions[0];
-
-          if (!isObject(userMention)) {
-            this.reply(lang.userNotFound, {}, 6e4);
-            return false;
-          }
-
-          const user = bot.plug.getUser(userMention.id);
+          const user = bot.plug.userByName(args.join(' ').substr(4));
       
           if (!isObject(user)) {
             this.reply(lang.userNotFound, {}, 6e4);
             return false;
-          } else if (user.id === rawData.from.id) {
+          } else if (user.id === rawData.uid) {
             this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
             return false;
           }
@@ -124,7 +117,7 @@ module.exports = function Command(bot) {
               return false;
             }
     
-            if (type === "gif" && user.role < ROOM_ROLE.RESIDENTDJ) {
+            if (type === "gif" && user.role < ROLE.DJ) {
               this.reply(lang.propsShop.imageRDJ, {}, 6e4);
               return false;
             }

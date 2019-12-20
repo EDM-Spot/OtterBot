@@ -10,15 +10,15 @@ module.exports = function Command(bot) {
     description: "Checks the specified link, or the current media, for the last time it was played in the community.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       if (!args.length) {
-        const currentMedia = bot.plug.getMedia();
-        const dj = bot.plug.getDJ();
+        const currentMedia = bot.plug.historyEntry();
+        const dj = bot.plug.dj();
 
         if (!isObject(currentMedia)) {
           this.reply(lang.plays.nothingPlaying, {}, 6e4);
           return false;
         }
 
-        if (rawData.from.id == dj.id) { return false; }
+        if (rawData.uid == dj.id) { return false; }
 
         let songAuthor = null;
         let songTitle = null;
@@ -129,7 +129,7 @@ module.exports = function Command(bot) {
                 which: lang.plays.specified,
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
-              if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
+              if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
 
               return true;
             }
@@ -139,7 +139,7 @@ module.exports = function Command(bot) {
               time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               count: playsCount,
             }, 6e4);
-            if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
+            if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
 
             return true;
           } else {
@@ -149,7 +149,7 @@ module.exports = function Command(bot) {
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
-              if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
+              if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
 
               return true;
             }
@@ -192,7 +192,7 @@ module.exports = function Command(bot) {
                     which: lang.plays.specified,
                     time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   }, 6e4);
-                  if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
+                  if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
 
                   return true;
                 }
@@ -202,7 +202,7 @@ module.exports = function Command(bot) {
                   time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   count: playsCount,
                 }, 6e4);
-                if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
+                if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
 
                 return true;
               } else {
@@ -212,7 +212,7 @@ module.exports = function Command(bot) {
                     cid: map(songHistory, "cid")[0],
                     time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   }, 6e4);
-                  if (isOverplayed) { await bot.plug.sendChat("Song Is Overplayed!"); }
+                  if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
 
                   return true;
                 }

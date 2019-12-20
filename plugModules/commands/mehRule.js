@@ -7,7 +7,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Shows the Mehs needed to skip a song",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const usersCount = bot.plug.getUsers().length;
+      const usersCount = bot.plug.users().length;
 
       const mehRule = Math.round((usersCount/100)*6);
       const hsMehRule = Math.round((usersCount/100)*4);

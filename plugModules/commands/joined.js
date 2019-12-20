@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Check when user joined the community.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
-      const id = rawData.from.id;
+      const { uid: id } = rawData;
 
       const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
 

@@ -6,15 +6,15 @@ module.exports = function Util(bot) {
       this.users = [];
       this.shouldUnlock = true;
 
-      bot.plug.on(bot.plug.events.DJ_LIST_UPDATE, this.run);
+      bot.plug.on('waitlistUpdate', this.run);
     }
     add(user, position) {
       if (this.users.map(u => u.user.id).includes(user.id)) {
         return this.update(user, position);
       }
-      
+
       this.users.push({ user, position });
-      
+
       return this.run();
     }
     update(user, position) {
@@ -23,7 +23,7 @@ module.exports = function Util(bot) {
           queueUser.position = position;
         }
       });
-      
+
       return this.run();
     }
     remove(user) {
@@ -36,12 +36,12 @@ module.exports = function Util(bot) {
       return this.run();
     }
     async run() {
-      const waitlist = bot.plug.getWaitList();
-      const dj = bot.plug.getDJ();
-      
-      if (this.users === undefined) {
+      const waitlist = bot.plug.waitlist();
+      const dj = bot.plug.dj();
+
+      if (!this.users.length) {
         if (this.shouldUnlock) {
-          await bot.plug.moderateLockBooth(false, false);
+          await bot.plug.setLock(false);
           this.shouldUnlock = false;
         }
 
@@ -50,12 +50,10 @@ module.exports = function Util(bot) {
 
       const next = this.users.shift();
 
-      if (next === undefined) return;
-      
-      if (waitlist.length === 50 && bot.plug.getWaitListPosition(next.user.id) === -1) {
+      if (waitlist.length === 50 && !waitlist.contains(next.user.id)) {
         if (!bot.plug.isLocked()) {
           try {
-            await bot.plug.moderateLockBooth(true, false);
+            await bot.plug.setLock(true);
             this.shouldUnlock = true;
           } catch (err) {
             console.error(err);
@@ -69,65 +67,52 @@ module.exports = function Util(bot) {
       if (isObject(dj) && dj.id === next.user.id) {
         this.users.push(next);
         return;
-      } else if (bot.plug.getWaitListPosition(next.user.id) === -1) {
+      } else if (waitlist.positionOf(next.user.id) === -1) {
         try {
-          if (next.user.id !== bot.plug.getSelf().id) {
-            //await next.user.addToWaitList();
-            await bot.plug.moderateAddDJ(next.user.id, function() {
-              if (next.position < waitlist.length && next.position !== bot.plug.getWaitListPosition(next.user.id)) {
-                bot.plug.moderateMoveDJ(next.user.id, next.position);
-              }
-            });
-          }
+          await next.user.add();
         } catch (err) {
-          if (get(err, "response.body.status")) {
-            switch (get(err, "response.body.status")) {
-              case "noValidPlaylist":
-                await bot.plug.sendChat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist, 6e4);
+          if (get(err, 'response.body.status')) {
+            switch (get(err, 'response.body.status')) {
+              case 'noValidPlaylist':
+                await bot.plug.chat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist, 6e4);
                 return;
-              case "roomMismatch":
-                await bot.plug.sendChat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id }), 6e4);
+              case 'roomMismatch':
+                await bot.plug.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id }), 6e4);
                 return;
-                // to-do: handle wait list banned users
+              // to-do: handle wait list banned users
               default:
                 console.error(err);
                 return;
             }
           }
         }
-        
+
         if (next.position < waitlist.length) {
           try {
-            //await next.user.moveInWaitList(next.position);
-            await bot.plug.moderateMoveDJ(next.user.id, next.position);
+            await next.user.move(next.position);
           } catch (err) {
             console.error(err);
-            console.log(next);
             this.users.push(next);
             return;
           }
         }
       } else {
-        //console.log("isinlist");
+        console.log('isinlist');
         try {
-          //await next.user.moveInWaitList(next.position);
-          //await next.user.moveInWaitList(next.position);
-          await bot.plug.moderateMoveDJ(next.user.id, next.position);
+          await next.user.move(next.position);
         } catch (err) {
-          console.error(err);
-          console.log(next);
           this.users.push(next);
           return;
         }
 
         if (this.shouldUnlock) {
-          await bot.plug.moderateLockBooth(false, false);
+          await bot.plug.setLock(false);
           this.shouldUnlock = false;
         }
       }
 
       if (this.shouldUnlock) {
-        await bot.plug.moderateLockBooth(false, false);
+        await bot.plug.setLock(false);
         this.shouldUnlock = false;
       }
     }

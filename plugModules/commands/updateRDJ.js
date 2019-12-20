@@ -1,5 +1,5 @@
 const { isNil } = require("lodash");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { ROLE } = require("miniplug");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -12,26 +12,28 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const totalusers = await bot.db.models.users.count();
       console.log(totalusers);
-      
-      bot.plug.getAllStaff(async (err, data) => {
-        const offUser = data.filter(u => u.role === ROOM_ROLE.RESIDENTDJ);
 
-        var i = 0;
-        var interval = setInterval(function() {
-          if (!isNil(offUser[i])) {
-            if (offUser[i].role < ROOM_ROLE.BOUNCER || offUser[i].gRole < GLOBAL_ROLES.MODERATOR) {
+      const users = bot.plug.getStaff();
+      const listDJ = users.filter(u => u.role === ROLE.DJ);
 
-              if (offUser[i].role === ROOM_ROLE.RESIDENTDJ) {
-                console.log(offUser[i].username);
-                bot.utils.updateRDJ(offUser[i].id);
+      var i = 0;
+      for (i = 0; i < listDJ.length; i++) {
+        var interval = setInterval(async function() {
+          if (!isNil(listDJ[i])) {
+            if (listDJ[i].role < ROLE.BOUNCER || listDJ[i].gRole < ROLE.SITEMOD) {
+              if (listDJ[i].role === ROLE.DJ) {
+                console.log(listDJ[i].username);
+                await bot.utils.updateRDJ(listDJ[i].id);
               }
             }
           }
           i++;
-          if (i === offUser.length) clearInterval(interval);
+          if (i === listDJ.length) {
+            clearInterval(interval);
+            console.log("Finished");
+          }
         }, 10000);
-      });
-      console.log("Finished");
+      }
 
       return true;
     },

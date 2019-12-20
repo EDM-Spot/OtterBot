@@ -1,4 +1,4 @@
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { ROLE, MUTE_DURATION, MUTE_REASON } = require("miniplug");
 
 module.exports = function Util(bot) {
   class RussianRouletteUtil {
@@ -49,16 +49,16 @@ module.exports = function Util(bot) {
 
       const victim = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.getUser(victim);
-      const waitlist = bot.plug.getWaitList();
+      const waitlist = bot.plug.waitlist();
 
       if (!players.length) {
-        await bot.plug.sendChat(bot.lang.russianroulette.countOver);
+        await bot.plug.chat(bot.lang.russianroulette.countOver);
         this.end();
         return;
       }
 
       if (!user || typeof user.username !== "string" || !user.username.length) {
-        await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.chicken, {
+        await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.chicken, {
           user: victim,
         }));
 
@@ -68,24 +68,24 @@ module.exports = function Util(bot) {
       }
 
       await bot.wait(3000);
-      await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.shot, {
+      await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.shot, {
         user: user.username,
       }));
       await bot.wait(5000);
 
       const randomBool = Math.random() >= 0.5;
 
-      const luckyshot = Math.floor(Math.random() * (bot.plug.getWaitListPosition(victim) - 5)) + 5;
-      const unluckyshot = Math.floor(Math.random() * (waitlist.length - bot.plug.getWaitListPosition(victim)) + bot.plug.getWaitListPosition(victim) + 1);
+      const luckyshot = Math.floor(Math.random() * (waitlist.positionOf(victim) - 5)) + 5;
+      const unluckyshot = Math.floor(Math.random() * (waitlist.length - waitlist.positionOf(victim)) + waitlist.positionOf(victim) + 1);
 
       if (randomBool) {
-        await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
+        await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
 
-        if (bot.plug.getWaitListPosition(victim) === -1) {
+        if (waitlist.positionOf(victim) === -1) {
           bot.queue.add(user, waitlist.length);
-  
+
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }
@@ -93,30 +93,28 @@ module.exports = function Util(bot) {
         bot.queue.add(user, luckyshot);
       }
       else {
-        await bot.plug.sendChat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
+        await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
           user: user.username,
         }));
 
-        if (bot.plug.getWaitListPosition(victim) === -1 && (user.role <= ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR)) {
-          if (user.role <= ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR) {
+        if (waitlist.positionOf(victim) === -1 && (user.role <= ROLE.BOUNCER && user.gRole < ROLE.SITEMOD)) {
+          if (user.role <= ROLE.BOUNCER && user.gRole < ROLE.SITEMOD) {
             const { role } = user;
 
-            await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE, async function() {
-              await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT, async function() {
-                await bot.plug.moderateSetRole(user.id, role);
-              });
-            });
+            await user.setRole(0);
+            await user.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
+            await user.setRole(role);
 
             this.chooseVictim(players.filter(player => player !== victim));
             return;
           }
 
-          await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, bot.plug.MUTE.SHORT);
-  
+          await user.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
+
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }
-        
+
         bot.queue.add(user, unluckyshot);
       }
 

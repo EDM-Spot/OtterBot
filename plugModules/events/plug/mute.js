@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: bot.plug.events.MODERATE_MUTE,
+    name: 'modMute',
     platform,
     run: async (data) => {
       if (isNil(data)) return;
@@ -20,7 +20,7 @@ module.exports = function Event(bot, platform) {
         console.log(data);
       }
 
-      if (data.moderator.id === bot.plug.getSelf().id) return;
+      if (data.moderator.id === bot.plug.me().id) return;
 
       const embed = new Discord.RichEmbed()
         //.setTitle("Title")

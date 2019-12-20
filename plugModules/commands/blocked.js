@@ -15,7 +15,7 @@ module.exports = function Command(bot) {
       let which;
 
       if (!args.length) {
-        const currentMedia = bot.plug.getMedia();
+        const currentMedia = bot.plug.historyEntry();
 
         if (!isObject(currentMedia)) {
           this.reply(lang.check.noMedia, {}, 6e4);

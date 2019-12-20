@@ -10,9 +10,10 @@ module.exports = function Event(bot, filename, platform) {
       // Following the same reason to wait here as discord ready 
       await bot.wait(2000);
 
-      await bot.plug.sendChat(bot.lang.startup);
+      await bot.plug.join(bot.config.plug.room);
+      await bot.plug.chat(bot.lang.startup);
 
-      const user = bot.plug.getUsers();
+      const user = bot.plug.users();
       for (var i = 0; i < user.lenght; i++) {
         await bot.db.models.users.findOrCreate({
           where: { id: user[i].id }, defaults: { id: user[i].id, username: user[i].username }
@@ -33,7 +34,7 @@ module.exports = function Event(bot, filename, platform) {
 
       new moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
         var randomNumber = Math.floor(Math.random() * randomTimedText.length);
-        bot.plug.sendChat(randomTimedText[randomNumber]);
+        bot.plug.chat(randomTimedText[randomNumber]);
       });
 
       new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {

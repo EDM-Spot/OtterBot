@@ -39,7 +39,7 @@ module.exports = function Util(bot) {
           { where: { id: id }, defaults: { id: id }}
         );
 
-        await bot.plug.sendChat("Thanks for your Badge purchase!");
+        await bot.plug.chat("Thanks for your Badge purchase!");
 
         await bot.generateCSS.generateBadges();
       }).catch((err) => {

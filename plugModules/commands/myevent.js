@@ -9,6 +9,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Checks how many event currency do you have.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
+      //NEEDS MINIPLUG FIX
       return;
       
       const id = rawData.from.id;

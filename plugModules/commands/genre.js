@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Check song genre.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const currentMedia = bot.plug.getMedia();
+      const currentMedia = bot.plug.historyEntry();
 
       const genres = await bot.api.getGenre(currentMedia);
 

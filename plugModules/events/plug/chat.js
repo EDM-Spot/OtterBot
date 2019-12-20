@@ -1,11 +1,11 @@
 const { each, isNil } = require("lodash");
 const moment = require("moment");
 const Discord = require("discord.js");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { ROLE } = require("miniplug");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: bot.plug.events.CHAT,
+    name: 'chat',
     platform,
     run: async (rawData) => {
       const commandHandleRegex = /^(\/(em|me)\s)?!/;
@@ -13,16 +13,16 @@ module.exports = function Event(bot, platform) {
       rawData.timestamp = Date.now();
       
       const message = await bot.db.models.messages.create({
-        id: rawData.from.id,
+        id: rawData.uid,
         cid: rawData.id,
-        username: rawData.from.username,
+        username: rawData.un,
         message: rawData.message,
       });
       
       try {
         await bot.db.models.users.update(
-          { username: rawData.from.username, last_seen: moment() },
-          { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
+          { username: rawData.un, last_seen: moment() },
+          { where: { id: rawData.uid }, defaults: { id: rawData.uid }}
         );
       }
       catch (err) {
@@ -31,7 +31,7 @@ module.exports = function Event(bot, platform) {
       }
 
       if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(nigger)|(faggot)/ig.test(rawData.message)) {
-        await bot.plug.moderateDeleteChat(rawData.id);
+        await rawData.delete();
         return;
       }
 
@@ -55,17 +55,17 @@ module.exports = function Event(bot, platform) {
       const dubtrack = /^(?=.*join)(?=.*dubtrack.fm)/i;
       const plug = /(plug\.dj\/)(?!edmspot\b|about\b|ba\b|forgot-password\b|founders\b|giftsub\/\d|jobs\b|legal\b|merch\b|partners\b|plot\b|privacy\b|purchase\b|subscribe\b|team\b|terms\b|press\b|_\/|@\/|!\/)(.+)/i;
 
-      if (rawData.from.role >= ROOM_ROLE.RESIDENTDJ || rawData.from.gRole >= GLOBAL_ROLES.MODERATOR) {
+      if (rawData.role >= ROLE.DJ || rawData.gRole >= ROLE.SITEMOD) {
         if (dubtrack.test(rawData.message) || plug.test(rawData.message)) {
-          bot.plug.moderateDeleteChat(rawData.id);
+          await rawData.delete();
           //await bot.plug.moderateBanUser(rawData.from.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, bot.plug.BAN.PERMA);
 
           const embed = new Discord.RichEmbed()
-            .setAuthor(rawData.from.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
+            .setAuthor(rawData.un, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
             .setColor(0xFF00FF)
             .setFooter("By OtterBot")
             .setTimestamp()
-            .addField("ID", rawData.from.id, true)
+            .addField("ID", rawData.uid, true)
             .addField("Warning", "Promote other room", false)
             .addField("Message", rawData.message, false);
 
@@ -75,7 +75,7 @@ module.exports = function Event(bot, platform) {
       }
 
       if (/^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(rawData.message)) {
-        setTimeout(() => bot.plug.moderateDeleteChat(rawData.id), 3e5);
+        setTimeout(() => rawData.delete(), 3e5);
       }
 
       //bot.channels.get("486125808553820160").send(rawData.from.username + ": " + rawData.message);
@@ -83,9 +83,9 @@ module.exports = function Event(bot, platform) {
       if (!commandHandleRegex.test(rawData.message)) {
         if (isNil(bot.lottery.timer)) return;
         if (bot.lottery.timer.isStarted) {
-          if (rawData.from.id !== bot.plug.getSelf().id) {
+          if (rawData.uid !== bot.plug.me().id) {
             if (moment().valueOf() > bot.lottery.canJoinDate.valueOf()) {
-              bot.lottery.add(rawData.from.id);
+              bot.lottery.add(rawData.uid);
             }
           }
         }

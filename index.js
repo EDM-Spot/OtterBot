@@ -5,8 +5,8 @@ if (Number(process.version.slice(1).split(".")[0]) < 8) throw new Error("Node 10
 
 // Load up the discord.js library
 const Discord = require("discord.js");
-// Load up the plugAPI library
-const PlugAPI = require("plugapi");
+// Load up the miniplug library
+const miniplug = require('miniplug');
 // We also load the rest of the things we need in this file:
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
@@ -27,14 +27,16 @@ class Bot extends Discord.Client {
     this.config = require("./config.js");
     // client.config.token contains the bot's token
     // client.config.prefix contains the message prefix
-	
+
     this.sequelize = Sequelize;
+    this.miniplug = miniplug;
     this.moment = require("moment");
 
     this.lang = require("./plugModules/data/lang.json");
 
     this.models = {};
 
+    this.plug = miniplug({ connect: false });
     this.Redis = new Redis(this.config.db.redis);
     this.db = new Sequelize(Object.assign(this.config.db.sequelize, {
       logging: false,
@@ -50,18 +52,6 @@ class Bot extends Discord.Client {
       }
     }));
 
-    //Connect to plug
-    this.plug = new PlugAPI({
-      email: this.config.plug.email,
-      password: this.config.plug.password
-    }, function(err, bot) { // eslint-disable-line no-unused-vars
-      if (err) {
-        console.log("Error initializing PlugAPI: " + err);
-      }
-    });
-    this.plug.multiLine = true;
-    this.plug.multiLineLimit = 2;
-	
     // Aliases and commands are put in collections where they can be read from,
     // catalogued, listed, etc.
     this.commands = new Discord.Collection();
@@ -143,6 +133,7 @@ class Bot extends Discord.Client {
       });
       return false;
     } catch (e) {
+      console.log(e);
       return `Unable to load command ${commandName}: ${e}`;
     }
   }
@@ -209,7 +200,7 @@ class Bot extends Discord.Client {
     if (text && text.constructor.name == "Promise")
       text = await text;
     if (typeof text !== "string")
-      text = require("util").inspect(text, {depth: 0});
+      text = require("util").inspect(text, { depth: 0 });
 
     text = text
       .replace(/`/g, "`" + String.fromCharCode(8203))
@@ -231,7 +222,7 @@ class Bot extends Discord.Client {
   msg.reply(`Oh, I really love ${response} too!`);
   */
   async awaitReply(msg, question, limit = 60000) {
-    const filter = m=>m.author.id = msg.author.id;
+    const filter = m => m.author.id = msg.author.id;
     await msg.channel.send(question);
     try {
       const collected = await msg.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
@@ -254,10 +245,15 @@ const init = async () => {
   // Load Plug Modules
   plugModuleManager(client).then(() => {
     client.events.init();
-    client.plug.connect(client.config.plug.room);
+    client.plug.connect({
+      email: client.config.plug.email,
+      password: client.config.plug.password
+    }).catch(() => {
+      console.warn('Failed to connect to plug!')
+    });
     console.info("[!] Plug Modules Loaded [!]");
   });
-  
+
   // Here we load **commands** into memory, as a collection, so they're accessible
   // here and everywhere else.
   klaw("./commands").on("data", (item) => {
@@ -286,7 +282,7 @@ const init = async () => {
 
   // Here we login the client.
   client.login(client.config.token);
-  
+
   // End top-level async/await function.
 
   await Deck.loadAssets();
@@ -299,8 +295,25 @@ client.on("disconnect", () => client.logger.warn("Bot is disconnecting..."))
   .on("error", e => client.logger.error(e))
   .on("warn", info => client.logger.warn(info));
 
-client.plug.on("close", () => client.plug.connect(client.config.plug.room));
-client.plug.on("error", () => client.plug.connect(client.config.plug.room));
+client.plug.on("disconnected", () => {
+  console.warn("!! Connection to Plug Lost.");
+  reconnect();
+});
+
+let timeout = 0
+function reconnect() {
+  console.info('Trying to reconnect to plug...')
+  client.plug.connect({
+    email: client.config.plug.email,
+    password: client.config.plug.password
+  }).then(() => {
+    console.info('Reconnected to plug!')
+  }).catch(() => {
+    console.warn('Failed to reconnect to plug, trying again in', timeout, 'ms')
+    setTimeout(reconnect, timeout)
+  });
+  timeout += 1000 // 1 second
+};
 
 /* MISCELANEOUS NON-CRITICAL FUNCTIONS */
 
@@ -312,14 +325,14 @@ client.plug.on("error", () => client.plug.connect(client.config.plug.room));
 // <String>.toPropercase() returns a proper-cased string such as: 
 // "Mary had a little lamb".toProperCase() returns "Mary Had A Little Lamb"
 Object.defineProperty(String.prototype, "toProperCase", {
-  value: function() {
+  value: function () {
     return this.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
   }
 });
 // <Array>.random() returns a single random element from an array
 // [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
 Object.defineProperty(Array.prototype, "random", {
-  value: function() {
+  value: function () {
     return this[Math.floor(Math.random() * this.length)];
   }
 });
@@ -339,7 +352,7 @@ Object.defineProperty(Number.prototype, "plural", {
 
 // These 2 process methods will catch exceptions and give *more details* about the error and stack trace.
 process.on("uncaughtException", (err) => {
-  const errorMsg = err.stack.replace(new RegExp(process.cwd().replace(/\\/g,"\\\\"), "g"), ".");
+  const errorMsg = err.stack.replace(new RegExp(process.cwd().replace(/\\/g, "\\\\"), "g"), ".");
   client.logger.error("Uncaught Exception: ", errorMsg);
   // Always best practice to let the code crash on uncaught exceptions. 
   // Because you should be catching them anyway.
@@ -347,6 +360,6 @@ process.on("uncaughtException", (err) => {
 });
 
 process.on("unhandledRejection", err => {
-  if (err.stack) err = err.stack.replace(new RegExp(process.cwd().replace(/\\/g,"\\\\"), "g"), ".");
+  if (err.stack) err = err.stack.replace(new RegExp(process.cwd().replace(/\\/g, "\\\\"), "g"), ".");
   client.logger.error("Unhandled rejection: ", err);
 });

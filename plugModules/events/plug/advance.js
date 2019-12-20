@@ -8,11 +8,14 @@ var savedMessage;
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: bot.plug.events.ADVANCE,
+    name: 'advance',
     platform,
     _filename: filename,
     run: async (data) => {
-      if (!isObject(data) || !isObject(data.media) || !isObject(data.currentDJ)) return;
+      if (!isObject(data) || !isObject(data.media) || !isObject(data.getUser())) return;
+
+      const currentMedia = bot.plug.historyEntry();
+      var currentDJ = data.getUser();
 
       bot.plug.woot();
 
@@ -33,7 +36,7 @@ module.exports = function Event(bot, filename, platform) {
           const embeddable = get(YouTubeMediaData, "status.embeddable");
     
           if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
-            await bot.plug.sendChat(bot.utils.replace(bot.check.mediaUnavailable, { which: "current" }));
+            await bot.plug.chat(bot.utils.replace(bot.check.mediaUnavailable, { which: "current" }));
           }
 
           if ((fullTitle.match(/-/g) || []).length === 1) {
@@ -80,13 +83,13 @@ module.exports = function Event(bot, filename, platform) {
         var pattern = new RegExp("\\b" + blackword[i] + "\\b");
 
         if (pattern.test(songAuthor.toLowerCase()) || pattern.test(songTitle.toLowerCase())) {
-          //await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
+          //await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
           if (!skipped) {
-            await bot.plug.sendChat("!bl");
+            await bot.plug.chat("!bl");
 
             if (blackword[i] == "gemido" || blackword[i] == "gemidão" || blackword[i] == "rape") {
-              await bot.plug.sendChat(`!ban @${data.currentDJ.username} p Playing Ear Rape`);
+              await bot.plug.chat(`!ban @${currentDJ.username} p Playing Ear Rape`);
             }
 
             skipped = true;
@@ -98,9 +101,9 @@ module.exports = function Event(bot, filename, platform) {
 
       if (isObject(blacklisted)) {
         if (!skipped) {
-          await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.blacklisted);
+          await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
-          await bot.plug.moderateForceSkip();
+          await currentMedia.skip();
           skipped = true;
         }
       }
@@ -109,15 +112,15 @@ module.exports = function Event(bot, filename, platform) {
 
       if (isOverplayed) {
         if (!skipped) {
-          await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
+          await bot.plug.chat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
 
-          await bot.plug.moderateForceSkip();
+          await currentMedia.skip();
           skipped = true;
         }
       }
 
-      if (isObject(data.currentDJ) && data.media.duration >= 390) {
-        const [user] = await bot.db.models.users.findOrCreate({ where: { id: data.currentDJ.id }, defaults: { id: data.currentDJ.id } });
+      if (isObject(currentDJ) && data.media.duration >= 390) {
+        const [user] = await bot.db.models.users.findOrCreate({ where: { id: currentDJ.id }, defaults: { id: currentDJ.id } });
         const seconds = data.media.duration - 390;
         const props = user.get("props");
 
@@ -125,12 +128,12 @@ module.exports = function Event(bot, filename, platform) {
 
         if (data.media.duration <= 600 && props >= propsToPay) {
           await user.decrement("props", { by: propsToPay });
-          await bot.plug.sendChat(`${data.currentDJ.username} paid ${propsToPay} Props to play this song!`);
+          await bot.plug.chat(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
         } else {
           if (!skipped) {
-            await bot.plug.sendChat(`@${data.currentDJ.username} ` + bot.lang.exceedstimeguard);
+            await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
             
-            await bot.utils.lockskip(data.currentDJ);
+            await bot.utils.lockskip(currentDJ);
             skipped = true;
           }
         }
@@ -143,15 +146,15 @@ module.exports = function Event(bot, filename, platform) {
           if (songHistory.skip) {
             if (!songHistory.maybe) {
               if (!skipped) {
-                await bot.plug.sendChat(bot.utils.replace(bot.lang.historySkip, {
+                await bot.plug.chat(bot.utils.replace(bot.lang.historySkip, {
                   time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                 }));
                 
-                await bot.plug.moderateForceSkip();
+                await currentMedia.skip();
                 skipped = true;
               }
             } else {
-              await bot.plug.sendChat(bot.utils.replace(bot.lang.maybeHistorySkip, {
+              await bot.plug.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }));
@@ -183,15 +186,15 @@ module.exports = function Event(bot, filename, platform) {
       const savedID = data.media.id;
 
       setTimeout(async () => {
-        const currentMedia = bot.plug.getMedia();
+        const timeoutMedia = bot.plug.historyEntry();
 
-        if (savedID === get(currentMedia, "id")) {
+        if (savedID === get(timeoutMedia, "id")) {
           if (!skipped) {
-            await bot.plug.sendChat(bot.lang.stuckSkip);
+            await bot.plug.chat(bot.lang.stuckSkip);
 
             bot.global.isSkippedByTimeGuard = true;
             
-            await bot.plug.moderateForceSkip();
+            await timeoutMedia.skip();
             skipped = true;
           }
         }
@@ -200,10 +203,8 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getHistory(async function(history) {
-          const sortHistory = sortBy(history, ["timestamp"]);
-          const lastPlay = sortHistory.pop(); //await bot.plug.getHistory();
-
+        bot.plug.getRoomHistory().then(async(history) => {
+          const [lastPlay] = history;
 
           // if plug reset the history or its a brand new room it won't have history
           if (isNil(lastPlay.media)) return;
@@ -368,7 +369,7 @@ module.exports = function Event(bot, filename, platform) {
             // otherwise, give them the props
               await instance.increment("props", { by: props });
 
-              await bot.plug.sendChat(bot.utils.replace(bot.lang.advanceprops, {
+              await bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
                 props,
                 user: lastPlay.user.username,
                 plural: props > 1 ? "s" : "",

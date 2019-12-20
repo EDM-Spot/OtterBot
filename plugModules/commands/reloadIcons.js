@@ -8,7 +8,7 @@ module.exports = function Command(bot) {
     description: "Reloads the Icons CSS.",
     async execute() {
       await bot.generateCSS.generateIcons();
-      await bot.plug.sendChat("Icons CSS Reloaded.");
+      await bot.plug.chat("Icons CSS Reloaded.");
       return true;
     },
   });

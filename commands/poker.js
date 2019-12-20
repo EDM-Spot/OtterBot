@@ -1,7 +1,7 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
 const { isNil, isNaN, isObject } = require("lodash");
-const { ROOM_ROLE } = require("plugapi");
+const { ROLE } = require("miniplug");
 const moment = require("moment");
 require("moment-timer");
 
@@ -66,8 +66,8 @@ class Poker extends Command {
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          await this.client.plug.sendChat("Discord Texas Hold'em Poker will start in 1 minute in channel #" + message.channel.name + "!");
-          await this.client.plug.sendChat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
+          await this.client.plug.chat("Discord Texas Hold'em Poker will start in 1 minute in channel #" + message.channel.name + "!");
+          await this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
           this.client.pokerUtil.running = true;
 
@@ -235,7 +235,7 @@ class Poker extends Command {
         case "reset": {
           const user = this.client.plug.getUser(userDB.get("id"));
 
-          if (!isObject(user) || await this.client.utils.getRole(user) <= ROOM_ROLE.MANAGER) return false;
+          if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
 
           await this.client.redis.removeCommandFromCoolDown("discord", "poker@play", "perUse");
 

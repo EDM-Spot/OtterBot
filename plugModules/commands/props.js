@@ -6,7 +6,7 @@ function generateIdentifier(currentMedia, dj, rawData) {
     console.warn("Props Error!");
     return null;
   }
-  return `historyID-${currentMedia}:dj-${dj.id}:user-${rawData.from.id}`;
+  return `historyID-${currentMedia}:dj-${dj.id}:user-${rawData.uid}`;
 }
 
 module.exports = function Command(bot) {
@@ -18,26 +18,17 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Gives props to the current DJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const historyID = bot.plug.getHistoryID();
-      let dj = bot.plug.getDJ();
-      const timeElapsed = bot.plug.getTimeElapsed();
+      const currentMedia = bot.plug.historyEntry();
+			const dj = bot.plug.dj();
 
-      if (isNil(dj)) {
-        dj = bot.plug.getDJ();
-      }
-
-      if (timeElapsed < 10) {
-        return false;
-      }
-
-      const [inst] = await bot.db.models.users.findOrCreate({ where: { id: rawData.from.id }, defaults: { id: rawData.from.id } });
+      const [inst] = await bot.db.models.users.findOrCreate({ where: { id: rawData.uid }, defaults: { id: rawData.uid } });
 
       let propsToGiveLeft = inst.get("props_to_give");
 
       if (isNil(propsToGiveLeft)) {
         await bot.db.models.users.update(
           { props_to_give: 30, last_props_give_reset: moment() },
-          { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
+          { where: { id: rawData.uid }, defaults: { id: rawData.uid }}
         );
 
         propsToGiveLeft = 30;
@@ -48,7 +39,7 @@ module.exports = function Command(bot) {
       if (lastReset >= 24) {
         await bot.db.models.users.update(
           { props_to_give: 30, last_props_give_reset: moment() },
-          { where: { id: rawData.from.id }, defaults: { id: rawData.from.id }}
+          { where: { id: rawData.uid }, defaults: { id: rawData.uid }}
         );
 
         propsToGiveLeft = 30;
@@ -57,7 +48,7 @@ module.exports = function Command(bot) {
       if (isNil(historyID)) {
         this.reply(lang.props.nothingPlaying, {}, 6e4);
         return false;
-      } else if (isObject(dj) && dj.id === rawData.from.id) {
+      } else if (isObject(dj) && dj.id === rawData.uid) {
         this.reply(lang.props.propSelf, {}, 6e4);
         return true;
       } else if (propsToGiveLeft == 0) {
@@ -68,14 +59,14 @@ module.exports = function Command(bot) {
       await bot.db.models.props.findOrCreate({
         where: { identifier: generateIdentifier(historyID, dj, rawData) },
         defaults: {
-          id: rawData.from.id,
+          id: rawData.uid,
           dj: dj.id,
           historyID: `${historyID}`,
           identifier: generateIdentifier(historyID, dj, rawData),
         },
       });
 
-      await bot.db.models.users.decrement("props_to_give", { by: 1, where: { id: rawData.from.id } });
+      await bot.db.models.users.decrement("props_to_give", { by: 1, where: { id: rawData.uid } });
       return true;
     },
   });

@@ -2,23 +2,24 @@ const { isObject } = require("lodash");
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: bot.plug.events.VOTE,
+    name: 'vote',
     platform,
     _filename: filename,
     run: async () => {
-      const dj = bot.plug.getDJ();
+      const currentMedia = bot.plug.historyEntry();
+      const dj = bot.plug.dj();
 
       if (!isObject(dj)) return;
 
-      const mehCount   = bot.plug.getRoomScore().negative;
-      const usersCount = bot.plug.getUsers().length;
+      const mehCount   = bot.plug.score().negative;
+      const usersCount = bot.plug.users().length;
       const mehPercent = Math.round((mehCount / usersCount) * 100);
 
       if (mehPercent >= 6 && mehCount >= 3) {
         bot.global.isSkippedByMehGuard = true;
         
-        await bot.plug.sendChat(`@${dj.username} ` + bot.lang.mehSkip);
-        await bot.plug.moderateForceSkip();
+        await bot.plug.chat(`@${dj.username} ` + bot.lang.mehSkip);
+        await currentMedia.skip();
       }
     },
     init() {

@@ -1,5 +1,5 @@
 const { isObject } = require("lodash");
-const { ROOM_ROLE } = require("plugapi");
+const { ROLE } = require("miniplug");
 const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
@@ -11,20 +11,20 @@ module.exports = function Command(bot) {
     parameters: "<@username> [s|h|hour|short|l|d|day|long|f|p|perma|forever] <reason>",
     description: "Bans the specified user from using specific commands for the specified duration (hour, day or forever).",
     async execute(rawData, { args, name }, lang) {
-      if (!rawData.mentions.length || rawData.mentions.length >= 2) {
+      if (!args.length || args.join(' ').charAt(0) !== '@') {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = rawData.mentions[0];
+      const user = bot.plug.userByName(args.join(' ').substr(1));
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
-      } else if (user.id === rawData.from.id) {
+      } else if (user.id === rawData.uid) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if ((user.role >= ROOM_ROLE.BOUNCER && rawData.from.role < ROOM_ROLE.MANAGER) || user.gRole >= GLOBAL_ROLES.MODERATOR) {
+      } else if ((user.role >= ROLE.BOUNCER && await bot.utils.getRole(rawData.getUser) < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
         return false;
       }
@@ -71,7 +71,7 @@ module.exports = function Command(bot) {
         .setAuthor(user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)
       //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("By " + rawData.from.username)
+        .setFooter("By " + rawData.un)
       //.setImage("http://i.imgur.com/yVpymuV.png")
       //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()
@@ -94,7 +94,7 @@ module.exports = function Command(bot) {
         defaults: { id: user.id },
       });
       this.reply(lang.moderation.effective, {
-        mod: rawData.from.username,
+        mod: rawData.un,
         command: `!${name}`,
         user: user.username,
       }, 6e4);

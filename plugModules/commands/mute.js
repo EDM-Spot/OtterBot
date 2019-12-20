@@ -1,5 +1,5 @@
 const { isObject, isEmpty } = require("lodash");
-const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { ROLE, MUTE_DURATION, MUTE_REASON } = require("miniplug");
 const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
@@ -11,20 +11,20 @@ module.exports = function Command(bot) {
     parameters: "<@username> [15|s|short|30|m|medium|45|l|long] <reason>",
     description: "Mutes the specified user for the specified duration, or defaults to 15 minutes.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
-      if (!rawData.mentions.length || rawData.mentions.length >= 2) {
+      if (!args.length || args.join(' ').charAt(0) !== '@') {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = rawData.mentions[0];
+      const user = bot.plug.userByName(args.join(' ').substr(1));
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
-      } else if (user.id === rawData.from.id) {
+      } else if (user.id === rawData.uid) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if ((user.role >= ROOM_ROLE.BOUNCER && rawData.from.role < ROOM_ROLE.MANAGER) || user.gRole >= GLOBAL_ROLES.MODERATOR) {
+      } else if ((user.role >= ROLE.BOUNCER && await bot.utils.getRole(rawData.getUser) < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
         return false;
       }
@@ -38,20 +38,20 @@ module.exports = function Command(bot) {
         case "15":
         case "s":
         case "short":
-          apiDuration = bot.plug.MUTE.SHORT;
+          apiDuration = MUTE_DURATION.SHORT;
           break;
         case "30":
         case "m":
         case "medium":
-          apiDuration = bot.plug.MUTE.MEDIUM;
+          apiDuration = MUTE_DURATION.MEDIUM;
           break;
         case "45":
         case "l":
         case "long":
-          apiDuration = bot.plug.MUTE.LONG;
+          apiDuration = MUTE_DURATION.LONG;
           break;
         default:
-          apiDuration = bot.plug.MUTE.SHORT;
+          apiDuration = MUTE_DURATION.SHORT;
           timeSelected = false;
           break;
       }
@@ -74,7 +74,7 @@ module.exports = function Command(bot) {
         .setAuthor(user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)
         //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("By " + rawData.from.username)
+        .setFooter("By " + rawData.un)
         //.setImage("http://i.imgur.com/yVpymuV.png")
         //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()
@@ -88,27 +88,24 @@ module.exports = function Command(bot) {
       bot.channels.get("485173444330258454").send({embed});
       bot.channels.get("486637288923725824").send({embed});
       
-      if (user.role < ROOM_ROLE.BOUNCER && user.gRole < GLOBAL_ROLES.MODERATOR) {
+      if (user.role < ROLE.BOUNCER && user.gRole < ROLE.SITEMOD) {
         const { role } = user;
         
-        await bot.plug.moderateSetRole(user.id, ROOM_ROLE.NONE, async function() {
-          await bot.plug.moderateMuteUser(user.id, bot.plug.MUTE_REASON.VIOLATING_COMMUNITY_RULES, apiDuration, async function() {
-            await bot.plug.moderateSetRole(user.id, role);
-          });
-        });
+				await user.setRole(0);
+				await user.mute(apiDuration, MUTE_REASON.VIOLATING_RULES);
+        await user.setRole(role);
         
-        this.reply(lang.moderation.effective, {
-          mod: rawData.from.username,
-          command: `!${name}`,
-          user: user.username,
-        });
-        
-        return true;
-      }
+				this.reply(lang.moderation.effective, {
+					mod: rawData.un,
+					command: `!${name}`,
+					user: user.username,
+				});
+				return true;
+			}
 
-      await bot.moderateMuteUser(user.id, bot.plug.MUTE._REASON.VIOLATING_COMMUNITY_RULES, apiDuration);
+      await user.mute(apiDuration, MUTE_REASON.VIOLATING_RULES);
       this.reply(lang.moderation.effective, {
-        mod: rawData.from.username,
+        mod: rawData.un,
         command: `!${name}`,
         user: user.username,
       });
