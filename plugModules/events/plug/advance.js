@@ -1,5 +1,5 @@
 const moment = require("moment");
-const { isObject, isNil, get, map, sortBy } = require("lodash");
+const { isObject, isNil, get, map } = require("lodash");
 //const ytdl = require("ytdl-core-discord");
 //const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
 
@@ -8,14 +8,14 @@ var savedMessage;
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: 'advance',
+    name: "advance",
     platform,
     _filename: filename,
     run: async (data) => {
       if (!isObject(data) || !isObject(data.media) || !isObject(data.getUser())) return;
 
       const currentMedia = bot.plug.historyEntry();
-      var currentDJ = data.getUser();
+      var currentDJ = bot.plug.dj();
 
       bot.plug.woot();
 
@@ -203,7 +203,7 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getRoomHistory().then(async(history) => {
+        bot.plug.getRoomHistory().then(async (history) => {
           const [lastPlay] = history;
 
           // if plug reset the history or its a brand new room it won't have history
@@ -308,8 +308,6 @@ module.exports = function Event(bot, filename, platform) {
                   .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
               }
             }
-
-            console.log(currentDJ);
             
             bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
               savedMessageID = m.id;

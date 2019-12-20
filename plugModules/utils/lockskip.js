@@ -2,9 +2,9 @@ const { isObject } = require("lodash");
 
 module.exports = function Util(bot) {
   const util = {
-    name: 'lockskip',
+    name: "lockskip",
     function: user => new Promise((resolve, reject) => {
-      const shouldCycle = bot.plug.shouldCycle();
+      const shouldCycle = bot.plug.isCycling();
       const waitList = bot.plug.waitlist();
       const historyEntry = bot.plug.historyEntry();
       const dj = bot.plug.dj();
@@ -41,7 +41,7 @@ module.exports = function Util(bot) {
         run: function RunLockSkip() {
           try {
             if (!isObject(dj) || !isObject(historyEntry)) {
-              return Promise.reject(new Error('[!] No DJ or Media playing.'));
+              return Promise.reject(new Error("[!] No DJ or Media playing."));
             } else if (!waitList.length && shouldCycle) {
               return this.onlySkip();
             } else if (!shouldCycle && waitList.length < this.position) {
@@ -56,7 +56,7 @@ module.exports = function Util(bot) {
 
             return this.withoutCycle();
           } catch (err) {
-            console.error('[!] LockSkip Error');
+            console.error("[!] LockSkip Error");
             console.error(err);
             return reject(err);
           }
