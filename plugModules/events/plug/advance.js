@@ -203,10 +203,12 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        const lastPlay = previous;
+        console.log(previous);
+        const lastPlay = previous.media;
+        const lastDJ = previous.getUser();
 
         // if plug reset the history or its a brand new room it won't have history
-        if (!isObject(lastPlay.media)) return;
+        if (!isObject(lastPlay)) return;
 
         const lastSaved = await bot.db.models.plays.findAll({
           order: [["id", "DESC"]],
@@ -214,21 +216,21 @@ module.exports = function Event(bot, filename, platform) {
         });
 
         if (!isNil(lastSaved)) {
-          if (lastSaved[0].cid === lastPlay.media.cid) return;
+          if (lastSaved[0].cid === lastPlay.cid) return;
         }
 
         //const [lastPlay] = history;
 
         // reset any DC spots when they start DJing
-        await bot.redis.removeDisconnection(lastPlay.user.id);
-        await bot.redis.removeGivePosition(lastPlay.user.id);
+        await bot.redis.removeDisconnection(lastDJ.id);
+        await bot.redis.removeGivePosition(lastDJ.id);
 
         let lastSongAuthor = null;
         let lastSongTitle = null;
 
         try {
-          if (get(lastPlay.media, "format", 2) === 1) {
-            const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.media.cid);
+          if (get(lastPlay, "format", 2) === 1) {
+            const lastYouTubeMediaData = await bot.youtube.getMedia(lastPlay.cid);
 
             const { snippet } = lastYouTubeMediaData; // eslint-disable-line no-unused-vars
             const lastFullTitle = get(lastYouTubeMediaData, "snippet.title");
@@ -238,7 +240,7 @@ module.exports = function Event(bot, filename, platform) {
               lastSongTitle = lastFullTitle.split(" - ")[1].trim();
             }
           } else {
-            const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.media.cid);
+            const lastSoundCloudMediaData = await bot.soundcloud.getTrack(lastPlay.cid);
 
             if (!isNil(lastSoundCloudMediaData)) {
               const lastFullTitle = lastSoundCloudMediaData.title;
@@ -250,16 +252,16 @@ module.exports = function Event(bot, filename, platform) {
             }
           }
         } catch (err) {
-          lastSongAuthor = lastPlay.media.author;
-          lastSongTitle = lastPlay.media.title;
+          lastSongAuthor = lastPlay.author;
+          lastSongTitle = lastPlay.title;
         }
 
         if (isNil(lastSongAuthor) || isNil(lastSongTitle)) {
-          lastSongAuthor = lastPlay.media.author;
-          lastSongTitle = lastPlay.media.title;
+          lastSongAuthor = lastPlay.author;
+          lastSongTitle = lastPlay.title;
         }
 
-        let lastPlaySkipped = lastPlay.score.skipped;
+        let lastPlaySkipped = previous.score.skipped;
 
         if (bot.global.isSkippedByTimeGuard) {
           lastPlaySkipped = false;
@@ -272,12 +274,12 @@ module.exports = function Event(bot, filename, platform) {
 
         // keep track of played media in the room
         await bot.db.models.plays.create({
-          cid: lastPlay.media.cid,
-          format: lastPlay.media.format,
-          woots: lastPlay.score.positive,
-          grabs: lastPlay.score.grabs,
-          mehs: lastPlay.score.negative,
-          dj: lastPlay.user.id,
+          cid: lastPlay.cid,
+          format: lastPlay.format,
+          woots: previous.score.positive,
+          grabs: previous.score.grabs,
+          mehs: previous.score.negative,
+          dj: lastDJ.id,
           skipped: lastPlaySkipped > 0,
           author: `${lastSongAuthor}`,
           title: `${lastSongTitle}`,
@@ -285,17 +287,17 @@ module.exports = function Event(bot, filename, platform) {
 
         // count how many props were given while that media played
         const props = await bot.db.models.props.count({
-          where: { historyID: `${lastPlay.id}`, dj: lastPlay.user.id },
+          where: { historyID: `${previous.id}`, dj: lastDJ.id },
         });
 
         // get an user object for the last DJ
         const [instance] = await bot.db.models.users.findOrCreate({
-          where: { id: lastPlay.user.id }, defaults: { id: lastPlay.user.id, username: lastPlay.user.username },
+          where: { id: lastDJ.id }, defaults: { id: lastDJ.id, username: lastDJ.username },
         });
 
-        const woots = lastPlay.score.positive;
-        const grabs = lastPlay.score.grabs;
-        const mehs = lastPlay.score.negative;
+        const woots = previous.score.positive;
+        const grabs = previous.score.grabs;
+        const mehs = previous.score.negative;
 
         try {
           if (!isNil(savedMessageID)) {
@@ -370,7 +372,7 @@ module.exports = function Event(bot, filename, platform) {
 
             await bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
               props,
-              user: lastPlay.user.username,
+              user: lastDJ.username,
               plural: props > 1 ? "s" : "",
             }));
           }
