@@ -10,7 +10,7 @@ module.exports = function Util(bot) {
       this.players = [];
     }
     async autoStart() {
-      const waitlist = bot.plug.getWaitList();
+      const waitlist = bot.plug.waitlist();
       const day = moment().isoWeekday();
       const isWeekend = (day === 6) || (day === 7);
 

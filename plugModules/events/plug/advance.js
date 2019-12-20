@@ -12,12 +12,14 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async (next) => {
-      if (!isObject(next) || !isObject(next.media) || !isObject(next.getUser())) return;
+      if (!isObject(next) || !isObject(next.media) || !isObject(next.user)) return;
 
       var currentPlay = next.media;
-      var currentDJ = next.getUser();
+      var currentDJ = next.user;
 
-      console.log(currentPlay);
+      if (isNil(currentDJ.id) || isNil(currentDJ.username)) {
+        currentDJ = next.getUser();
+      }
 
       bot.plug.woot();
 
@@ -211,8 +213,6 @@ module.exports = function Event(bot, filename, platform) {
 
         const [history] = previous;
 
-        console.log(history);
-
         const lastPlay = history.media;
         const lastDJ = history.user;
 
@@ -391,7 +391,6 @@ module.exports = function Event(bot, filename, platform) {
         bot.global.ignoreHistoryNext = false;
         //await bot.utils.updateRDJ(lastPlay.user.id);
       } catch (err) {
-        console.log("//////////////////////////////////////////////////ADVANCE PREVIOUS");
         console.warn(err);
       }
     },
