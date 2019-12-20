@@ -204,9 +204,9 @@ module.exports = function Event(bot, filename, platform) {
         // get history for the latest play
 
         await bot.plug.getRoomHistory().then(async (history) => {
-          console.log(history);
-          const lastPlay = history.media;
-          const lastDJ = history.getUser();
+          console.log([history]);
+          const lastPlay = [history].media;
+          const lastDJ = [history].getUser();
 
           // if plug reset the history or its a brand new room it won't have history
           if (!isObject(lastPlay)) return;
