@@ -203,10 +203,13 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        bot.plug.getRoomHistory().then(async (history) => {
-          console.log([history]);
-          const lastPlay = [history].media;
-          const lastDJ = [history].getUser();
+        bot.plug.getRoomHistory().then(async (previous) => {
+          const [history] = previous;
+
+          console.log(history);
+
+          const lastPlay = history.media;
+          const lastDJ = history.getUser();
 
           // if plug reset the history or its a brand new room it won't have history
           if (!isObject(lastPlay)) return;
