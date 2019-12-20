@@ -45,7 +45,7 @@ module.exports = function Command(bot) {
           return true;
         }
         case "reset": {
-          const user = bot.plug.getUser(rawData.uid);
+          const user = await bot.plug.getUser(rawData.uid);
 
           if (!isObject(user) || await bot.utils.getRole(user) <= ROLE.MANAGER) return false;
 

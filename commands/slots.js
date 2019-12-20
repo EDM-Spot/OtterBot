@@ -56,7 +56,7 @@ class Slots extends Command {
         return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
       }
 
-      const user = this.client.plug.getUser(userDB.get("id"));
+      const user = await this.client.plug.getUser(userDB.get("id"));
 
       const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
 
@@ -148,7 +148,7 @@ class Slots extends Command {
         const dj = this.client.plug.dj();
         const userPos = this.client.plug.waitlist().positionOf(userDB.get("id"));
 
-        if (!user || typeof user.username !== "string" || !user.username.length) {
+        if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
           message.reply("You're not online on plug! Can't Move.");
         } else if (isObject(dj) && dj.id !== user.id) {
           if (moveTo3 && userPos >= 4) {

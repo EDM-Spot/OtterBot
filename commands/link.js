@@ -43,7 +43,7 @@ class Link extends Command {
         { where: { id: args[0] }, defaults: { id: args[0] }}
       );
 
-      const userPlug = this.client.plug.getUser(args[0]);
+      const userPlug = await this.client.plug.getUser(args[0]);
 
       if (!isNil(userPlug)) {
         if (userPlug.role === ROLE.DJ) {

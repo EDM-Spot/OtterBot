@@ -37,7 +37,7 @@ module.exports = function Command(bot) {
         const winner = players[Math.floor(Math.random() * players.length)];
         const user = bot.plug.getUser(winner);
 
-        if (!user || typeof user.username !== "string" || !user.username.length) {
+        if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
           //await bot.plug.sendChat("User Offline! Picking up someone else...");
           const userBD = await bot.db.models.users.findOne({
             where: {

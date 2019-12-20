@@ -1,4 +1,4 @@
-const { each } = require("lodash");
+const { each, isObject } = require("lodash");
 const moment = require("moment");
 require("moment-timer");
 const momentRandom = require("moment-random");
@@ -65,7 +65,7 @@ module.exports = function Util(bot) {
       if (bot.plug.waitlist().length <= 10) return;
 
       const winner = players[Math.floor(Math.random() * players.length)];
-      const user = bot.plug.getUser(winner);
+      const user = await bot.plug.getUser(winner);
       const userPos = bot.plug.waitlist().positionOf(user.id);
 
       if (!players.length) {
@@ -78,7 +78,7 @@ module.exports = function Util(bot) {
 
       const position = 5;
 
-      if (!user || typeof user.username !== "string" || !user.username.length || (userPos >= 0 && userPos <= 5)) {
+      if (!isObject(user) || typeof user.username !== "string" || !user.username.length || (userPos >= 0 && userPos <= 5)) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
@@ -116,9 +116,9 @@ module.exports = function Util(bot) {
 
       const alteredOdds = [];
 
-      each(this.players, (player) => {
-        if (bot.plug.getUser(player)) {
-          if (bot.plug.waitlist().positionOf(player) === -1 || bot.plug.getUser(player).role >= ROLE.BOUNCER) {
+      each(this.players, async (player) => {
+        if (await bot.plug.getUser(player)) {
+          if (bot.plug.waitlist().positionOf(player) === -1 || await bot.plug.getUser(player).role >= ROLE.BOUNCER) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
             if (bot.plug.waitlist().positionOf(player) > 5) {

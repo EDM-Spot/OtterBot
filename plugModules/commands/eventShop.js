@@ -108,7 +108,7 @@ module.exports = function Command(bot) {
 
         await eventUser.decrement("currency", { by: 200 });
 
-        const user = bot.plug.getUser(id);
+        const user = await bot.plug.getUser(id);
         const position = bot.plug.getWaitListPosition(id);
 
         if (position >= 5) {

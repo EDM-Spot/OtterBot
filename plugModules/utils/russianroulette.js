@@ -1,3 +1,4 @@
+const { isObject } = require("lodash");
 const { ROLE, MUTE_DURATION, MUTE_REASON } = require("miniplug");
 
 module.exports = function Util(bot) {
@@ -48,7 +49,7 @@ module.exports = function Util(bot) {
       this.running = false;
 
       const victim = players[Math.floor(Math.random() * players.length)];
-      const user = bot.plug.getUser(victim);
+      const user = await bot.plug.getUser(victim);
       const waitlist = bot.plug.waitlist();
 
       if (!players.length) {
@@ -57,7 +58,7 @@ module.exports = function Util(bot) {
         return;
       }
 
-      if (!user || typeof user.username !== "string" || !user.username.length) {
+      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
         await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.chicken, {
           user: victim,
         }));

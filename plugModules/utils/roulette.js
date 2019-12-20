@@ -1,4 +1,4 @@
-const { each } = require("lodash");
+const { each, isObject } = require("lodash");
 const moment = require("moment");
 
 module.exports = function Util(bot) {
@@ -109,7 +109,7 @@ module.exports = function Util(bot) {
     }
     async winner(players) {
       const winner = players[Math.floor(Math.random() * players.length)];
-      const user = bot.plug.getUser(winner);
+      const user = await bot.plug.getUser(winner);
       const waitlist = bot.plug.waitlist();
 
       if (!players.length && this.end()) {
@@ -119,7 +119,7 @@ module.exports = function Util(bot) {
 
       const position = this.constructor.position(waitlist.positionOf(winner), waitlist.length);
 
-      if (!user || typeof user.username !== "string" || !user.username.length) {
+      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
@@ -156,8 +156,8 @@ module.exports = function Util(bot) {
       const alteredOdds = [];
       const waitlist = bot.plug.waitlist();
 
-      each(this.players, (player) => {
-        if (bot.plug.getUser(player)) {
+      each(this.players, async (player) => {
+        if (await bot.plug.getUser(player)) {
           if (waitlist.positionOf(player) === -1) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {

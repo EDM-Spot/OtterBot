@@ -2,7 +2,7 @@ const { isObject } = require("lodash");
 
 module.exports = function Util(bot) {
   const util = {
-    name: 'getRole',
+    name: "getRole",
     function: async (user) => {
       if (!isObject(user)) return 0;
 

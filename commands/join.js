@@ -37,11 +37,11 @@ class Join extends Command {
 
       const userID = userDB.get("discord");
 
-      const user = this.client.plug.getUser(userDB.get("id"));
+      const user = await this.client.plug.getUser(userDB.get("id"));
 
       const dj = this.client.plug.dj();
 
-      if (!user || typeof user.username !== "string" || !user.username.length) {
+      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
         return message.reply("You're not online on plug!");
       }
 

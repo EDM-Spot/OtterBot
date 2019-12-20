@@ -15,8 +15,8 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const byUser = bot.plug.getUser(parseInt(byID));
-      const toUser = bot.plug.getUser(rawData.uid);
+      const byUser = await bot.plug.getUser(parseInt(byID));
+      const toUser = await bot.plug.getUser(rawData.uid);
 
       if (isNil(byUser) || isNil(toUser)) {
         return false;
