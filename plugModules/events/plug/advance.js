@@ -209,7 +209,7 @@ module.exports = function Event(bot, filename, platform) {
           console.log(history);
 
           const lastPlay = history.media;
-          const lastDJ = history.getUser();
+          const lastDJ = history.user;
 
           // if plug reset the history or its a brand new room it won't have history
           if (!isObject(lastPlay)) return;
