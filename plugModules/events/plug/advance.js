@@ -203,7 +203,7 @@ module.exports = function Event(bot, filename, platform) {
       try {
         // get history for the latest play
 
-        const [lastPlay] = previous;
+        const lastPlay = previous;
 
         // if plug reset the history or its a brand new room it won't have history
         if (!isObject(lastPlay.media)) return;
@@ -372,7 +372,7 @@ module.exports = function Event(bot, filename, platform) {
               props,
               user: lastPlay.user.username,
               plural: props > 1 ? "s" : "",
-            })).delay(currentPlay.duration * 1e3).call("delete");
+            }));
           }
         }
 
