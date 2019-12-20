@@ -117,7 +117,7 @@ module.exports = function Util(bot) {
           const userPoints = points + tolerance;
 
           if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
-            await user.setRole(0);
+            await bot.plug.setRole(id, 1000);
 
             if (!isNil(userDB.get("discord"))) {
               await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
@@ -131,7 +131,7 @@ module.exports = function Util(bot) {
           const joined = moment().diff(userDB.get("createdAt"), "months");
 
           if ((points >= 100 && joined >= 1 && playscount >= 150) || (points >= 50 && joined >= 1 && playscount >= 250)) {
-            await user.setRole(ROLE.DJ);
+            await bot.plug.setRole(id, 1000);
 
             if (!isNil(userDB.get("discord"))) {
               await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
