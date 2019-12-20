@@ -24,15 +24,15 @@ module.exports = function Command(bot) {
         let songTitle = null;
 
         try {
-          if (get(currentMedia, "format", 2) === 1) {
-            const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.cid);
+          if (get(currentMedia.media, "format", 2) === 1) {
+            const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.media.cid);
 
             const fullTitle = get(YouTubeMediaData, "snippet.title");
 
             songAuthor = fullTitle.split(" - ")[0].trim();
             songTitle = fullTitle.split(" - ")[1].trim();
           } else {
-            const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.cid);
+            const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.media.cid);
 
             if (!isNil(SoundCloudMediaData)) {
               const fullTitle = SoundCloudMediaData.title;
@@ -43,16 +43,16 @@ module.exports = function Command(bot) {
           }
         }
         catch (err) {
-          songAuthor = currentMedia.author;
-          songTitle = currentMedia.title;
+          songAuthor = currentMedia.media.author;
+          songTitle = currentMedia.media.title;
         }
 
         if (isNil(songAuthor) || isNil(songTitle)) {
-          songAuthor = currentMedia.author;
-          songTitle = currentMedia.title;
+          songAuthor = currentMedia.media.author;
+          songTitle = currentMedia.media.title;
         }
 
-        const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, currentMedia.cid);
+        const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, currentMedia.media.cid);
 
         if (isNil(songHistory)) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.current }, 6e4);

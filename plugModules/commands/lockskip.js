@@ -11,11 +11,11 @@ module.exports = function Command(bot) {
     description: "Executes a lockskip, which skips the current DJ and moves them back to the 3rd position to have another try.",
     async execute(rawData, { name }, lang) {
       const dj = bot.plug.dj();
-			const currentMedia = bot.plug.historyEntry();
+      const currentMedia = bot.plug.historyEntry();
 
       const embed = new Discord.RichEmbed()
       //.setTitle("Title")
-        .setAuthor(currentMedia.author + " - " + currentMedia.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
+        .setAuthor(currentMedia.media.author + " - " + currentMedia.media.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
         .setColor(0xFF00FF)
       //.setDescription("This is the main body of text, it can hold 2048 characters.")
         .setFooter("By " + rawData.un)
@@ -25,7 +25,7 @@ module.exports = function Command(bot) {
       //.addField("This is a field title, it can hold 256 characters")
         .addField("ID", dj.id, true)
         .addField("User ", dj.username, true)
-        .addField("Lock Skipped", " (youtube.com/watch?v=" + currentMedia.cid + ")", false);
+        .addField("Lock Skipped", " (youtube.com/watch?v=" + currentMedia.media.cid + ")", false);
       //.addBlankField(true);
 
       bot.channels.get("486637288923725824").send({embed});

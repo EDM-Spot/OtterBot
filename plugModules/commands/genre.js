@@ -11,7 +11,7 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const currentMedia = bot.plug.historyEntry();
 
-      const genres = await bot.api.getGenre(currentMedia);
+      const genres = await bot.api.getGenre(currentMedia.media);
 
       if (isNil(genres)) return false;
 
