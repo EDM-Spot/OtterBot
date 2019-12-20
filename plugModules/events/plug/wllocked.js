@@ -8,8 +8,6 @@ module.exports = function Event(bot, filename, platform) {
     _filename: filename,
     run: async (update) => {
       if (!isObject(update)) return;
-      console.log(update.user.id);
-      console.log(update.moderator.id);
 
       if (update.user.id === bot.plug.me().id) return;
 
