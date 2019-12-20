@@ -165,16 +165,16 @@
       "sendLink": "You can check it here https://polsy.org.uk/stuff/ytrestrict.cgi?ytid="
     },
     "cookie": [
-      "@%%RECEIVER%%, %%SENDER%% baked you a simple cookie.",
-      "@%%RECEIVER%%, %%SENDER%% baked you a chocolate chip cookie.",
-      "@%%RECEIVER%%, %%SENDER%% hands you a sugar cookie.",
-      "@%%RECEIVER%%, %%SENDER%% baked you a peanut butter cookie.",
-      "@%%RECEIVER%%, %%SENDER%% hands you a heart shaped cookie.",
-      "@%%RECEIVER%%, %%SENDER%% throws you an oreo.",
-      "@%%RECEIVER%%, %%SENDER%% baked you a dozen vanilla cookies.",
-      "@%%RECEIVER%%, %%SENDER%% gifted you a strawberry flavored cookie.",
-      "@%%RECEIVER%%, %%SENDER%% hands you an apple flavored cookie.",
-      "@%%RECEIVER%%, %%SENDER%% baked you a honey flavored cookie."
+      "%%RECEIVER%%, %%SENDER%% baked you a simple cookie.",
+      "%%RECEIVER%%, %%SENDER%% baked you a chocolate chip cookie.",
+      "%%RECEIVER%%, %%SENDER%% hands you a sugar cookie.",
+      "%%RECEIVER%%, %%SENDER%% baked you a peanut butter cookie.",
+      "%%RECEIVER%%, %%SENDER%% hands you a heart shaped cookie.",
+      "%%RECEIVER%%, %%SENDER%% throws you an oreo.",
+      "%%RECEIVER%%, %%SENDER%% baked you a dozen vanilla cookies.",
+      "%%RECEIVER%%, %%SENDER%% gifted you a strawberry flavored cookie.",
+      "%%RECEIVER%%, %%SENDER%% hands you an apple flavored cookie.",
+      "%%RECEIVER%%, %%SENDER%% baked you a honey flavored cookie."
     ],
     "plays": {
       "current": "current",

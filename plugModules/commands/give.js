@@ -27,7 +27,7 @@ module.exports = function Command(bot) {
       const userPosition = bot.plug.waitlist().positionOf(rawData.uid);
       const toUserPosition = bot.plug.waitlist().positionOf(user.id);
 
-      if (userPosition < 1 || toUserPosition < 1) {
+      if (userPosition < 0 || toUserPosition < 0) {
         this.reply(lang.give.notInList, {}, 6e4);
         return false;
       }
