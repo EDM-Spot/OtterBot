@@ -6,10 +6,10 @@ module.exports = function Event(bot, filename, platform) {
     name: "modSkip",
     platform,
     _filename: filename,
-    run: async (data) => {
-      if (!isObject(data)) return;
+    run: async (moderator) => {
+      if (!isObject(moderator)) return;
 
-      if (data.user.id === bot.plug.me().id) return;
+      if (moderator.id === bot.plug.me().id) return;
 
       bot.plug.getRoomHistory().then(async (history) => {
         var skippedSong = history;
@@ -21,7 +21,7 @@ module.exports = function Event(bot, filename, platform) {
           .setAuthor(skippedSong.user.username, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
           .setColor(0xFF00FF)
           //.setDescription("This is the main body of text, it can hold 2048 characters.")
-          .setFooter("By " + data.user.username)
+          .setFooter("By " + moderator.username)
           //.setImage("http://i.imgur.com/yVpymuV.png")
           //.setThumbnail("http://i.imgur.com/p2qNFag.png")
           .setTimestamp()
