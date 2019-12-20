@@ -379,7 +379,7 @@ module.exports = function Event(bot, filename, platform) {
 
           skipped = false;
           bot.global.ignoreHistoryNext = false;
-          await bot.utils.updateRDJ(lastPlay.user.id);
+          //await bot.utils.updateRDJ(lastPlay.user.id);
         });
       } catch (err) {
         console.warn(err);
