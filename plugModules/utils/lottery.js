@@ -118,10 +118,10 @@ module.exports = function Util(bot) {
 
       each(this.players, (player) => {
         if (bot.plug.getUser(player)) {
-          if (bot.plug.waitlist.positionOf(player) === -1 || bot.plug.getUser(player).role >= ROLE.BOUNCER) {
+          if (bot.plug.waitlist().positionOf(player) === -1 || bot.plug.getUser(player).role >= ROLE.BOUNCER) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
-            if (bot.plug.waitlist.positionOf(player) > 5) {
+            if (bot.plug.waitlist().positionOf(player) > 5) {
               alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
             }
           }

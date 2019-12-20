@@ -146,7 +146,7 @@ class Slots extends Command {
 
       if (moveTo3 || moveDown5 || moveDown2) {
         const dj = this.client.plug.dj();
-        const userPos = this.client.plug.waitlist.positionOf(userDB.get("id"));
+        const userPos = this.client.plug.waitlist().positionOf(userDB.get("id"));
 
         if (!user || typeof user.username !== "string" || !user.username.length) {
           message.reply("You're not online on plug! Can't Move.");

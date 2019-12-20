@@ -154,6 +154,7 @@ module.exports = function Util(bot) {
       this.running = false;
 
       const alteredOdds = [];
+      const waitlist = bot.plug.waitlist();
 
       each(this.players, (player) => {
         if (bot.plug.getUser(player)) {

@@ -29,10 +29,10 @@ module.exports = function Event(bot, platform) {
 
       const waitlist = bot.plug.waitlist();
       
-      if (waitlist.length <= position && !waitlist.contains(user.id)) {
+      if (waitlist.length <= position && !waitlist.contains(data.id)) {
         await bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.waitlistSmaller);
         bot.queue.add(data, waitlist.length);
-      } else if (waitlist.contains(user.id) && waitlist.positionOf(user.id) <= position) {
+      } else if (waitlist.contains(data.id) && waitlist.positionOf(data.id) <= position) {
         await bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.sameOrLower);
       } else {
         bot.queue.add(data, position);

@@ -8,10 +8,10 @@ module.exports = function Command(bot) {
     cooldownDuration: 240,
     parameters: "<Text>",
     description: "Random Gif.",
-    async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      if (!rawData.args.length) return;
+    async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
+      if (!args.length) return;
 
-      const text = rawData.args.join(" ");
+      const text = args.join(" ");
 
       const gif = await bot.api.getGiphy(text);
       var randomNumb = Math.floor(Math.random() * 10) + 0;
