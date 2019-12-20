@@ -129,7 +129,7 @@ module.exports = function Command(bot) {
                 which: lang.plays.specified,
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
-              if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
+              if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
               return true;
             }
@@ -139,7 +139,7 @@ module.exports = function Command(bot) {
               time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               count: playsCount,
             }, 6e4);
-            if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
+            if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
             return true;
           } else {
@@ -149,7 +149,7 @@ module.exports = function Command(bot) {
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }, 6e4);
-              if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
+              if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
               return true;
             }
@@ -192,7 +192,7 @@ module.exports = function Command(bot) {
                     which: lang.plays.specified,
                     time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   }, 6e4);
-                  if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
+                  if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
                   return true;
                 }
@@ -202,7 +202,7 @@ module.exports = function Command(bot) {
                   time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   count: playsCount,
                 }, 6e4);
-                if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
+                if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
                 return true;
               } else {
@@ -212,7 +212,7 @@ module.exports = function Command(bot) {
                     cid: map(songHistory, "cid")[0],
                     time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   }, 6e4);
-                  if (isOverplayed) { await bot.plug.chat("Song Is Overplayed!"); }
+                  if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
                   return true;
                 }

@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     async execute() {
       bot.global.ignoreHistoryNext = true;
 
-      await bot.plug.chat("History check will be disabled next song.");
+      bot.plug.chat("History check will be disabled next song.");
       return true;
     },
   });

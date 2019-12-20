@@ -11,7 +11,7 @@ module.exports = function Event(bot, filename, platform) {
       await bot.wait(2000);
 
       await bot.plug.join(bot.config.plug.room);
-      await bot.plug.chat(bot.lang.startup);
+      bot.plug.chat(bot.lang.startup);
 
       const user = bot.plug.users();
       for (var i = 0; i < user.lenght; i++) {

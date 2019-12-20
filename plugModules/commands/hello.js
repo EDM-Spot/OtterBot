@@ -10,12 +10,12 @@ module.exports = function Command(bot) {
       const lucky = !Math.floor(Math.random() * 50);
 
       if (lucky) {
-        await rawData.reply('hello...').delay(4500);
-        await bot.plug.chat('... it\'s me...');
+        rawData.reply('hello...').delay(4500);
+        bot.plug.chat('... it\'s me...');
         return true;
       }
 
-      await bot.plug.chat(`Hi There, @${rawData.un}`);
+      bot.plug.chat(`Hi There, @${rawData.un}`);
       return true;
     },
   });

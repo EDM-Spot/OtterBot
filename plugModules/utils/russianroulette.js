@@ -53,13 +53,13 @@ module.exports = function Util(bot) {
       const waitlist = bot.plug.waitlist();
 
       if (!players.length) {
-        await bot.plug.chat(bot.lang.russianroulette.countOver);
+        bot.plug.chat(bot.lang.russianroulette.countOver);
         this.end();
         return;
       }
 
       if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
-        await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.chicken, {
+        bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.chicken, {
           user: victim,
         }));
 
@@ -69,7 +69,7 @@ module.exports = function Util(bot) {
       }
 
       await bot.wait(3000);
-      await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.shot, {
+      bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.shot, {
         user: user.username,
       }));
       await bot.wait(5000);
@@ -80,7 +80,7 @@ module.exports = function Util(bot) {
       const unluckyshot = Math.floor(Math.random() * (waitlist.length - waitlist.positionOf(victim)) + waitlist.positionOf(victim) + 1);
 
       if (randomBool) {
-        await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
+        bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
 
@@ -94,7 +94,7 @@ module.exports = function Util(bot) {
         bot.queue.add(user, luckyshot);
       }
       else {
-        await bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
+        bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
           user: user.username,
         }));
 

@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     async execute(rawData) { // eslint-disable-line no-unused-vars
       const me = bot.plug.me();
 
-      await bot.plug.chat(`I have ${me.pp} PP.`);
+      bot.plug.chat(`I have ${me.pp} PP.`);
       return true;
     },
   });

@@ -118,16 +118,16 @@ module.exports = function Command(bot) {
           
           //if (isWeekend) {
           if (isWeekend  && !isDecember) {
-            await bot.plug.chat(bot.utils.replace(lang.roulette.startingWeekend, {}), duration * 1e3);
+            bot.plug.chat(bot.utils.replace(lang.roulette.startingWeekend, {}), duration * 1e3);
           }
 
           if (isDecember) {
-            await bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {})).delay(duration * 1e3).call("delete");
+            bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {})).delay(duration * 1e3).call("delete");
           }
 
-          await bot.plug.chat(bot.utils.replace(lang.roulette.starting, {})).delay(duration * 1e3).call("delete");
+          bot.plug.chat(bot.utils.replace(lang.roulette.starting, {})).delay(duration * 1e3).call("delete");
 
-          await bot.plug.chat(bot.utils.replace(lang.roulette.info, {
+          bot.plug.chat(bot.utils.replace(lang.roulette.info, {
             duration,
             price: price === 0 ? lang.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
           })).delay(duration * 1e3).call("delete");

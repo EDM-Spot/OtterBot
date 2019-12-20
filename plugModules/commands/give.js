@@ -9,12 +9,13 @@ module.exports = function Command(bot) {
     parameters: "<@username>",
     description: "Gives your positions in the waitlist.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
-      if (!args.length || args.join(' ').charAt(0) !== '@') {
+      console.log(args);
+      if (!args.length || args.join(" ").charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(' ').substr(1));
+      const user = bot.plug.userByName(args.join(" ").substr(1));
 
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);

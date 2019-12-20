@@ -152,15 +152,15 @@ class Slots extends Command {
           message.reply("You're not online on plug! Can't Move.");
         } else if (isObject(dj) && dj.id !== user.id) {
           if (moveTo3 && userPos >= 4) {
-            await this.client.plug.chat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
+            this.client.plug.chat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
 
             this.client.queue.add(user, 3);
           } else if (moveDown5 && userPos >= 6) {
-            await this.client.plug.chat("@" + user.username + " Won 5 Spots in the Slot Machine! Moving Down 5...");
+            this.client.plug.chat("@" + user.username + " Won 5 Spots in the Slot Machine! Moving Down 5...");
 
             this.client.queue.add(user, userPos - 5);
           } else if (moveDown2 && userPos >= 3) {
-            await this.client.plug.chat("@" + user.username + " Won 2 Spots in the Slot Machine! Moving Down 2...");
+            this.client.plug.chat("@" + user.username + " Won 2 Spots in the Slot Machine! Moving Down 2...");
 
             this.client.queue.add(user, userPos - 2);
           }

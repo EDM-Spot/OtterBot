@@ -85,7 +85,7 @@ module.exports = function Util(bot) {
 
       await bot.redis.removeGivePosition(bot.plug.me().id, user.id);
 
-      await bot.plug.chat(bot.utils.replace(bot.lang.lotteryWinner, {
+      bot.plug.chat(bot.utils.replace(bot.lang.lotteryWinner, {
         winner: user.username,
         position: position,
       }));
@@ -94,7 +94,7 @@ module.exports = function Util(bot) {
       await bot.redis.registerGivePosition(bot.plug.me().id, user.id, position);
 
       this.giveTimer = moment.duration(3, "minutes").timer({loop: false, start: true}, async () => {
-        await bot.plug.chat(bot.lang.notAccepted);
+        bot.plug.chat(bot.lang.notAccepted);
         bot.redis.removeGivePosition(bot.plug.me().id, user.id);
         this.winner(players.filter(player => player !== winner));
       }, (120000));

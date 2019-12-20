@@ -123,7 +123,7 @@ module.exports = function Util(bot) {
               await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
             }
 
-            await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
+            bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
               user: user.username
             }));
           }
@@ -137,7 +137,7 @@ module.exports = function Util(bot) {
               await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
             }
 
-            await bot.plug.chat(bot.utils.replace(bot.lang.rdjPromoted, {
+            bot.plug.chat(bot.utils.replace(bot.lang.rdjPromoted, {
               user: user.username
             }));
           }

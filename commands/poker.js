@@ -66,13 +66,13 @@ class Poker extends Command {
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          await this.client.plug.chat("Discord Texas Hold'em Poker will start in 1 minute in channel #" + message.channel.name + "!");
-          await this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
+          this.client.plug.chat("Discord Texas Hold'em Poker will start in 1 minute in channel #" + message.channel.name + "!");
+          this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
           this.client.pokerUtil.running = true;
 
           //new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-            //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
           //});
 
           new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {

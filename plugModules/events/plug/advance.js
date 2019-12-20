@@ -40,7 +40,7 @@ module.exports = function Event(bot, filename, platform) {
           const embeddable = get(YouTubeMediaData, "status.embeddable");
     
           if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
-            await bot.plug.chat(bot.utils.replace(bot.check.mediaUnavailable, { which: "current" }));
+            bot.plug.chat(bot.utils.replace(bot.check.mediaUnavailable, { which: "current" }));
           }
 
           if ((fullTitle.match(/-/g) || []).length === 1) {
@@ -87,13 +87,13 @@ module.exports = function Event(bot, filename, platform) {
         var pattern = new RegExp("\\b" + blackword[i] + "\\b");
 
         if (pattern.test(songAuthor.toLowerCase()) || pattern.test(songTitle.toLowerCase())) {
-          //await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
+          //bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
           if (!skipped) {
-            await bot.plug.chat("!bl");
+            bot.plug.chat("!bl");
 
             if (blackword[i] == "gemido" || blackword[i] == "gemidão" || blackword[i] == "rape") {
-              await bot.plug.chat(`!ban @${currentDJ.username} p Playing Ear Rape`);
+              bot.plug.chat(`!ban @${currentDJ.username} p Playing Ear Rape`);
             }
 
             skipped = true;
@@ -105,7 +105,7 @@ module.exports = function Event(bot, filename, platform) {
 
       if (isObject(blacklisted)) {
         if (!skipped) {
-          await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
+          bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
           await next.skip();
           skipped = true;
@@ -116,7 +116,7 @@ module.exports = function Event(bot, filename, platform) {
 
       if (isOverplayed) {
         if (!skipped) {
-          await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.overplayed);
+          bot.plug.chat(`@${currentDJ.username} ` + bot.lang.overplayed);
 
           await next.skip();
           skipped = true;
@@ -132,10 +132,10 @@ module.exports = function Event(bot, filename, platform) {
 
         if (currentPlay.duration <= 600 && props >= propsToPay) {
           await user.decrement("props", { by: propsToPay });
-          await bot.plug.chat(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
+          bot.plug.chat(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
         } else {
           if (!skipped) {
-            await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
+            bot.plug.chat(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
             
             await bot.utils.lockskip(currentDJ);
             skipped = true;
@@ -150,7 +150,7 @@ module.exports = function Event(bot, filename, platform) {
           if (songHistory.skip) {
             if (!songHistory.maybe) {
               if (!skipped) {
-                await bot.plug.chat(bot.utils.replace(bot.lang.historySkip, {
+                bot.plug.chat(bot.utils.replace(bot.lang.historySkip, {
                   time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                 }));
                 
@@ -158,7 +158,7 @@ module.exports = function Event(bot, filename, platform) {
                 skipped = true;
               }
             } else {
-              await bot.plug.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {
+              bot.plug.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }));
@@ -194,7 +194,7 @@ module.exports = function Event(bot, filename, platform) {
 
         if (savedID === get(timeoutMedia, "id")) {
           if (!skipped) {
-            await bot.plug.chat(bot.lang.stuckSkip);
+            bot.plug.chat(bot.lang.stuckSkip);
 
             bot.global.isSkippedByTimeGuard = true;
             
@@ -379,7 +379,7 @@ module.exports = function Event(bot, filename, platform) {
             // otherwise, give them the props
             await instance.increment("props", { by: props });
 
-            await bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
+            bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
               props,
               user: lastDJ.username,
               plural: props > 1 ? "s" : "",

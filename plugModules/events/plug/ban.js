@@ -41,7 +41,7 @@ module.exports = function Event(bot, platform) {
 
       await bot.redis.removeDisconnection(userID);
 
-      await bot.plug.chat(":banhammer:");
+      bot.plug.chat(":banhammer:");
       await bot.utils.updateRDJ(userID);
     },
     init() {

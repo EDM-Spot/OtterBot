@@ -18,7 +18,7 @@ module.exports = function Event(bot, filename, platform) {
       if (mehPercent >= 6 && mehCount >= 3) {
         bot.global.isSkippedByMehGuard = true;
         
-        await bot.plug.chat(`@${dj.username} ` + bot.lang.mehSkip);
+        bot.plug.chat(`@${dj.username} ` + bot.lang.mehSkip);
         await currentMedia.skip();
       }
     },

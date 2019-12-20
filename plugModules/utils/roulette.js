@@ -38,12 +38,12 @@ module.exports = function Util(bot) {
       await this.start(duration, price);
 
       if (isWeekend) {
-        await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
+        bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
       }
 
-      await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {})).delay(duration * 1e3).call("delete");
+      bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {})).delay(duration * 1e3).call("delete");
 
-      await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.info, {
+      bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.info, {
         duration,
         price: price === 0 ? bot.lang.commands.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
       })).delay(duration * 1e3).call("delete");
@@ -113,7 +113,7 @@ module.exports = function Util(bot) {
       const waitlist = bot.plug.waitlist();
 
       if (!players.length && this.end()) {
-        await bot.plug.chat(bot.lang.roulette.somethingwrong);
+        bot.plug.chat(bot.lang.roulette.somethingwrong);
         return;
       }
 
@@ -139,7 +139,7 @@ module.exports = function Util(bot) {
         //await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
       }
 
-      await bot.plug.chat(bot.utils.replace(bot.lang.roulette.winner, {
+      bot.plug.chat(bot.utils.replace(bot.lang.roulette.winner, {
         winner: user.username,
         position: position,
       }));

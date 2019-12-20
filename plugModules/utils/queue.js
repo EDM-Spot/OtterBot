@@ -74,10 +74,10 @@ module.exports = function Util(bot) {
           if (get(err, "response.body.status")) {
             switch (get(err, "response.body.status")) {
               case "noValidPlaylist":
-                await bot.plug.chat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist).delay(6e4).call("delete");
+                bot.plug.chat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist).delay(6e4).call("delete");
                 return;
               case "roomMismatch":
-                await bot.plug.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id })).delay(6e4).call("delete");
+                bot.plug.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id })).delay(6e4).call("delete");
                 return;
               // to-do: handle wait list banned users
               default:

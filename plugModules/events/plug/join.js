@@ -30,13 +30,13 @@ module.exports = function Event(bot, platform) {
       const waitlist = bot.plug.waitlist();
       
       if (waitlist.length <= position && !waitlist.contains(data.id)) {
-        await bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.waitlistSmaller);
+        bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.waitlistSmaller);
         bot.queue.add(data, waitlist.length);
       } else if (waitlist.contains(data.id) && waitlist.positionOf(data.id) <= position) {
-        await bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.sameOrLower);
+        bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.sameOrLower);
       } else {
         bot.queue.add(data, position);
-        await bot.plug.chat(`@${data.username} ` + bot.utils.replace(bot.lang.commands.dc.placeBack, {
+        bot.plug.chat(`@${data.username} ` + bot.utils.replace(bot.lang.commands.dc.placeBack, {
           position: position,
           when: waitlist.length === 50 ?
             bot.lang.commands.dc.whenPossible : bot.lang.commands.dc.now,

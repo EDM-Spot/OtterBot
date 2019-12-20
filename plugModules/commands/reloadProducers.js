@@ -8,7 +8,7 @@ module.exports = function Command(bot) {
     description: "Reloads the Producers CSS.",
     async execute() {
       await bot.generateCSS.generateProducers();
-      await bot.plug.chat("Producers CSS Reloaded.");
+      bot.plug.chat("Producers CSS Reloaded.");
       return true;
     },
   });
