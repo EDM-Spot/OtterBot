@@ -22,8 +22,8 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const byPosition = bot.plug.waitlist().positionOf(byUser.id);
-      const toPosition = bot.plug.waitlist().positionOf(rawData.uid);
+      const byPosition = bot.plug.waitlist().positionOf(byUser.id) + 1;
+      const toPosition = bot.plug.waitlist().positionOf(rawData.uid) + 1;
 
       if (byUser.id === bot.plug.me().id) {
         bot.lottery.accepted();

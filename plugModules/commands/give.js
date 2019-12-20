@@ -9,7 +9,6 @@ module.exports = function Command(bot) {
     parameters: "<@username>",
     description: "Gives your positions in the waitlist.",
     async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
-      console.log(args);
       if (!args.length || args.join(" ").charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
@@ -24,10 +23,10 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const userPosition = bot.plug.waitlist().positionOf(rawData.uid);
-      const toUserPosition = bot.plug.waitlist().positionOf(user.id);
+      const userPosition = bot.plug.waitlist().positionOf(rawData.uid) + 1;
+      const toUserPosition = bot.plug.waitlist().positionOf(user.id) + 1;
 
-      if (userPosition < 0 || toUserPosition < 0) {
+      if (userPosition < 1 || toUserPosition < 1) {
         this.reply(lang.give.notInList, {}, 6e4);
         return false;
       }
