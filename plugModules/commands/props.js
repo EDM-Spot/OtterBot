@@ -6,7 +6,7 @@ function generateIdentifier(currentMedia, dj, rawData) {
     console.warn("Props Error!");
     return null;
   }
-  return `historyID-${currentMedia}:dj-${dj.id}:user-${rawData.uid}`;
+  return `historyID-${currentMedia.id}:dj-${dj.id}:user-${rawData.uid}`;
 }
 
 module.exports = function Command(bot) {
@@ -19,7 +19,7 @@ module.exports = function Command(bot) {
     description: "Gives props to the current DJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const currentMedia = bot.plug.historyEntry();
-			const dj = bot.plug.dj();
+      const dj = bot.plug.dj();
 
       const [inst] = await bot.db.models.users.findOrCreate({ where: { id: rawData.uid }, defaults: { id: rawData.uid } });
 
@@ -45,7 +45,7 @@ module.exports = function Command(bot) {
         propsToGiveLeft = 30;
       }
       
-      if (isNil(historyID)) {
+      if (!isObject(currentMedia)) {
         this.reply(lang.props.nothingPlaying, {}, 6e4);
         return false;
       } else if (isObject(dj) && dj.id === rawData.uid) {
@@ -57,12 +57,12 @@ module.exports = function Command(bot) {
       }
       
       await bot.db.models.props.findOrCreate({
-        where: { identifier: generateIdentifier(historyID, dj, rawData) },
+        where: { identifier: generateIdentifier(currentMedia.id, dj, rawData) },
         defaults: {
           id: rawData.uid,
           dj: dj.id,
-          historyID: `${historyID}`,
-          identifier: generateIdentifier(historyID, dj, rawData),
+          historyID: `${currentMedia.id}`,
+          identifier: generateIdentifier(currentMedia, dj, rawData),
         },
       });
 

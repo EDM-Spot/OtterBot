@@ -112,7 +112,7 @@ module.exports = function Event(bot, filename, platform) {
 
       if (isOverplayed) {
         if (!skipped) {
-          await bot.plug.chat(`@${data.currentDJ.username} ` + bot.lang.overplayed);
+          await bot.plug.chat(`@${currentDJ.username} ` + bot.lang.overplayed);
 
           await currentMedia.skip();
           skipped = true;
@@ -309,7 +309,7 @@ module.exports = function Event(bot, filename, platform) {
               }
             }
 
-            bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + data.currentDJ.username + " (" + data.currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
+            bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
               savedMessageID = m.id;
               savedMessage = m.content;
             });
