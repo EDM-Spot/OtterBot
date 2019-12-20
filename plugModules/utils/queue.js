@@ -6,7 +6,7 @@ module.exports = function Util(bot) {
       this.users = [];
       this.shouldUnlock = true;
 
-      bot.plug.on('waitlistUpdate', this.run);
+      bot.plug.on("waitlistUpdate", this.run);
     }
     add(user, position) {
       if (this.users.map(u => u.user.id).includes(user.id)) {
@@ -71,13 +71,13 @@ module.exports = function Util(bot) {
         try {
           await next.user.add();
         } catch (err) {
-          if (get(err, 'response.body.status')) {
-            switch (get(err, 'response.body.status')) {
-              case 'noValidPlaylist':
-                await bot.plug.chat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist, 6e4);
+          if (get(err, "response.body.status")) {
+            switch (get(err, "response.body.status")) {
+              case "noValidPlaylist":
+                await bot.plug.chat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist).delay(6e4).call("delete");
                 return;
-              case 'roomMismatch':
-                await bot.plug.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id }), 6e4);
+              case "roomMismatch":
+                await bot.plug.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id })).delay(6e4).call("delete");
                 return;
               // to-do: handle wait list banned users
               default:
@@ -97,7 +97,7 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        console.log('isinlist');
+        console.log("isinlist");
         try {
           await next.user.move(next.position);
         } catch (err) {

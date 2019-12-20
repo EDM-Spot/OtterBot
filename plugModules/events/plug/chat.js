@@ -5,7 +5,7 @@ const { ROLE } = require("miniplug");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: 'chat',
+    name: "chat",
     platform,
     run: async (rawData) => {
       const commandHandleRegex = /^(\/(em|me)\s)?!/;

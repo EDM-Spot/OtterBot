@@ -3,7 +3,7 @@ const moment = require("moment");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: 'userJoin',
+    name: "userJoin",
     platform,
     run: async (data) => {
       if (isNil(data.username) || data.guest || data.id === bot.plug.me().id) return;

@@ -2,7 +2,7 @@ const { isObject } = require("lodash");
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: 'vote',
+    name: "vote",
     platform,
     _filename: filename,
     run: async () => {

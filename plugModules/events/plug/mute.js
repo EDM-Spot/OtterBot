@@ -1,12 +1,12 @@
-const { isNil } = require("lodash");
+const { isObject } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, platform) {
   const event = {
-    name: 'modMute',
+    name: "modMute",
     platform,
     run: async (data) => {
-      if (isNil(data)) return;
+      if (!isObject(data)) return;
 
       try {
         await bot.db.models.bans.create({

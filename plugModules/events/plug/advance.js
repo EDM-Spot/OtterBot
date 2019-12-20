@@ -309,6 +309,8 @@ module.exports = function Event(bot, filename, platform) {
               }
             }
 
+            console.log(currentDJ);
+            
             bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
               savedMessageID = m.id;
               savedMessage = m.content;
@@ -373,7 +375,7 @@ module.exports = function Event(bot, filename, platform) {
                 props,
                 user: lastPlay.user.username,
                 plural: props > 1 ? "s" : "",
-              }), data.media.duration * 1e3);
+              })).delay(data.media.duration * 1e3).call("delete");
             }
           }
 

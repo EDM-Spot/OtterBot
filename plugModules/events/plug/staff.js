@@ -1,13 +1,13 @@
-const { isNil } = require("lodash");
+const { isObject } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: 'modStaff',
+    name: "modStaff",
     platform,
     _filename: filename,
     run: async (data) => {
-      if (isNil(data)) return;
+      if (!isObject(data)) return;
 
       if (data.moderator.id === bot.plug.me().id) return;
 

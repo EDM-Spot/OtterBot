@@ -118,19 +118,19 @@ module.exports = function Command(bot) {
 
           //if (isWeekend) {
           if (isWeekend && !isDecember) {
-            await bot.plug.chat(bot.utils.replace(lang.russianroulette.startingWeekend, {}), duration * 1e3);
+            await bot.plug.chat(bot.utils.replace(lang.russianroulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
           }
 
           if (isDecember) {
-            await bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
+            await bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {})).delay(duration * 1e3).call("delete");
           }
           
-          await bot.plug.chat(bot.utils.replace(lang.russianroulette.starting, {}), duration * 1e3);
+          await bot.plug.chat(bot.utils.replace(lang.russianroulette.starting, {})).delay(duration * 1e3).call("delete");
 
           await bot.plug.chat(bot.utils.replace(lang.russianroulette.info, {
             duration,
             price: price === 0 ? lang.russianroulette.free : `${price} prop${price > 1 ? "s" : ""}`,
-          }), duration * 1e3);
+          })).delay(duration * 1e3).call("delete");
           return true;
         }
         case "force": {
@@ -196,19 +196,19 @@ module.exports = function Command(bot) {
 
           //if (isWeekend) {
           if (isWeekend && !isDecember) {
-            await bot.plug.chat(bot.utils.replace(lang.russianroulette.startingWeekend, {}), duration * 1e3);
+            await bot.plug.chat(bot.utils.replace(lang.russianroulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
           }
 
           if (isDecember) {
-            await bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {}), duration * 1e3);
+            await bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {})).delay(duration * 1e3).call("delete");
           }
           
-          await bot.plug.chat(bot.utils.replace(lang.russianroulette.starting, {}), duration * 1e3);
+          await bot.plug.chat(bot.utils.replace(lang.russianroulette.starting, {})).delay(duration * 1e3).call("delete");
 
           await bot.plug.chat(bot.utils.replace(lang.russianroulette.info, {
             duration,
             price: price === 0 ? lang.russianroulette.free : `${price} prop${price > 1 ? "s" : ""}`,
-          }), duration * 1e3);
+          })).delay(duration * 1e3).call("delete");
           return true;
         }
         case "end": {

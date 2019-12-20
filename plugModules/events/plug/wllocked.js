@@ -1,23 +1,24 @@
-const { isNil } = require("lodash");
+const { isObject } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: 'waitlistLock',
+    name: "waitlistLock",
     platform,
     _filename: filename,
     run: async (data) => {
-      if (isNil(data)) return;
-      console.log(data);
+      if (!isObject(data)) return;
+      console.log(data.user.id);
+      console.log(data.moderator.id);
 
-      if (data.moderator.id === bot.plug.me().id) return;
+      if (data.user.id === bot.plug.me().id) return;
 
       const embed = new Discord.RichEmbed()
         //.setTitle("Title")
-        .setAuthor(data.moderator.username, "http://www.myiconfinder.com/uploads/iconsets/64-64-60eade7f184e696a79fa2ff1e81c851d.png")
+        .setAuthor(data.user.username, "http://www.myiconfinder.com/uploads/iconsets/64-64-60eade7f184e696a79fa2ff1e81c851d.png")
         .setColor(0xFF00FF)
         //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("By " + data.moderator.username)
+        .setFooter("By " + data.user.username)
         //.setImage("http://i.imgur.com/yVpymuV.png")
         //.setThumbnail("http://i.imgur.com/p2qNFag.png")
         .setTimestamp()

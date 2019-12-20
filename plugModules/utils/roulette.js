@@ -38,15 +38,15 @@ module.exports = function Util(bot) {
       await this.start(duration, price);
 
       if (isWeekend) {
-        await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {}), duration * 1e3);
+        await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
       }
 
-      await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {}), duration * 1e3);
+      await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {})).delay(duration * 1e3).call("delete");
 
       await bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.info, {
         duration,
         price: price === 0 ? bot.lang.commands.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
-      }), duration * 1e3);
+      })).delay(duration * 1e3).call("delete");
     }
     async start(duration, price) {
       this.running = true;

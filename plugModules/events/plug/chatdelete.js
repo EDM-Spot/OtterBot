@@ -3,7 +3,7 @@
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: 'chatDelete',
+    name: "chatDelete",
     platform,
     _filename: filename,
     run: async (del) => {
