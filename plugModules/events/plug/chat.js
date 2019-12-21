@@ -45,10 +45,12 @@ module.exports = function Event(bot, platform) {
         const random = Math.ceil(Math.random() * 1E10);
         const messageMentions = [];
 
+        console.log(messageArgs);
         if (!isNil(messageArgs)) {
           let lastIndex = -1;
           let allUsers = bot.plug.users;
 
+          console.log(allUsers.length);
           if (allUsers.length > 0) {
             allUsers = allUsers.sort((a, b) => {
               if (Object.is(a.username.length, b.username.length)) {
