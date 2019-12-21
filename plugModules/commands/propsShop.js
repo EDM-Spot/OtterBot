@@ -11,7 +11,7 @@ module.exports = function Command(bot) {
     deleteInstantly: true,
     parameters: "[badge <Image>]",
     description: "Props Shop",
-    async execute(rawData, { args, name }, lang) {
+    async execute(rawData, { args, name, mentions }, lang) {
       const id = rawData.uid;
 
       const buyType = args[0];
@@ -47,12 +47,12 @@ module.exports = function Command(bot) {
             return false;
           }
   
-          if (type === "gif" && await bot.utils.getRole(rawData.getUser) < ROLE.DJ) {
+          if (type === "gif" && await bot.utils.getRole(rawData.getUser()) < ROLE.DJ) {
             this.reply(lang.propsShop.imageRDJ, {}, 6e4);
             return false;
           }
 
-          if (isNil(badge) && await bot.utils.getRole(rawData.getUser) >= ROLE.BOUNCER) {
+          if (isNil(badge) && await bot.utils.getRole(rawData.getUser()) >= ROLE.BOUNCER) {
             free = true;
           } else {
             if (props < 100) {
@@ -82,7 +82,14 @@ module.exports = function Command(bot) {
         }
 
         if (buyGift === "badge") {
-          const user = bot.plug.userByName(args.join(' ').substr(4));
+          const userMention = rawData.mentions[0];
+
+          if (!isObject(userMention)) {	
+            this.reply(lang.userNotFound, {}, 6e4);	
+            return false;	
+          }	
+
+          const user = bot.plug.getUser(userMention.id);
       
           if (!isObject(user)) {
             this.reply(lang.userNotFound, {}, 6e4);

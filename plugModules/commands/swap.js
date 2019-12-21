@@ -9,15 +9,13 @@ module.exports = function Command(bot) {
     parameters: "<@username> <@username>",
     description: "Swap users position.",
     async execute(rawData, { args, mentions }, lang) { // eslint-disable-line no-unused-vars
-      console.log(args);
-      console.log(mentions);
-      if (!args.length || args.join(" ").substr(1).charAt(0) !== "@" || args.join(" ").substr(2).charAt(0) !== "@") {
+      if (!mentions.length || mentions.length !== 2) {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
-      const user2 = bot.plug.userByName(args.join(" ").substr(2).trim());
+      const user = mentions[0];
+      const user2 = mentions[1];
 
       if (!isObject(user) || !isObject(user2)) {
         this.reply(lang.userNotFound, {}, 6e4);

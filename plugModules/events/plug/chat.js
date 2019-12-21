@@ -93,13 +93,10 @@ module.exports = function Event(bot, platform) {
 
         const command = {
           name: splitMessage[0].replace(commandHandleRegex, "").toLowerCase(),
-          args: splitMessage.splice(1),
+          args: messageArgs,
           mentions: messageMentions,
           platform,
         };
-
-        console.log(splitMessage);
-        console.log(messageArgs);
 
         each(bot.plugCommands.getLoaded(), async (registeredCommand) => {
           if (registeredCommand.names.includes(command.name)) {

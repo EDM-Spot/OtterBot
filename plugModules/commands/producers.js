@@ -8,8 +8,8 @@ module.exports = function Command(bot) {
     cooldownDuration: 0,
     parameters: "<add|remove> <@User>",
     description: "Set or Remove Producers",
-    async execute(rawData, { args }, lang) {
-      if (!args.length) {
+    async execute(rawData, { args, mentions }, lang) {
+      if (!args.length || !mentions.length || mentions.length >= 2) {
         return false;
       }
 
@@ -20,7 +20,7 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
+      const user = mentions[0];
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);

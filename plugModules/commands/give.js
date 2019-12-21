@@ -8,13 +8,13 @@ module.exports = function Command(bot) {
     cooldownDuration: 180,
     parameters: "<@username>",
     description: "Gives your positions in the waitlist.",
-    async execute(rawData, { args, name }, lang) { // eslint-disable-line no-unused-vars
-      if (!args.length || args.join(" ").charAt(0) !== "@") {
+    async execute(rawData, { mentions }, lang) { // eslint-disable-line no-unused-vars
+      if (!mentions.length || mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
+      const user = mentions[0];
 
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);

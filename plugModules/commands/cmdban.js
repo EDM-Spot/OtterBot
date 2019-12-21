@@ -1,4 +1,4 @@
-const { isObject } = require("lodash");
+const { isObject, isEmpty } = require("lodash");
 const { ROLE } = require("miniplug");
 const Discord = require("discord.js");
 
@@ -10,13 +10,13 @@ module.exports = function Command(bot) {
     cooldownDuration: 0,
     parameters: "<@username> [s|h|hour|short|l|d|day|long|f|p|perma|forever] <reason>",
     description: "Bans the specified user from using specific commands for the specified duration (hour, day or forever).",
-    async execute(rawData, { args, name }, lang) {
-      if (!args.length || args.join(" ").charAt(0) !== "@") {
+    async execute(rawData, { mentions, name }, lang) {
+      if (!mentions.length || mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
 
-      const user = bot.plug.userByName(args.join(" ").substr(1).trim());
+      const user = mentions[0];
       
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
@@ -24,7 +24,7 @@ module.exports = function Command(bot) {
       } else if (user.id === rawData.uid) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if ((user.role >= ROLE.BOUNCER && await bot.utils.getRole(rawData.getUser) < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
+      } else if ((user.role >= ROLE.BOUNCER && await bot.utils.getRole(rawData.getUser()) < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
         return false;
       }
