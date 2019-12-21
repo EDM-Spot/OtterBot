@@ -11,18 +11,18 @@ module.exports = function Event(bot, platform) {
       const commandHandleRegex = /^(\/(em|me)\s)?!/;
       const emoteRegex = /^\/(em|me)\s/;
       rawData.timestamp = Date.now();
-      
+
       const message = await bot.db.models.messages.create({
         id: rawData.uid,
         cid: rawData.id,
         username: rawData.un,
         message: rawData.message,
       });
-      
+
       try {
         await bot.db.models.users.update(
           { username: rawData.un, last_seen: moment() },
-          { where: { id: rawData.uid }, defaults: { id: rawData.uid }}
+          { where: { id: rawData.uid }, defaults: { id: rawData.uid } }
         );
       }
       catch (err) {
@@ -37,9 +37,68 @@ module.exports = function Event(bot, platform) {
 
       if (commandHandleRegex.test(rawData.message)) {
         const splitMessage = rawData.message.replace(emoteRegex, "").split(" ");
+
+        const cmd = rawData.message.split(" ")[0];
+        let messageArgs = rawData.message.substr(cmd.length + 1);
+
+        let i;
+        const random = Math.ceil(Math.random() * 1E10);
+        const messageMentions = [];
+
+        if (!isNil(messageArgs)) {
+          let lastIndex = -1;
+          let allUsers = bot.plug.users;
+
+          if (allUsers.length > 0) {
+            allUsers = allUsers.sort((a, b) => {
+              if (Object.is(a.username.length, b.username.length)) {
+                return 0;
+              }
+
+              return a.username.length < b.username.length ? -1 : 1;
+            });
+
+            for (const user of allUsers) {
+              lastIndex = messageArgs.toLowerCase().indexOf(user.username.toLowerCase());
+
+              if (lastIndex > -1) {
+                messageArgs = `${messageArgs.substr(0, lastIndex).replace("@", "")}%MENTION-${random}-${mentions.length}% ${messageArgs.substr(lastIndex + user.username.length + 1)}`;
+                messageMentions.push(user);
+              }
+            }
+          }
+
+          messageArgs = messageArgs.split(" ").filter((item) => item != null && !Object.is(item, ""));
+
+          for (i = 0; i < messageArgs.length; i++) {
+            if (isFinite(Number(messageArgs[i])) && !Object.is(messageArgs[i], "")) {
+              messageArgs[i] = Number(messageArgs[i]);
+            }
+          }
+        }
+
+        if (messageMentions.length > 0) {
+          for (i = 0; i < messageMentions.length; i++) {
+            const atIndex = messageArgs.indexOf(`@%MENTION-${random}-${i}%`);
+            const normalIndex = messageArgs.indexOf(`%MENTION-${random}-${i}%`);
+
+            if (normalIndex > -1) {
+              messageArgs[normalIndex] = messageMentions[i];
+            }
+            if (atIndex > -1) {
+              messageArgs[atIndex] = messageMentions[i];
+            }
+          }
+        }
+
+        console.log("Mentions " + messageMentions);
+        console.log("OriginalArgs " + splitMessage.splice(1));
+        console.log("NewArgs " + messageArgs);
+
         const command = {
           name: splitMessage[0].replace(commandHandleRegex, "").toLowerCase(),
           args: splitMessage.splice(1),
+          mentions: messageMentions,
           platform,
         };
 
@@ -69,8 +128,8 @@ module.exports = function Event(bot, platform) {
             .addField("Warning", "Promote other room", false)
             .addField("Message", rawData.message, false);
 
-          bot.channels.get("485173444330258454").send({embed});
-          bot.channels.get("486637288923725824").send({embed});
+          bot.channels.get("485173444330258454").send({ embed });
+          bot.channels.get("486637288923725824").send({ embed });
         }
       }
 

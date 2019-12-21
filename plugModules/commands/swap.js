@@ -8,10 +8,9 @@ module.exports = function Command(bot) {
     cooldownDuration: 60,
     parameters: "<@username> <@username>",
     description: "Swap users position.",
-    async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
+    async execute(rawData, { args, mentions }, lang) { // eslint-disable-line no-unused-vars
       console.log(args);
-      console.log(args.join(" ").substr(1));
-      console.log(args.join(" ").substr(2));
+      console.log(mentions);
       if (!args.length || args.join(" ").substr(1).charAt(0) !== "@" || args.join(" ").substr(2).charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
