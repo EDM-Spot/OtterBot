@@ -112,8 +112,6 @@ module.exports = function Util(bot) {
       const user = bot.plug.user(winner);
       const waitlist = bot.plug.waitlist();
 
-      console.log("picked winner");
-
       if (!players.length && this.end()) {
         bot.plug.chat(bot.lang.roulette.somethingwrong);
         return;
@@ -153,8 +151,6 @@ module.exports = function Util(bot) {
         return bot.plug.chat(bot.lang.roulette.noplayers);
       }
 
-      console.log(this.players);
-
       this.running = false;
 
       const alteredOdds = [];
@@ -163,10 +159,8 @@ module.exports = function Util(bot) {
       each(this.players, async (player) => {
         if (bot.plug.user(player)) {
           if (waitlist.positionOf(player) === -1) {
-            console.log(player);
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
-            console.log(player);
             alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
           }
         }
