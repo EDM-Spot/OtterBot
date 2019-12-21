@@ -112,6 +112,8 @@ module.exports = function Util(bot) {
       const user = await bot.plug.getUser(winner);
       const waitlist = bot.plug.waitlist();
 
+      console.log("picked winner");
+
       if (!players.length && this.end()) {
         bot.plug.chat(bot.lang.roulette.somethingwrong);
         return;
@@ -124,20 +126,20 @@ module.exports = function Util(bot) {
         return;
       }
 
-      const day = moment().isoWeekday();
-      const isWeekend = (day === 5) || (day === 6) || (day === 7);
+      // const day = moment().isoWeekday();
+      // const isWeekend = (day === 5) || (day === 6) || (day === 7);
 
-      if (isWeekend) {
-        const random = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
+      // if (isWeekend) {
+      //   const random = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
 
-        const [holidayUser] = await bot.db.models.holiday.findOrCreate({
-          where: { id: user.id }, defaults: { id: user.id },
-        });
+      //   const [holidayUser] = await bot.db.models.holiday.findOrCreate({
+      //     where: { id: user.id }, defaults: { id: user.id },
+      //   });
 
-        await holidayUser.increment("currency", { by: random });
+      //   await holidayUser.increment("currency", { by: random });
 
-        //await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
-      }
+      //   await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
+      // }
 
       bot.plug.chat(bot.utils.replace(bot.lang.roulette.winner, {
         winner: user.username,
@@ -151,16 +153,22 @@ module.exports = function Util(bot) {
         return bot.plug.chat(bot.lang.roulette.noplayers);
       }
 
+      console.log(this.players);
+
       this.running = false;
 
       const alteredOdds = [];
       const waitlist = bot.plug.waitlist();
 
       each(this.players, async (player) => {
-        if (await bot.plug.getUser(player)) {
+        const user = await bot.plug.getUser(player);
+
+        if (!isObject(user)) {
           if (waitlist.positionOf(player) === -1) {
+            console.log(player);
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
+            console.log(player);
             alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
           }
         }
