@@ -45,7 +45,7 @@ module.exports = function Command(bot) {
           return true;
         }
         case "reset": {
-          const user = await bot.plug.getUser(rawData.uid);
+          const user = bot.plug.user(rawData.uid);
 
           if (!isObject(user) || await bot.utils.getRole(user) <= ROLE.MANAGER) return false;
 
@@ -134,7 +134,7 @@ module.exports = function Command(bot) {
           return true;
         }
         case "force": {
-          const user = await bot.plug.getUser(rawData.uid);
+          const user = bot.plug.user(rawData.uid);
 
           if (!isObject(user) || await bot.utils.getRole(user) <= ROLE.MANAGER) return false;
 

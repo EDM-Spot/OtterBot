@@ -142,7 +142,7 @@ module.exports = (client) => {
   
       const userID = userDB.get("id");
   
-      const plugUser = await client.plug.getUser(userID);
+      const plugUser = client.plug.user(userID);
   
       if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
         return null;
@@ -164,7 +164,7 @@ module.exports = (client) => {
   
       const userID = userDB.get("id");
   
-      const plugUser = await client.plug.getUser(userID);
+      const plugUser = client.plug.user(userID);
   
       if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
         return null;

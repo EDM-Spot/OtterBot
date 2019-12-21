@@ -9,7 +9,7 @@ module.exports = function Util(bot) {
     function: async (id) => {
       if (isNil(id)) return false;
 
-      const user = await bot.plug.getUser(id);
+      const user = bot.plug.user(id);
 
       const totalsongs = await bot.db.models.plays.count({
         where: { skipped: false }

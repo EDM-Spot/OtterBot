@@ -46,7 +46,7 @@ class TriviaPay extends Command {
 
       const userID = userDB.get("discord");
 
-      const user = await this.client.plug.getUser(userDB.get("id"));
+      const user = this.client.plug.user(userDB.get("id"));
 
       const dj = this.client.plug.dj();
 

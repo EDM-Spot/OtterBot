@@ -56,7 +56,7 @@ class Slots extends Command {
         return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
       }
 
-      const user = await this.client.plug.getUser(userDB.get("id"));
+      const user = this.client.plug.user(userDB.get("id"));
 
       const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
 

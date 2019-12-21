@@ -89,7 +89,7 @@ module.exports = function Command(bot) {
             return false;	
           }	
 
-          const user = bot.plug.getUser(userMention.id);
+          const user = bot.plug.user(userMention.id);
       
           if (!isObject(user)) {
             this.reply(lang.userNotFound, {}, 6e4);

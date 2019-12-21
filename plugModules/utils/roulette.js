@@ -109,7 +109,7 @@ module.exports = function Util(bot) {
     }
     async winner(players) {
       const winner = players[Math.floor(Math.random() * players.length)];
-      const user = await bot.plug.getUser(winner);
+      const user = bot.plug.user(winner);
       const waitlist = bot.plug.waitlist();
 
       console.log("picked winner");
@@ -161,9 +161,7 @@ module.exports = function Util(bot) {
       const waitlist = bot.plug.waitlist();
 
       each(this.players, async (player) => {
-        const user = await bot.plug.getUser(player);
-
-        if (!isObject(user)) {
+        if (bot.plug.user(player)) {
           if (waitlist.positionOf(player) === -1) {
             console.log(player);
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));

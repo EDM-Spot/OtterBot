@@ -19,7 +19,7 @@ module.exports = function Command(bot) {
       } else if (isObject(dj) && dj.id === rawData.uid) {
         this.reply(lang.join.isPlaying, {}, 6e4);
         return true;
-      } else if (waitlist.contains(rawData.uid) && waitlist.positionOf(rawData.uid) <= 5) {
+      } else if (waitlist.contains(rawData.uid) && waitlist.positionOf(rawData.uid) <= 4) {
         this.reply(lang.join.closeToPlaying, {}, 6e4);
         return true;
       }

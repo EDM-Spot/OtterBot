@@ -49,7 +49,7 @@ module.exports = function Util(bot) {
       this.running = false;
 
       const victim = players[Math.floor(Math.random() * players.length)];
-      const user = await bot.plug.getUser(victim);
+      const user = bot.plug.user(victim);
       const waitlist = bot.plug.waitlist();
 
       if (!players.length) {
