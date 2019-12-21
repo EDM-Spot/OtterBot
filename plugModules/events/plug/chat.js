@@ -91,16 +91,15 @@ module.exports = function Event(bot, platform) {
           }
         }
 
-        console.log("Mentions " + messageMentions);
-        console.log("OriginalArgs " + splitMessage.splice(1));
-        console.log("NewArgs " + messageArgs);
-
         const command = {
           name: splitMessage[0].replace(commandHandleRegex, "").toLowerCase(),
           args: splitMessage.splice(1),
           mentions: messageMentions,
           platform,
         };
+
+        console.log(splitMessage);
+        console.log(messageArgs);
 
         each(bot.plugCommands.getLoaded(), async (registeredCommand) => {
           if (registeredCommand.names.includes(command.name)) {
