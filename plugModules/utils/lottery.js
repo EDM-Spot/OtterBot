@@ -66,7 +66,7 @@ module.exports = function Util(bot) {
 
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = await bot.plug.getUser(winner);
-      const userPos = bot.plug.waitlist().positionOf(user.id);
+      const userPos = bot.plug.waitlist().positionOf(user.id) + 1;
 
       if (!players.length) {
         this.players = [];
@@ -121,7 +121,7 @@ module.exports = function Util(bot) {
           if (bot.plug.waitlist().positionOf(player) === -1 || await bot.plug.getUser(player).role >= ROLE.BOUNCER) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
-            if (bot.plug.waitlist().positionOf(player) > 5) {
+            if (bot.plug.waitlist().positionOf(player) > 6) {
               alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
             }
           }

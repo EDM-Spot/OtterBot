@@ -22,8 +22,8 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const userPosition = bot.plug.waitlist().positionOf(user.id);
-      const user2Position = bot.plug.waitlist().positionOf(user2.id);
+      const userPosition = bot.plug.waitlist().positionOf(user.id) + 1;
+      const user2Position = bot.plug.waitlist().positionOf(user2.id) + 1;
 
       if (userPosition < 1 || user2Position < 1) {
         this.reply(lang.give.notInList, {}, 6e4);

@@ -54,7 +54,7 @@ class TriviaPay extends Command {
         return message.reply("You're not online on plug!");
       }
 
-      const userPos = this.client.plug.waitlist().positionOf(user.id);
+      const userPos = this.client.plug.waitlist().positionOf(user.id) + 1;
 
       if (this.client.triviaUtil.started) {
         return message.reply("Trivia already started!");

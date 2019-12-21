@@ -9,6 +9,8 @@ module.exports = function Util(bot) {
       bot.plug.on("waitlistUpdate", this.run);
     }
     add(user, position) {
+      position = position - 1;
+
       if (this.users.map(u => u.user.id).includes(user.id)) {
         return this.update(user, position);
       }
@@ -97,7 +99,6 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        console.log("isinlist");
         try {
           await next.user.move(next.position);
         } catch (err) {
