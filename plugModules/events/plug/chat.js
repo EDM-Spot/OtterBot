@@ -45,12 +45,10 @@ module.exports = function Event(bot, platform) {
         const random = Math.ceil(Math.random() * 1E10);
         const messageMentions = [];
 
-        console.log(messageArgs);
         if (!isNil(messageArgs)) {
           let lastIndex = -1;
           let allUsers = bot.plug.users();
 
-          console.log(allUsers.length);
           if (allUsers.length > 0) {
             allUsers = allUsers.sort((a, b) => {
               if (Object.is(a.username.length, b.username.length)) {
@@ -63,10 +61,7 @@ module.exports = function Event(bot, platform) {
             for (const user of allUsers) {
               lastIndex = messageArgs.toLowerCase().indexOf(user.username.toLowerCase());
 
-              console.log(lastIndex);
               if (lastIndex > -1) {
-                console.log(user.username);
-
                 messageArgs = `${messageArgs.substr(0, lastIndex).replace("@", "")}%MENTION-${random}-${messageMentions.length}% ${messageArgs.substr(lastIndex + user.username.length + 1)}`;
                 messageMentions.push(user);
               }
@@ -82,7 +77,6 @@ module.exports = function Event(bot, platform) {
           }
         }
 
-        console.log(messageMentions);
         if (messageMentions.length > 0) {
           for (i = 0; i < messageMentions.length; i++) {
             const atIndex = messageArgs.indexOf(`@%MENTION-${random}-${i}%`);
