@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     parameters: "<@username> <@username>",
     description: "Swap users position.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
-      if (!args.length || args.join(" ").substr(1).charAt(0) !== "@" || args.join(" ").substr(2).charAt(1) !== "@") {
+      if (!args.length || args.join(" ").substr(1).charAt(0) !== "@" || args.join(" ").substr(2).charAt(0) !== "@") {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
       }
