@@ -84,7 +84,6 @@ module.exports = function Util(bot) {
               // to-do: handle wait list banned users
               default:
                 console.error(err);
-                console.log(waitlist.positionOf(next.user.id));
                 return;
             }
           }
@@ -95,7 +94,6 @@ module.exports = function Util(bot) {
             await next.user.move(next.position);
           } catch (err) {
             console.error(err);
-            console.log(waitlist.positionOf(next.user.id));
             this.users.push(next);
             return;
           }

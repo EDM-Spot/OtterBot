@@ -7,7 +7,7 @@ module.exports = function Event(bot, platform) {
     run: async (data) => {
       if (data.inBooth) return;
 
-      const userDB = await bot.db.models.users.findOne({ where: { username: data.user }});
+      const userDB = await bot.db.models.users.findOne({ where: { username: data.username }});
       const userID = userDB.get("id");
 
       if (!isObject(data)) return;
