@@ -48,7 +48,7 @@ module.exports = function Event(bot, platform) {
         console.log(messageArgs);
         if (!isNil(messageArgs)) {
           let lastIndex = -1;
-          let allUsers = bot.plug.users;
+          let allUsers = await bot.plug.users;
 
           console.log(allUsers.length);
           if (allUsers.length > 0) {
