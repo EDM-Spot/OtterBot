@@ -1,5 +1,6 @@
 const { get, assign, isNil } = require("lodash");
 const { ROLE } = require("miniplug");
+const plugMessage = require("plug-message-split");
 
 const NO_DELETION = ["props"];
 const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays", "meh"];
@@ -15,15 +16,45 @@ module.exports = class Command {
     this.run();
   }
   async reply(string, variables = {}, ttl) {
-    const reply = this.bot.plug.chat(this.utils.replace(this.lang.commands.default, {
+    const lines = plugMessage.split(this.utils.replace(this.lang.commands.default, {
       command: this.instance.name,
       user: this.rawData.un,
       message: this.utils.replace(string, variables),
     }));
 
-    if (ttl) {
-      return reply.delay(ttl).call("delete");
+    if (lines.length > 1) {
+      for (let i = 0; i < lines.length; i++) {
+        const reply = this.bot.plug.chat(lines[i]);
+
+        if (i + 1 >= 3) {
+          break;
+        }
+
+        if (ttl) {
+          return reply.delay(ttl).call("delete");
+        }
+      }
+    } else {
+      const reply = this.bot.plug.chat(this.utils.replace(this.lang.commands.default, {
+        command: this.instance.name,
+        user: this.rawData.un,
+        message: this.utils.replace(string, variables),
+      }));
+
+      if (ttl) {
+        return reply.delay(ttl).call("delete");
+      }
     }
+
+    // const reply = this.bot.plug.chat(this.utils.replace(this.lang.commands.default, {
+    //   command: this.instance.name,
+    //   user: this.rawData.un,
+    //   message: this.utils.replace(string, variables),
+    // }));
+
+    // if (ttl) {
+    //   return reply.delay(ttl).call("delete");
+    // }
 
     return true;
   }
