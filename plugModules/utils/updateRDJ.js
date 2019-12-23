@@ -143,7 +143,7 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        const getAllStaff = await bot.plug.getStaff();
+        const getAllStaff = bot.plug.getStaff();
 
         const offUser = getAllStaff.filter(u => u.id === id);
 

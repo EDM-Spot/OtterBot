@@ -13,7 +13,7 @@ module.exports = function Command(bot) {
       const totalusers = await bot.db.models.users.count();
       console.log(totalusers);
 
-      const users = await bot.plug.getStaff();
+      const users = bot.plug.getStaff();
       const listDJ = users.filter(u => u.role === ROLE.DJ);
 
       var i = 0;
