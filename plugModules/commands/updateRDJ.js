@@ -10,17 +10,13 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Update RDJ.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const totalusers = await bot.db.models.users.count();
-      console.log(totalusers);
-
       const users = await bot.plug.getStaff();
-      console.log(users);
 
       const listDJ = users.filter(u => u.role === ROLE.DJ);
-      console.log(listDJ);
 
       var i = 0;
       for (i = 0; i < listDJ.length; i++) {
+        console.log(listDJ[i]);
         var interval = setInterval(async function() {
           if (!isNil(listDJ[i])) {
             if (listDJ[i].role < ROLE.BOUNCER || listDJ[i].gRole < ROLE.SITEMOD) {
