@@ -1,4 +1,3 @@
-const { isObject } = require("lodash");
 const { ROLE } = require("miniplug");
 
 module.exports = function Command(bot) {
@@ -16,18 +15,15 @@ module.exports = function Command(bot) {
 
       var i = 0;
       for (i = 0; i < listDJ.length; i++) {
-        var interval = setInterval(async function () {
-          if (isObject(listDJ[i])) {
-            if (listDJ[i].gRole < ROLE.SITEMOD) {
-              console.log(listDJ[i].username);
-              await bot.utils.updateRDJ(listDJ[i].id);
-            }
+        var interval = setInterval(async function() {
+          if (listDJ[i].gRole < ROLE.SITEMOD) {
+            console.log(listDJ[i].username);
+            await bot.utils.updateRDJ(listDJ[i].id);
           }
+
           i++;
-          if (i === listDJ.length) {
-            clearInterval(interval);
-            console.log("Finished");
-          }
+
+          if (i === listDJ.length) clearInterval(interval);
         }, 10000);
       }
 
