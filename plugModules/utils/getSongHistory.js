@@ -7,6 +7,11 @@ module.exports = function Util(bot) {
       if (isNil(cid)) return;
 
       const songHistory = await bot.db.models.plays.findAll({
+        where: {
+          createdAt: {
+            [Op.gte]: bot.moment().subtract(360, "minutes").toDate()
+          }
+        },
         order: [["createdAt", "DESC"]],
       });
 
@@ -41,8 +46,7 @@ module.exports = function Util(bot) {
                 // Same Song Name/Maybe diff Author
                 return { songHistory: songHistory[i], maybe: true, skip: true };
               }
-            }
-            else {
+            } else {
               if (songHistory[i].cid === cid) {
                 // Song Played | Same ID
                 return { songHistory: songHistory[i], maybe: false, skip: false };

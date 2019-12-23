@@ -27,7 +27,7 @@ class Bot extends Discord.Client {
     this.config = require("./config.js");
     // client.config.token contains the bot's token
     // client.config.prefix contains the message prefix
-    
+
     this.sequelize = Sequelize;
     this.miniplug = miniplug;
     this.moment = require("moment");
@@ -45,10 +45,10 @@ class Bot extends Discord.Client {
         underscored: true,
       },
       pool: {
-        max: 100,
+        max: 5,
         min: 0,
-        idle: 20000,
-        acquire: 20000
+        idle: 10000,
+        acquire: 30000
       }
     }));
 

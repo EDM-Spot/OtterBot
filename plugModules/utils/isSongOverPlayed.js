@@ -9,7 +9,12 @@ module.exports = function Util(bot) {
       let playedCount = 0;
 
       const songHistory = await bot.db.models.plays.findAll({
-        where: { skipped: false },
+        where: {
+          createdAt: {
+            [Op.gte]: bot.moment().subtract(1, "months").toDate()
+          },
+          skipped: false
+        },
         order: [["createdAt", "DESC"]],
       });
 
