@@ -16,6 +16,7 @@ const path = require("path");
 const Redis = require("ioredis");
 const Sequelize = require("sequelize");
 const plugModuleManager = require("./plugModules");
+const Unhandled = require("@spokedev/node-unhandled");
 
 const Deck = require("./util/poker/deck.js");
 
@@ -27,6 +28,8 @@ class Bot extends Discord.Client {
     this.config = require("./config.js");
     // client.config.token contains the bot's token
     // client.config.prefix contains the message prefix
+
+    const unhandled = Unhandled();
 
     this.sequelize = Sequelize;
     this.miniplug = miniplug;

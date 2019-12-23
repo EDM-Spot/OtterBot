@@ -13,6 +13,7 @@ module.exports = function Util(bot) {
       const waitlist = bot.plug.waitlist();
       const day = moment().isoWeekday();
       const isWeekend = (day === 6) || (day === 7);
+      const isDecember = (moment().month() === 11);
 
       if (await this.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
         return;
@@ -31,14 +32,18 @@ module.exports = function Util(bot) {
       const duration = 60;
       let price = 1;
 
-      if (isWeekend) {
+      if (isWeekend || isDecember) {
         price = 0;
       }
 
       await this.start(duration, price);
 
-      if (isWeekend) {
-        bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
+      if (isWeekend  && !isDecember) {
+        bot.plug.chat(bot.utils.replace(bot.lang.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
+      }
+
+      if (isDecember) {
+        bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {})).delay(duration * 1e3).call("delete");
       }
 
       bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {})).delay(duration * 1e3).call("delete");

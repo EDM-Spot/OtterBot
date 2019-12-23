@@ -25,10 +25,11 @@
   },
   "homepage": "https://github.com/EDM-Spot/OtterBot#readme",
   "dependencies": {
+    "@spokedev/node-unhandled": "0.0.5",
     "better-sqlite-pool": "0.2.2",
     "bluebird": "3.7.2",
     "body-parser": "1.19.0",
-    "canvas": "2.6.0",
+    "canvas": "2.6.1",
     "chalk": "3.0.0",
     "compose-function": "3.0.3",
     "discord.js": "11.5.1",

@@ -118,7 +118,7 @@ module.exports = function Command(bot) {
           
           //if (isWeekend) {
           if (isWeekend  && !isDecember) {
-            bot.plug.chat(bot.utils.replace(lang.roulette.startingWeekend, {}), duration * 1e3);
+            bot.plug.chat(bot.utils.replace(lang.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
           }
 
           if (isDecember) {
