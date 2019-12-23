@@ -143,30 +143,27 @@ module.exports = function Util(bot) {
           }
         }
       } else {
-        const getAllStaff = bot.plug.getStaff();
+        const getAllStaff = await bot.plug.getStaff();
 
-        var i = 0;
-        for (i = 0; i < getAllStaff.length; i++) {
-          const offUser = getAllStaff.filter(u => u.id === id);
+        const offUser = getAllStaff.filter(u => u.id === id);
 
-          if (isNil(offUser[0])) return false;
-          if (offUser[0].role >= ROLE.BOUNCER || offUser[0].gRole >= ROLE.SITEMOD) return false;
+        if (isNil(offUser[0])) return false;
+        if (offUser[0].role >= ROLE.BOUNCER || offUser[0].gRole >= ROLE.SITEMOD) return false;
 
-          if (offUser[0].role === ROLE.DJ) {
-            const tolerance = 20;
-            const userPoints = points + tolerance;
+        if (offUser[0].role === ROLE.DJ) {
+          const tolerance = 20;
+          const userPoints = points + tolerance;
 
-            if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
-              await offUser[0].setRole(0);
+          if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
+            await offUser[0].setRole(0);
 
-              if (!isNil(userDB.get("discord"))) {
-                await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
-              }
-
-              await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
-                user: offUser[0].username
-              }));
+            if (!isNil(userDB.get("discord"))) {
+              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
             }
+
+            await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
+              user: offUser[0].username
+            }));
           }
         };
       }
