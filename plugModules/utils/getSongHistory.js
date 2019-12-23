@@ -1,4 +1,5 @@
 const { isNil } = require("lodash");
+const { Op } = require("sequelize");
 
 module.exports = function Util(bot) {
   const util = {
