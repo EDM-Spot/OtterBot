@@ -14,7 +14,10 @@ module.exports = function Command(bot) {
       console.log(totalusers);
 
       const users = bot.plug.getStaff();
+      console.log(users);
+
       const listDJ = users.filter(u => u.role === ROLE.DJ);
+      console.log(listDJ);
 
       var i = 0;
       for (i = 0; i < listDJ.length; i++) {
