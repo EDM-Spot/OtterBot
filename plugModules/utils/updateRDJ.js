@@ -142,47 +142,34 @@ module.exports = function Util(bot) {
             }));
           }
         }
-      } 
-      //TODO: CHECK OFFLINE RDJ's
-      // else {
-      //   bot.plug.getAllStaff(async (err, data) => {
-      //     const offUser = data.filter(u => u.id === id);
+      } else {
+        const getAllStaff = bot.plug.getStaff();
 
-      //     if (isNil(offUser[0])) return false;
-      //     if (offUser[0].role >= ROOM_ROLE.BOUNCER || offUser[0].gRole >= GLOBAL_ROLES.MODERATOR) return false;
+        var i = 0;
+        for (i = 0; i < getAllStaff.length; i++) {
+          const offUser = getAllStaff.filter(u => u.id === id);
 
-      //     if (offUser[0].role === ROOM_ROLE.RESIDENTDJ) {
-      //       const tolerance = 20;
-      //       const userPoints = points + tolerance;
+          if (isNil(offUser[0])) return false;
+          if (offUser[0].role >= ROLE.BOUNCER || offUser[0].gRole >= ROLE.SITEMOD) return false;
 
-      //       if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
-      //         await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.NONE);
-  
-      //         if (!isNil(userDB.get("discord"))) {
-      //           await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
-      //         }
-  
-      //         await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjDemoted, {
-      //           user: offUser[0].username
-      //         }));
-      //       }
-      //     } else {
-      //       const joined = moment().diff(userDB.get("createdAt"), "months");
-  
-      //       if ((points >= 100 && joined >= 1 && playscount >= 150) || (points >= 50 && joined >= 1 && playscount >= 250)) {
-      //         await bot.plug.moderateSetRole(offUser[0].id, ROOM_ROLE.RESIDENTDJ);
-  
-      //         if (!isNil(userDB.get("discord"))) {
-      //           await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
-      //         }
-  
-      //         await bot.plug.sendChat(bot.utils.replace(bot.lang.rdjPromoted, {
-      //           user: offUser[0].username
-      //         }));
-      //       }
-      //     }
-      //   });
-      // }
+          if (offUser[0].role === ROLE.DJ) {
+            const tolerance = 20;
+            const userPoints = points + tolerance;
+
+            if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
+              await offUser[0].setRole(0);
+
+              if (!isNil(userDB.get("discord"))) {
+                await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
+              }
+
+              await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
+                user: offUser[0].username
+              }));
+            }
+          }
+        };
+      }
 
       return true;
     },
