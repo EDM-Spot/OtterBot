@@ -1,4 +1,4 @@
-const { isNil } = require("lodash");
+const { isObject } = require("lodash");
 const { ROLE } = require("miniplug");
 
 module.exports = function Command(bot) {
@@ -13,18 +13,14 @@ module.exports = function Command(bot) {
       const users = await bot.plug.getStaff();
 
       const listDJ = users.filter(u => u.role === ROLE.DJ);
-      console.log(listDJ.length);
 
       var i = 0;
       for (i = 0; i < listDJ.length; i++) {
-        console.log(listDJ[i]);
-        var interval = setInterval(async function() {
-          if (!isNil(listDJ[i])) {
-            if (listDJ[i].role < ROLE.BOUNCER || listDJ[i].gRole < ROLE.SITEMOD) {
-              if (listDJ[i].role === ROLE.DJ) {
-                console.log(listDJ[i].username);
-                await bot.utils.updateRDJ(listDJ[i].id);
-              }
+        var interval = setInterval(async function () {
+          if (isObject(listDJ[i])) {
+            if (listDJ[i].gRole < ROLE.SITEMOD) {
+              console.log(listDJ[i].username);
+              await bot.utils.updateRDJ(listDJ[i].id);
             }
           }
           i++;
