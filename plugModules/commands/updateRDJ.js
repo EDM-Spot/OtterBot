@@ -13,6 +13,7 @@ module.exports = function Command(bot) {
       const users = await bot.plug.getStaff();
 
       const listDJ = users.filter(u => u.role === ROLE.DJ);
+      console.log(listDJ.length);
 
       var i = 0;
       for (i = 0; i < listDJ.length; i++) {
