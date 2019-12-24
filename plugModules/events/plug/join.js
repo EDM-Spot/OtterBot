@@ -37,7 +37,7 @@ module.exports = function Event(bot, platform) {
       } else {
         bot.queue.add(data, position);
         bot.plug.chat(`@${data.username} ` + bot.utils.replace(bot.lang.commands.dc.placeBack, {
-          position: position + 1,
+          position: position,
           when: waitlist.length === 50 ?
             bot.lang.commands.dc.whenPossible : bot.lang.commands.dc.now,
         }));

@@ -10,7 +10,7 @@ module.exports = function Util(bot) {
       const dj = bot.plug.dj();
 
       const lockSkip = {
-        position: 3,
+        position: 2,
         withCycle: async () => {
           await bot.plug.enableCycle();
           await historyEntry.skip();
