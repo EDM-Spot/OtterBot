@@ -22,7 +22,7 @@ module.exports = function Command(bot) {
         await bot.db.models.blacklist.findOrCreate({
           where: { cid: currentMedia.media.cid },
           defaults: {
-            cid: currentMedia.cid,
+            cid: currentMedia.media.cid,
             moderator: rawData.uid,
           },
         });

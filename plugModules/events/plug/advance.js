@@ -1,7 +1,6 @@
 const moment = require("moment");
 const { isObject, isNil, get, map } = require("lodash");
-//const ytdl = require("ytdl-core-discord");
-//const { ROOM_ROLE, GLOBAL_ROLES } = require("plugapi");
+const { BAN_DURATION, BAN_REASON } = require("miniplug");
 
 var savedMessageID;
 var savedMessage;
@@ -90,10 +89,37 @@ module.exports = function Event(bot, filename, platform) {
           //bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
           if (!skipped) {
-            bot.plug.chat("!bl");
+            await bot.db.models.blacklist.findOrCreate({
+              where: { cid: currentPlay.cid },
+              defaults: {
+                cid: currentPlay.cid,
+                moderator: bot.plug.me().id,
+              },
+            });
+    
+            const embed = new Discord.RichEmbed()
+              //.setTitle("Title")
+              .setAuthor(currentPlay.author + " - " + currentPlay.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
+              .setColor(0xFF00FF)
+              //.setDescription("This is the main body of text, it can hold 2048 characters.")
+              .setFooter("By " + bot.plug.me().username)
+              //.setImage("http://i.imgur.com/yVpymuV.png")
+              //.setThumbnail("http://i.imgur.com/p2qNFag.png")
+              .setTimestamp()
+              //.addField("This is a field title, it can hold 256 characters")
+              .addField("ID", currentDJ.id, true)
+              .addField("User ", currentDJ.username, true)
+              .addField("Blacklisted", " (youtube.com/watch?v=" + currentPlay.cid + ")", false);
+            //.addBlankField(true);
+    
+            bot.channels.get("486637288923725824").send({ embed });
+    
+            bot.plug.chat(bot.lang.blacklist.currentAdded);
+
+            await next.skip();
 
             if (blackword[i] == "gemido" || blackword[i] == "gemidão" || blackword[i] == "rape") {
-              bot.plug.chat(`!ban @${currentDJ.username} p Playing Ear Rape`);
+              await currentDJ.ban(BAN_DURATION.PERMA, BAN_REASON.SPAMMING);
             }
 
             skipped = true;
