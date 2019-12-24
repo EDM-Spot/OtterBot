@@ -66,7 +66,11 @@ module.exports = function Util(bot) {
 
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = bot.plug.user(winner);
-      const userPos = bot.plug.waitlist().positionOf(user.id) + 1;
+
+      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
+        this.winner(players.filter(player => player !== winner));
+        return;
+      }
 
       if (!players.length) {
         this.players = [];
@@ -78,7 +82,9 @@ module.exports = function Util(bot) {
 
       const position = 5;
 
-      if (!isObject(user) || typeof user.username !== "string" || !user.username.length || (userPos >= 0 && userPos <= 5)) {
+      const userPos = bot.plug.waitlist().positionOf(user.id) + 1;
+
+      if (userPos >= 0 && userPos <= 5) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
