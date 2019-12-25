@@ -1,6 +1,7 @@
 const moment = require("moment");
 const { isObject, isNil, get, map } = require("lodash");
 const { BAN_DURATION, BAN_REASON } = require("miniplug");
+const Discord = require("discord.js");
 
 var savedMessageID;
 var savedMessage;
