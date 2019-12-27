@@ -31,7 +31,7 @@ module.exports = function Event(bot, platform) {
       
       if (waitlist.length <= position && !waitlist.contains(data.id)) {
         bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.waitlistSmaller);
-        bot.queue.add(data, waitlist.length);
+        bot.queue.add(data, waitlist.length + 1);
       } else if (waitlist.contains(data.id) && waitlist.positionOf(data.id) <= position) {
         bot.plug.chat(`@${data.username} ` + bot.lang.commands.dc.sameOrLower);
       } else {
