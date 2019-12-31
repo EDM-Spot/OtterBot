@@ -115,7 +115,7 @@ module.exports = function Event(bot, filename, platform) {
     
             bot.channels.get("486637288923725824").send({ embed });
     
-            bot.plug.chat(bot.lang.blacklist.currentAdded);
+            bot.plug.chat(bot.lang.commands.blacklist.currentAdded);
 
             await next.skip();
 
