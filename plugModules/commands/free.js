@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       await bot.db.models.users.increment("props", { by: 2, where: { id: rawData.uid } });
 
-      bot.plug.chat(bot.utils.replace("You got your daily 2 props. Come back tomorrow for more free props!", {})).delay(6e4).call("delete");
+      bot.plug.chat("You got your daily 2 props. Come back tomorrow for more free props!");
 
       return true;
     },
