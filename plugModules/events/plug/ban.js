@@ -8,7 +8,7 @@ module.exports = function Event(bot, platform) {
     run: async (data) => {
       if (!isObject(data)) return;
       
-      const userDB = await bot.db.models.users.findOne({ where: { username: data.user }});
+      const userDB = await bot.db.models.users.findOne({ where: { username: data.username }});
 
       if (isNil(userDB)) { console.log(data); return; }
 
@@ -24,7 +24,7 @@ module.exports = function Event(bot, platform) {
 
       const embed = new Discord.RichEmbed()
         //.setTitle("Title")
-        .setAuthor(data.user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
+        .setAuthor(data.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)
         //.setDescription("This is the main body of text, it can hold 2048 characters.")
         .setFooter("By " + data.moderator.username)
