@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 0,
     parameters: "<@username> [15|s|short|30|m|medium|45|l|long] <reason>",
     description: "Mutes the specified user for the specified duration, or defaults to 15 minutes.",
-    async execute(rawData, { name, mentions }, lang) { // eslint-disable-line no-unused-vars
+    async execute(rawData, { args, name, mentions }, lang) { // eslint-disable-line no-unused-vars
       if (!mentions.length || mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
@@ -18,18 +18,21 @@ module.exports = function Command(bot) {
 
       const user = mentions[0];
       
+      const moderator = await rawData.getUser();
+      const moderatorRole = await bot.utils.getRole(moderator);
+      
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
       } else if (user.id === rawData.uid) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if ((user.role >= ROLE.BOUNCER && await bot.utils.getRole(rawData.getUser()) < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
+      } else if ((user.role >= ROLE.BOUNCER && moderatorRole < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
         return false;
       }
 
-      const durationArgs = rawData.args.slice(1).shift();
+      const durationArgs = args.slice(1).shift();
       let apiDuration;
       let timeSelected = true;
       let reason;
@@ -57,11 +60,11 @@ module.exports = function Command(bot) {
       }
 
       if (timeSelected) {
-        reason = rawData.args.slice(2).join(" ");
+        reason = args.slice(2).join(" ");
       }
       else
       {
-        reason = rawData.args.slice(1).join(" ");
+        reason = args.slice(1).join(" ");
       }
 
       if (isEmpty(reason) || reason.trim() === "" || reason.length < 2) {

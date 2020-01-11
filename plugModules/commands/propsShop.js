@@ -47,12 +47,12 @@ module.exports = function Command(bot) {
             return false;
           }
   
-          if (type === "gif" && await bot.utils.getRole(rawData.getUser()) < ROLE.DJ) {
+          if (type === "gif" && await bot.utils.getRole(await rawData.getUser()) < ROLE.DJ) {
             this.reply(lang.propsShop.imageRDJ, {}, 6e4);
             return false;
           }
 
-          if (isNil(badge) && await bot.utils.getRole(rawData.getUser()) >= ROLE.BOUNCER) {
+          if (isNil(badge) && await bot.utils.getRole(await rawData.getUser()) >= ROLE.BOUNCER) {
             free = true;
           } else {
             if (props < 100) {

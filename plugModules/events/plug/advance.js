@@ -18,7 +18,7 @@ module.exports = function Event(bot, filename, platform) {
       var currentDJ = next.user;
 
       if (isNil(currentDJ.id) || isNil(currentDJ.username)) {
-        currentDJ = next.getUser();
+        currentDJ = await next.getUser();
       }
 
       bot.plug.woot();

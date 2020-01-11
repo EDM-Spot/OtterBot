@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 0,
     parameters: "<@username> [s|h|hour|short|l|d|day|long|f|p|perma|forever] <reason>",
     description: "Bans the specified user from using specific commands for the specified duration (hour, day or forever).",
-    async execute(rawData, { mentions, name }, lang) {
+    async execute(rawData, { args, mentions, name }, lang) {
       if (!mentions.length || mentions.length >= 2) {
         this.reply(lang.invalidUser, {}, 6e4);
         return false;
@@ -18,18 +18,21 @@ module.exports = function Command(bot) {
 
       const user = mentions[0];
       
+      const moderator = await rawData.getUser();
+      const moderatorRole = await bot.utils.getRole(moderator);
+      
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
       } else if (user.id === rawData.uid) {
         this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
         return false;
-      } else if ((user.role >= ROLE.BOUNCER && await bot.utils.getRole(rawData.getUser()) < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
+      } else if ((user.role >= ROLE.BOUNCER && moderatorRole < ROLE.MANAGER) || user.gRole >= ROLE.SITEMOD) {
         this.reply(lang.moderation.onStaff, {}, 6e4);
         return false;
       }
 
-      const durationArgs = rawData.args.slice(1).shift();
+      const durationArgs = args.slice(1).shift();
       let apiDuration;
       let timeSelected = true;
       let reason;
@@ -54,11 +57,11 @@ module.exports = function Command(bot) {
       }
 
       if (timeSelected) {
-        reason = rawData.args.slice(2).join(" ");
+        reason = args.slice(2).join(" ");
       }
       else
       {
-        reason = rawData.args.slice(1).join(" ");
+        reason = args.slice(1).join(" ");
       }
 
       if (isEmpty(reason) || reason.trim() === "" || reason.length < 2) {
