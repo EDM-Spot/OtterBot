@@ -222,10 +222,10 @@ module.exports = function Event(bot, filename, platform) {
         const timeoutMedia = bot.plug.historyEntry();
 
         console.log("savedID: " + savedID);
-        console.log("get(timeoutMedia, id): " + get(timeoutMedia, "id"));
+        console.log("get(timeoutMedia, cid): " + get(timeoutMedia, "cid"));
         console.log("(currentPlay.duration + 10) * 1e3: " + (currentPlay.duration + 10) * 1e3);
 
-        if (savedID === get(timeoutMedia, "id")) {
+        if (savedID === get(timeoutMedia, "cid")) {
           console.log("skipped: " + skipped);
 
           if (!skipped) {
