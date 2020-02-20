@@ -6,6 +6,8 @@ const Discord = require("discord.js");
 var savedMessageID;
 var savedMessage;
 
+let skipped = false;
+
 module.exports = function Event(bot, filename, platform) {
   const event = {
     name: "advance",
@@ -26,7 +28,7 @@ module.exports = function Event(bot, filename, platform) {
       let songAuthor = null;
       let songTitle = null;
 
-      let skipped = false;
+      skipped = false;
 
       try {
         if (get(currentPlay, "format", 2) === 1) {
@@ -219,7 +221,13 @@ module.exports = function Event(bot, filename, platform) {
       setTimeout(async () => {
         const timeoutMedia = bot.plug.historyEntry();
 
+        console.log("savedID: " + savedID);
+        console.log("get(timeoutMedia, id): " + get(timeoutMedia, "id"));
+        console.log("(currentPlay.duration + 10) * 1e3: " + (currentPlay.duration + 10) * 1e3);
+
         if (savedID === get(timeoutMedia, "id")) {
+          console.log("skipped: " + skipped);
+
           if (!skipped) {
             bot.plug.chat(bot.lang.stuckSkip);
 
