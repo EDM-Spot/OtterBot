@@ -223,9 +223,6 @@ module.exports = function Event(bot, filename, platform) {
       setTimeout(async () => {
         const timeoutMedia = bot.plug.historyEntry();
 
-        console.log("savedID: " + savedID);
-        console.log("get(timeoutMedia, cid): " + get(timeoutMedia.media, "id"));
-
         if (savedID === get(timeoutMedia.media, "id")) {
           if (!skipped) {
             bot.plug.chat(bot.lang.stuckSkip);
