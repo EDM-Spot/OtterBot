@@ -58,6 +58,7 @@ module.exports = function Util(bot) {
             await bot.plug.setLock(true);
             this.shouldUnlock = true;
           } catch (err) {
+            console.warn("setLock Error!");
             console.error(err);
           }
 
@@ -83,6 +84,7 @@ module.exports = function Util(bot) {
                 return;
               // to-do: handle wait list banned users
               default:
+                console.warn("next.user.add Error!");
                 console.error(err);
                 return;
             }
@@ -93,6 +95,7 @@ module.exports = function Util(bot) {
           try {
             await next.user.move(next.position);
           } catch (err) {
+            console.warn("next.move Error!");
             console.error(err);
             this.users.push(next);
             return;

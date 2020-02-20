@@ -76,10 +76,12 @@ module.exports = function Event(bot, filename, platform) {
           bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
             type: "LISTENING"
           }).catch(function(error) {
+            console.warn("setActivity Error!");
             console.log(error);
           });
         }
       } catch (err) {
+        console.warn("setActivity Error!");
         console.log(err);
       }
 
@@ -222,12 +224,9 @@ module.exports = function Event(bot, filename, platform) {
         const timeoutMedia = bot.plug.historyEntry();
 
         console.log("savedID: " + savedID);
-        console.log("get(timeoutMedia, cid): " + get(timeoutMedia, "cid"));
-        console.log("(currentPlay.duration + 10) * 1e3: " + (currentPlay.duration + 10) * 1e3);
+        console.log("get(timeoutMedia, cid): " + get(timeoutMedia.media, "id"));
 
-        if (savedID === get(timeoutMedia, "cid")) {
-          console.log("skipped: " + skipped);
-
+        if (savedID === get(timeoutMedia.media, "id")) {
           if (!skipped) {
             bot.plug.chat(bot.lang.stuckSkip);
 
@@ -359,6 +358,7 @@ module.exports = function Event(bot, filename, platform) {
             savedMessage = m.content;
           });
         } catch (err) {
+          console.warn("message.edit Error!");
           console.log(err);
         }
 
@@ -426,6 +426,7 @@ module.exports = function Event(bot, filename, platform) {
         bot.global.ignoreHistoryNext = false;
         //await bot.utils.updateRDJ(lastPlay.user.id);
       } catch (err) {
+        console.warn("advance Error!");
         console.warn(err);
       }
     },
