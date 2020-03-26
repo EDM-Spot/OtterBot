@@ -58,7 +58,7 @@ module.exports = class {
 
     // Grab the settings for this server from the Enmap
     // If there is no guild, get default conf (DMs)
-    const settings = client.getSettings(message.guild);
+    const settings = this.client.getSettings(message.guild);
 
     // For ease of use in commands and functions, we'll attach the settings
     // to the message object, so `message.settings` is accessible.
