@@ -51,10 +51,10 @@ module.exports = function Command(bot) {
       } else if (isObject(dj) && dj.id === rawData.uid) {
         this.reply(lang.props.propSelf, {}, 6e4);
         return true;
-      } else if (propsToGiveLeft == 0) {
-        this.reply(lang.props.noPropsToGive, {}, 6e4);
-        return true;
-      }
+      } //else if (propsToGiveLeft == 0) {
+        //this.reply(lang.props.noPropsToGive, {}, 6e4);
+        //return true;
+      //}
       
       await bot.db.models.props.findOrCreate({
         where: { identifier: generateIdentifier(currentMedia.id, dj, rawData) },
@@ -66,7 +66,7 @@ module.exports = function Command(bot) {
         },
       });
 
-      await bot.db.models.users.decrement("props_to_give", { by: 1, where: { id: rawData.uid } });
+      //await bot.db.models.users.decrement("props_to_give", { by: 1, where: { id: rawData.uid } });
       return true;
     },
   });
