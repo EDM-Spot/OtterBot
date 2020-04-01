@@ -4,6 +4,7 @@ module.exports = (client) => {
   class VoiceUtil {
     constructor() {
       this.channel = "485173051432894493";
+      this.key = client.config.soundcloud;
     }
 
     async play() {
@@ -11,20 +12,21 @@ module.exports = (client) => {
       const voiceChannel = client.channels.cache.get(this.channel);
       const connection = await voiceChannel.join();
 
-      let dataUrl;
+      let dataStream;
 
       if (plug.media.format === 1) {
-        dataUrl = `https://www.youtube.com/watch?v=${plug.media.cid}`;
+        const url = `https://www.youtube.com/watch?v=${plug.media.cid}`;
+
+        dataStream = await ytdl(dataUrl, {
+            begin: plug.media.elapsed,
+            quality: 'highestaudio',
+            highWaterMark: 1 << 25
+          });
       } else {
-        dataUrl = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${plug.media.cid}`;
+        dataStream = "http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + key;
       }
 
-      connection.play(await ytdl(dataUrl, {
-        begin: plug.media.elapsed,
-        filter: format => ['251'],
-        quality: 'highest',
-        highWaterMark: 1 << 25
-      }), {
+      connection.play(dataStream, {
         volume: false,
         type: 'opus'
       });
