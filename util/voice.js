@@ -17,7 +17,7 @@ module.exports = (client) => {
       if (plug.media.format === 1) {
         const url = `https://www.youtube.com/watch?v=${plug.media.cid}`;
 
-        dataStream = await ytdl(dataUrl, {
+        dataStream = await ytdl(url, {
             begin: plug.media.elapsed,
             quality: 'highestaudio',
             highWaterMark: 1 << 25
