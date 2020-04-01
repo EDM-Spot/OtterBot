@@ -120,7 +120,7 @@ module.exports = function Util(bot) {
             await bot.plug.setRole(id, 1000);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
+              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).roles.remove(role).catch(console.error);
             }
 
             bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
@@ -134,7 +134,7 @@ module.exports = function Util(bot) {
             await bot.plug.setRole(id, 1000);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).addRole(role).catch(console.error);
+              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).roles.add(role).catch(console.error);
             }
 
             bot.plug.chat(bot.utils.replace(bot.lang.rdjPromoted, {
@@ -159,7 +159,7 @@ module.exports = function Util(bot) {
             await user.setRole(0);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).removeRole(role).catch(console.error);
+              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).roles.remove(role).catch(console.error);
             }
 
             await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {

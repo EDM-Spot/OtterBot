@@ -16,7 +16,7 @@ module.exports = function Event(bot, filename, platform) {
 
         if (isNil(skippedSong)) return;
 
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
           //.setTitle("Title")
           .setAuthor(skippedSong.user.username, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
           .setColor(0xFF00FF)

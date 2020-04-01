@@ -115,7 +115,7 @@ module.exports = function Event(bot, platform) {
           await rawData.delete();
           //await bot.plug.moderateBanUser(rawData.from.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, bot.plug.BAN.PERMA);
 
-          const embed = new Discord.RichEmbed()
+          const embed = new Discord.MessageEmbed()
             .setAuthor(rawData.un, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
             .setColor(0xFF00FF)
             .setFooter("By OtterBot")

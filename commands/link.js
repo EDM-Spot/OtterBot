@@ -24,7 +24,7 @@ class Link extends Command {
       if (isNil(user)) return message.reply("Can't find your ID. Login in plug.dj, join the room and try again.");
 
       if (!isNil(user.get("discord"))) {
-        const discordName = this.client.users.get(user.get("discord")).username;
+        const discordName = this.client.users.cache.get(user.get("discord")).username;
         return message.reply("That ID it's already linked with " + discordName);
       }
 
@@ -48,7 +48,7 @@ class Link extends Command {
       if (!isNil(userPlug)) {
         if (userPlug.role === ROLE.DJ) {
           const role = "485174834448564224";
-          await this.client.guilds.get("485173051432894489").members.get(message.author.id).addRole(role).catch(console.error);
+          await this.client.guilds.get("485173051432894489").members.get(message.author.id).roles.add(role).catch(console.error);
         }
       }
 

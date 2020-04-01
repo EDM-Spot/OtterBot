@@ -69,7 +69,7 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const embed = new Discord.RichEmbed()
+      const embed = new Discord.MessageEmbed()
         //.setTitle("Title")
         .setAuthor(user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)

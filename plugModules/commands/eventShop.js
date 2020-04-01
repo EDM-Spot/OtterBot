@@ -86,7 +86,7 @@ module.exports = function Command(bot) {
 
         await eventUser.decrement("currency", { by: 1500 });
 
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
           .setColor(0xFF00FF)
           .setFooter("By " + rawData.from.username)
           .setTimestamp()

@@ -22,7 +22,7 @@ module.exports = function Event(bot, platform) {
 
       if (data.moderator.id === bot.plug.me().id) return;
 
-      const embed = new Discord.RichEmbed()
+      const embed = new Discord.MessageEmbed()
         //.setTitle("Title")
         .setAuthor(data.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
         .setColor(0xFF00FF)

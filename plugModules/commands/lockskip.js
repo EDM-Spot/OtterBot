@@ -13,7 +13,7 @@ module.exports = function Command(bot) {
       const dj = bot.plug.dj();
       const currentMedia = bot.plug.historyEntry();
 
-      const embed = new Discord.RichEmbed()
+      const embed = new Discord.MessageEmbed()
       //.setTitle("Title")
         .setAuthor(currentMedia.media.author + " - " + currentMedia.media.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
         .setColor(0xFF00FF)

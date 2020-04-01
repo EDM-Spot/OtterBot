@@ -23,7 +23,7 @@ module.exports = function Event(bot, filename, platform) {
       //if (deleted_by === bot.plug.getSelf().id) return;
       //if (deleted_by === cid) return;
 
-      //const embed = new Discord.RichEmbed()
+      //const embed = new Discord.MessageEmbed()
       //.setTitle("Title")
       //  .setAuthor(username, "https://www.shareicon.net/data/64x64/2017/06/21/887378_delete_512x512.png")
       //  .setColor(0xFF00FF)

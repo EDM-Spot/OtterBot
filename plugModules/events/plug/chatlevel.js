@@ -11,7 +11,7 @@ module.exports = function Event(bot, filename, platform) {
 
       if (data.user.id === bot.plug.me().id) return;
 
-      const embed = new Discord.RichEmbed()
+      const embed = new Discord.MessageEmbed()
         //.setTitle("Title")
         .setAuthor(data.user.username, "http://www.myiconfinder.com/uploads/iconsets/64-64-60eade7f184e696a79fa2ff1e81c851d.png")
         .setColor(0xFF00FF)

@@ -25,7 +25,7 @@ module.exports = function Command(bot) {
         const YouTubeMediaData = await bot.youtube.getMedia(cid);
         const fullTitle = get(YouTubeMediaData, "snippet.title");
 
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
           //.setTitle("Title")
           .setAuthor(fullTitle, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
           .setColor(0xFF00FF)
@@ -61,7 +61,7 @@ module.exports = function Command(bot) {
           const SoundCloudMediaData = await bot.soundcloud.getTrack(soundcloudMedia.id);
           const fullTitle = SoundCloudMediaData.title;
 
-          const embed = new Discord.RichEmbed()
+          const embed = new Discord.MessageEmbed()
             //.setTitle("Title")
             .setAuthor(fullTitle, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
             .setColor(0xFF00FF)

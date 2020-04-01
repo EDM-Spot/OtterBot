@@ -82,7 +82,7 @@ class Slots extends Command {
 
       message.channel.send("Current JackPot: " + jackpot + " Props");
 
-      const embed = new Discord.RichEmbed();
+      const embed = new Discord.MessageEmbed();
       const dollarSigns = "   💲 💲 💲   ";
 
       embed.description = (results.lines.slice(-2)[0].isWon ? "\n↘" : "\n⬛") + dollarSigns + (results.lines.slice(-1)[0].isWon ? "↙" : "⬛");
@@ -139,7 +139,7 @@ class Slots extends Command {
 
       embed.setTitle("🎰 Slot Machine 🎰");
       embed.setTimestamp();
-      embed.setFooter(message.author.username, `${message.author.displayAvatarURL}`);
+      embed.setFooter(message.author.username, `${message.author.displayAvatarURL()}`);
       embed.setColor("#e6f90e");
 
       await inst.increment("props", { by: payout });

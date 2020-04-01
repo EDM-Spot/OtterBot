@@ -499,7 +499,7 @@ module.exports = (client) => {
     const guild = client.guilds.get(req.params.guildID);
     if (!guild) return res.status(404);
     if (req.query.fetch) {
-      await guild.fetchMembers();
+      await guild.members.fetch();
     }
     const totals = guild.members.size;
     const start = parseInt(req.query.start, 10) || 0;

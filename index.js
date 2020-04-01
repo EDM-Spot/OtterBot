@@ -1,7 +1,7 @@
 // This will check if the node version you are running is the required
 // Node version, if it isn't it will throw the following error to inform
 // you.
-if (Number(process.version.slice(1).split(".")[0]) < 8) throw new Error("Node 10.0.0 or higher is required. Update Node on your system.");
+if (Number(process.version.slice(1).split(".")[0]) < 12) throw new Error("Node 12.0.0 or higher is required. Update Node on your system.");
 
 // Load up the discord.js library
 const Discord = require("discord.js");
@@ -290,8 +290,8 @@ const init = async () => {
 
 init();
 
-client.on("disconnect", () => client.logger.warn("Bot is disconnecting..."))
-  .on("reconnecting", () => client.logger.log("Bot reconnecting...", "log"))
+client.on("shardDisconnected", (event, shardID) => client.logger.warn("Bot is disconnecting..."))
+  .on("shardReconnecting", id => client.logger.log("Bot reconnecting...", "log"))
   .on("error", e => client.logger.error(e))
   .on("warn", info => client.logger.warn(info));
 

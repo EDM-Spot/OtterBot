@@ -85,6 +85,15 @@ module.exports = function Event(bot, filename, platform) {
         console.log(err);
       }
 
+      try {
+        if (!isNil(bot.user)) {
+          await bot.voiceUtil.play();
+        }
+      } catch (err) {
+        console.warn("play Error!");
+        console.log(err);
+      }
+
       const blackword = ["nightcore", "nightstep", "bass boosted", "whatsapp", "gemido", "gemidão", "rape"];
 
       for (let i = 0; i < blackword.length; i++) {
@@ -102,7 +111,7 @@ module.exports = function Event(bot, filename, platform) {
               },
             });
     
-            const embed = new Discord.RichEmbed()
+            const embed = new Discord.MessageEmbed()
               //.setTitle("Title")
               .setAuthor(currentPlay.author + " - " + currentPlay.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
               .setColor(0xFF00FF)
@@ -197,26 +206,6 @@ module.exports = function Event(bot, filename, platform) {
           }
         }
       }
-
-      //let stream;
-      //if (data.media.format === 1) {
-      //stream = await ytdl(`https://www.youtube.com/watch?v=${data.media.cid}`, { filter: "audioonly", quality: "lowest" });
-
-      //bot.channels.get("485173051432894493").join()
-      //  .then(connection => {
-      //    connection.playOpusStream(stream, { volume: 1 })
-      //      .on("error", error => console.warn(error));
-      //  })
-      //  .catch(console.warn);
-      //} else {
-      //stream = `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${data.media.cid}`; //Not Supported Yet
-      //}
-
-      //bot.channels.get("485173051432894493").join()
-      //  .then(async connection => {
-      //    connection.playOpusStream(await ytdl(dataUrl), streamOptions);
-      //  })
-      //  .catch(console.error);
 
       const savedID = currentPlay.id;
 
@@ -342,10 +331,10 @@ module.exports = function Event(bot, filename, platform) {
         try {
           if (!isNil(savedMessageID)) {
             if (lastPlaySkipped === 1) {
-              bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
+              bot.channels.get("486125808553820160").messages.fetch(savedMessageID)
                 .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " Skipped!"));
             } else {
-              bot.channels.get("486125808553820160").fetchMessage(savedMessageID)
+              bot.channels.get("486125808553820160").messages.fetch(savedMessageID)
                 .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
             }
           }

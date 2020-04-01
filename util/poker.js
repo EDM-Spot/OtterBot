@@ -38,7 +38,7 @@ module.exports = (client) => {
 
     async end() {
       for (const playerID of this.startingPlayers) {
-        await this.guild.members.get(playerID).removeRole("512635547320188928").catch(console.warn);
+        await this.guild.members.get(playerID).roles.remove("512635547320188928").catch(console.warn);
       }
 
       this.players = new Set();
@@ -119,9 +119,9 @@ module.exports = (client) => {
 
     async send(text, withCards = true) {
       const prefix = "-";
-      const playerIcon = this.currentPlayer.user.displayAvatarURL;
+      const playerIcon = this.currentPlayer.user.displayAvatarURL();
 
-      const embed = new Discord.RichEmbed()
+      const embed = new Discord.MessageEmbed()
         .setTitle("♥️♣️ Texas Hold'em Poker ♠️♦️")
         .addField(`Round ${this.currentRound + 1}`, [
           text,
@@ -179,12 +179,12 @@ module.exports = (client) => {
         this.totalBets.set(playerID, 0);
 
         const imagePromise = Deck.drawCards(cards);
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
           .addField("Game Started", `A poker game has started in ${client.channels.get(this.channel).name}.`)
           .addField("Your Cards", cards.map(card => `${card.toEmojiForm()}\u2000(${card})`))
           .setImage("attachment://cards.png");
 
-        const promise = imagePromise.then(image => client.users.get(playerID).send({
+        const promise = imagePromise.then(image => client.users.cache.get(playerID).send({
           files: [
             {
               attachment: image,
@@ -217,7 +217,7 @@ module.exports = (client) => {
       //this.handler.removeGame(this);
 
       if (this.players.size === 1) {
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
           .addField("Game Results", [
             "Everyone decided to fold!",
             `**${this.getPlayer(0).user.username}** wins **${this.tableMoney}** Props`
@@ -263,11 +263,11 @@ module.exports = (client) => {
       }
 
       const winners = Hand.winners(hands).map(hand => {
-        return client.users.get(hand.player);
+        return client.users.cache.get(hand.player);
       });
 
       const payout = Math.floor(this.tableMoney / winners.length);
-      const embed = new Discord.RichEmbed()
+      const embed = new Discord.MessageEmbed()
         .addField("Game Results", [
           winners.length.plural("The winner is...", "The winners are..."),
           `**${winners.map(w => w.username).join("**, **")}**`,
@@ -281,7 +281,7 @@ module.exports = (client) => {
       //}
 
       embed.addField("Hands", hands.map(hand => {
-        const name = client.users.get(hand.player).tag;
+        const name = client.users.cache.get(hand.player).tag;
         const desc = hand.descr.replace(",", ":").replace(/'/g, "").replace(/&/g, "and");
         const cards = hand.original.map(card => `${card.toEmojiForm()}\u2000(${card})`).join("\n");
         return `**${name}**: ${desc}\n${cards}`;
@@ -359,7 +359,7 @@ module.exports = (client) => {
       const player = this.currentPlayer;
       this.players.delete(player.id);
 
-      //await this.guild.members.get(player.id).removeRole("512635547320188928").catch(console.warn);
+      //await this.guild.members.get(player.id).roles.remove("512635547320188928").catch(console.warn);
 
       this.currentTurn -= 1;
 
@@ -427,7 +427,7 @@ module.exports = (client) => {
       this.players.delete(player.id);
       this.startingPlayers.delete(player.id);
 
-      await this.guild.members.get(player.id).removeRole("512635547320188928").catch(console.warn);
+      await this.guild.members.get(player.id).roles.remove("512635547320188928").catch(console.warn);
 
       this.currentTurn -= 1;
 
