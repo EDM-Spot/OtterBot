@@ -42,7 +42,7 @@ module.exports = function Command(bot) {
           .addField("Blacklisted", " (youtube.com/watch?v=" + currentMedia.media.cid + ")", false);
         //.addBlankField(true);
 
-        bot.channels.get("486637288923725824").send({ embed });
+        bot.channels.cache.get("486637288923725824").send({ embed });
 
         this.reply(lang.blacklist.currentAdded, {}, 6e4);
         await currentMedia.skip();
@@ -77,7 +77,7 @@ module.exports = function Command(bot) {
           .addField("Added To Blacklist", " (youtube.com/watch?v=" + cid + ")", false);
         //.addBlankField(true);
 
-        bot.channels.get("486637288923725824").send({ embed });
+        bot.channels.cache.get("486637288923725824").send({ embed });
 
         this.reply(lang.blacklist.linkAdded, {}, 6e4);
         return true;
@@ -112,7 +112,7 @@ module.exports = function Command(bot) {
             .addField("Added To Blacklist", "SoundCloud", false);
           //.addBlankField(true);
 
-          bot.channels.get("486637288923725824").send({ embed });
+          bot.channels.cache.get("486637288923725824").send({ embed });
 
           this.reply(lang.blacklist.linkAdded, {}, 6e4);
           return true;

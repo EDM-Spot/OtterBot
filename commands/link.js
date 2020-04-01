@@ -48,7 +48,7 @@ class Link extends Command {
       if (!isNil(userPlug)) {
         if (userPlug.role === ROLE.DJ) {
           const role = "485174834448564224";
-          await this.client.guilds.get("485173051432894489").members.get(message.author.id).roles.add(role).catch(console.error);
+          await this.client.guilds.cache.get("485173051432894489").members.get(message.author.id).roles.add(role).catch(console.error);
         }
       }
 

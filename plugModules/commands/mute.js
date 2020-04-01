@@ -88,8 +88,8 @@ module.exports = function Command(bot) {
         .addField("Reason", reason, false);
       //.addBlankField(true);
 
-      bot.channels.get("485173444330258454").send({embed});
-      bot.channels.get("486637288923725824").send({embed});
+      bot.channels.cache.get("485173444330258454").send({embed});
+      bot.channels.cache.get("486637288923725824").send({embed});
       
       if (user.role < ROLE.BOUNCER && user.gRole < ROLE.SITEMOD) {
         const { role } = user;

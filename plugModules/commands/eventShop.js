@@ -93,7 +93,7 @@ module.exports = function Command(bot) {
           .addField("ID", rawData.from.id, true)
           .addField("EVENT", "Bought Icon", false);
   
-        bot.channels.get("486598639691497474").send({embed});
+        bot.channels.cache.get("486598639691497474").send({embed});
 
         await bot.plug.sendChat("Thanks for your Icon purchase!");
 

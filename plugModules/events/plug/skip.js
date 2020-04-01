@@ -30,7 +30,7 @@ module.exports = function Event(bot, filename, platform) {
           .addField("Skipped", skippedSong.media.name + " (youtube.com/watch?v=" + skippedSong.media.cid + ")", false);
         //.addBlankField(true);
 
-        bot.channels.get("487985043776733185").send({ embed });
+        bot.channels.cache.get("487985043776733185").send({ embed });
       });
     },
     init() {

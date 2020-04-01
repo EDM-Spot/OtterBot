@@ -107,7 +107,7 @@ class TriviaPay extends Command {
       if (this.client.triviaUtil.players.includes(userID)) return message.reply("Paid more " + price + " Props.");
 
       this.client.triviaUtil.add(userID);
-      await this.client.guilds.get("485173051432894489").members.get(message.author.id).roles.add("512635547320188928").catch(console.error);
+      await this.client.guilds.cache.get("485173051432894489").members.get(message.author.id).roles.add("512635547320188928").catch(console.error);
 
       return message.reply("Paid " + price + " Props And Joined Next Trivia.");
     } catch (e) {

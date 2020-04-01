@@ -126,7 +126,7 @@ module.exports = function Event(bot, filename, platform) {
               .addField("Blacklisted", " (youtube.com/watch?v=" + currentPlay.cid + ")", false);
             //.addBlankField(true);
     
-            bot.channels.get("486637288923725824").send({ embed });
+            bot.channels.cache.get("486637288923725824").send({ embed });
     
             bot.plug.chat(bot.lang.commands.blacklist.currentAdded);
 
@@ -331,15 +331,15 @@ module.exports = function Event(bot, filename, platform) {
         try {
           if (!isNil(savedMessageID)) {
             if (lastPlaySkipped === 1) {
-              bot.channels.get("486125808553820160").messages.fetch(savedMessageID)
+              bot.channels.cache.get("486125808553820160").messages.fetch(savedMessageID)
                 .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " Skipped!"));
             } else {
-              bot.channels.get("486125808553820160").messages.fetch(savedMessageID)
+              bot.channels.cache.get("486125808553820160").messages.fetch(savedMessageID)
                 .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
             }
           }
             
-          bot.channels.get("486125808553820160").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
+          bot.channels.cache.get("486125808553820160").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
             savedMessageID = m.id;
             savedMessage = m.content;
           });

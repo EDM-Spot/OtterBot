@@ -38,7 +38,7 @@ module.exports = function Command(bot) {
           .addField("Removed From Blacklist", " (youtube.com/watch?v=" + cid + ")", false);
         //.addBlankField(true);
 
-        bot.channels.get("486637288923725824").send({ embed });
+        bot.channels.cache.get("486637288923725824").send({ embed });
 
         await bot.db.models.blacklist.destroy({ where: { cid: cid } });
         this.reply(lang.blacklist.deleted, {}, 6e4);
@@ -74,7 +74,7 @@ module.exports = function Command(bot) {
             .addField("Removed From Blacklist", "SoundCloud", false);
           //.addBlankField(true);
 
-          bot.channels.get("486637288923725824").send({ embed });
+          bot.channels.cache.get("486637288923725824").send({ embed });
 
           await bot.db.models.blacklist.destroy({ where: { cid: `${soundcloudMedia.id}` } });
           this.reply(lang.blacklist.deleted, {}, 6e4);

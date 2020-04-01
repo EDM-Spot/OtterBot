@@ -24,7 +24,7 @@
                 </h5>
                 <% 
                   let href, text;
-                  if(bot.guilds.get(guild.id)) {
+                  if(bot.guilds.cache.get(guild.id)) {
                     href = `/dashboard/${guild.id}/manage`;
                     text = "Manage";
                   } else {

@@ -25,7 +25,7 @@ module.exports = function Event(bot, filename, platform) {
         .addField("Data", data.minChatLevel, true);
       //.addBlankField(true);
 
-      bot.channels.get("486637288923725824").send({embed});
+      bot.channels.cache.get("486637288923725824").send({embed});
     },
     init() {
       bot.plug.on(this.name, this.run);

@@ -37,7 +37,7 @@ module.exports = function Event(bot, platform) {
         .addField("Time", data.duration, true);
       //.addBlankField(true);
 
-      bot.channels.get("487985043776733185").send({embed});
+      bot.channels.cache.get("487985043776733185").send({embed});
 
       await bot.redis.removeDisconnection(userID);
 

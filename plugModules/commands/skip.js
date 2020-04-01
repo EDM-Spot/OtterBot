@@ -28,7 +28,7 @@ module.exports = function Command(bot) {
         .addField("Skipped", " (youtube.com/watch?v=" + currentMedia.media.cid + ")", false);
       //.addBlankField(true);
 
-      bot.channels.get("486637288923725824").send({embed});
+      bot.channels.cache.get("486637288923725824").send({embed});
 
       if (isObject(currentMedia) && isObject(dj)) {
         await currentMedia.skip();

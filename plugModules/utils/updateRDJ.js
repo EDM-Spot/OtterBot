@@ -102,7 +102,7 @@ module.exports = function Util(bot) {
 
       const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / (totalsongs + playsmehcount)) * 100));
 
-      const role = "485174834448564224"; //bot.guilds.get("485173051432894489").roles.find(r => r.name === "RDJ");
+      const role = "485174834448564224"; //bot.guilds.cache.get("485173051432894489").roles.find(r => r.name === "RDJ");
 
       if (isNaN(points)) {
         await user.setRole(0);
@@ -120,7 +120,7 @@ module.exports = function Util(bot) {
             await bot.plug.setRole(id, 1000);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).roles.remove(role).catch(console.error);
+              await bot.guilds.cache.get("485173051432894489").members.get(userDB.get("discord")).roles.remove(role).catch(console.error);
             }
 
             bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
@@ -134,7 +134,7 @@ module.exports = function Util(bot) {
             await bot.plug.setRole(id, 1000);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).roles.add(role).catch(console.error);
+              await bot.guilds.cache.get("485173051432894489").members.get(userDB.get("discord")).roles.add(role).catch(console.error);
             }
 
             bot.plug.chat(bot.utils.replace(bot.lang.rdjPromoted, {
@@ -159,7 +159,7 @@ module.exports = function Util(bot) {
             await user.setRole(0);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.get("485173051432894489").members.get(userDB.get("discord")).roles.remove(role).catch(console.error);
+              await bot.guilds.cache.get("485173051432894489").members.get(userDB.get("discord")).roles.remove(role).catch(console.error);
             }
 
             await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {

@@ -8,7 +8,7 @@ module.exports = (client) => {
 
     async play() {
       const plug = client.plug.historyEntry();
-      const voiceChannel = client.channels.get(this.channel);
+      const voiceChannel = client.channels.cache.get(this.channel);
       const connection = await voiceChannel.join();
 
       let dataUrl;

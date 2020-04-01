@@ -18,7 +18,7 @@ module.exports = function Util(bot) {
         .addField("Users Online", usersCount, true)
         .addField("Mods Online", modsOnline, true);
 
-      bot.channels.get("536278824753561630").send({embed});
+      bot.channels.cache.get("536278824753561630").send({embed});
     },
   };
 

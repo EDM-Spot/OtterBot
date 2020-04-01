@@ -124,8 +124,8 @@ module.exports = function Event(bot, platform) {
             .addField("Warning", "Promote other room", false)
             .addField("Message", rawData.message, false);
 
-          bot.channels.get("485173444330258454").send({ embed });
-          bot.channels.get("486637288923725824").send({ embed });
+          bot.channels.cache.get("485173444330258454").send({ embed });
+          bot.channels.cache.get("486637288923725824").send({ embed });
         }
       }
 
@@ -133,7 +133,7 @@ module.exports = function Event(bot, platform) {
         setTimeout(() => rawData.delete(), 3e5);
       }
 
-      //bot.channels.get("486125808553820160").send(rawData.from.username + ": " + rawData.message);
+      //bot.channels.cache.get("486125808553820160").send(rawData.from.username + ": " + rawData.message);
 
       if (!commandHandleRegex.test(rawData.message)) {
         if (isNil(bot.lottery.timer)) return;

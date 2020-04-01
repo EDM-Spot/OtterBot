@@ -8,7 +8,7 @@ require("moment-timer");
 module.exports = (client) => {
   class PokerUtil {
     constructor() {
-      this.guild = client.guilds.get("485173051432894489");
+      this.guild = client.guilds.cache.get("485173051432894489");
 
       this.deck = new Deck().fill().shuffle();
 
@@ -81,12 +81,12 @@ module.exports = (client) => {
       this.roundBets = new Map();
       this.previousBets = [];
 
-      client.channels.get(this.channel).send("<@&512635547320188928> 1 Minute left until next Round start!");
-      client.channels.get(this.channel).send("Type `-p exit` if you want to leave the table!");
+      client.channels.cache.get(this.channel).send("<@&512635547320188928> 1 Minute left until next Round start!");
+      client.channels.cache.get(this.channel).send("Type `-p exit` if you want to leave the table!");
 
       new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
         if (this.startingPlayers.size < this.minPlayers) {
-          client.channels.get(this.channel).send(`Not enough players (${this.minPlayers} required) to continue this game.`);
+          client.channels.cache.get(this.channel).send(`Not enough players (${this.minPlayers} required) to continue this game.`);
           await this.end();
         } else {
           this.players = this.startingPlayers;
@@ -159,7 +159,7 @@ module.exports = (client) => {
         return this.skip();
       }
 
-      return client.channels.get(this.channel).send(`${this.currentPlayer}, it is your turn!`, options);
+      return client.channels.cache.get(this.channel).send(`${this.currentPlayer}, it is your turn!`, options);
     }
 
     checkGame() {
@@ -180,7 +180,7 @@ module.exports = (client) => {
 
         const imagePromise = Deck.drawCards(cards);
         const embed = new Discord.MessageEmbed()
-          .addField("Game Started", `A poker game has started in ${client.channels.get(this.channel).name}.`)
+          .addField("Game Started", `A poker game has started in ${client.channels.cache.get(this.channel).name}.`)
           .addField("Your Cards", cards.map(card => `${card.toEmojiForm()}\u2000(${card})`))
           .setImage("attachment://cards.png");
 
@@ -241,7 +241,7 @@ module.exports = (client) => {
         }
 
         options.embed = embed;
-        client.channels.get(this.channel).send(options);
+        client.channels.cache.get(this.channel).send(options);
 
         if (this.startingPlayers.size > 1) {
           await this.endCurrent();
@@ -293,7 +293,7 @@ module.exports = (client) => {
         .setImage("attachment://cards.png")
         .addField("Cards on Table", this.tableCards.map(card => `${card.toEmojiForm()}\u2000(${card})`));
 
-      client.channels.get(this.channel).send({
+      client.channels.cache.get(this.channel).send({
         embed,
         files: [
           {
@@ -329,7 +329,7 @@ module.exports = (client) => {
       this.previousBets.unshift(amount);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
-      await client.channels.get(this.channel).send([
+      await client.channels.cache.get(this.channel).send([
         `**${player.user.username}** has bet **${amount}** Props`,
         `The total pool is now **${this.tableMoney}** Props`
       ]);
@@ -347,7 +347,7 @@ module.exports = (client) => {
       this.previousBets.unshift(0);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
-      await client.channels.get(this.channel).send([
+      await client.channels.cache.get(this.channel).send([
         `**${player.user.username}** has decided to check.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
@@ -368,7 +368,7 @@ module.exports = (client) => {
         this.previousBets.splice(betIndex, 1);
       }
 
-      await client.channels.get(this.channel).send([
+      await client.channels.cache.get(this.channel).send([
         `**${player.user.username}** has ${timeout ? "been forced" : "decided"} to fold.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
@@ -396,7 +396,7 @@ module.exports = (client) => {
       this.previousBets.unshift(props);
       if (this.previousBets.length > this.players.size) this.previousBets.pop();
 
-      await client.channels.get(this.channel).send([
+      await client.channels.cache.get(this.channel).send([
         `**${player.user.username}** has gone all-in!`,
         `The total pool is now **${this.tableMoney}** Props`
       ]);
@@ -411,7 +411,7 @@ module.exports = (client) => {
       const player = this.currentPlayer;
       const props = this.playerBalances.get(player.id);
 
-      await client.channels.get(this.channel).send([
+      await client.channels.cache.get(this.channel).send([
         `**${player.user.username}** had gone all-in and is skipping their turn.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);
@@ -436,7 +436,7 @@ module.exports = (client) => {
         this.previousBets.splice(betIndex, 1);
       }
 
-      await client.channels.get(this.channel).send([
+      await client.channels.cache.get(this.channel).send([
         `**${player.user.username}** left the table.`,
         `The total pool is currently **${this.tableMoney}** Props`
       ]);

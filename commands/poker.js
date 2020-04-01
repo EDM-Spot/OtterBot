@@ -112,7 +112,7 @@ class Poker extends Command {
           }
 
           this.client.pokerUtil.startingPlayers.add(userID);
-          await this.client.guilds.get("485173051432894489").members.get(message.author.id).roles.add("512635547320188928").catch(console.error);
+          await this.client.guilds.cache.get("485173051432894489").members.get(message.author.id).roles.add("512635547320188928").catch(console.error);
 
           return message.reply("Joined Poker.");
         }
@@ -221,7 +221,7 @@ class Poker extends Command {
           } else if (!this.client.pokerUtil.started) {
             this.client.pokerUtil.startingPlayers.delete(userID);
 
-            await this.client.guilds.get("485173051432894489").members.get(userID).roles.remove("512635547320188928").catch(console.warn);
+            await this.client.guilds.cache.get("485173051432894489").members.get(userID).roles.remove("512635547320188928").catch(console.warn);
 
             return message.reply("You left the table!");
           }
