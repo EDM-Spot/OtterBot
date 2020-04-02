@@ -11,7 +11,6 @@ module.exports = (client) => {
       const plug = client.plug.historyEntry();
       const voiceChannel = client.channels.cache.get(this.channel);
 
-      console.log(voiceChannel.members.size);
       if (voiceChannel.members.size < 1) { return; }
 
       const connection = await voiceChannel.join();
@@ -45,7 +44,13 @@ module.exports = (client) => {
     let newUserChannel = newMember.voiceChannel;
     let oldUserChannel = oldMember.voiceChannel;
 
+    console.log(voiceChannel.members.size);
+    console.log(voiceChannel);
+
     if (newMember.voiceChannelID != "485173051432894493") { return; }
+
+    console.log(newUserChannel);
+    console.log(oldUserChannel);
 
     if (oldUserChannel === undefined && newUserChannel !== undefined && voiceChannel.members.size >= 1) {
       await client.voiceUtil.play();
