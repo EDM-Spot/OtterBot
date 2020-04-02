@@ -423,7 +423,7 @@ module.exports = (client) => {
   // not in the template, to simplify the page code. Most of it **could** be done on the page.
   app.get("/stats", (req, res) => {
     const duration = moment.duration(client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
-    const members = client.guilds.reduce((p, c) => p + c.memberCount, 0);
+    const members = client.guilds.cache.reduce((p, c) => p + c.memberCount, 0);
     const textChannels = client.channels.filter(c => c.type === "text").size;
     const voiceChannels = client.channels.filter(c => c.type === "voice").size;
     const guilds = client.guilds.size;
