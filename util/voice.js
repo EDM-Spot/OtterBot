@@ -37,7 +37,7 @@ module.exports = (client) => {
     }
   }
 
-  client.on('voiceStateUpdate', (oldMember, newMember) => {
+  client.on('voiceStateUpdate', async (oldMember, newMember) => {
     const voiceChannel = client.channels.cache.get(this.channel);
     let newUserChannel = newMember.voiceChannel;
     let oldUserChannel = oldMember.voiceChannel;
