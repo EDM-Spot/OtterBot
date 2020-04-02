@@ -28,12 +28,19 @@ module.exports = (client) => {
         });
       } else {
         //dataStream = await client.soundcloud.getStream(plug.media.cid);
-        dataStream = await fetch("http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key)
+        //dataStream = await fetch("http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key)
 
-        const stream = await dataStream.json();
-        const mp3Url = stream.url;
+        let response = await fetch(`https://api-v2.soundcloud.com/tracks/${plug.media.cid}?client_id=${this.key}`);
+        const trackV2 = await response.json();
+        const streamUrl = trackV2.media.transcodings.filter(
+          transcoding => transcoding.format.protocol === 'progressive'
+        )[0].url;
 
-        console.log(mp3Url);
+        response = await fetch(`${streamUrl}?client_id=${this.key}`);
+        const stream = await response.json();
+        const dataStream = stream.url;
+
+        console.log(dataStream);
       }
 
       connection.play(dataStream, {
