@@ -27,6 +27,9 @@ module.exports = (client) => {
           highWaterMark: 1 << 25
         });
       } else {
+        const soundcloudData = await client.soundcloud.getTrack(plug.media.cid);
+        console.log(soundcloudData.stream_url);
+
         dataStream = await client.soundcloud.getStream(plug.media.cid);
       }
 
