@@ -51,7 +51,7 @@ module.exports = (client) => {
         if (newMember.id === "486087139088400384") { return; }
         if (newMember.channelID != "485173051432894493") { return; }
 
-        if (voiceChannel.members.size >= 1) {
+        if (voiceChannel.members.size >= 1 && !voiceChannel.members.some(user => user.id === '486087139088400384')) {
           await client.voiceUtil.play();
         }
       }
