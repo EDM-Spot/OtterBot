@@ -40,7 +40,6 @@ module.exports = (client) => {
   client.on('voiceStateUpdate', async (oldMember, newMember) => {
     const voiceChannel = client.channels.cache.get("485173051432894493");
 
-    console.log(newMember);
     if (newMember !== undefined) {
       if (newMember.channelID !== null) {
         if (newMember.id === "486087139088400384") { return; }
