@@ -32,13 +32,14 @@ module.exports = (client) => {
 
         let response = await fetch(`https://api-v2.soundcloud.com/tracks/${plug.media.cid}?client_id=${this.key}`);
         const trackV2 = await response.json();
+        console.log(trackV2);
         const streamUrl = trackV2.media.transcodings.filter(
           transcoding => transcoding.format.protocol === 'progressive'
         )[0].url;
 
         response = await fetch(`${streamUrl}?client_id=${this.key}`);
         const stream = await response.json();
-        const dataStream = stream.url;
+        dataStream = stream.url;
 
         console.log(dataStream);
       }
