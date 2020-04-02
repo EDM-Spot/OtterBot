@@ -42,17 +42,17 @@ module.exports = (client) => {
 
   client.on('voiceStateUpdate', async (oldMember, newMember) => {
     const voiceChannel = client.channels.cache.get("485173051432894493");
-    let newUserChannel = oldMember.voiceChannel;
+    let newUserChannel = newMember.voiceChannel;
 
-    if (oldMember.id === "486087139088400384") { return; }
-    if (oldMember.channelID != "485173051432894493") { return; }
+    if (newMember.id === "486087139088400384") { return; }
+    if (newMember.channelID != "485173051432894493") { return; }
 
     console.log(newUserChannel);
     console.log(voiceChannel.members.size);
 
-    if (newUserChannel !== undefined && voiceChannel.members.size >= 1) {
+    if (voiceChannel.members.size >= 1) {
       await client.voiceUtil.play();
-    } else if (newUserChannel === undefined) {
+    } else {
       await voiceChannel.leave();
     }
   });
