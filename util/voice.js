@@ -47,7 +47,7 @@ module.exports = (client) => {
 
     if (newMember.voiceChannelID != this.channel) { return; }
 
-    if (oldUserChannel === undefined && newUserChannel !== undefined && voiceChannel.members.size > 1) {
+    if (oldUserChannel === undefined && newUserChannel !== undefined && voiceChannel.members.size >= 1) {
       await voiceChannel.join();
     } else if (newUserChannel === undefined) {
       await voiceChannel.leave();
