@@ -44,7 +44,11 @@ module.exports = (client) => {
     const voiceChannel = client.channels.cache.get("485173051432894493");
     let newUserChannel = newMember.voiceChannel;
 
+    if (newMember.id != "486087139088400384") { return; }
     if (newMember.channelID != "485173051432894493") { return; }
+
+    console.log(newUserChannel);
+    console.log(voiceChannel.members.size);
 
     if (newUserChannel !== undefined && voiceChannel.members.size >= 1) {
       await client.voiceUtil.play();
