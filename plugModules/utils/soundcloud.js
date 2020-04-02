@@ -36,6 +36,9 @@ module.exports = function Util(bot) {
     getTrack(id) {
       return this.req("tracks/" + id);
     }
+    getStream(id) {
+      return this.req("tracks/" + id + "/stream");
+    }
   }
 
   bot.soundcloud = new SoundCloud(bot.config.soundcloud);

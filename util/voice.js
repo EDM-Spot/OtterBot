@@ -23,7 +23,7 @@ module.exports = (client) => {
             highWaterMark: 1 << 25
           });
       } else {
-        dataStream = "http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key;
+        dataStream = await client.soundcloud.getStream(plug.media.cid);
       }
 
       connection.play(dataStream, {
