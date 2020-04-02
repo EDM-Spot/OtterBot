@@ -1,5 +1,5 @@
 const ytdl = require('ytdl-core-discord');
-const request = require("request-promise");
+const fetch = require("node-fetch");
 
 module.exports = (client) => {
   class VoiceUtil {
@@ -27,7 +27,8 @@ module.exports = (client) => {
           highWaterMark: 1 << 25
         });
       } else {
-        dataStream = await client.soundcloud.getStream(plug.media.cid);
+        //dataStream = await client.soundcloud.getStream(plug.media.cid);
+        dataStream = fetch("http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key)
       }
 
       connection.play(dataStream, {
@@ -51,8 +52,6 @@ module.exports = (client) => {
       }
     }
 
-    console.log(voiceChannel.members.some(user => user.id === '486087139088400384'));
-    console.log(voiceChannel.members.size);
     if (voiceChannel.members.some(user => user.id === '486087139088400384')) {
       if (voiceChannel.members.size === 1) {
         voiceChannel.leave();
