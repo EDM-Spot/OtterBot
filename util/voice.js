@@ -28,7 +28,12 @@ module.exports = (client) => {
         });
       } else {
         //dataStream = await client.soundcloud.getStream(plug.media.cid);
-        dataStream = fetch("http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key)
+        dataStream = await fetch("http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key)
+
+        const stream = await dataStream.json();
+        const mp3Url = stream.url;
+
+        console.log(mp3Url);
       }
 
       connection.play(dataStream, {
