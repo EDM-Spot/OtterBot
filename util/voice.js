@@ -45,11 +45,10 @@ module.exports = (client) => {
     let oldUserChannel = oldMember.voiceChannel;
 
     console.log(voiceChannel.members.size);
-    console.log(voiceChannel);
+    console.log(newMember);
 
-    if (newMember.voiceChannelID != "485173051432894493") { return; }
+    if (newMember.voiceChannel.id != "485173051432894493") { return; }
 
-    console.log(newUserChannel);
     console.log(oldUserChannel);
 
     if (oldUserChannel === undefined && newUserChannel !== undefined && voiceChannel.members.size >= 1) {
