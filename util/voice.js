@@ -26,11 +26,7 @@ module.exports = (client) => {
           highWaterMark: 1 << 25
         });
       } else {
-        const soundcloudData = await client.soundcloud.getTrack(plug.media.cid);
-        console.log(soundcloudData.stream_url);
-
-        // dataStream = await client.soundcloud.getStream(plug.media.cid);
-        dataStream = soundcloudData.stream_url;
+        dataStream = await client.soundcloud.getStream(plug.media.cid);
       }
 
       connection.play(dataStream, {
@@ -42,13 +38,9 @@ module.exports = (client) => {
 
   client.on('voiceStateUpdate', async (oldMember, newMember) => {
     const voiceChannel = client.channels.cache.get("485173051432894493");
-    let newUserChannel = newMember.voiceChannel;
 
     if (newMember.id === "486087139088400384") { return; }
     if (newMember.channelID != "485173051432894493") { return; }
-
-    console.log(newUserChannel);
-    console.log(voiceChannel.members.size);
 
     if (voiceChannel.members.size >= 1) {
       await client.voiceUtil.play();

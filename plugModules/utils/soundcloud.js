@@ -10,7 +10,7 @@ module.exports = function Util(bot) {
       this.baseURL = "https://api.soundcloud.com/";
       this.key = key;
     }
-    req(endpoint, opts = {}) {
+    async req(endpoint, opts = {}) {
       const options = merge(opts, {
         qs: {
           client_id: this.key,
@@ -21,26 +21,29 @@ module.exports = function Util(bot) {
         json: true
       });
 
-      console.log(this.baseURL + endpoint);
-      console.log(options);
-
-      return request(this.baseURL + endpoint, options).catch((err) => {
+      try {
+        return request(this.baseURL + endpoint, options);
+      }
+      catch (err) {
         console.error("[!] SoundCloud Util Error");
         console.error(err);
-      });
+      }
     }
-    resolve(url) {
+    async resolve(url) {
       //return this.req("resolve", { query: { url } });
-      return request(this.baseURL + "resolve.json?url=" + url + "&client_id=" + this.key).catch((err) => {
+      try {
+        return request(this.baseURL + "resolve.json?url=" + url + "&client_id=" + this.key);
+      }
+      catch (err) {
         console.error("[!] SoundCloud Resolve Util Error");
         console.error(err);
-      });
+      }
     }
-    getTrack(id) {
-      return this.req("tracks/" + id);
+    async getTrack(id) {
+      return await this.req("tracks/" + id);
     }
-    getStream(id) {
-      return this.req("tracks/" + id + "/stream");
+    async getStream(id) {
+      return await this.req("tracks/" + id + "/stream");
     }
   }
 
