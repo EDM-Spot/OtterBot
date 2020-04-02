@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core-discord');
+const request = require("request-promise");
 
 module.exports = (client) => {
   class VoiceUtil {
@@ -26,7 +27,8 @@ module.exports = (client) => {
           highWaterMark: 1 << 25
         });
       } else {
-        dataStream = await client.soundcloud.getStream(plug.media.cid);
+        dataStream = await request("http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key);
+        //dataStream = await client.soundcloud.getStream(plug.media.cid);
       }
 
       connection.play(dataStream, {
@@ -38,7 +40,7 @@ module.exports = (client) => {
 
   client.on('voiceStateUpdate', async (oldMember, newMember) => {
     const voiceChannel = client.channels.cache.get("485173051432894493");
-    console.log(voiceChannel.members);
+
     if (newMember.id === "486087139088400384") { return; }
     if (newMember.channelID != "485173051432894493") { return; }
 
@@ -46,6 +48,13 @@ module.exports = (client) => {
       await client.voiceUtil.play();
     } else {
       voiceChannel.leave();
+    }
+
+    console.log(voiceChannel.members.some(user => user.id === '486087139088400384'));
+    if (voiceChannel.members.some(user => user.id === '486087139088400384')) {
+      if (voiceChannel.members.size === 1) {
+        voiceChannel.leave();
+      }
     }
   });
 
