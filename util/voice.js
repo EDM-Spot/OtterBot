@@ -17,6 +17,7 @@ module.exports = (client) => {
       const connection = await voiceChannel.join();
 
       let dataStream;
+      let streamType = "opus";
 
       if (plug.media.format === 1) {
         const url = `https://www.youtube.com/watch?v=${plug.media.cid}`;
@@ -27,12 +28,13 @@ module.exports = (client) => {
           highWaterMark: 1 << 25
         });
       } else {
-        //dataStream = await client.soundcloud.getStream(plug.media.cid);
-        //dataStream = await fetch("http://api.soundcloud.com/tracks/" + plug.media.cid + "/stream?consumer_key=" + this.key);
+        dataStream = await client.soundcloud.getStream(plug.media.cid);
+        streamType = null;
       }
 
-      connection.play("https://cf-media.sndcdn.com/nK4TgJ5ypSrQ.128.mp3?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiKjovL2NmLW1lZGlhLnNuZGNkbi5jb20vbks0VGdKNXlwU3JRLjEyOC5tcDMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1ODU4NzQ4OTR9fX1dfQ__&Signature=KPndqDvIUjyMljwixdfQaYUs06TCbumMo6j79nfDKFP4Z14KxvAxUrIW8DHh79U5ftiUF1N-mnI23dCiyLhYw8zGozdhs3KzHDY4MzocxolCgpx9rXVWlvinImD9JfWn2yxjLM8MV6dcAAzpwA0pxq3PalQRD2ztNMqN3ns~z931y99Co3OA85~0oO8XDZ7agBD776-Ukn7eWJQGNijYCT0vs-V1GFH~rZlVeonvO4w4kJFxzeYlpRP6qiUfg7ZG8NbMTen1ybuYBu2ZPpYKlfzySvdH8a2cmc6kmHzYFe-q4RzKywytWWzQwawoCVc3IXe3-3AJng1c2M6fU0MpCA__&Key-Pair-Id=APKAI6TU7MMXM5DG6EPQ", {
-        volume: 0.25
+      connection.play("https://cf-media.sndcdn.com/TO0cX0BfbH5e.128.mp3?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiKjovL2NmLW1lZGlhLnNuZGNkbi5jb20vVE8wY1gwQmZiSDVlLjEyOC5tcDMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE1ODU4NzU1NTd9fX1dfQ__&Signature=Ow5CW-nYd6l-yulykWjb26dAQKD-gvWYZD0n7zZAO95zEh1nkuUxDpylGHRYISMAinmLzkj5T2sjHfBd6uRG0tI0sAk0rpb09kTuebdnSuDJi0ywPUZ7PNYH9FvfYHWucw6Ywtpxu2mMyCpYNB4wNfBMeHBOFHeg9ba~945yAXfhPJfzPTNW3EYTeguJ-7V6z-9eKxBxpa8yQ01j~1l1u6PiPQvMGaE~ISMbc~S3PNblFk6bbunSzDvP21v1lQnkkpOPklwM6DiEF~X4RGEoe1r9TGbGmxTU0PI2GjImGMuqy92Lm-XiphF22drGxuo2v257W7CKstn1-pCfVmHbbA__&Key-Pair-Id=APKAI6TU7MMXM5DG6EPQ", {
+        volume: 0.25,
+        type: streamType
       });
     }
   }
