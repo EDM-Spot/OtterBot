@@ -30,7 +30,7 @@ module.exports = (client) => {
           type: 'opus'
         });
       } else {
-        const dataStream = await client.soundcloud.getStream(plug.media.cid);
+        const dataStream = await fetch(`https://api.soundcloud.com/tracks/${plug.media.cid}/stream?client_id=${this.key}`);
 
         connection.play(dataStream, {
           volume: 0.25
