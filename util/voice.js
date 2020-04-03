@@ -30,11 +30,19 @@ module.exports = (client) => {
           type: 'opus'
         });
       } else {
-        const dataStream = await fetch(`https://api.soundcloud.com/tracks/${plug.media.cid}/stream?client_id=${this.key}`);
+        //const dataStream = await fetch(`https://api.soundcloud.com/tracks/${plug.media.cid}/stream?client_id=${this.key}`);
 
-        connection.play(dataStream, {
-          volume: 0.25
-        });
+        //connection.play(dataStream, {
+        //volume: 0.25
+        //});
+
+        await fetch(`https://api.soundcloud.com/tracks/${plug.media.cid}/stream?client_id=${this.key}`)
+          .then(res => {
+            console.log(res);
+            connection.play(res, {
+              volume: 0.25
+            });
+          });
       }
     }
   }
