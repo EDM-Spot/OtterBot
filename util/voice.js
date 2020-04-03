@@ -39,7 +39,8 @@ module.exports = (client) => {
         await fetch(`https://api.soundcloud.com/tracks/${plug.media.cid}/stream?client_id=${this.key}`)
           .then(res => {
             console.log(res);
-            connection.play(res, {
+            console.log(res.url);
+            connection.play(res.url, {
               volume: 0.25
             });
           });
