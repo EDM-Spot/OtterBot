@@ -22,7 +22,7 @@ class Link extends Command {
 
       if (!isNil(userDB)) {
         const statusRole = "695994210603630633";
-        await this.client.guilds.cache.get("485173051432894489").members.get(message.author.id).roles.add(statusRole).catch(console.error);
+        await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id).roles.add(statusRole).catch(console.error);
 
         return message.reply("Your Account is linked with plug.dj!");
       } else {
