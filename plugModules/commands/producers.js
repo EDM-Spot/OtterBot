@@ -47,7 +47,7 @@ module.exports = function Command(bot) {
           return true;
         }
         case "remove": {
-          const id = args.slice(2).join(" ");
+          const id = args.slice(1).join(" ");
 
           if (isNil(id)) {
             this.reply("No id specified", {}, 6e4);
