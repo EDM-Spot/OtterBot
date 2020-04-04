@@ -82,7 +82,7 @@ class Trivia extends Command {
       .setTimestamp()
     //.addField("This is a field title, it can hold 256 characters")
       .addField("Question", decodeURIComponent(question.question), true)
-      .addBlankField(true);
+      .addField('\u200b', '\u200b');
 
     const answerTrue = [];
     const answerFalse = [];
