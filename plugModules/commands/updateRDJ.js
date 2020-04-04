@@ -12,10 +12,11 @@ module.exports = function Command(bot) {
       const users = await bot.plug.getStaff();
 
       const listDJ = users.filter(u => u.role === ROLE.DJ);
-
+      console.log(listDJ);
       var i = 0;
       for (i = 0; i < listDJ.length; i++) {
         var interval = setInterval(async function() {
+          console.log(listDJ[i]);
           if (listDJ[i].gRole < ROLE.SITEMOD) {
             console.log(listDJ[i].username);
             await bot.utils.updateRDJ(listDJ[i].id);
