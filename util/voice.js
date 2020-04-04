@@ -26,14 +26,14 @@ module.exports = (client) => {
         });
 
         connection.play(dataStream, {
-          volume: 0.25,
+          volume: false,
           type: 'opus'
         });
       } else {
         await fetch(`https://api.soundcloud.com/tracks/${plug.media.cid}/stream?client_id=${this.key}`)
           .then(res => {
             connection.play(res.url, {
-              volume: 0.5
+              volume: false
             });
           });
       }
