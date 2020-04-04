@@ -133,7 +133,9 @@ module.exports = function Event(bot, platform) {
         setTimeout(() => rawData.delete(), 3e5);
       }
 
-      //bot.channels.cache.get("486125808553820160").send(rawData.from.username + ": " + rawData.message);
+      if (!commandHandleRegex.test(rawData.message)) {
+        bot.channels.cache.get("695987344280649839").send(rawData.un + ": " + rawData.message);
+      }
 
       if (!commandHandleRegex.test(rawData.message)) {
         if (isNil(bot.lottery.timer)) return;
