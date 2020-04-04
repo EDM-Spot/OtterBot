@@ -21,8 +21,6 @@ module.exports = function Command(bot) {
             await bot.utils.updateRDJ(listDJ[i].id);
           }
 
-          i++;
-
           //if (i === listDJ.length) clearInterval(interval);
         //}, 10000);
       }
