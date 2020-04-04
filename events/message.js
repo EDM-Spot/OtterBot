@@ -50,6 +50,7 @@ module.exports = class {
       });
 
       if (!isNil(userDB)) {
+        console.log(message);
         this.client.plug.chat(userDB.get("username") + ": " + message.content);
       }
     }
