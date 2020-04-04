@@ -42,6 +42,10 @@ module.exports = class {
       }
     }
 
+    // Check whether the command, or alias, exist in the collections defined
+    // in app.js.
+    const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
+
     if (message.channel.id === "695987344280649839") {
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -49,7 +53,7 @@ module.exports = class {
         },
       });
 
-      if (!isNil(userDB)) {
+      if (!isNil(userDB) && !cmd) {
         this.client.plug.chat(userDB.get("username") + ": " + message.cleanContent);
       }
     }
@@ -76,9 +80,6 @@ module.exports = class {
     // Get the user or member's permission level from the elevation
     const level = this.client.permlevel(message);
 
-    // Check whether the command, or alias, exist in the collections defined
-    // in app.js.
-    const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
     // using this const varName = thing OR otherthign; is a pretty efficient
     // and clean way to grab one of 2 values!
     if (!cmd) return;
