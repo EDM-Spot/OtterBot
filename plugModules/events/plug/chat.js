@@ -134,7 +134,9 @@ module.exports = function Event(bot, platform) {
       }
 
       if (!commandHandleRegex.test(rawData.message)) {
-        bot.channels.cache.get("695987344280649839").send(rawData.un + ": " + rawData.message);
+        if (rawData.uid !== bot.plug.me().id) {
+          bot.channels.cache.get("695987344280649839").send(rawData.un + ": " + rawData.message);
+        }
       }
 
       if (!commandHandleRegex.test(rawData.message)) {

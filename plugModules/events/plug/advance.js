@@ -40,9 +40,11 @@ module.exports = function Event(bot, filename, platform) {
           const uploadStatus = get(YouTubeMediaData, "status.uploadStatus");
           const privacyStatus = get(YouTubeMediaData, "status.privacyStatus");
           const embeddable = get(YouTubeMediaData, "status.embeddable");
-    
+
           if (!isObject(contentDetails) || !isObject(status) || uploadStatus !== "processed" || privacyStatus === "private" || !embeddable) {
             bot.plug.chat(bot.utils.replace(bot.check.mediaUnavailable, { which: "current" }));
+
+            bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.check.mediaUnavailable, { which: "current" }));
           }
 
           if ((fullTitle.match(/-/g) || []).length === 1) {
@@ -75,7 +77,7 @@ module.exports = function Event(bot, filename, platform) {
         if (!isNil(bot.user)) {
           bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
             type: "LISTENING"
-          }).catch(function(error) {
+          }).catch(function (error) {
             console.warn("setActivity Error!");
             console.log(error);
           });
@@ -110,7 +112,7 @@ module.exports = function Event(bot, filename, platform) {
                 moderator: bot.plug.me().id,
               },
             });
-    
+
             const embed = new Discord.MessageEmbed()
               //.setTitle("Title")
               .setAuthor(currentPlay.author + " - " + currentPlay.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
@@ -125,10 +127,12 @@ module.exports = function Event(bot, filename, platform) {
               .addField("User ", currentDJ.username, true)
               .addField("Blacklisted", " (youtube.com/watch?v=" + currentPlay.cid + ")", false);
             //.addBlankField(true);
-    
+
             bot.channels.cache.get("486637288923725824").send({ embed });
-    
+
             bot.plug.chat(bot.lang.commands.blacklist.currentAdded);
+
+            bot.channels.cache.get("695987344280649839").send(bot.lang.commands.blacklist.currentAdded);
 
             await next.skip();
 
@@ -147,6 +151,8 @@ module.exports = function Event(bot, filename, platform) {
         if (!skipped) {
           bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
+          bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.blacklisted);
+
           await next.skip();
           skipped = true;
         }
@@ -157,6 +163,8 @@ module.exports = function Event(bot, filename, platform) {
       if (isOverplayed) {
         if (!skipped) {
           bot.plug.chat(`@${currentDJ.username} ` + bot.lang.overplayed);
+
+          bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.overplayed);
 
           await next.skip();
           skipped = true;
@@ -173,10 +181,14 @@ module.exports = function Event(bot, filename, platform) {
         if (currentPlay.duration <= 600 && props >= propsToPay) {
           await user.decrement("props", { by: propsToPay });
           bot.plug.chat(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
+
+          bot.channels.cache.get("695987344280649839").send(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
         } else {
           if (!skipped) {
             bot.plug.chat(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
-            
+
+            bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
+
             await bot.utils.lockskip(currentDJ);
             skipped = true;
           }
@@ -193,12 +205,21 @@ module.exports = function Event(bot, filename, platform) {
                 bot.plug.chat(bot.utils.replace(bot.lang.historySkip, {
                   time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                 }));
-                
+
+                bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.historySkip, {
+                  time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                }));
+
                 await next.skip();
                 skipped = true;
               }
             } else {
               bot.plug.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {
+                cid: map(songHistory, "cid")[0],
+                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+              }));
+
+              bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.maybeHistorySkip, {
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               }));
@@ -216,8 +237,10 @@ module.exports = function Event(bot, filename, platform) {
           if (!skipped) {
             bot.plug.chat(bot.lang.stuckSkip);
 
+            bot.channels.cache.get("695987344280649839").send(bot.lang.stuckSkip);
+
             bot.global.isSkippedByTimeGuard = true;
-            
+
             await timeoutMedia.skip();
             skipped = true;
           }
@@ -338,13 +361,13 @@ module.exports = function Event(bot, filename, platform) {
                 .then(message => message.edit(savedMessage.replace("is now Playing", "Played") + " <:plugWoot:486538570715103252> " + woots + " " + "<:plugMeh:486538601044115478> " + mehs + " " + "<:plugGrab:486538625270677505> " + grabs + "\n"));
             }
           }
-            
+
           bot.channels.cache.get("486125808553820160").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`).then(m => {
             savedMessageID = m.id;
             savedMessage = m.content;
           });
 
-          bot.channels.cache.get("695987344280649839").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`);
+          bot.channels.cache.get("695987344280649839").send("**" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`);
         } catch (err) {
           console.warn("message.edit Error!");
           console.log(err);
@@ -403,6 +426,12 @@ module.exports = function Event(bot, filename, platform) {
             await instance.increment("props", { by: props });
 
             bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
+              props,
+              user: lastDJ.username,
+              plural: props > 1 ? "s" : "",
+            }));
+
+            bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.advanceprops, {
               props,
               user: lastDJ.username,
               plural: props > 1 ? "s" : "",
