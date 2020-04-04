@@ -96,7 +96,7 @@ class Bot extends Discord.Client {
 
   checklevel(id) {
     const guild = client.guilds.cache.get("485173051432894489");
-    const member = client.guilds.cache.get("485173051432894489").members.get(id);
+    const member = client.guilds.cache.get("485173051432894489").members.cache.get(id);
     const settings = client.getSettings("485173051432894489");
 
     const managerRole = guild.roles.find(r => r.name.toLowerCase() === settings.adminRole.toLowerCase());

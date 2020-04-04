@@ -1,7 +1,7 @@
 <%- include('blocks/header', {bot, user, path}) %>
 <h1 class="display-3">Dashboard</h1>
 <ul class="list-unstyled">
-  <% user.guilds.forEach(guild => { 
+  <% user.guilds.cache.forEach(guild => { 
     const permsOnGuild = new perms(guild.permissions);
     if(!permsOnGuild.has("MANAGE_GUILD")) return;
   %>

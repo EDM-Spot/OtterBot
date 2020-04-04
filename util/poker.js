@@ -38,7 +38,7 @@ module.exports = (client) => {
 
     async end() {
       for (const playerID of this.startingPlayers) {
-        await this.guild.members.get(playerID).roles.remove("512635547320188928").catch(console.warn);
+        await this.guild.members.cache.get(playerID).roles.remove("512635547320188928").catch(console.warn);
       }
 
       this.players = new Set();
@@ -427,7 +427,7 @@ module.exports = (client) => {
       this.players.delete(player.id);
       this.startingPlayers.delete(player.id);
 
-      await this.guild.members.get(player.id).roles.remove("512635547320188928").catch(console.warn);
+      await this.guild.members.cache.get(player.id).roles.remove("512635547320188928").catch(console.warn);
 
       this.currentTurn -= 1;
 
