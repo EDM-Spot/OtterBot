@@ -99,7 +99,7 @@ class Trivia extends Command {
         user.id !== "486087139088400384" &&
         reaction.emoji.name === "❌"
       ).on("collect", async reaction => {
-        const user = reaction.users.last();
+        const user = reaction.users.cache.last();
         const chosen = reaction.emoji.name;
 
         if (currentPlayers.includes(user.id)) {
