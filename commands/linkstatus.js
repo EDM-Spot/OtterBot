@@ -1,8 +1,7 @@
 const Command = require("../base/Command.js");
 const { isNil } = require("lodash");
-const { ROLE } = require("miniplug");
 
-class Link extends Command {
+class LinkStatus extends Command {
   constructor(client) {
     super(client, {
       name: "linkstatus",
@@ -34,4 +33,4 @@ class Link extends Command {
   }
 }
 
-module.exports = Link;
+module.exports = LinkStatus;
