@@ -22,6 +22,10 @@ class Props extends Command {
     try {
       //message.delete();
 
+      if (message.channel.id !== "695987344280649839") {
+        return true;
+      }
+
       const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "props@use", "perUser", message.author.id);
 
       if (cooldown != -2) {
