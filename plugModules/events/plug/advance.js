@@ -343,6 +343,8 @@ module.exports = function Event(bot, filename, platform) {
             savedMessageID = m.id;
             savedMessage = m.content;
           });
+
+          bot.channels.cache.get("695987344280649839").send(moment().format("LT") + " - **" + currentDJ.username + " (" + currentDJ.id + ")** is now Playing: " + `${songAuthor} - ${songTitle}`);
         } catch (err) {
           console.warn("message.edit Error!");
           console.log(err);
