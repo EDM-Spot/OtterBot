@@ -12,11 +12,10 @@ module.exports = function Command(bot) {
       const users = await bot.plug.getStaff();
 
       const listDJ = users.filter(u => u.role === ROLE.DJ);
-      console.log(listDJ);
+      
       var i = 0;
       for (i = 0; i < listDJ.length; i++) {
-        var interval = setInterval(async function() {
-          console.log(listDJ[i]);
+        //var interval = setInterval(async function() {
           if (listDJ[i].gRole < ROLE.SITEMOD) {
             console.log(listDJ[i].username);
             await bot.utils.updateRDJ(listDJ[i].id);
@@ -24,8 +23,8 @@ module.exports = function Command(bot) {
 
           i++;
 
-          if (i === listDJ.length) clearInterval(interval);
-        }, 10000);
+          //if (i === listDJ.length) clearInterval(interval);
+        //}, 10000);
       }
 
       return true;
