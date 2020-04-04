@@ -1,4 +1,4 @@
-const { isObject } = require("lodash");
+const { isObject, isNil } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     parameters: "<add|remove> <@User>",
     description: "Set or Remove Producers",
     async execute(rawData, { args, mentions }, lang) {
-      if (!args.length || !mentions.length || mentions.length >= 2) {
+      if (!args.length) {
         return false;
       }
 
@@ -20,20 +20,24 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      const user = mentions[0];
-      
-      if (!isObject(user)) {
-        this.reply(lang.userNotFound, {}, 6e4);
-        return false;
-      } else if (user.id === rawData.uid) {
-        return false;
-      }
-
       switch (param) {
         case "add": {
+          if (!mentions.length || mentions.length >= 2) {
+            return false;
+          }
+
+          const user = mentions[0];
+
+          if (!isObject(user)) {
+            this.reply(lang.userNotFound, {}, 6e4);
+            return false;
+          } else if (user.id === rawData.uid) {
+            return false;
+          }
+
           await bot.db.models.users.update(
             { producer: true },
-            { where: { id: user.id }, defaults: { id: user.id }}
+            { where: { id: user.id }, defaults: { id: user.id } }
           );
 
           await bot.generateCSS.generateProducers();
@@ -43,9 +47,16 @@ module.exports = function Command(bot) {
           return true;
         }
         case "remove": {
+          const id = args.slice(2).join(" ");
+
+          if (isNil(id)) {
+            this.reply("No id specified", {}, 6e4);
+            return false;
+          }
+
           await bot.db.models.users.update(
             { producer: false },
-            { where: { id: user.id }, defaults: { id: user.id }}
+            { where: { id: id }, defaults: { id: id } }
           );
 
           await bot.generateCSS.generateProducers();
