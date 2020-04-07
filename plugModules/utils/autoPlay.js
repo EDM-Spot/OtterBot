@@ -8,12 +8,12 @@ module.exports = function Util(bot) {
     }
     async updatePlaylist() {
       each(bot.plug.getPlaylists(), async (playlist) => {
-        await playlist.delete();
+        await bot.plug.deletePlaylist(playlist.id);
       });
 
       bot.plug.createPlaylist('Bot Playlist').then(async (playlist) => {
         console.log(playlist);
-        await playlist.activate();
+        await bot.plug.activatePlaylist(playlist.id);
 
         /////////////////////////////////////////////////Channels
         //UCe55Gy-hFDvLZp8C8BZhBnw - NightBlue
@@ -77,7 +77,7 @@ module.exports = function Util(bot) {
                         duration = this.convertTimeToSeconds(videoInfo.items[0].contentDetails.duration);
 
                         if (duration > 0 && duration < 600) {
-                          await playlist.insert({
+                          await bot.plug.insertMedia(playlist.id, {
                             format: bot.plug.MEDIA_SOURCE.YOUTUBE,
                             cid: video.id.videoId,
                             author: fulltitle.split(" - ")[0].trim(),
@@ -96,7 +96,7 @@ module.exports = function Util(bot) {
             });
         });
 
-        await playlist.shuffle();
+        await bot.plug.shufflePlaylist(playlist.id);
       });
     }
     convertTimeToSeconds(time) {
