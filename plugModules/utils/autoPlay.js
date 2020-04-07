@@ -1,16 +1,17 @@
 const { each } = require("lodash");
 const fetch = require("node-fetch");
 
+let waitsDone = 0;
+let countWaits = 0;
+
 module.exports = function Util(bot) {
   class AutoPlayUtil {
     constructor() {
       this.key = bot.config.youtube2;
-      this.waitsDone = 0;
-      this.countWaits = 0;
     }
     async updatePlaylist() {
-      this.waitsDone = 0;
-      this.countWaits = 0;
+      waitsDone = 0;
+      countWaits = 0;
 
       bot.plug.leaveWaitlist();
 
@@ -98,7 +99,7 @@ module.exports = function Util(bot) {
 
                           await this.addItem(Item, playlistID, this.countWaits * 3500);
 
-                          this.countWaits++;
+                          countWaits++;
                         }
                       });
                   }
@@ -110,13 +111,13 @@ module.exports = function Util(bot) {
     }
     async addItem(item, pID, a) {
       setTimeout(async function () {
-        this.waitsDone++;
+        waitsDone++;
 
-        console.log('Loaded ' + this.waitsDone + ' of ' + this.countWaits);
+        console.log('Loaded ' + waitsDone + ' of ' + countWaits);
 
         await bot.plug.insertMedia(pID, item);
 
-        if (this.countWaits == this.waitsDone) {
+        if (countWaits == waitsDone) {
           await bot.plug.shufflePlaylist(pID);
         }
       }, a);
