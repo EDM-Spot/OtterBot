@@ -5,8 +5,13 @@ module.exports = function Util(bot) {
   class AutoPlayUtil {
     constructor() {
       this.key = bot.config.youtube;
+      this.waitsDone = 0;
+      this.countWaits = 0;
     }
     async updatePlaylist() {
+      this.waitsDone = 0;
+      this.countWaits = 0;
+
       bot.plug.leaveWaitlist();
 
       each(bot.plug.getPlaylists(), (playlist) => {
@@ -63,7 +68,6 @@ module.exports = function Util(bot) {
         const d = new Date();
         d.setDate(d.getDate() - 14);
 
-        let i = 1;
         each(channels, async (channel) => {
           await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channel}&maxResults=30&order=date&publishedAfter=${d.toISOString()}&fields=items(id(videoId),snippet(channelId,channelTitle,title,thumbnails(default(url))))&key=${this.key}`)
             .then(res => res.json())
@@ -75,7 +79,7 @@ module.exports = function Util(bot) {
                   const fulltitle = video.snippet.title;
 
                   if (fulltitle.split(" - ")[1] != undefined) {
-                    var duration = 0;
+                    let duration = 0;
 
                     await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${video.id.videoId}&fields=items(contentDetails(duration))&key=${this.key}&part=contentDetails`)
                       .then(res1 => res1.json())
@@ -83,17 +87,18 @@ module.exports = function Util(bot) {
                         duration = this.convertTimeToSeconds(videoInfo.items[0].contentDetails.duration);
 
                         if (duration > 0 && duration < 600) {
-                          await bot.plug.insertMedia(playlistID, [{
+                          const Item = [{
                             format: 1,
                             cid: video.id.videoId,
                             author: fulltitle.split(" - ")[0].trim(),
                             title: fulltitle.split(" - ")[1].trim(),
                             duration: duration,
                             image: video.snippet.thumbnails.default.url
-                          }]);
+                          }];
 
-                          console.log('Loaded ' + i + ' of ' + data.items.length);
-                          i++;
+                          await addItem(Item, playlistID, countWaits * 3500);
+
+                          countWaits++;
                         }
                       });
                   }
@@ -101,9 +106,20 @@ module.exports = function Util(bot) {
               }
             });
         });
-
-        await bot.plug.shufflePlaylist(playlistID);
       });
+    }
+    async addItem(item, pID, a) {
+      setTimeout(async function () {
+        this.waitsDone++;
+
+        console.log('Loaded ' + this.waitsDone + ' of ' + this.countWaits);
+
+        await bot.plug.insertMedia(pID, item);
+
+        if (countWaits == waitsDone) {
+          await bot.plug.shufflePlaylist(pID);
+        }
+      }, a);
     }
     convertTimeToSeconds(time) {
       var a = time.match(/\d+H|\d+M|\d+S/g),
