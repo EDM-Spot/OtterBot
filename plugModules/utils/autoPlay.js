@@ -88,7 +88,7 @@ module.exports = function Util(bot) {
 
                         if (duration > 0 && duration < 600) {
                           await bot.plug.insertMedia(playlistID, {
-                            format: bot.plug.MEDIA_SOURCE.YOUTUBE,
+                            format: 1,
                             cid: video.id.videoId,
                             author: fulltitle.split(" - ")[0].trim(),
                             title: fulltitle.split(" - ")[1].trim(),
