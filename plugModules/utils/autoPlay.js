@@ -1,10 +1,10 @@
-const { each, get } = require("lodash");
+const { each } = require("lodash");
 const fetch = require("node-fetch");
 
 module.exports = function Util(bot) {
   class AutoPlayUtil {
-    constructor(key) {
-      this.key = key;
+    constructor() {
+      this.key = bot.config.youtube;
     }
     async updatePlaylist() {
       each(bot.plug.getPlaylists(), (playlist) => {
@@ -127,5 +127,5 @@ module.exports = function Util(bot) {
     }
   }
 
-  bot.autoplay = new AutoPlayUtil(bot.config.youtube);
+  bot.autoplay = new AutoPlayUtil();
 };
