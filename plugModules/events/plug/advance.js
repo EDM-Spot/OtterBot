@@ -24,7 +24,7 @@ module.exports = function Event(bot, filename, platform) {
       }
 
       bot.plug.woot();
-      await bot.joinWaitlist();
+      await bot.plug.joinWaitlist();
 
       let songAuthor = null;
       let songTitle = null;
