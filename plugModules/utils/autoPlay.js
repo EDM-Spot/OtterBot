@@ -116,7 +116,7 @@ module.exports = function Util(bot) {
 
         await bot.plug.insertMedia(pID, item);
 
-        if (countWaits == waitsDone) {
+        if (this.countWaits == this.waitsDone) {
           await bot.plug.shufflePlaylist(pID);
         }
       }, a);
