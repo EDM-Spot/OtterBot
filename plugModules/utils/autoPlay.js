@@ -65,7 +65,7 @@ module.exports = function Util(bot) {
         const d = new Date();
         d.setDate(d.getDate() - 2);
 
-        const i = 1;
+        let i = 1;
         each(channels, async (channel) => {
           await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channel}&maxResults=30&order=date&publishedAfter=${d.toISOString()}&fields=items(id(videoId),snippet(channelId,channelTitle,title,thumbnails(default(url))))&key=${this.key}`)
             .then(res => res.json())
@@ -75,7 +75,6 @@ module.exports = function Util(bot) {
                 console.log(data.items[0].snippet.channelTitle + ' Retrieved ' + data.items.length + ' Results');
 
                 each(data.items, async (video) => {
-                  console.log(video);
                   const fulltitle = video.snippet.title;
 
                   if (fulltitle.split(" - ")[1] != undefined) {
