@@ -12,9 +12,8 @@ module.exports = function Util(bot) {
       });
 
       bot.plug.createPlaylist('Bot Playlist').then(async (playlist) => {
-        const playlistID = get(playlist, "id");
+        const playlistID = playlist[0].id
         console.log(playlist);
-        console.log(playlist.id);
         console.log(playlistID);
         await bot.plug.activatePlaylist(playlistID);
 
