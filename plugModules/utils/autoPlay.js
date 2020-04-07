@@ -1,4 +1,4 @@
-const { each, isObject } = require("lodash");
+const { each, get } = require("lodash");
 const fetch = require("node-fetch");
 
 module.exports = function Util(bot) {
@@ -12,7 +12,10 @@ module.exports = function Util(bot) {
       });
 
       bot.plug.createPlaylist('Bot Playlist').then(async (playlist) => {
+        const playlistID = get(playlist, "id");
         console.log(playlist);
+        console.log(playlist.id);
+        console.log(playlistID);
         await bot.plug.activatePlaylist(playlist.id);
 
         /////////////////////////////////////////////////Channels
