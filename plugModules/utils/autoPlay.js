@@ -72,6 +72,7 @@ module.exports = function Util(bot) {
           await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channel}&maxResults=30&order=date&publishedAfter=${d.toISOString()}&fields=items(id(videoId),snippet(channelId,channelTitle,title,thumbnails(default(url))))&key=${this.key}`)
             .then(res => res.json())
             .then(data => {
+              console.log(data);
               if (data.items.length > 0) {
                 console.log(data.items[0].snippet.channelTitle + ' Retrieved ' + data.items.length + ' Results');
 
