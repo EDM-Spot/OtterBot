@@ -38,7 +38,7 @@
     "express": "4.17.1",
     "express-passport": "0.1.0",
     "express-session": "1.17.0",
-    "ffmpeg-static": "4.0.1",
+    "ffmpeg-static": "4.1.0",
     "fs-extra": "9.0.0",
     "gulp": "4.0.2",
     "gulp-clean-css": "4.3.0",
