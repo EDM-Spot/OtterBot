@@ -98,7 +98,7 @@ module.exports = function Util(bot) {
 
                           await this.addItem(Item, playlistID, countWaits * 3500);
 
-                          countWaits++;
+                          this.countWaits++;
                         }
                       });
                   }
