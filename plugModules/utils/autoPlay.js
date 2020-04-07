@@ -4,7 +4,7 @@ const fetch = require("node-fetch");
 module.exports = function Util(bot) {
   class AutoPlayUtil {
     constructor() {
-      this.key = bot.config.youtube;
+      this.key = bot.config.youtube2;
       this.waitsDone = 0;
       this.countWaits = 0;
     }
