@@ -12,6 +12,7 @@ module.exports = function Util(bot) {
       });
 
       bot.plug.createPlaylist('Bot Playlist').then(async (playlist) => {
+        console.log(playlist);
         await playlist.activate();
 
         /////////////////////////////////////////////////Channels
@@ -72,7 +73,7 @@ module.exports = function Util(bot) {
 
                     await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${video.id.videoId}&fields=items(contentDetails(duration))&key=${this.key}&part=contentDetails`)
                       .then(res1 => res1.json())
-                      .then(async videoInfo => {
+                      .then(async (videoInfo) => {
                         duration = this.convertTimeToSeconds(videoInfo.items[0].contentDetails.duration);
 
                         if (duration > 0 && duration < 600) {
