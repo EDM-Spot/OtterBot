@@ -74,7 +74,7 @@ module.exports = function Util(bot) {
               if (data.items.length > 0) {
                 console.log(data.items[0].snippet.channelTitle + ' Retrieved ' + data.items.length + ' Results');
 
-                each(data.items, async (index, video) => {
+                each(data.items, async (video) => {
                   console.log(video);
                   const fulltitle = video.snippet.title;
 
