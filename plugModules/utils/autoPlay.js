@@ -6,9 +6,6 @@ module.exports = function Util(bot) {
     constructor(key) {
       this.key = key;
     }
-    async joinWaitlist() {
-      await bot.joinWaitlist();
-    }
     async updatePlaylist() {
       each(bot.getPlaylists(), async (playlist) => {
         await playlist.delete();
