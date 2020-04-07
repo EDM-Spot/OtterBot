@@ -7,14 +7,17 @@ module.exports = function Util(bot) {
       this.key = key;
     }
     async updatePlaylist() {
-      each(bot.plug.getPlaylists(), async (playlist) => {
-        await bot.plug.deletePlaylist(playlist.id);
+      each(bot.plug.getPlaylists(), (playlist) => {
+        return Promise.all([
+          playlist.delete()
+        ]);
       });
 
-      bot.plug.createPlaylist('Bot Playlist').then(async (playlist) => {
-        const playlistID = playlist[0].id
-        console.log(playlist);
-        console.log(playlistID);
+      const random = Math.floor(Math.random() * 100);
+
+      await bot.plug.createPlaylist(`Bot Playlist ${random}`).then(async (playlist) => {
+        const playlistID = playlist[0].id;
+
         await bot.plug.activatePlaylist(playlistID);
 
         /////////////////////////////////////////////////Channels
@@ -56,7 +59,7 @@ module.exports = function Util(bot) {
         ];
 
         const d = new Date();
-        d.setDate(d.getDate() - days);
+        d.setDate(d.getDate() - 14);
 
         const i = 1;
         each(channels, async (channel) => {
