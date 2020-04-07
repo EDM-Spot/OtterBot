@@ -87,14 +87,14 @@ module.exports = function Util(bot) {
                         duration = this.convertTimeToSeconds(videoInfo.items[0].contentDetails.duration);
 
                         if (duration > 0 && duration < 600) {
-                          await bot.plug.insertMedia(playlistID, {
+                          await bot.plug.insertMedia(playlistID, [{
                             format: 1,
                             cid: video.id.videoId,
                             author: fulltitle.split(" - ")[0].trim(),
                             title: fulltitle.split(" - ")[1].trim(),
                             duration: duration,
                             image: video.snippet.thumbnails.default.url
-                          });
+                          }]);
 
                           console.log('Loaded ' + i + ' of ' + data.items.length);
                           i++;
