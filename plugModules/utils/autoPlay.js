@@ -38,32 +38,28 @@ module.exports = function Util(bot) {
         //UC5nc_ZtjKW1htCVZVRxlQAQ - MrSuicideSheep
         //UCaAlh3Iy7rAcO3MgD_O3Kkg - Nik Cooper
         //UC0n9yiP-AD2DpuuYCDwlNxQ - Tasty
-        
-        //const channels = [
-        //  'UCe55Gy-hFDvLZp8C8BZhBnw',
-        //  'UCa10nxShhzNrCE1o2ZOPztg',
-        //  'UCJ6td3C9QlPO9O_J5dF4ZzA',
-        //  'UC7tD6Ifrwbiy-BoaAHEinmQ',
-        //  'UCMOgdURr7d8pOVlc-alkfRg',
-        //  'UC_aEa8K-EOJ3D6gOs7HcyNg',
-        //  'UCSa8IUd1uEjlREMa21I3ZPQ',
-        //  'UC3ifTl5zKiCAhHIBQYcaTeg',
-        //  'UCp8OOssjSjGZRVYK6zWbNLg',
-        //  'UCqolymr8zonJzC08v2wXNrQ',
-        //  'UC65afEgL62PGFWXY7n6CUbA',
-        // 'UCwIgPuUJXuf2nY-nKsEvLOg',
-        //  'UCj_Y-xJ2DRDGP4ilfzplCOQ',
-        //  'UCSXm6c-n6lsjtyjvdD0bFVw',
-        //  'UC5nc_ZtjKW1htCVZVRxlQAQ',
-        //  'UCaAlh3Iy7rAcO3MgD_O3Kkg',
-        //  'UC0n9yiP-AD2DpuuYCDwlNxQ'
-        //];
         const channels = [
-          'UCe55Gy-hFDvLZp8C8BZhBnw'
+          'UCe55Gy-hFDvLZp8C8BZhBnw',
+          'UCa10nxShhzNrCE1o2ZOPztg',
+          'UCJ6td3C9QlPO9O_J5dF4ZzA',
+          'UC7tD6Ifrwbiy-BoaAHEinmQ',
+          'UCMOgdURr7d8pOVlc-alkfRg',
+          'UC_aEa8K-EOJ3D6gOs7HcyNg',
+          'UCSa8IUd1uEjlREMa21I3ZPQ',
+          'UC3ifTl5zKiCAhHIBQYcaTeg',
+          'UCp8OOssjSjGZRVYK6zWbNLg',
+          'UCqolymr8zonJzC08v2wXNrQ',
+          'UC65afEgL62PGFWXY7n6CUbA',
+          'UCwIgPuUJXuf2nY-nKsEvLOg',
+          'UCj_Y-xJ2DRDGP4ilfzplCOQ',
+          'UCSXm6c-n6lsjtyjvdD0bFVw',
+          'UC5nc_ZtjKW1htCVZVRxlQAQ',
+          'UCaAlh3Iy7rAcO3MgD_O3Kkg',
+          'UC0n9yiP-AD2DpuuYCDwlNxQ'
         ];
 
         const d = new Date();
-        d.setDate(d.getDate() - 2);
+        d.setDate(d.getDate() - 14);
 
         let i = 1;
         each(channels, async (channel) => {
