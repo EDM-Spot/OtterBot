@@ -75,7 +75,7 @@ module.exports = function Util(bot) {
 
                     await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${video.id.videoId}&fields=items(contentDetails(duration))&key=${this.key}&part=contentDetails`)
                       .then(res1 => res1.json())
-                      .then(videoInfo => {
+                      .then(async videoInfo => {
                         duration = this.convertTimeToSeconds(videoInfo.items[0].contentDetails.duration);
 
                         if (duration > 0 && duration < 600) {
