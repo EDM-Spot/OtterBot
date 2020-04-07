@@ -7,11 +7,11 @@ module.exports = function Util(bot) {
       this.key = key;
     }
     async updatePlaylist() {
-      each(bot.getPlaylists(), async (playlist) => {
+      each(bot.plug.getPlaylists(), async (playlist) => {
         await playlist.delete();
       });
 
-      bot.createPlaylist('Bot Playlist').then(async (playlist) => {
+      bot.plug.createPlaylist('Bot Playlist').then(async (playlist) => {
         await playlist.activate();
 
         /////////////////////////////////////////////////Channels
@@ -77,7 +77,7 @@ module.exports = function Util(bot) {
 
                         if (duration > 0 && duration < 600) {
                           await playlist.insert({
-                            format: bot.MEDIA_SOURCE.YOUTUBE,
+                            format: bot.plug.MEDIA_SOURCE.YOUTUBE,
                             cid: video.id.videoId,
                             author: fulltitle.split(" - ")[0].trim(),
                             title: fulltitle.split(" - ")[1].trim(),
