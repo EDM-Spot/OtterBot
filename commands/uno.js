@@ -225,15 +225,15 @@ class Uno extends Command {
 
         //   return this.client.unoUtil.exit();
         // }
-        // case "reset": {
-        //   const user = this.client.plug.user(userDB.get("id"));
+        case "reset": {
+          const user = this.client.plug.user(userDB.get("id"));
 
-        //   if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
+          if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
 
-        //   await this.client.redis.removeCommandFromCoolDown("discord", "poker@play", "perUse");
+          await this.client.redis.removeCommandFromCoolDown("discord", "uno@play", "perUse");
 
-        //   return message.reply("The cooldown for poker has been reset!");
-        // }
+          return message.reply("The cooldown for uno has been reset!");
+        }
         default:
           return false;
       }
