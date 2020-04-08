@@ -230,6 +230,7 @@ class Uno extends Command {
 
           if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
 
+          await this.client.unoUtil.end();
           await this.client.redis.removeCommandFromCoolDown("discord", "uno@play", "perUse");
 
           return message.reply("The cooldown for uno has been reset!");

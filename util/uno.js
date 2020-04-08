@@ -202,7 +202,7 @@ module.exports = (client) => {
     addPlayer(member) {
       this.lastChange = Date.now();
       if (!this.players[member.id]) {
-        let player = this.players[member.id] = new Player(member, this);
+        let player = this.players[member.id] = new Player(member, client);
         this.queue.push(player);
         return player;
       }
@@ -390,7 +390,7 @@ module.exports = (client) => {
         card.color = undefined;
       if (top)
         this.discard.push(top);
-      client.channels.cache.get(this.channel).send('*Thfwwp!* The deck has been shuffled.');
+      client.channels.cache.get(this.channel).send('The deck has been shuffled.');
       this.log('shuffle', null, { total: this.deck.length });
     }
   }

@@ -1,9 +1,11 @@
 const Card = require("./card.js");
 
 class UnoPlayer {
-    constructor(member, game) {
+    constructor(member, client) {
+        this.channel = "485927387079639051";
+        this.client = client;
+
         this.member = member;
-        this.game = game;
         this.id = member.id;
         this.hand = [];
         this.called = false;
@@ -15,9 +17,9 @@ class UnoPlayer {
         this.sortHand();
     }
 
-    static deserialize(obj, game) {
-        let member = game.channel.guild.members.get(obj.id);
-        let player = new UnoPlayer(member, game);
+    static deserialize(obj, client) {
+        let member = this.client.channels.cache.members.cache.get(obj.id);
+        let player = new UnoPlayer(member, client);
         player.called = obj.called;
         player.finished = obj.finished;
         player.hand = obj.hand.map(c => Card.deserialize(c));
@@ -95,7 +97,7 @@ class UnoPlayer {
             id = words[1];
         }
         if (!id) {
-            await this.game.send('Something went wrong. Did you provide a proper card?');
+            this.client.channels.cache.get(this.channel).send('Something went wrong. Did you provide a proper card?');
             return null;
         }
         let wild = ['WILD', 'WILD+4'];
@@ -109,7 +111,7 @@ class UnoPlayer {
             if (!color && (wild.includes(id.toUpperCase()) || alias[id.toUpperCase()])) {
                 let first = true;
                 while (!_color) {
-                    let msg = await this.game.client.awaitQuery(this.game.channel.id, this.id, first
+                    let msg = this.client.channels.cache.get(this.channel).send(first
                         ? 'You played a **wild card**! In your next message, say just the color you want the **wild card** to be.'
                         : 'Say just the color for your **wild card**. One of: red, yellow, green, or blue.');
                     _color = this.parseColor(msg.content);
@@ -121,7 +123,7 @@ class UnoPlayer {
                 id = temp;
                 _color = this.parseColor(color);
                 if (!_color) {
-                    this.game.send('You have to specify a valid color! Colors are **red**, **yellow**, **green**, and **blue**.\n`uno play <color> <value>`');
+                    this.client.channels.cache.get(this.channel).send('You have to specify a valid color! Colors are **red**, **yellow**, **green**, and **blue**.\n`uno play <color> <value>`');
                     return null;
                 }
             }
@@ -142,9 +144,9 @@ class UnoPlayer {
     async send(content) {
         try {
             let chan = await this.member.user.getDMChannel();
-            await chan.createMessage(content);
+            this.client.users.cache.get(this.id).send(content);
         } catch (err) {
-            await this.game.send(`Hey <@${this.id}>, I can't DM you! Please make sure your DMs are enabled, and run \`uno hand\` to see your cards.`);
+            this.client.channels.cache.get(this.channel).send(`Hey <@${this.id}>, I can't DM you! Please make sure your DMs are enabled, and run \`uno hand\` to see your cards.`);
         }
     }
 
