@@ -15,7 +15,7 @@ module.exports = function Util(bot) {
 
       bot.plug.leaveWaitlist();
 
-      each(bot.plug.getPlaylists(), (playlist) => {
+      each(await bot.plug.getPlaylists(), (playlist) => {
         return Promise.all([
           playlist.delete()
         ]);
@@ -119,6 +119,7 @@ module.exports = function Util(bot) {
 
         if (countWaits == waitsDone) {
           await bot.plug.shufflePlaylist(pID);
+          console.log('Playlist Updated!');
         }
       }, a);
     }
