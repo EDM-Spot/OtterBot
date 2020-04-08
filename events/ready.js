@@ -34,6 +34,8 @@ module.exports = class {
 
     require("../util/poker.js")(this.client);
 
+    require("../util/uno.js")(this.client);
+
     require("../util/voice.js")(this.client);
     
     // Set the game as the default help command + guild count.
