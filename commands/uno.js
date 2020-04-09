@@ -143,11 +143,17 @@ class Uno extends Command {
             return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
 
+          if (args.length < 2) {
+            return message.reply('You have to specify a valid color! Colors are **red**, **yellow**, **green**, and **blue**.\n`uno play <color> <value>`');
+          }
+
           let drawn = false;
 
           if (args.length > 2) {
+            console.log("args.length:" + args.length);
             let cardsCheck = args;
             while (cardsCheck.length) {
+              console.log("cardsCheck.length:" + cardsCheck.length);
               let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
               if (card === null) return;
               if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
@@ -159,6 +165,7 @@ class Uno extends Command {
           }
 
           while (args.length) {
+            console.log("args2.length:" + args.length);
             let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
             if (card === null) return;
             if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
