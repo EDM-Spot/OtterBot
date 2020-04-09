@@ -9,7 +9,7 @@ module.exports = (client) => {
       this.guild = client.guilds.cache.get("485173051432894489");
       this.channel = "485927387079639051";
 
-      this.minPlayers = 2;
+      this.minPlayers = 1;
       this.maxPlayers = 8;
 
       this.running = false;

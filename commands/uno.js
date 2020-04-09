@@ -82,6 +82,8 @@ class Uno extends Command {
             } else {
               await this.client.unoUtil.start();
 
+              console.log(this.client.unoUtil.player);
+              console.log(this.client.unoUtil.player.member);
               message.channel.send(this.client.unoUtil.embed(`The game has begun with ${this.client.unoUtil.queue.length} players! The currently flipped card is: **${this.client.unoUtil.flipped}**. \n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`));
             }
           });
