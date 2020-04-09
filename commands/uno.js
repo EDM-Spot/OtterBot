@@ -159,7 +159,6 @@ class Uno extends Command {
 
           let isAllNormal = true;
           let isAllSpecial = true;
-          let isAll2plus = true;
           let isAllreverse = true;
 
           if (args.length > 2) {
@@ -179,9 +178,6 @@ class Uno extends Command {
               if (card.if !== "REVERSE") {
                 isAllreverse = false;
               }
-              if (card.if !== "+2") {
-                isAll2plus = false;
-              }
               if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
                 isAllSpecial = false;
               }
@@ -191,7 +187,7 @@ class Uno extends Command {
             }
 
             if (!isAllNormal) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
-            if (isAllSpecial && (!isAll2plus || !isAllreverse)) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
+            if (isAllSpecial && !isAllreverse) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
           }
 
           this.client.unoUtil.timer.stop();
