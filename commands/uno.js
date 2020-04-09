@@ -71,7 +71,7 @@ class Uno extends Command {
           startMessage += "-uno hand | DM your hand.";
           startMessage += "-uno table | Shows everyone at the table.";
           startMessage += "-uno exit | Quits the game.";
-          
+
           message.channel.send(startMessage);
 
           this.client.plug.chat("Discord Uno Game will start in 1 minute in channel #" + message.channel.name + "!");
@@ -130,100 +130,116 @@ class Uno extends Command {
 
           let drawn = false;
 
-          let card = await this.client.unoUtil.player.getCard(args);
-          if (card === null) return;
-          if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
+          if (args.length > 2) {
+            let cardsCheck = args;
+            while (cardsCheck.length) {
+              let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
+              if (card === null) return;
+              if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
-          this.client.unoUtil.player.cardsPlayed++;
-
-          if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color) {
-
-            this.client.unoUtil.discard.push(card);
-            this.client.unoUtil.player.hand.splice(this.client.unoUtil.player.hand.indexOf(card), 1);
-            this.client.unoUtil.player.cardsChanged();
-
-            let pref = '';
-            if (this.client.unoUtil.player.hand.length === 0) {
-              this.client.unoUtil.finished.push(this.client.unoUtil.player);
-              this.client.unoUtil.player.finished = true;
-
-              pref = `${this.client.unoUtil.player.member.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
-              if (2 === this.client.unoUtil.queue.length) {
-                this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
-                pref = this.client.unoUtil.scoreboard();
-                return message.channel.send(pref);
+              if (this.client.unoUtil.flipped.color || !card.wild || card.id !== this.client.unoUtil.flipped.id || card.color !== this.client.unoUtil.flipped.color) {
+                return message.reply("Sorry, you can't play one of your cards here!");
               }
             }
+          }
 
-            if (this.client.unoUtil.player.hand.length === 1) {
-              message.channel.send(`**UNO!!** ${this.client.unoUtil.player.member.username} only has one card left!`);
-            }
+          while (args.length) {
+            let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
+            if (card === null) return;
+            if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
-            let extra = '';
-            switch (card.id) {
-              case 'REVERSE':
-                if (this.client.unoUtil.queue.length > 2) {
-                  let player = this.client.unoUtil.queue.shift();
+            if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color) {
+              this.client.unoUtil.player.cardsPlayed++;
 
-                  this.client.unoUtil.queue.reverse();
-                  this.client.unoUtil.queue.unshift(player);
+              this.client.unoUtil.discard.push(card);
+              this.client.unoUtil.player.hand.splice(this.client.unoUtil.player.hand.indexOf(card), 1);
+              this.client.unoUtil.player.cardsChanged();
 
-                  extra = `Turns are now in reverse order! `;
+              let pref = '';
+              if (this.client.unoUtil.player.hand.length === 0) {
+                this.client.unoUtil.finished.push(this.client.unoUtil.player);
+                this.client.unoUtil.player.finished = true;
 
-                  break;
-                } else {
+                pref = `${this.client.unoUtil.player.member.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
+                if (2 === this.client.unoUtil.queue.length) {
+                  this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
+                  pref = this.client.unoUtil.scoreboard();
+                  return message.channel.send(pref);
+                }
+              }
+
+              if (this.client.unoUtil.player.hand.length === 1) {
+                message.channel.send(`**UNO!!** ${this.client.unoUtil.player.member.username} only has one card left!`);
+              }
+
+              let extra = '';
+              switch (card.id) {
+                case 'REVERSE':
+                  if (this.client.unoUtil.queue.length > 2) {
+                    let player = this.client.unoUtil.queue.shift();
+
+                    this.client.unoUtil.queue.reverse();
+                    this.client.unoUtil.queue.unshift(player);
+
+                    extra = `Turns are now in reverse order! `;
+
+                    break;
+                  } else {
+                    let skipped = this.client.unoUtil.queue.shift();
+                    this.client.unoUtil.queue.push(skipped);
+
+                    extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
+                    break;
+                  }
+                case 'SKIP':
                   let skipped = this.client.unoUtil.queue.shift();
                   this.client.unoUtil.queue.push(skipped);
 
                   extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
+
+                  break;
+                case '+2':
+                  let amount = 0;
+                  for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
+                    if (this.client.unoUtil.discard[i].id === '+2')
+                      amount += 2;
+                    else break;
+                  }
+                  this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
+                  extra = `${this.client.unoUtil.queue[1].member.username} picks up ${amount} cards! Tough break. `;
+
+                  extra += ' Also, skip a turn!';
+                  this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
+
+                  break;
+                case 'WILD':
+                  extra = `In case you missed it, the current color is now **${card.colorName}**! `;
+
+                  break;
+                case 'WILD+4': {
+                  // let player = this.client.unoUtil.queue.shift();
+                  await this.client.unoUtil.deal(this.client.unoUtil.queue[1], 4);
+
+                  // this.client.unoUtil.queue.unshift(player);
+                  extra = `${this.client.unoUtil.queue[1].member.username} picks up 4! The current color is now **${card.colorName}**! `;
+
+                  extra += ' Also, skip a turn!';
+
+                  let skipped = this.client.unoUtil.queue.shift();
+                  this.client.unoUtil.queue.push(skipped);
+
                   break;
                 }
-              case 'SKIP':
-                let skipped = this.client.unoUtil.queue.shift();
-                this.client.unoUtil.queue.push(skipped);
-
-                extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
-
-                break;
-              case '+2':
-                let amount = 0;
-                for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
-                  if (this.client.unoUtil.discard[i].id === '+2')
-                    amount += 2;
-                  else break;
-                }
-                this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
-                extra = `${this.client.unoUtil.queue[1].member.username} picks up ${amount} cards! Tough break. `;
-
-                extra += ' Also, skip a turn!';
-                this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
-
-                break;
-              case 'WILD':
-                extra = `In case you missed it, the current color is now **${card.colorName}**! `;
-
-                break;
-              case 'WILD+4': {
-                // let player = this.client.unoUtil.queue.shift();
-                await this.client.unoUtil.deal(this.client.unoUtil.queue[1], 4);
-
-                // this.client.unoUtil.queue.unshift(player);
-                extra = `${this.client.unoUtil.queue[1].member.username} picks up 4! The current color is now **${card.colorName}**! `;
-
-                extra += ' Also, skip a turn!';
-
-                let skipped = this.client.unoUtil.queue.shift();
-                this.client.unoUtil.queue.push(skipped);
-
-                break;
               }
+
+              if (args.length === 0) {
+                await this.client.unoUtil.next();
+
+                return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
+              }
+            } else {
+              return message.reply("Sorry, you can't play that card here!");
             }
-
-            await this.client.unoUtil.next();
-
-            return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
-          } else {
-            return message.reply("Sorry, you can't play that card here!");
           }
         }
         case "pick": {
