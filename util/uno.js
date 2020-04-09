@@ -1,6 +1,7 @@
 // Original Version https://github.com/Ratismal/UNO
 const Player = require("./uno/player.js");
 const Card = require("./uno/card.js");
+const Discord = require("discord.js");
 const moment = require("moment");
 
 module.exports = (client) => {
