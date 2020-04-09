@@ -130,18 +130,18 @@ class Uno extends Command {
 
           let drawn = false;
 
-          if (args.length > 2) {
-            let cardsCheck = args;
-            while (cardsCheck.length) {
-              let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
-              if (card === null) return;
-              if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
+          // if (args.length > 2) {
+          //   let cardsCheck = args;
+          //   while (cardsCheck.length) {
+          //     let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
+          //     if (card === null) return;
+          //     if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
-              if (this.client.unoUtil.flipped.color || !card.wild || card.id !== this.client.unoUtil.flipped.id || card.color !== this.client.unoUtil.flipped.color) {
-                return message.reply("Sorry, you can't play one of your cards here!");
-              }
-            }
-          }
+          //     if (this.client.unoUtil.flipped.color || !card.wild || card.id !== this.client.unoUtil.flipped.id || card.color !== this.client.unoUtil.flipped.color) {
+          //       return message.reply("Sorry, you can't play one of your cards here!");
+          //     }
+          //   }
+          // }
 
           while (args.length) {
             let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
