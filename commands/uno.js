@@ -17,7 +17,7 @@ class Uno extends Command {
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
       //message.delete();
-      console.log(args);
+
       if (!args.length) { return; }
 
       const params = ["start", "join", "play", "pick", "hand", "table", "reset", "exit"];
@@ -64,6 +64,14 @@ class Uno extends Command {
           startMessage += `A maximum of ${this.client.unoUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 1 minute. Join the game with `-uno join` \n";
           startMessage += "Good Luck!";
+          startMessage += " ";
+          startMessage += "Commands:";
+          startMessage += "-uno play <colour> <number> | Plays a card.";
+          startMessage += "-uno pick | Picks up a card.";
+          startMessage += "-uno hand | DM your hand.";
+          startMessage += "-uno table | Shows everyone at the table.";
+          startMessage += "-uno exit | Quits the game.";
+          
           message.channel.send(startMessage);
 
           this.client.plug.chat("Discord Uno Game will start in 1 minute in channel #" + message.channel.name + "!");
@@ -120,8 +128,6 @@ class Uno extends Command {
             return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
 
-          console.log(args);
-
           let drawn = false;
 
           let card = await this.client.unoUtil.player.getCard(args);
@@ -147,6 +153,10 @@ class Uno extends Command {
                 pref = this.client.unoUtil.scoreboard();
                 return message.channel.send(pref);
               }
+            }
+
+            if (this.client.unoUtil.player.hand.length === 1) {
+              message.channel.send(`**UNO!!** ${this.client.unoUtil.player.member.username} only has one card left!`);
             }
 
             let extra = '';
