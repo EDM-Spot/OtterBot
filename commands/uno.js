@@ -161,11 +161,11 @@ class Uno extends Command {
           let isAllSpecial = true;
           let isAllreverse = true;
 
-          var firstCheck = new Promise((resolve, reject) => {
+          var firstCheck = new Promise(async (resolve, reject) => {
             if (args.length > 2) {
               let cardsCheck = cloneDeep(args);
 
-              var firstSubCheck = new Promise((resolve, reject) => {
+              var firstSubCheck = new Promise(async (resolve, reject) => {
                 while (cardsCheck.length) {
                   let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
                   if (card === null) return;
@@ -199,7 +199,7 @@ class Uno extends Command {
             this.client.unoUtil.timer.stop();
           });
 
-          firstCheck.then(() => {
+          firstCheck.then(async () => {
             while (args.length) {
               let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
               if (card === null) return;
