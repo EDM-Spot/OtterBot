@@ -123,6 +123,7 @@ class Uno extends Command {
           let cardArgs = args;
           cardArgs.shift();
           console.log(args);
+          console.log(cardArgs);
 
           let card = await this.client.unoUtil.player.getCard(args);
           if (card === null) return;
