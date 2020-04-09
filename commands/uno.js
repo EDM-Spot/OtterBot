@@ -17,7 +17,7 @@ class Uno extends Command {
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
       //message.delete();
-
+      console.log(args);
       if (!args.length) { return; }
 
       const params = ["start", "join", "play", "pick", "hand", "table", "reset", "exit"];
@@ -120,10 +120,9 @@ class Uno extends Command {
             return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
 
-          let cardArgs = args;
-          cardArgs.shift();
           console.log(args);
-          console.log(cardArgs);
+
+          let drawn = false;
 
           let card = await this.client.unoUtil.player.getCard(args);
           if (card === null) return;
