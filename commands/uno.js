@@ -82,7 +82,6 @@ class Uno extends Command {
             } else {
               await this.client.unoUtil.start();
 
-              console.log(this.client.unoUtil.player.member);
               message.channel.send(this.client.unoUtil.embed(`The game has begun with ${this.client.unoUtil.queue.length} players! The currently flipped card is: **${this.client.unoUtil.flipped}**. \n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
             }
           });
@@ -118,7 +117,7 @@ class Uno extends Command {
           }
 
           if (this.client.unoUtil.player.id !== message.author.id) {
-            return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.user.username}'s turn.`);
+            return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
 
           let cardArgs = args;
@@ -141,7 +140,7 @@ class Uno extends Command {
               this.client.unoUtil.finished.push(this.client.unoUtil.player);
               this.client.unoUtil.player.finished = true;
 
-              pref = `${this.client.unoUtil.player.member.user.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
+              pref = `${this.client.unoUtil.player.member.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
               if (2 === this.client.unoUtil.queue.length) {
                 this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
                 pref = this.client.unoUtil.scoreboard();
@@ -165,14 +164,14 @@ class Uno extends Command {
                   let skipped = this.client.unoUtil.queue.shift();
                   this.client.unoUtil.queue.push(skipped);
 
-                  extra = `Sorry, ${this.client.unoUtil.player.member.user.username}! Skip a turn! `;
+                  extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
                   break;
                 }
               case 'SKIP':
                 let skipped = this.client.unoUtil.queue.shift();
                 this.client.unoUtil.queue.push(skipped);
 
-                extra = `Sorry, ${this.client.unoUtil.player.member.user.username}! Skip a turn! `;
+                extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
 
                 break;
               case '+2':
@@ -183,7 +182,7 @@ class Uno extends Command {
                   else break;
                 }
                 this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
-                extra = `${this.client.unoUtil.queue[1].member.user.username} picks up ${amount} cards! Tough break. `;
+                extra = `${this.client.unoUtil.queue[1].member.username} picks up ${amount} cards! Tough break. `;
 
                 extra += ' Also, skip a turn!';
                 this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
@@ -198,7 +197,7 @@ class Uno extends Command {
                 await this.client.unoUtil.deal(this.client.unoUtil.queue[1], 4);
 
                 // this.client.unoUtil.queue.unshift(player);
-                extra = `${this.client.unoUtil.queue[1].member.user.username} picks up 4! The current color is now **${card.colorName}**! `;
+                extra = `${this.client.unoUtil.queue[1].member.username} picks up 4! The current color is now **${card.colorName}**! `;
 
                 extra += ' Also, skip a turn!';
 
@@ -211,7 +210,7 @@ class Uno extends Command {
 
             await this.client.unoUtil.next();
 
-            return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`));
+            return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
           } else {
             return message.reply("Sorry, you can't play that card here!");
           }
@@ -222,7 +221,7 @@ class Uno extends Command {
           }
 
           if (this.client.unoUtil.player.id !== message.author.id) {
-            return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.user.username}'s turn.`);
+            return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
 
           // if (game.rules.MUST_PLAY === true) {
@@ -244,7 +243,7 @@ class Uno extends Command {
 
           await this.client.unoUtil.next();
 
-          return message.channel.send(this.client.unoUtil.embed(`${player.member.user.username} picked up a card.\n\nA **${this.client.unoUtil.flipped}** was played last. \n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`));
+          return message.channel.send(this.client.unoUtil.embed(`${player.member.username} picked up a card.\n\nA **${this.client.unoUtil.flipped}** was played last. \n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
         }
         case "hand": {
           if (!this.client.unoUtil.started) {
@@ -275,9 +274,9 @@ class Uno extends Command {
 
           d = d.join(', ');
 
-          let out = this.client.unoUtil.embed(`A ** ${this.client.unoUtil.flipped}** has been played.\n\nIt is currently ${this.client.unoUtil.player.member.user.username} 's turn!`);
+          let out = this.client.unoUtil.embed(`A ** ${this.client.unoUtil.flipped}** has been played.\n\nIt is currently ${this.client.unoUtil.player.member.username} 's turn!`);
 
-          out.content = `Here are the players in this game:\n${this.client.unoUtil.queue.map(p => `**${p.member.user.username}** | ${p.hand.length} card(s)`).join('\n')}`
+          out.content = `Here are the players in this game:\n${this.client.unoUtil.queue.map(p => `**${p.member.username}** | ${p.hand.length} card(s)`).join('\n')}`
             + `\n\nThis game has lasted **${d}**. **${this.client.unoUtil.drawn}** cards have been drawn!\n\n`;
 
           return message.channel.send(out);
@@ -305,7 +304,7 @@ class Uno extends Command {
             if (this.client.unoUtil.started && this.client.unoUtil.player.member.id === message.author.id) {
               this.client.unoUtil.next();
 
-              out = this.client.unoUtil.embed(`${out}A **${this.client.unoUtil.flipped}** was played last. \n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`);
+              out = this.client.unoUtil.embed(`${out}A **${this.client.unoUtil.flipped}** was played last. \n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`);
             }
 
             delete this.client.unoUtil.players[message.author.id];

@@ -97,25 +97,33 @@ module.exports = (client) => {
     }
 
     embed(desc) {
-      return {
-        embed: {
-          description: desc,
-          thumbnail: { url: this.flipped.URL },
-          color: this.flipped.colorCode,
-          footer: {
-            text: `Decks: ${1} (${1 * 108} cards) | Remaining: ${this.deck.length} | Discarded: ${this.discard.length}`,
-            icon_url: __dirname + '/resources/logo.png'
-          },
-          timestamp: moment(this.timeStarted),
-        }
-      }
+      return new Discord.MessageEmbed()
+        .setColor(this.flipped.colorCode)
+        .setDescription(desc)
+        .setFooter(`Decks: ${1} (${1 * 108} cards) | Remaining: ${this.deck.length} | Discarded: ${this.discard.length}`)
+        .setImage(this.flipped.URL)
+        .setThumbnail(__dirname + '/resources/logo.png')
+        .setTimestamp(moment(this.timeStarted));
+      
+      // {
+      //   embed: {
+      //     description: desc,
+      //     thumbnail: { url: this.flipped.URL },
+      //     color: this.flipped.colorCode,
+      //     footer: {
+      //       text: `Decks: ${1} (${1 * 108} cards) | Remaining: ${this.deck.length} | Discarded: ${this.discard.length}`,
+      //       icon_url: __dirname + '/resources/logo.png'
+      //     },
+      //     timestamp: moment(this.timeStarted),
+      //   }
+      // }
     }
 
     scoreboard() {
       let out = 'The game is now over. Here is the scoreboard:\n';
 
       for (let i = 0; i < this.finished.length; i++) {
-        let user = this.finished[i].member.user;
+        let user = this.finished[i].member;
         out += `${i + 1}. **${user.username}#${user.discriminator}**\n`;
       }
 

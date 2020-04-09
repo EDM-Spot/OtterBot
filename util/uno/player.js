@@ -52,8 +52,8 @@ class UnoPlayer {
         return {
             id: this.id,
             cardsPlayed: this.cardsPlayed,
-            name: this.member.user.username,
-            discriminator: this.member.user.discriminator
+            name: this.member.username,
+            discriminator: this.member.discriminator
         };
     }
 
