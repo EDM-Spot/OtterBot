@@ -27,7 +27,7 @@ class Uno extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 2;
+      const price = 0;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -149,11 +149,11 @@ class Uno extends Command {
 
           let drawn = false;
 
+          console.log(args);
+
           if (args.length > 2) {
-            console.log("args.length:" + args.length);
             let cardsCheck = args;
             while (cardsCheck.length) {
-              console.log("cardsCheck.length:" + cardsCheck.length);
               let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
               if (card === null) return;
               if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
@@ -164,8 +164,9 @@ class Uno extends Command {
             }
           }
 
+          console.log(args);
+
           while (args.length) {
-            console.log("args2.length:" + args.length);
             let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
             if (card === null) return;
             if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
@@ -254,13 +255,15 @@ class Uno extends Command {
                 }
               }
 
+              console.log(card.id + " " + card.colorName);
+              console.log(args.length);
               if (args.length === 0) {
                 await this.client.unoUtil.next();
 
                 return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
               }
             } else {
-              return message.reply("Sorry, you can't play that card here!");
+              return message.reply("Sorry, you can't play that card now!");
             }
           }
         }
