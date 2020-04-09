@@ -98,12 +98,15 @@ module.exports = (client) => {
     }
 
     embed(desc) {
+      console.log(this.flipped);
+      console.log(this.flipped.URL);
+      console.log(__dirname + 'uno/resources/logo.png');
       return new Discord.MessageEmbed()
         .setColor(this.flipped.colorCode)
         .setDescription(desc)
         .setFooter(`Decks: ${1} (${1 * 108} cards) | Remaining: ${this.deck.length} | Discarded: ${this.discard.length}`)
         .setImage(this.flipped.URL)
-        .setThumbnail(__dirname + '/resources/logo.png')
+        .setThumbnail(__dirname + 'uno/resources/logo.png')
         .setTimestamp(moment(this.timeStarted));
       
       // {
