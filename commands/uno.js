@@ -63,13 +63,13 @@ class Uno extends Command {
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.unoUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 1 minute. Join the game with `-uno join` \n";
-          startMessage += "Good Luck!";
-          startMessage += " ";
-          startMessage += "Commands:";
-          startMessage += "-uno play <colour> <number> | Plays a card. Can be multiple if same color: -uno play <colour> <number> <colour>";
-          startMessage += "-uno pick | Picks up a card.";
-          startMessage += "-uno hand | DM your hand.";
-          startMessage += "-uno table | Shows everyone at the table.";
+          startMessage += "Good Luck! \n";
+          startMessage += " \n";
+          startMessage += "Commands: \n";
+          startMessage += "-uno play <colour> <number> | Plays a card. Can be multiple if same color: -uno play <colour> <number> <colour> \n";
+          startMessage += "-uno pick | Picks up a card. \n";
+          startMessage += "-uno hand | DM your hand. \n";
+          startMessage += "-uno table | Shows everyone at the table. \n";
           startMessage += "-uno exit | Quits the game.";
 
           message.channel.send(startMessage);
