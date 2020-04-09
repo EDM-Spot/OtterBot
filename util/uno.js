@@ -178,7 +178,7 @@ module.exports = (client) => {
 
       out += `\nThis game lasted **${d}**, and **${this.drawn}** cards were drawn!`;
 
-      await this.client.unoUtil.end();
+      await this.end();
 
       return out;
     }
