@@ -10,7 +10,7 @@ module.exports = (client) => {
       this.guild = client.guilds.cache.get("485173051432894489");
       this.channel = "485927387079639051";
 
-      this.minPlayers = 1;
+      this.minPlayers = 2;
       this.maxPlayers = 8;
 
       this.running = false;
@@ -42,8 +42,8 @@ module.exports = (client) => {
     }
 
     async end() {
-      for (const id in this.players) {
-        await this.guild.members.cache.get(id).roles.remove("512635547320188928").catch(console.warn);
+      for (const player in this.players) {
+        await this.guild.members.cache.get(player.member.id).roles.remove("512635547320188928").catch(console.warn);
       }
 
       this.running = false;

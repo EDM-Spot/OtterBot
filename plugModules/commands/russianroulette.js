@@ -59,7 +59,7 @@ module.exports = function Command(bot) {
           const isWeekend = (day === 6) || (day === 7);
           const isDecember = (moment().month() === 11);
 
-          if (await bot.roulette.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame()) {
+          if (await bot.roulette.check() || await bot.russianRoulette.check() || bot.triviaUtil.check() || bot.pokerUtil.checkGame() || bot.unoUtil.checkGame()) {
             this.reply(lang.russianroulette.started, {}, 6e4);
             return true;
           }

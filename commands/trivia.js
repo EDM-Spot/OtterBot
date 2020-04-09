@@ -15,7 +15,7 @@ class Trivia extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
+    if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame() || this.client.unoUtil.checkGame()) {
       return true;
     }
 

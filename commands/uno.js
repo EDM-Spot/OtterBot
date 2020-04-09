@@ -27,7 +27,7 @@ class Uno extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 0;
+      const price = 2;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -93,16 +93,16 @@ class Uno extends Command {
 
           this.client.unoUtil.running = true;
 
-          // new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-          //   message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
-          // });
+          new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+            message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          });
 
-          new moment.duration(5, "seconds").timer({ loop: false, start: true }, async () => {
+          new moment.duration(5, "minutes").timer({ loop: false, start: true }, async () => {
             if (this.client.unoUtil.queue.length < this.client.unoUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.unoUtil.minPlayers} required) to play this game.`);
               await this.client.unoUtil.end();
             } else {
-              message.channel.send("<@&512635547320188928> Trivia will now start!");
+              message.channel.send("<@&512635547320188928> Uno will now start!");
               await this.client.unoUtil.start();
 
               message.channel.send(this.client.unoUtil.embed(`The game has begun with ${this.client.unoUtil.queue.length} players! The currently flipped card is: **${this.client.unoUtil.flipped}**. \n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
@@ -149,8 +149,6 @@ class Uno extends Command {
 
           let drawn = false;
 
-          console.log(args);
-
           if (args.length > 2) {
             let cardsCheck = cloneDeep(args);
             while (cardsCheck.length) {
@@ -163,8 +161,6 @@ class Uno extends Command {
               }
             }
           }
-
-          console.log(args);
 
           while (args.length) {
             let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
@@ -254,9 +250,7 @@ class Uno extends Command {
                   break;
                 }
               }
-
-              console.log(card.id + " " + card.colorName);
-              console.log(args.length);
+              
               if (args.length === 0) {
                 await this.client.unoUtil.next();
 

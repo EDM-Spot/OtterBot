@@ -18,7 +18,7 @@ class TriviaPay extends Command {
       
       if (!args.length) { return; }
 
-      if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame()) {
+      if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame() || this.client.unoUtil.checkGame()) {
         return message.reply("There's a Game running already!");
       }
 
