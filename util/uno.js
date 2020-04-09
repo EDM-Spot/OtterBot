@@ -103,7 +103,7 @@ module.exports = (client) => {
       this.player.sendHand(true);
       this.lastChange = Date.now();
 
-      this.timer = new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
+      this.timer = new moment.duration(2, "minutes").timer({ loop: false, start: true }, async () => {
         let [card] = await this.deal(this.player, 1);
         let player = this.player;
 
