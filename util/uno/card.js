@@ -6,23 +6,6 @@ class UnoCard {
     if (!this.color) this.wild = true;
   }
 
-  static deserialize(obj) {
-    let card = new UnoCard(obj.id, obj.color);
-    card.wild = obj.wild;
-
-    return card;
-  }
-
-  serialize() {
-    let obj = {
-      id: this.id,
-      wild: this.wild,
-      color: this.color
-    };
-
-    return obj;
-  }
-
   get colorName() {
     return {
       R: 'Red',

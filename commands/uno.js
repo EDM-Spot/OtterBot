@@ -20,7 +20,7 @@ class Uno extends Command {
 
       if (!args.length) { return; }
 
-      const params = ["start", "join", "table", "play", "pick", "hand", "reset", "exit"];
+      const params = ["start", "join", "play", "pick", "hand", "table", "reset", "exit"];
       const param = `${args.shift()}`.toLowerCase();
 
       if (!params.includes(param)) {
@@ -76,7 +76,7 @@ class Uno extends Command {
           //});
 
           new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
-            if (this.client.unoUtil.players.size < this.client.unoUtil.minPlayers) {
+            if (this.client.unoUtil.queue.size < this.client.unoUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.unoUtil.minPlayers} required) to play this game.`);
               await this.client.unoUtil.end();
             } else {
@@ -91,7 +91,7 @@ class Uno extends Command {
         case "join": {
           if (!this.client.unoUtil.checkGame() && !this.client.unoUtil.started) {
             return message.reply("Uno is not running!");
-          } else if (this.client.unoUtil.players.size >= this.client.unoUtil.maxPlayers) {
+          } else if (this.client.unoUtil.queue.size >= this.client.unoUtil.maxPlayers) {
             return message.reply("The game is Full!");
           }
 
@@ -109,122 +109,215 @@ class Uno extends Command {
 
           return message.reply("Joined Uno.");
         }
-        // case "bet": {
-        //   if (!this.client.unoUtil.started) {
-        //     return message.reply("Poker is not running!");
-        //   }
+        case "play": {
+          if (!this.client.unoUtil.started) {
+            return message.reply("Uno is not running!");
+          }
 
-        //   const amount = parseInt(args.pop(), 10);
+          if (this.client.unoUtil.player.id !== message.author.id) {
+            return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.user.username}'s turn.`);
+          }
 
-        //   if (isNaN(amount)) {
-        //     return false;
-        //   }
+          let cardArgs = args;
+          cardArgs.shift();
 
-        //   if (this.client.unoUtil.currentPlayer.id != userID) {
-        //     return message.reply("It's not your turn!");
-        //   } else if (this.client.unoUtil.allInPlayers.has(this.client.unoUtil.currentPlayer.id)) {
-        //     return message.reply("You gone all-in! You can only skip at this point!");
-        //   } else if (this.client.unoUtil.playerBalances.get(this.client.unoUtil.currentPlayer.id) + (this.client.unoUtil.roundBets.get(this.client.unoUtil.currentPlayer.id) || 0) - amount < 0) {
-        //     return message.reply("You do not have enough Props to bet!");
-        //   } else if (amount !== this.client.unoUtil.previousBet && amount < this.client.unoUtil.previousBet * 2) {
-        //     return message.reply(`You need to bet equal or at least twice the previous bet of **${this.client.unoUtil.previousBet}** Props`);
-        //   }
+          let card = await this.client.unoUtil.player.getCard(cardArgs);
+          if (card === null) return;
+          if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
-        //   return this.client.unoUtil.bet(amount);
-        // }
-        // case "call": {
-        //   if (!this.client.unoUtil.started) {
-        //     return message.reply("Poker is not running!");
-        //   }
+          this.client.unoUtil.player.cardsPlayed++;
 
-        //   const amount = this.client.unoUtil.previousBet;
+          if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color) {
 
-        //   if (isNaN(amount)) {
-        //     return false;
-        //   }
+            this.client.unoUtil.discard.push(card);
+            this.client.unoUtil.player.hand.splice(this.client.unoUtil.player.hand.indexOf(card), 1);
+            this.client.unoUtil.player.cardsChanged();
 
-        //   if (this.client.unoUtil.currentPlayer.id != userID) {
-        //     return message.reply("It's not your turn!");
-        //   } else if (this.client.unoUtil.allInPlayers.has(this.client.unoUtil.currentPlayer.id)) {
-        //     return message.reply("You gone all-in! You can only skip at this point!");
-        //   } else if (this.client.unoUtil.playerBalances.get(this.client.unoUtil.currentPlayer.id) + (this.client.unoUtil.roundBets.get(this.client.unoUtil.currentPlayer.id) || 0) - amount < 0) {
-        //     return message.reply("You do not have enough Props to bet!");
-        //   } else if (amount !== this.client.unoUtil.previousBet && amount < this.client.unoUtil.previousBet * 2) {
-        //     return message.reply(`You need to bet equal or at least twice the previous bet of **${this.client.unoUtil.previousBet}** Props`);
-        //   }
+            let pref = '';
+            if (this.client.unoUtil.player.hand.length === 0) {
+              this.client.unoUtil.finished.push(this.client.unoUtil.player);
+              this.client.unoUtil.player.finished = true;
 
-        //   return this.client.unoUtil.bet(amount);
-        // }
-        // case "check": {
-        //   if (!this.client.unoUtil.started) {
-        //     return message.reply("Poker is not running!");
-        //   }
+              pref = `${this.client.unoUtil.player.member.user.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
+              if (2 === this.client.unoUtil.queue.length) {
+                this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
+                pref = this.client.unoUtil.scoreboard();
+                return message.channel.send(pref);
+              }
+            }
 
-        //   if (this.client.unoUtil.currentPlayer.id != userID) {
-        //     return message.reply("It's not your turn!");
-        //   } else if (this.client.unoUtil.allInPlayers.has(this.client.unoUtil.currentPlayer.id)) {
-        //     return message.reply("You gone all-in! You can only skip at this point!");
-        //   } else if (this.client.unoUtil.previousBet) {
-        //     return message.reply("You can only bet, fold, or go all-in at this point!");
-        //   }
+            let extra = '';
+            switch (card.id) {
+              case 'REVERSE':
+                if (this.client.unoUtil.queue.length > 2) {
+                  let player = this.client.unoUtil.queue.shift();
 
-        //   return this.client.unoUtil.check();
-        // }
-        // case "fold": {
-        //   if (!this.client.unoUtil.started) {
-        //     return message.reply("Poker is not running!");
-        //   } else if (this.client.unoUtil.currentPlayer.id != userID) {
-        //     return message.reply("It's not your turn!");
-        //   }
+                  this.client.unoUtil.queue.reverse();
+                  this.client.unoUtil.queue.unshift(player);
 
-        //   return this.client.unoUtil.fold();
-        // }
-        // case "skip": {
-        //   if (!this.client.unoUtil.started) {
-        //     return message.reply("Poker is not running!");
-        //   } else if (this.client.unoUtil.currentPlayer.id != userID) {
-        //     return message.reply("It's not your turn!");
-        //   } else if (!this.client.unoUtil.allInPlayers.has(this.client.unoUtil.currentPlayer.id)) {
-        //     return message.reply("You cannot skip unless you have gone all-in.");
-        //   }
+                  extra = `Turns are now in reverse order! `;
 
-        //   return this.client.unoUtil.skip();
-        // }
-        // case "allin": {
-        //   if (!this.client.unoUtil.started) {
-        //     return message.reply("Poker is not running!");
-        //   } else if (this.client.unoUtil.currentPlayer.id != userID) {
-        //     return message.reply("It's not your turn!");
-        //   } else if (this.client.unoUtil.allInPlayers.has(this.client.unoUtil.currentPlayer.id)) {
-        //     return message.reply("You gone all-in! You can only skip at this point!");
-        //   }
+                  break;
+                } else {
+                  let skipped = this.client.unoUtil.queue.shift();
+                  this.client.unoUtil.queue.push(skipped);
 
-        //   const props = inst.get("props");
+                  extra = `Sorry, ${this.client.unoUtil.player.member.user.username}! Skip a turn! `;
+                  break;
+                }
+              case 'SKIP':
+                let skipped = this.client.unoUtil.queue.shift();
+                this.client.unoUtil.queue.push(skipped);
 
-        //   if (props == 0) {
-        //     message.reply("You have 0 props.");
-        //     return this.client.unoUtil.exit();
-        //   }
+                extra = `Sorry, ${this.client.unoUtil.player.member.user.username}! Skip a turn! `;
 
-        //   return this.client.unoUtil.allIn();
-        // }
-        // case "exit": {
-        //   if (!this.client.unoUtil.checkGame() && !this.client.unoUtil.started) {
-        //     return message.reply("Poker is not running!");
-        //   } else if (!this.client.unoUtil.started) {
-        //     this.client.unoUtil.startingPlayers.delete(userID);
+                break;
+              case '+2':
+                let amount = 0;
+                for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
+                  if (this.client.unoUtil.discard[i].id === '+2')
+                    amount += 2;
+                  else break;
+                }
+                this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
+                extra = `${this.client.unoUtil.queue[1].member.user.username} picks up ${amount} cards! Tough break. `;
 
-        //     await this.client.guilds.cache.get("485173051432894489").members.cache.get(userID).roles.remove("512635547320188928").catch(console.warn);
+                extra += ' Also, skip a turn!';
+                this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
 
-        //     return message.reply("You left the table!");
-        //   }
+                break;
+              case 'WILD':
+                extra = `In case you missed it, the current color is now **${card.colorName}**! `;
 
-        //   if (this.client.unoUtil.currentPlayer.id != userID) {
-        //     return message.reply("It's not your turn!");
-        //   }
+                break;
+              case 'WILD+4': {
+                // let player = this.client.unoUtil.queue.shift();
+                await this.client.unoUtil.deal(this.client.unoUtil.queue[1], 4);
 
-        //   return this.client.unoUtil.exit();
-        // }
+                // this.client.unoUtil.queue.unshift(player);
+                extra = `${this.client.unoUtil.queue[1].member.user.username} picks up 4! The current color is now **${card.colorName}**! `;
+
+                extra += ' Also, skip a turn!';
+
+                let skipped = this.client.unoUtil.queue.shift();
+                this.client.unoUtil.queue.push(skipped);
+
+                break;
+              }
+            }
+
+            await this.client.unoUtil.next();
+
+            return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`));
+          } else {
+            return message.reply("Sorry, you can't play that card here!");
+          }
+        }
+        case "pick": {
+          if (!this.client.unoUtil.started) {
+            return message.reply("Uno is not running!");
+          }
+
+          if (this.client.unoUtil.player.id !== message.author.id) {
+            return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.user.username}'s turn.`);
+          }
+
+          // if (game.rules.MUST_PLAY === true) {
+          //   for (const card of this.client.unoUtil.player.hand) {
+          //     if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id
+          //       || card.color === this.client.unoUtil.flipped.color) {
+          //       return 'Sorry, you have to play a card if you\'re able!';
+          //     }
+          //   }
+          // }
+
+          let [card] = await this.client.unoUtil.deal(this.client.unoUtil.player, 1);
+          // if (game.rules.DRAW_AUTOPLAY === true
+          //   && (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color)) {
+          //   return await commands.play(message, card.toString().split(' '), true);
+          // }
+
+          let player = this.client.unoUtil.player;
+
+          await this.client.unoUtil.next();
+
+          return message.channel.send(this.client.unoUtil.embed(`${player.member.user.username} picked up a card.\n\nA **${this.client.unoUtil.flipped}** was played last. \n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`));
+        }
+        case "hand": {
+          if (!this.client.unoUtil.started) {
+            return message.reply("Uno is not running!");
+          }
+
+          let player = this.client.unoUtil.players[message.author.id];
+          await player.sendHand();
+
+          return message.reply("Sent your hand to DM.");
+        }
+        case "table": {
+          if (!this.client.unoUtil.started) {
+            return message.reply("Uno is not running!");
+          }
+
+          let diff = moment.duration(moment() - this.client.unoUtil.timeStarted);
+          let d = [];
+
+          if (diff.days() > 0) d.push(`${diff.days()} day${diff.days() === 1 ? '' : 's'}`);
+          if (diff.hours() > 0) d.push(`${diff.hours()} hour${diff.hours() === 1 ? '' : 's'}`);
+
+          d.push(`${diff.minutes()} minute${diff.minutes() === 1 ? '' : 's'}`);
+
+          if (d.length > 1) {
+            d[d.length - 1] = 'and ' + d[d.length - 1];
+          }
+
+          d = d.join(', ');
+
+          let out = this.client.unoUtil.embed(`A ** ${this.client.unoUtil.flipped}** has been played.\n\nIt is currently ${this.client.unoUtil.player.member.user.username} 's turn!`);
+
+          out.content = `Here are the players in this game:\n${this.client.unoUtil.queue.map(p => `**${p.member.user.username}** | ${p.hand.length} card(s)`).join('\n')}`
+            + `\n\nThis game has lasted **${d}**. **${this.client.unoUtil.drawn}** cards have been drawn!\n\n`;
+
+          return message.channel.send(out);
+        }
+        case "exit": {
+          if (!this.client.unoUtil.started) {
+            return message.reply("Uno is not running!");
+          }
+
+          if (this.client.unoUtil.players.hasOwnProperty(message.author.id)) {
+
+            let out = 'You are no longer participating in the game.\n\n';
+
+            this.client.unoUtil.dropped.push(this.client.unoUtil.players[message.author.id]);
+
+            if (this.client.unoUtil.started && this.client.unoUtil.queue.length <= 2) {
+              this.client.unoUtil.queue = this.client.unoUtil.queue.filter(p => p.id !== message.author.id);
+              this.client.unoUtil.finished.push(this.client.unoUtil.queue[0]);
+
+              out += this.client.unoUtil.scoreboard();
+
+              return message.channel.send(out);
+            }
+
+            if (this.client.unoUtil.started && this.client.unoUtil.player.member.id === message.author.id) {
+              this.client.unoUtil.next();
+
+              out = this.client.unoUtil.embed(`${out}A **${this.client.unoUtil.flipped}** was played last. \n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`);
+            }
+
+            delete this.client.unoUtil.players[message.author.id];
+
+            this.client.unoUtil.queue = this.client.unoUtil.queue.filter(p => p.id !== message.author.id);
+
+            if (!this.client.unoUtil.started, this.client.unoUtil.queue.length === 0) {
+              out = 'The game has been cancelled.';
+            }
+
+            return message.channel.send(out);
+          } else {
+            return message.reply('You haven\'t joined!');
+          }
+        }
         case "reset": {
           const user = this.client.plug.user(userDB.get("id"));
 

@@ -17,31 +17,6 @@ class UnoPlayer {
         this.sortHand();
     }
 
-    static deserialize(obj, client) {
-        let member = this.client.channels.cache.members.cache.get(obj.id);
-        let player = new UnoPlayer(member, client);
-        player.called = obj.called;
-        player.finished = obj.finished;
-        player.hand = obj.hand.map(c => Card.deserialize(c));
-        player.cardsPlayed = obj.cardsPlayed || 0;
-
-        player.cardsChanged();
-
-        return player;
-    }
-
-    serialize() {
-        let obj = {
-            id: this.id,
-            hand: this.hand.map(c => c.serialize()),
-            called: this.called,
-            finished: this.finished,
-            cardsPlayed: this.cardsPlayed
-        };
-
-        return obj;
-    }
-
     sortHand() {
         this.hand.sort((a, b) => {
             return a.value > b.value;
@@ -142,13 +117,7 @@ class UnoPlayer {
     }
 
     async send(content) {
-        //try {
-            //let chan = await this.member.user.getDMChannel();
-            console.log(this.id);
-            this.client.users.cache.get(this.id).send(content);
-        // } catch (err) {
-        //     this.client.channels.cache.get(this.channel).send(`Hey <@${this.id}>, I can't DM you! Please make sure your DMs are enabled, and run \`uno hand\` to see your cards.`);
-        // }
+        this.client.users.cache.get(this.id).send(content);
     }
 
     async sendHand(turn = false) {
