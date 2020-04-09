@@ -66,7 +66,7 @@ class Uno extends Command {
           startMessage += "Good Luck!";
           startMessage += " ";
           startMessage += "Commands:";
-          startMessage += "-uno play <colour> <number> | Plays a card.";
+          startMessage += "-uno play <colour> <number> | Plays a card. Can be multiple if same color: -uno play <colour> <number> <colour>";
           startMessage += "-uno pick | Picks up a card.";
           startMessage += "-uno hand | DM your hand.";
           startMessage += "-uno table | Shows everyone at the table.";
