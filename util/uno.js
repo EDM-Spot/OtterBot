@@ -15,6 +15,8 @@ module.exports = (client) => {
 
       this.running = false;
 
+      this.timer = null;
+
       this.players = {};
       this.queue = [];
       this.deck = [];
@@ -28,6 +30,7 @@ module.exports = (client) => {
       this.timeStarted = null;
       //this.rules = client.ruleset;
       this.transcript = [];
+      this.prizes = true;
     }
 
     async start() {
@@ -39,6 +42,16 @@ module.exports = (client) => {
 
       this.started = true;
       this.timeStarted = Date.now();
+
+      this.timer = new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
+        let [card] = await this.deal(this.player, 1);
+        let player = this.player;
+
+        await this.next();
+
+        client.channels.cache.get(this.channel).send("Timeout!");
+        client.channels.cache.get(this.channel).send(this.embed(`${player.member.username} picked up a card.\n\nA **${this.flipped}** was played last. \n\nIt is now ${this.player.member.username}'s turn!`));
+      });
     }
 
     async end() {
@@ -60,6 +73,8 @@ module.exports = (client) => {
       this.drawn = 0;
       this.timeStarted = null;
       this.transcript = [];
+      this.prizes = true;
+      this.timer = null;
 
       return true;
     }
@@ -87,6 +102,16 @@ module.exports = (client) => {
       this.queue = this.queue.filter(p => !p.finished);
       this.player.sendHand(true);
       this.lastChange = Date.now();
+
+      this.timer = new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
+        let [card] = await this.deal(this.player, 1);
+        let player = this.player;
+
+        await this.next();
+
+        client.channels.cache.get(this.channel).send("Timeout!");
+        client.channels.cache.get(this.channel).send(this.embed(`${player.member.username} picked up a card.\n\nA **${this.flipped}** was played last. \n\nIt is now ${this.player.member.username}'s turn!`));
+      });
     }
 
     get player() {
@@ -105,7 +130,7 @@ module.exports = (client) => {
         .setImage(this.flipped.URL)
         .setThumbnail('https://edmspot.tk/uno/logo.png')
         .setTimestamp(moment(this.timeStarted));
-      
+
       // {
       //   embed: {
       //     description: desc,
@@ -128,6 +153,7 @@ module.exports = (client) => {
         if (i === 0) { props = 30; }
         if (i === 1) { props = 15; }
         if (i === 2) { props = 10; }
+        if (!this.prizes) { props = 0; }
 
         let user = this.finished[i].member;
         out += `${i + 1}. **${user.username}#${user.discriminator}** - Won ${props} props.\n`;
@@ -151,6 +177,8 @@ module.exports = (client) => {
       d = d.join(', ');
 
       out += `\nThis game lasted **${d}**, and **${this.drawn}** cards were drawn!`;
+
+      await this.client.unoUtil.end();
 
       return out;
     }

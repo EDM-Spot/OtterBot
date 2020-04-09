@@ -93,7 +93,7 @@ class Uno extends Command {
 
           this.client.unoUtil.running = true;
 
-          new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+          new moment.duration(270000, "milliseconds").timer({ loop: false, start: true }, async () => {
             message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
           });
 
@@ -103,6 +103,12 @@ class Uno extends Command {
               await this.client.unoUtil.end();
             } else {
               message.channel.send("<@&512635547320188928> Uno will now start!");
+
+              if (this.client.unoUtil.queue.length < 4) {
+                this.client.unoUtil.prizes = false;
+                message.channel.send("Less than 4 players... Prizes disabled!");
+              }
+
               await this.client.unoUtil.start();
 
               message.channel.send(this.client.unoUtil.embed(`The game has begun with ${this.client.unoUtil.queue.length} players! The currently flipped card is: **${this.client.unoUtil.flipped}**. \n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
@@ -149,6 +155,12 @@ class Uno extends Command {
 
           let drawn = false;
 
+          let argsCards = [];
+
+          let isAllSpecial = true;
+          let isAll2plus = true;
+          let isAllreverse = true;
+
           if (args.length > 2) {
             let cardsCheck = cloneDeep(args);
             while (cardsCheck.length) {
@@ -156,11 +168,29 @@ class Uno extends Command {
               if (card === null) return;
               if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
 
-              if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
-                return message.reply("Sorry, you can't multiple play special cards!");
+              argsCards.push(card);
+              // if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
+              //   return message.reply("Sorry, you can't multiple play special cards mixed with normal!");
+              // }
+            }
+
+            for (var card in argsCards) {
+              if (card.if !== "REVERSE") {
+                isAllreverse = false;
+              }
+              if (card.if !== "+2") {
+                isAll2plus = false;
+              }
+              if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
+                isAllSpecial = false;
               }
             }
+
+            if (!isAllSpecial) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
+            if (isAllSpecial && (!isAll2plus || !isAllreverse)) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
           }
+
+          this.client.unoUtil.timer.stop();
 
           while (args.length) {
             let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
@@ -219,16 +249,19 @@ class Uno extends Command {
                   break;
                 case '+2':
                   let amount = 0;
-                  for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
-                    if (this.client.unoUtil.discard[i].id === '+2')
-                      amount += 2;
-                    else break;
-                  }
-                  this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
-                  extra = `${this.client.unoUtil.queue[1].member.username} picks up ${amount} cards! Tough break. `;
+                  if (args.length === 0) {
+                    for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
+                      if (this.client.unoUtil.discard[i].id === '+2')
+                        amount += 2;
+                      else break;
+                    }
 
-                  extra += ' Also, skip a turn!';
-                  this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
+                    this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
+                    extra = `${this.client.unoUtil.queue[1].member.username} picks up ${amount} cards! Tough break. `;
+
+                    extra += ' Also, skip a turn!';
+                    this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
+                  }
 
                   break;
                 case 'WILD':
@@ -250,7 +283,7 @@ class Uno extends Command {
                   break;
                 }
               }
-              
+
               if (args.length === 0) {
                 await this.client.unoUtil.next();
 
@@ -269,6 +302,8 @@ class Uno extends Command {
           if (this.client.unoUtil.player.id !== message.author.id) {
             return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
+
+          this.client.unoUtil.timer.stop();
 
           // if (game.rules.MUST_PLAY === true) {
           //   for (const card of this.client.unoUtil.player.hand) {
@@ -333,7 +368,8 @@ class Uno extends Command {
           }
 
           if (this.client.unoUtil.players.hasOwnProperty(message.author.id)) {
-
+            this.client.unoUtil.timer.stop();
+            
             let out = 'You are no longer participating in the game.\n\n';
 
             this.client.unoUtil.dropped.push(this.client.unoUtil.players[message.author.id]);
