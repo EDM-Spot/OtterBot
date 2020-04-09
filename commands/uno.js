@@ -76,11 +76,13 @@ class Uno extends Command {
           //});
 
           new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
-            if (this.client.unoUtil.queue.size < this.client.unoUtil.minPlayers) {
+            if (this.client.unoUtil.queue.length < this.client.unoUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.unoUtil.minPlayers} required) to play this game.`);
               await this.client.unoUtil.end();
             } else {
               await this.client.unoUtil.start();
+
+              message.channel.send(this.client.unoUtil.embed(`The game has begun with ${this.client.unoUtil.queue.length} players! The currently flipped card is: **${this.client.unoUtil.flipped}**. \n\nIt is now ${this.client.unoUtil.player.member.user.username}'s turn!`));
             }
           });
 
@@ -91,7 +93,7 @@ class Uno extends Command {
         case "join": {
           if (!this.client.unoUtil.checkGame() && !this.client.unoUtil.started) {
             return message.reply("Uno is not running!");
-          } else if (this.client.unoUtil.queue.size >= this.client.unoUtil.maxPlayers) {
+          } else if (this.client.unoUtil.queue.length >= this.client.unoUtil.maxPlayers) {
             return message.reply("The game is Full!");
           }
 

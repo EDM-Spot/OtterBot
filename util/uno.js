@@ -38,8 +38,6 @@ module.exports = (client) => {
 
       this.started = true;
       this.timeStarted = Date.now();
-
-      this.embed(`The game has begun with ${this.queue.length} players! The currently flipped card is: **${this.flipped}**. \n\nIt is now ${this.player.member.user.username}'s turn!`);
     }
 
     async end() {
