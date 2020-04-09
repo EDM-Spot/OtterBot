@@ -178,7 +178,7 @@ class Uno extends Command {
                 pref = `${this.client.unoUtil.player.member.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
                 if (2 === this.client.unoUtil.queue.length) {
                   this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
-                  pref = this.client.unoUtil.scoreboard();
+                  pref = await this.client.unoUtil.scoreboard();
                   return message.channel.send(pref);
                 }
               }
@@ -338,7 +338,7 @@ class Uno extends Command {
               this.client.unoUtil.queue = this.client.unoUtil.queue.filter(p => p.id !== message.author.id);
               this.client.unoUtil.finished.push(this.client.unoUtil.queue[0]);
 
-              out += this.client.unoUtil.scoreboard();
+              out += await this.client.unoUtil.scoreboard();
 
               return message.channel.send(out);
             }

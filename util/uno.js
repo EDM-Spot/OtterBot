@@ -120,7 +120,7 @@ module.exports = (client) => {
       // }
     }
 
-    scoreboard() {
+    async scoreboard() {
       let out = 'The game is now over. Here is the scoreboard:\n';
 
       for (let i = 0; i < this.finished.length; i++) {
