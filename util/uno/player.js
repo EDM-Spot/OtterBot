@@ -142,12 +142,13 @@ class UnoPlayer {
     }
 
     async send(content) {
-        try {
-            let chan = await this.member.user.getDMChannel();
+        //try {
+            //let chan = await this.member.user.getDMChannel();
+            console.log(this.id);
             this.client.users.cache.get(this.id).send(content);
-        } catch (err) {
-            this.client.channels.cache.get(this.channel).send(`Hey <@${this.id}>, I can't DM you! Please make sure your DMs are enabled, and run \`uno hand\` to see your cards.`);
-        }
+        // } catch (err) {
+        //     this.client.channels.cache.get(this.channel).send(`Hey <@${this.id}>, I can't DM you! Please make sure your DMs are enabled, and run \`uno hand\` to see your cards.`);
+        // }
     }
 
     async sendHand(turn = false) {
