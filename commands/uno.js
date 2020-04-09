@@ -122,9 +122,9 @@ class Uno extends Command {
 
           let cardArgs = args;
           cardArgs.shift();
-          console.log(cardArgs);
+          console.log(args);
 
-          let card = await this.client.unoUtil.player.getCard(cardArgs);
+          let card = await this.client.unoUtil.player.getCard(args);
           if (card === null) return;
           if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
