@@ -124,8 +124,16 @@ module.exports = (client) => {
       let out = 'The game is now over. Here is the scoreboard:\n';
 
       for (let i = 0; i < this.finished.length; i++) {
+        let props = 5;
+        if (i === 0) { props = 30; }
+        if (i === 1) { props = 15; }
+        if (i === 2) { props = 10; }
+
         let user = this.finished[i].member;
-        out += `${i + 1}. **${user.username}#${user.discriminator}**\n`;
+        out += `${i + 1}. **${user.username}#${user.discriminator}** - Won ${props} props.\n`;
+
+        const [inst] = await client.db.models.users.findOrCreate({ where: { discord: user.id }, defaults: { discord: user.id } });
+        await inst.increment("props", { by: props });
       }
 
       let diff = moment.duration(moment() - this.timeStarted);

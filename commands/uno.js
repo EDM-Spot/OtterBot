@@ -27,7 +27,7 @@ class Uno extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 0;
+      const price = 2;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -59,10 +59,22 @@ class Uno extends Command {
             return message.reply("There's a Game running already!");
           }
 
+          const props = inst.get("props");
+
+          if (props < price) {
+            return message.reply("You don't have enough props.");
+          }
+
+          await inst.decrement("props", { by: price });
+          await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
+
+          this.client.unoUtil.addPlayer(message.author);
+          await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id).roles.add("512635547320188928").catch(console.error);
+
           let startMessage = `A new Uno Game has been created. Entry Fee: ${price} Prop. \n`;
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.unoUtil.maxPlayers} players can play. \n`;
-          startMessage += "The game will start in 1 minute. Join the game with `-uno join` \n";
+          startMessage += "The game will start in 5 minute. Join the game with `-uno join` \n";
           startMessage += "Good Luck! \n";
           startMessage += " \n";
           startMessage += "Commands: \n";
@@ -74,20 +86,23 @@ class Uno extends Command {
 
           message.channel.send(startMessage);
 
-          this.client.plug.chat("Discord Uno Game will start in 1 minute in channel #" + message.channel.name + "!");
+          message.reply("Joined Uno.");
+
+          this.client.plug.chat("Discord Uno Game will start in 5 minute in channel #" + message.channel.name + "!");
           this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
           this.client.unoUtil.running = true;
 
-          //new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-          //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
-          //});
+          new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
+            message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          });
 
-          new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
+          new moment.duration(5, "minutes").timer({ loop: false, start: true }, async () => {
             if (this.client.unoUtil.queue.length < this.client.unoUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.unoUtil.minPlayers} required) to play this game.`);
               await this.client.unoUtil.end();
             } else {
+              message.channel.send("<@&512635547320188928> Trivia will now start!");
               await this.client.unoUtil.start();
 
               message.channel.send(this.client.unoUtil.embed(`The game has begun with ${this.client.unoUtil.queue.length} players! The currently flipped card is: **${this.client.unoUtil.flipped}**. \n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
