@@ -25,7 +25,7 @@ class UnoCard {
   }
 
   get URL() {
-    return __dirname + `/resources/${this.color || ''}${this.id}.png`;
+    return `https://edmspot.tk/uno/${this.color || ''}${this.id}.png`;
   }
 
   get value() {
