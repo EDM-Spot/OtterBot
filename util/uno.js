@@ -56,7 +56,8 @@ module.exports = (client) => {
 
     async end() {
       for (const player in this.players) {
-        await this.guild.members.cache.get(player.member.id).roles.remove("512635547320188928").catch(console.warn);
+        console.log(player);
+        //await this.guild.members.cache.get(player.id).roles.remove("512635547320188928").catch(console.warn);
       }
 
       this.running = false;
