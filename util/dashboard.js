@@ -649,7 +649,10 @@ module.exports = (client) => {
         attributes: ["username", "id", "last_seen", "points", "props"]
       }],
       where: {
-        skipped: false
+        skipped: false,
+        dj: {
+          [Op.ne]: 40333310
+        }
       },
       group: ["user.id", "plays.dj"],
       order: [[literal("totalpoints"), "DESC"]]
