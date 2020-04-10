@@ -74,9 +74,9 @@ module.exports = (client) => {
       const randomBool = Math.random() >= 0.5;
 
       if (randomBool) {
-        client.channels.cache.get(this.channel).send(`${user} survived! :feelsgoodman:`);
-
         const playerBet = this.bets.find(element => element.id === victim);
+
+        client.channels.cache.get(this.channel).send(`${user} survived! Won ${playerBet.bet*2} Props. :feelsgoodman:`);
 
         await userDB.increment("props", { by: playerBet.bet*2 });
       } else {
