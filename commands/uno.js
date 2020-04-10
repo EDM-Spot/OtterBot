@@ -155,153 +155,156 @@ class Uno extends Command {
 
           let drawn = false;
 
-          let argsCards = [];
+          // let argsCards = [];
 
-          let isAllNormal = true;
-          let isAllSpecial = true;
-          let isAllreverse = true;
+          // let isAllNormal = true;
+          // let isAllSpecial = true;
+          // let isAllreverse = true;
 
-          var firstCheck = new Promise(async (resolve, reject) => {
-            if (args.length > 2) {
-              let cardsCheck = cloneDeep(args);
+          if (args.length > 2) {
+            // let cardsCheck = cloneDeep(args);
 
-              var firstSubCheck = new Promise(async (resolve, reject) => {
-                while (cardsCheck.length) {
-                  let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
-                  if (card === null) return;
-                  if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
+            // while (cardsCheck.length) {
+            //   let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
+            //   if (card === null) return;
+            //   if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
 
-                  argsCards.push(card);
-                  // if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
-                  //   return message.reply("Sorry, you can't multiple play special cards mixed with normal!");
-                  // }
-                }
-              });
+            //   argsCards.push(card);
+            //   // if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
+            //   //   return message.reply("Sorry, you can't multiple play special cards mixed with normal!");
+            //   // }
+            // }
 
-              firstSubCheck.then(() => {
-                for (var card in argsCards) {
-                  if (card.if !== "REVERSE") {
-                    isAllreverse = false;
-                  }
-                  if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
-                    isAllSpecial = false;
-                  }
-                  if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
-                    isAllNormal = false;
-                  }
-                }
+            // for (var card in argsCards) {
+            //   if (card.if !== "REVERSE") {
+            //     isAllreverse = false;
+            //   }
+            //   if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
+            //     isAllSpecial = false;
+            //   }
+            //   if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
+            //     isAllNormal = false;
+            //   }
+            // }
 
-                if (!isAllNormal) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
-                if (!isAllSpecial && !isAllreverse) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
-              });
+            // if (!isAllNormal) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
+            // if (!isAllSpecial && !isAllreverse) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
+
+            let argsCards = await this.client.unoUtil.getCalledCards(args);
+
+            if (argsCards !== null) {
+              let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
+
+              if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
+              if (passCheck === 2) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
+            } else {
+              return message.reply("It doesn't seem like you have one of that cards! Try again.");
             }
+          }
 
-            this.client.unoUtil.timer.stop();
-          });
+          this.client.unoUtil.timer.stop();
 
-          firstCheck.then(async () => {
-            while (args.length) {
-              let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
-              if (card === null) return;
-              if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
+          while (args.length) {
+            let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
+            if (card === null) return;
+            if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
-              if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color) {
-                this.client.unoUtil.player.cardsPlayed++;
+            if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color) {
+              this.client.unoUtil.player.cardsPlayed++;
 
-                this.client.unoUtil.discard.push(card);
-                this.client.unoUtil.player.hand.splice(this.client.unoUtil.player.hand.indexOf(card), 1);
-                this.client.unoUtil.player.cardsChanged();
+              this.client.unoUtil.discard.push(card);
+              this.client.unoUtil.player.hand.splice(this.client.unoUtil.player.hand.indexOf(card), 1);
+              this.client.unoUtil.player.cardsChanged();
 
-                let pref = '';
-                if (this.client.unoUtil.player.hand.length === 0) {
-                  this.client.unoUtil.finished.push(this.client.unoUtil.player);
-                  this.client.unoUtil.player.finished = true;
+              let pref = '';
+              if (this.client.unoUtil.player.hand.length === 0) {
+                this.client.unoUtil.finished.push(this.client.unoUtil.player);
+                this.client.unoUtil.player.finished = true;
 
-                  pref = `${this.client.unoUtil.player.member.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
-                  if (2 === this.client.unoUtil.queue.length) {
-                    this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
-                    pref = await this.client.unoUtil.scoreboard();
-                    return message.channel.send(pref);
-                  }
+                pref = `${this.client.unoUtil.player.member.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
+                if (2 === this.client.unoUtil.queue.length) {
+                  this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
+                  pref = await this.client.unoUtil.scoreboard();
+                  return message.channel.send(pref);
                 }
+              }
 
-                if (this.client.unoUtil.player.hand.length === 1) {
-                  message.channel.send(`**UNO!!** ${this.client.unoUtil.player.member.username} only has one card left!`);
-                }
+              if (this.client.unoUtil.player.hand.length === 1) {
+                message.channel.send(`**UNO!!** ${this.client.unoUtil.player.member.username} only has one card left!`);
+              }
 
-                let extra = '';
-                switch (card.id) {
-                  case 'REVERSE':
-                    if (this.client.unoUtil.queue.length > 2) {
-                      let player = this.client.unoUtil.queue.shift();
+              let extra = '';
+              switch (card.id) {
+                case 'REVERSE':
+                  if (this.client.unoUtil.queue.length > 2) {
+                    let player = this.client.unoUtil.queue.shift();
 
-                      this.client.unoUtil.queue.reverse();
-                      this.client.unoUtil.queue.unshift(player);
+                    this.client.unoUtil.queue.reverse();
+                    this.client.unoUtil.queue.unshift(player);
 
-                      extra = `Turns are now in reverse order! `;
+                    extra = `Turns are now in reverse order! `;
 
-                      break;
-                    } else {
-                      let skipped = this.client.unoUtil.queue.shift();
-                      this.client.unoUtil.queue.push(skipped);
-
-                      extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
-                      break;
-                    }
-                  case 'SKIP':
+                    break;
+                  } else {
                     let skipped = this.client.unoUtil.queue.shift();
                     this.client.unoUtil.queue.push(skipped);
 
                     extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
-
-                    break;
-                  case '+2':
-                    let amount = 0;
-                    if (args.length === 0) {
-                      for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
-                        if (this.client.unoUtil.discard[i].id === '+2')
-                          amount += 2;
-                        else break;
-                      }
-
-                      this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
-                      extra = `${this.client.unoUtil.queue[1].member.username} picks up ${amount} cards! Tough break. `;
-
-                      extra += ' Also, skip a turn!';
-                      this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
-                    }
-
-                    break;
-                  case 'WILD':
-                    extra = `In case you missed it, the current color is now **${card.colorName}**! `;
-
-                    break;
-                  case 'WILD+4': {
-                    // let player = this.client.unoUtil.queue.shift();
-                    await this.client.unoUtil.deal(this.client.unoUtil.queue[1], 4);
-
-                    // this.client.unoUtil.queue.unshift(player);
-                    extra = `${this.client.unoUtil.queue[1].member.username} picks up 4! The current color is now **${card.colorName}**! `;
-
-                    extra += ' Also, skip a turn!';
-
-                    let skipped = this.client.unoUtil.queue.shift();
-                    this.client.unoUtil.queue.push(skipped);
-
                     break;
                   }
-                }
+                case 'SKIP':
+                  let skipped = this.client.unoUtil.queue.shift();
+                  this.client.unoUtil.queue.push(skipped);
 
-                if (args.length === 0) {
-                  await this.client.unoUtil.next();
+                  extra = `Sorry, ${this.client.unoUtil.player.member.username}! Skip a turn! `;
 
-                  return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
+                  break;
+                case '+2':
+                  let amount = 0;
+                  if (args.length === 0) {
+                    for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
+                      if (this.client.unoUtil.discard[i].id === '+2')
+                        amount += 2;
+                      else break;
+                    }
+
+                    this.client.unoUtil.deal(this.client.unoUtil.queue[1], amount);
+                    extra = `${this.client.unoUtil.queue[1].member.username} picks up ${amount} cards! Tough break. `;
+
+                    extra += ' Also, skip a turn!';
+                    this.client.unoUtil.queue.push(this.client.unoUtil.queue.shift());
+                  }
+
+                  break;
+                case 'WILD':
+                  extra = `In case you missed it, the current color is now **${card.colorName}**! `;
+
+                  break;
+                case 'WILD+4': {
+                  // let player = this.client.unoUtil.queue.shift();
+                  await this.client.unoUtil.deal(this.client.unoUtil.queue[1], 4);
+
+                  // this.client.unoUtil.queue.unshift(player);
+                  extra = `${this.client.unoUtil.queue[1].member.username} picks up 4! The current color is now **${card.colorName}**! `;
+
+                  extra += ' Also, skip a turn!';
+
+                  let skipped = this.client.unoUtil.queue.shift();
+                  this.client.unoUtil.queue.push(skipped);
+
+                  break;
                 }
-              } else {
-                return message.reply("Sorry, you can't play that card now!");
               }
+
+              if (args.length === 0) {
+                await this.client.unoUtil.next();
+
+                return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
+              }
+            } else {
+              return message.reply("Sorry, you can't play that card now!");
             }
-          });
+          }
         }
         case "pick": {
           if (!this.client.unoUtil.started) {

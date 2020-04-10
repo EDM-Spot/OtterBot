@@ -294,6 +294,43 @@ module.exports = (client) => {
 
       client.channels.cache.get(this.channel).send('The deck has been shuffled.');
     }
+
+    async getCalledCards(args) {
+      let argsCards = null;
+
+      while (args.length) {
+        let card = await this.player.getCard(args.splice(0, 2));
+        if (card === null) return null;
+        if (!card) return null;
+
+        argsCards.push(card);
+      }
+
+      return argsCards;
+    }
+
+    async checkCalledCards(cards) {
+      let isAllNormal = true;
+      let isAllSpecial = true;
+      let isAllreverse = true;
+
+      for (const card in cards) {
+        if (card.if !== "REVERSE") {
+          isAllreverse = false;
+        }
+        if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
+          isAllSpecial = false;
+        }
+        if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
+          isAllNormal = false;
+        }
+      }
+
+      if (!isAllNormal) { return 1; }
+      if (!isAllSpecial && !isAllreverse) { return 2; }
+
+      return 0;
+    }
   }
 
   client.unoUtil = new UnoUtil();
