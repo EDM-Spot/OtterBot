@@ -78,7 +78,7 @@ module.exports = (client) => {
 
         const playerBet = this.bets.find(element => element.id === victim);
 
-        await userDB.increment("props", { by: playerBet.bet });
+        await userDB.increment("props", { by: playerBet.bet*2 });
       } else {
         client.channels.cache.get(this.channel).send(`:otterarage::bulletgun::tfw::quinsplat: BANG! ${user}`);
       }
