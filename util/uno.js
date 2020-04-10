@@ -314,6 +314,7 @@ module.exports = (client) => {
       let isAllreverse = true;
 
       for (const card in cards) {
+        console.log(card);
         if (card.if !== "REVERSE") {
           isAllreverse = false;
         }
