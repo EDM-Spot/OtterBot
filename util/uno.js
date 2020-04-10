@@ -296,7 +296,7 @@ module.exports = (client) => {
     }
 
     async getCalledCards(args) {
-      let argsCards = null;
+      let argsCards = [];
 
       while (args.length) {
         let card = await this.player.getCard(args.splice(0, 2));

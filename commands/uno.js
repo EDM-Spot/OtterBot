@@ -1,6 +1,6 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
-const { isNil, isNaN, isObject, cloneDeep } = require("lodash");
+const { isNil, isNaN, isObject } = require("lodash");
 const { ROLE } = require("miniplug");
 const moment = require("moment");
 require("moment-timer");
@@ -10,7 +10,7 @@ class Uno extends Command {
     super(client, {
       name: "uno",
       description: "Start a Uno Game",
-      usage: "['start', 'join', 'table', 'play <colour> <value>', 'pick', 'hand', 'reset'. 'exit']"
+      usage: "['start', 'join', 'table', 'play <colour> <value>', 'pick', 'hand', 'reset', 'exit']"
     });
   }
 
