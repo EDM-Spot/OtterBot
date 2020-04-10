@@ -36,6 +36,8 @@ module.exports = class {
 
     require("../util/uno.js")(this.client);
 
+    require("../util/russianroulette.js")(this.client);
+
     require("../util/voice.js")(this.client);
     
     // Set the game as the default help command + guild count.
