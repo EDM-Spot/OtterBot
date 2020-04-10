@@ -27,7 +27,7 @@ class Uno extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 0;
+      const price = 2;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -97,7 +97,7 @@ class Uno extends Command {
             message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
           });
 
-          new moment.duration(5, "seconds").timer({ loop: false, start: true }, async () => {
+          new moment.duration(5, "minutes").timer({ loop: false, start: true }, async () => {
             if (this.client.unoUtil.queue.length < this.client.unoUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.unoUtil.minPlayers} required) to play this game.`);
               await this.client.unoUtil.end();
@@ -162,19 +162,16 @@ class Uno extends Command {
           if (argsCards !== null) {
             passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
 
-            console.log(argsCards.length);
             if (argsCards.length >= 2) {
-              if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
-              if (passCheck === 2) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
+              if (!passCheck) { return message.reply("Sorry, you can't play that multiple setup!"); }
             }
           } else {
             return message.reply("It doesn't seem like you have one of that cards! Try again.");
           }
 
-          console.log(passCheck);
           if (argsCards.length >= 2) {
             if (passCheck === null) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
-            if (passCheck !== 0) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
+            if (!passCheck) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
           }
 
           this.client.unoUtil.timer.stop();

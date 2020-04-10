@@ -10,8 +10,8 @@ module.exports = (client) => {
       this.guild = client.guilds.cache.get("485173051432894489");
       this.channel = "485927387079639051";
 
-      this.minPlayers = 1;
-      this.maxPlayers = 1;
+      this.minPlayers = 2;
+      this.maxPlayers = 8;
 
       this.running = false;
 
@@ -313,11 +313,8 @@ module.exports = (client) => {
       let isAllSpecial = true;
       let isAllreverse = true;
 
-      console.log(cards);
       for (const card of cards) {
-        console.log("card");
-        console.log(card);
-        if (card.if !== "REVERSE") {
+        if (card.id !== "REVERSE") {
           isAllreverse = false;
         }
         if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
@@ -328,13 +325,10 @@ module.exports = (client) => {
         }
       }
 
-      console.log("isAllNormal " + isAllNormal);
-      console.log("isAllSpecial " + isAllSpecial);
-      console.log("isAllreverse " + isAllreverse);
-      if (!isAllNormal && !isAllreverse) { return 1; }
-      if (isAllSpecial && !isAllreverse) { return 2; }
+      if (!isAllNormal && !isAllreverse) { return false; }
+      if (isAllSpecial && !isAllreverse) { return false; }
 
-      return 0;
+      return true;
     }
   }
 
