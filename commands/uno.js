@@ -55,7 +55,7 @@ class Uno extends Command {
             return false;
           }
 
-          if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.unoUtil.checkGame() || this.client.unoUtil.checkGame()) {
+          if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.unoUtil.checkGame() || this.client.unoUtil.checkGame() || this.client.russianRouletteUtil.checkGame()) {
             return message.reply("There's a Game running already!");
           }
 

@@ -47,7 +47,7 @@ class DiscordRussianRoulette extends Command {
             return message.reply("Hold on! Russian Roulette runned " + Math.floor((10800 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
           }
 
-          if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.unoUtil.checkGame() || this.client.unoUtil.checkGame()|| this.client.russianRouletteUtil.checkGame()) {
+          if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.unoUtil.checkGame() || this.client.unoUtil.checkGame() || this.client.russianRouletteUtil.checkGame()) {
             return message.reply("There's a Game running already!");
           }
 
