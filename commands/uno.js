@@ -156,48 +156,10 @@ class Uno extends Command {
           let drawn = false;
           let argsCards = null;
 
-          // let argsCards = [];
-
-          // let isAllNormal = true;
-          // let isAllSpecial = true;
-          // let isAllreverse = true;
-
-          //if (args.length > 2) {
-          // let cardsCheck = cloneDeep(args);
-
-          // while (cardsCheck.length) {
-          //   let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
-          //   if (card === null) return;
-          //   if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
-
-          //   argsCards.push(card);
-          //   // if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
-          //   //   return message.reply("Sorry, you can't multiple play special cards mixed with normal!");
-          //   // }
-          // }
-
-          // for (var card in argsCards) {
-          //   if (card.if !== "REVERSE") {
-          //     isAllreverse = false;
-          //   }
-          //   if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
-          //     isAllSpecial = false;
-          //   }
-          //   if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
-          //     isAllNormal = false;
-          //   }
-          // }
-
-          // if (!isAllNormal) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
-          // if (!isAllSpecial && !isAllreverse) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
-
           argsCards = await this.client.unoUtil.getCalledCards(args);
 
           if (argsCards !== null) {
             let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
-
-            console.log(argsCards);
-            console.log(passCheck);
 
             if (args.length > 2) {
               if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
@@ -206,16 +168,12 @@ class Uno extends Command {
           } else {
             return message.reply("It doesn't seem like you have one of that cards! Try again.");
           }
-          //}
 
           this.client.unoUtil.timer.stop();
 
           let i = argsCards.length;
           for (const card of argsCards) {
             i--;
-            // let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
-            // if (card === null) return;
-            // if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
             if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color) {
               this.client.unoUtil.player.cardsPlayed++;
