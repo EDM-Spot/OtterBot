@@ -171,7 +171,7 @@ class Uno extends Command {
           }
 
           console.log(passCheck);
-          if (passCheck !== null) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
+          if (passCheck === null) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
           if (passCheck !== 0) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
 
           this.client.unoUtil.timer.stop();
