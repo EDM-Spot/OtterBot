@@ -162,7 +162,8 @@ class Uno extends Command {
           if (argsCards !== null) {
             passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
 
-            if (argsCards.length > 2) {
+            console.log(argsCards.length);
+            if (argsCards.length >= 2) {
               if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
               if (passCheck === 2) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
             }
