@@ -206,10 +206,12 @@ class Uno extends Command {
 
           this.client.unoUtil.timer.stop();
 
-          while (args.length) {
-            let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
-            if (card === null) return;
-            if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
+          let i = argsCards.length;
+          for (const card of argsCards) {
+            i--;
+            // let card = await this.client.unoUtil.player.getCard(args.splice(0, 2));
+            // if (card === null) return;
+            // if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
 
             if (!this.client.unoUtil.flipped.color || card.wild || card.id === this.client.unoUtil.flipped.id || card.color === this.client.unoUtil.flipped.color) {
               this.client.unoUtil.player.cardsPlayed++;
@@ -263,7 +265,7 @@ class Uno extends Command {
                   break;
                 case '+2':
                   let amount = 0;
-                  if (args.length === 0) {
+                  if (i === 0) {
                     for (let i = this.client.unoUtil.discard.length - 1; i >= 0; i--) {
                       if (this.client.unoUtil.discard[i].id === '+2')
                         amount += 2;
@@ -298,7 +300,7 @@ class Uno extends Command {
                 }
               }
 
-              if (args.length === 0) {
+              if (i === 0) {
                 await this.client.unoUtil.next();
 
                 return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
