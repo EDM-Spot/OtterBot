@@ -325,6 +325,9 @@ module.exports = (client) => {
         }
       }
 
+      console.log("isAllNormal " + isAllNormal);
+      console.log("isAllSpecial " + isAllSpecial);
+      console.log("isAllreverse " + isAllreverse);
       if (!isAllNormal && !isAllreverse) { return 1; }
       if (isAllSpecial && !isAllreverse) { return 2; }
 

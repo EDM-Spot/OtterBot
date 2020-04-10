@@ -1,6 +1,6 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
-const { isNil, isNaN, isObject } = require("lodash");
+const { isNil, isNaN, isObject, cloneDeep } = require("lodash");
 const { ROLE } = require("miniplug");
 const moment = require("moment");
 require("moment-timer");
@@ -161,13 +161,16 @@ class Uno extends Command {
           if (argsCards !== null) {
             let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
 
-            if (args.length > 2) {
+            if (argsCards.length > 2) {
               if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
               if (passCheck === 2) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
             }
           } else {
             return message.reply("It doesn't seem like you have one of that cards! Try again.");
           }
+
+          console.log(passCheck);
+          if (passCheck !== 0) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
 
           this.client.unoUtil.timer.stop();
 
