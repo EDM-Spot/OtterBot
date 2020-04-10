@@ -162,48 +162,51 @@ class Uno extends Command {
           // let isAllSpecial = true;
           // let isAllreverse = true;
 
-          if (args.length > 2) {
-            // let cardsCheck = cloneDeep(args);
+          //if (args.length > 2) {
+          // let cardsCheck = cloneDeep(args);
 
-            // while (cardsCheck.length) {
-            //   let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
-            //   if (card === null) return;
-            //   if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
+          // while (cardsCheck.length) {
+          //   let card = await this.client.unoUtil.player.getCard(cardsCheck.splice(0, 2));
+          //   if (card === null) return;
+          //   if (!card) return message.reply("It doesn't seem like you have one of that cards! Try again.");
 
-            //   argsCards.push(card);
-            //   // if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
-            //   //   return message.reply("Sorry, you can't multiple play special cards mixed with normal!");
-            //   // }
-            // }
+          //   argsCards.push(card);
+          //   // if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
+          //   //   return message.reply("Sorry, you can't multiple play special cards mixed with normal!");
+          //   // }
+          // }
 
-            // for (var card in argsCards) {
-            //   if (card.if !== "REVERSE") {
-            //     isAllreverse = false;
-            //   }
-            //   if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
-            //     isAllSpecial = false;
-            //   }
-            //   if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
-            //     isAllNormal = false;
-            //   }
-            // }
+          // for (var card in argsCards) {
+          //   if (card.if !== "REVERSE") {
+          //     isAllreverse = false;
+          //   }
+          //   if (card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
+          //     isAllSpecial = false;
+          //   }
+          //   if (card.id === "REVERSE" || card.id === "SKIP" || card.id === "+2" || card.id === "WILD" || card.id === "WILD+4") {
+          //     isAllNormal = false;
+          //   }
+          // }
 
-            // if (!isAllNormal) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
-            // if (!isAllSpecial && !isAllreverse) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
+          // if (!isAllNormal) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
+          // if (!isAllSpecial && !isAllreverse) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
 
-            argsCards = await this.client.unoUtil.getCalledCards(args);
+          argsCards = await this.client.unoUtil.getCalledCards(args);
 
-            if (argsCards !== null) {
-              let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
+          if (argsCards !== null) {
+            let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
 
-              console.log(argsCards);
-              console.log(passCheck);
+            console.log(argsCards);
+            console.log(passCheck);
+
+            if (args.length > 2) {
               if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
               if (passCheck === 2) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
-            } else {
-              return message.reply("It doesn't seem like you have one of that cards! Try again.");
             }
+          } else {
+            return message.reply("It doesn't seem like you have one of that cards! Try again.");
           }
+          //}
 
           this.client.unoUtil.timer.stop();
 
