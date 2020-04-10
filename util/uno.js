@@ -326,8 +326,8 @@ module.exports = (client) => {
         }
       }
 
-      if (!isAllNormal) { return 1; }
-      if (!isAllSpecial && !isAllreverse) { return 2; }
+      if (!isAllNormal && !isAllreverse) { return 1; }
+      if (isAllSpecial && !isAllreverse) { return 2; }
 
       return 0;
     }
