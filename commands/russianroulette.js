@@ -54,7 +54,7 @@ class DiscordRussianRoulette extends Command {
           let startMessage = `A new Russian Roulette Game has been created. \n`;
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += "The game will start in 5 minute. Join the game with `-rr join <props 1-10>` \n";
-          startMessage += "If you survive you win your props x2, if you die you lose your props. \n";
+          startMessage += "If you survive you win your bet props x2, if you die you lose your bet props. \n";
           startMessage += "Good Luck! \n";
 
           message.channel.send(startMessage);
