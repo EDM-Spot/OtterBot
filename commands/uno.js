@@ -155,11 +155,12 @@ class Uno extends Command {
 
           let drawn = false;
           let argsCards = null;
+          let passCheck = null;
 
           argsCards = await this.client.unoUtil.getCalledCards(args);
 
           if (argsCards !== null) {
-            let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
+            passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
 
             if (argsCards.length > 2) {
               if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
@@ -170,6 +171,7 @@ class Uno extends Command {
           }
 
           console.log(passCheck);
+          if (passCheck !== null) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
           if (passCheck !== 0) { return message.reply("Sorry, I need better code <:kappa:486185487208546326>!"); }
 
           this.client.unoUtil.timer.stop();
