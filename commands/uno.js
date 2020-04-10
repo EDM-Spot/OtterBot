@@ -27,7 +27,7 @@ class Uno extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 2;
+      const price = 0;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -97,7 +97,7 @@ class Uno extends Command {
             message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
           });
 
-          new moment.duration(5, "minutes").timer({ loop: false, start: true }, async () => {
+          new moment.duration(5, "seconds").timer({ loop: false, start: true }, async () => {
             if (this.client.unoUtil.queue.length < this.client.unoUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.unoUtil.minPlayers} required) to play this game.`);
               await this.client.unoUtil.end();
@@ -195,6 +195,8 @@ class Uno extends Command {
             if (argsCards !== null) {
               let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
 
+              console.log(argsCards);
+              console.log(passCheck);
               if (passCheck === 1) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
               if (passCheck === 2) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
             } else {
@@ -305,6 +307,8 @@ class Uno extends Command {
               return message.reply("Sorry, you can't play that card now!");
             }
           }
+
+          return message.reply('You have to specify a valid card or its just bugged <:kappa:486185487208546326>!');
         }
         case "pick": {
           if (!this.client.unoUtil.started) {
