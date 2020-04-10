@@ -154,6 +154,7 @@ class Uno extends Command {
           }
 
           let drawn = false;
+          let argsCards = null;
 
           // let argsCards = [];
 
@@ -190,7 +191,7 @@ class Uno extends Command {
             // if (!isAllNormal) { return message.reply("Sorry, you can't multiple play special cards mixed with normal!"); }
             // if (!isAllSpecial && !isAllreverse) { return message.reply("Sorry, you can't multiple play mixed special cards!"); }
 
-            let argsCards = await this.client.unoUtil.getCalledCards(args);
+            argsCards = await this.client.unoUtil.getCalledCards(args);
 
             if (argsCards !== null) {
               let passCheck = await this.client.unoUtil.checkCalledCards(argsCards);
