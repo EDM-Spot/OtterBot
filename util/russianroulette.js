@@ -76,11 +76,11 @@ module.exports = (client) => {
       if (randomBool) {
         const playerBet = this.bets.find(element => element.id === victim);
 
-        client.channels.cache.get(this.channel).send(`${user} survived! Won ${playerBet.bet * 2} Props. :FeelsGoodMan:`);
+        client.channels.cache.get(this.channel).send(`${user} survived! Won ${playerBet.bet * 2} Props. <:FeelsGoodMan:486184925859545088>`);
 
         await userDB.increment("props", { by: playerBet.bet * 2 });
       } else {
-        client.channels.cache.get(this.channel).send(`:otterrage::bulletgun::FeelsBadMan::quinsplat: BANG! ${user}`);
+        client.channels.cache.get(this.channel).send(`<:otterrage:511579983668314122><:bulletgun:698190275503456278><:FeelsBadMan:486181331395411969><:quinsplat:698195042220769401> BANG! ${user}`);
       }
 
       this.chooseVictim(players.filter(player => player !== victim));
