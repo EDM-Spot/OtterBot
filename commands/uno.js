@@ -289,10 +289,6 @@ class Uno extends Command {
             return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
 
-          if (args.length !== 2) {
-            return message.reply('You have to specify a valid color! Colors are **red**, **yellow**, **green**, and **blue**.\n`uno play <color> <value>`');
-          }
-
           this.client.unoUtil.timer.stop();
 
           // if (game.rules.MUST_PLAY === true) {
@@ -323,6 +319,10 @@ class Uno extends Command {
 
           if (this.client.unoUtil.player.id === message.author.id) {
             return message.reply(`It's your turn! You can't Jump-In.`);
+          }
+
+          if (args.length !== 2) {
+            return message.reply('You have to specify a valid color! Colors are **red**, **yellow**, **green**, and **blue**.\n`uno play <color> <value>`');
           }
 
           let player = this.client.unoUtil.players[message.author.id];
