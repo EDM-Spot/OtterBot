@@ -11,7 +11,7 @@ module.exports = (client) => {
       this.channel = "485927387079639051";
 
       this.minPlayers = 2;
-      this.maxPlayers = 8;
+      this.maxPlayers = 10;
 
       this.running = false;
 
@@ -112,6 +112,17 @@ module.exports = (client) => {
         client.channels.cache.get(this.channel).send("Timeout!");
         client.channels.cache.get(this.channel).send(this.embed(`${player.member.username} picked up a card.\n\nA **${this.flipped}** was played last. \n\nIt is now ${this.player.member.username}'s turn!`));
       });
+    }
+
+    async jumpIn(player) {
+      console.log("jumpin: " + player.id);
+
+      while (this.queue[0].id !== player.id) {
+        this.queue.push(this.queue.shift());
+        this.queue = this.queue.filter(p => !p.finished);
+
+        console.log("queue: " + this.queue[0].id);
+      }
     }
 
     get player() {

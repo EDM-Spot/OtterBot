@@ -10,7 +10,7 @@ class Uno extends Command {
     super(client, {
       name: "uno",
       description: "Start a Uno Game",
-      usage: "['start', 'join', 'table', 'play <colour> <value>', 'pick', 'hand', 'reset', 'exit']"
+      usage: "['start', 'join', 'table', 'play <colour> <value>', 'pick', 'jumpin', 'hand', 'reset', 'exit']"
     });
   }
 
@@ -20,7 +20,7 @@ class Uno extends Command {
 
       if (!args.length) { return; }
 
-      const params = ["start", "join", "play", "pick", "hand", "table", "reset", "exit"];
+      const params = ["start", "join", "play", "pick", "hand", "table", "reset", "jumpin", "exit"];
       const param = `${args.shift()}`.toLowerCase();
 
       if (!params.includes(param)) {
@@ -78,7 +78,8 @@ class Uno extends Command {
           startMessage += "Good Luck! \n";
           startMessage += " \n";
           startMessage += "Commands: \n";
-          startMessage += "-uno play <colour> <number> | Plays a card. Can be multiple if same color: -uno play <colour> <number> <colour> \n";
+          startMessage += "-uno play <colour> <number> | Plays a card. Can be multiple if same number: -uno play <colour> <number> <colour> \n";
+          startMessage += "-uno jumpin <colour> <number> | Jump-In if you have the same exact card that is in the table out of your turn. \n";
           startMessage += "-uno pick | Picks up a card. \n";
           startMessage += "-uno hand | DM your hand. \n";
           startMessage += "-uno table | Shows everyone at the table. \n";
@@ -288,6 +289,10 @@ class Uno extends Command {
             return message.reply(`It's not your turn yet! It's currently ${this.client.unoUtil.player.member.username}'s turn.`);
           }
 
+          if (args.length !== 2) {
+            return message.reply('You have to specify a valid color! Colors are **red**, **yellow**, **green**, and **blue**.\n`uno play <color> <value>`');
+          }
+
           this.client.unoUtil.timer.stop();
 
           // if (game.rules.MUST_PLAY === true) {
@@ -310,6 +315,60 @@ class Uno extends Command {
           await this.client.unoUtil.next();
 
           return message.channel.send(this.client.unoUtil.embed(`${player.member.username} picked up a card.\n\nA **${this.client.unoUtil.flipped}** was played last. \n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
+        }
+        case "jumpin": {
+          if (!this.client.unoUtil.started) {
+            return message.reply("Uno is not running!");
+          }
+
+          if (this.client.unoUtil.player.id === message.author.id) {
+            return message.reply(`It's your turn! You can't Jump-In.`);
+          }
+
+          let player = this.client.unoUtil.players[message.author.id];
+
+          let card = await player.getCard(args.splice(0, 2));
+          if (card === null) return null;
+          if (!card) return message.reply("It doesn't seem like you have that card! Try again.");
+
+          if (!card.wild && card.id === this.client.unoUtil.flipped.id && card.color === this.client.unoUtil.flipped.color && card.id !== "REVERSE" && card.id !== "SKIP" && card.id !== "+2" && card.id !== "WILD" && card.id !== "WILD+4") {
+            this.client.unoUtil.timer.stop();
+
+            player.cardsPlayed++;
+
+            this.client.unoUtil.discard.push(card);
+            player.hand.splice(player.hand.indexOf(card), 1);
+            player.cardsChanged();
+
+            let pref = '';
+            if (player.hand.length === 0) {
+              this.client.unoUtil.finished.push(player);
+              player.finished = true;
+
+              pref = `${player.member.username} has no more cards! They finished in **Rank #${this.client.unoUtil.finished.length}**! :tada:\n\n`;
+              if (2 === this.client.unoUtil.queue.length) {
+                this.client.unoUtil.finished.push(this.client.unoUtil.queue[1]);
+                pref = await this.client.unoUtil.scoreboard();
+                return message.channel.send(pref);
+              }
+            }
+
+            if (player.hand.length === 1) {
+              message.channel.send(`**UNO!!** ${player.member.username} only has one card left!`);
+            }
+
+            await this.client.unoUtil.jumpIn(player);
+
+            console.log("command: " + player.id);
+
+            await this.client.unoUtil.next();
+
+            console.log("next: " + this.client.unoUtil.player.id);
+
+            return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `${player.member.username} Jumped-In. A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
+          }
+
+          return message.channel.send("It doesn't seem like you can Jump-In with that card! Try again.");
         }
         case "hand": {
           if (!this.client.unoUtil.started) {
@@ -342,7 +401,7 @@ class Uno extends Command {
 
           let out = this.client.unoUtil.embed(`A ** ${this.client.unoUtil.flipped}** has been played.\n\nIt is currently ${this.client.unoUtil.player.member.username} 's turn!`);
 
-          out.content = `Here are the players in this game:\n${this.client.unoUtil.queue.map(p => `**${p.member.username}** | ${p.hand.length} card(s)`).join('\n')}`
+          out += `Here are the players in this game:\n${this.client.unoUtil.queue.map(p => `**${p.member.username}** | ${p.hand.length} card(s)`).join('\n')}`
             + `\n\nThis game has lasted **${d}**. **${this.client.unoUtil.drawn}** cards have been drawn!\n\n`;
 
           return message.channel.send(out);
