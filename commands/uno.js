@@ -127,6 +127,10 @@ class Uno extends Command {
             return message.reply("The game is Full!");
           }
 
+          if (this.client.unoUtil.started) {
+            return message.reply("Uno already started!");
+          }
+
           const props = inst.get("props");
 
           if (props < price) {
