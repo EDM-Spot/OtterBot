@@ -443,7 +443,7 @@ module.exports = function Event(bot, filename, platform) {
         skipped = false;
         bot.global.ignoreHistoryNext = false;
 
-        if (lastDJ.id !== "40333310") {
+        if (lastDJ.id !== bot.plug.me().id) {
           await bot.utils.updateRDJ(lastDJ.id);
         }
       } catch (err) {

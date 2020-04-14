@@ -363,12 +363,9 @@ class Uno extends Command {
 
             await this.client.unoUtil.jumpIn(player);
 
-            console.log("command: " + player.id);
-
             await this.client.unoUtil.next();
 
-            console.log("next: " + this.client.unoUtil.player.id);
-
+            let drawn = false;
             return message.channel.send(this.client.unoUtil.embed(`${pref}${drawn ? `${message.author.username} has drawn and auto-played a **${this.client.unoUtil.flipped}**.` : `${player.member.username} Jumped-In. A **${this.client.unoUtil.flipped}** has been played.`} ${extra}\n\nIt is now ${this.client.unoUtil.player.member.username}'s turn!`));
           }
 

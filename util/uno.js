@@ -115,13 +115,9 @@ module.exports = (client) => {
     }
 
     async jumpIn(player) {
-      console.log("jumpin: " + player.id);
-
       while (this.queue[0].id !== player.id) {
         this.queue.push(this.queue.shift());
         this.queue = this.queue.filter(p => !p.finished);
-
-        console.log("queue: " + this.queue[0].id);
       }
     }
 
