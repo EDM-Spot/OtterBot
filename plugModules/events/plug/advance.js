@@ -442,7 +442,7 @@ module.exports = function Event(bot, filename, platform) {
 
         skipped = false;
         bot.global.ignoreHistoryNext = false;
-        //await bot.utils.updateRDJ(lastPlay.user.id);
+        await bot.utils.updateRDJ(lastDJ.id);
       } catch (err) {
         console.warn("advance Error!");
         console.warn(err);
