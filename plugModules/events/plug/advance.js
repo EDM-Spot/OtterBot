@@ -97,7 +97,7 @@ module.exports = function Event(bot, filename, platform) {
         console.log(err);
       }
 
-      const blackword = ["nightcore", "nightstep", "bass boosted", "whatsapp", "gemido", "gemidão", "rape"];
+      const blackword = ["nightcore", "nightstep", "bass boosted", "whatsapp", "gemido", "gemidão", "rape", "Nectus"];
 
       for (let i = 0; i < blackword.length; i++) {
         var pattern = new RegExp("\\b" + blackword[i] + "\\b");
