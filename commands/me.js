@@ -65,17 +65,17 @@ class Me extends Command {
         });
 
         let color;
-        console.log(message.author.roles.get('490618109347233804'));
+        let a = await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id);
 
-        if (message.author.roles.cache.get('490618109347233804')) {
+        if (await a.roles.get('490618109347233804')) {
           color = "#d1aa0d";
-        } else if (message.author.roles.get('485175393054097416')) {
+        } else if (await a.roles.get('485175393054097416')) {
           color = "#cc3333";
-        } else if (message.author.roles.get('485175078867304488')) {
+        } else if (await a.roles.get('485175078867304488')) {
           color = "#9b40e7";
-        } else if (message.author.roles.get('485774995163971597')) {
+        } else if (await a.roles.get('485774995163971597')) {
           color = "#9b40e7";
-        } else if (message.author.roles.get('485174834448564224')) {
+        } else if (await a.roles.get('485174834448564224')) {
           color = "#33ccff";
         } else {
           color = "#b8b8b8";
