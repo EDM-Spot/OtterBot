@@ -15,6 +15,8 @@ class Who extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
+    const level = this.client.permlevel(message);
+
     const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "who@info", "perUser", message.author.id);
 
     const discordMention = this.client.getUserFromMention(args[0]);
@@ -26,7 +28,7 @@ class Who extends Command {
       if (!idMention) { return; }
     }
 
-    if (cooldown != -2) {
+    if (cooldown != -2 && level < 9) {
       return;
     }
 
@@ -84,6 +86,10 @@ class Who extends Command {
 
         let color;
         let a = await this.client.guilds.cache.get("485173051432894489").members.cache.get(userDB.discord);
+
+        if (isNil(a)) {
+          return await message.reply("User not in discord!");
+        }
 
         if (await a.roles.cache.get('490618109347233804')) {
           color = "#d1aa0d";
