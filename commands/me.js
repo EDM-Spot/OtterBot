@@ -85,7 +85,7 @@ class Me extends Command {
           userImage = message.author.displayAvatarURL();
         }
 
-        return await message.channel.send(new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
           .setColor(color)
           .setAuthor(plugUser.username, message.author.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
           .setTitle(`Discord: ${message.author}`)
@@ -99,9 +99,11 @@ class Me extends Command {
           .addField('<:plugWoot:486538570715103252>', songVotes[0].dataValues.totalwoots, true)
           .addField('<:plugMeh:486538601044115478>', songVotesMehs[0].dataValues.totalmehs, true)
           .setFooter("EDM Spot")
-          .setTimestamp());
+          .setTimestamp();
+
+        return await message.channel.send({ embed });
       } else {
-        return message.reply("Your Account isn't linked! Use -link <Plug ID>");
+        return await message.reply("Your Account isn't linked! Use -link <Plug ID>");
       }
     } catch (e) {
       console.log(e);
