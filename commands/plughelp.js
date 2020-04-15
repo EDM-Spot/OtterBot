@@ -81,10 +81,15 @@ class PlugHelp extends Command {
         output += `\u200b\n== ${cat} ==\n`;
         currentCategory = cat;
       }
+      let i = 0;
       c.commands.forEach(d => {
-        let abc = `${d.Names}${" ".repeat(31 - d.Names.length)} :: ${d.Parameters} :: ${d.Description}\n`;
-        console.log(abc.length)
         output += `${d.Names}${" ".repeat(31 - d.Names.length)} :: ${d.Parameters} :: ${d.Description}\n`;
+        i++;
+
+        if(i === 5){
+          output += `\u200b`;
+          i = 0;
+        }
       });
     });
 
