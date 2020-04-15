@@ -13,11 +13,11 @@ class Me extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "me@info", "perUser", message.author.id);
+    //const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "me@info", "perUser", message.author.id);
 
-    if (cooldown != -2) {
-      return;
-    }
+    //if (cooldown != -2) {
+      //return;
+    //}
 
     try {
       const userDB = await this.client.db.models.users.findOne({
@@ -28,7 +28,7 @@ class Me extends Command {
 
       if (!isNil(userDB)) {
 
-        await this.client.redis.placeCommandOnCooldown("discord", "me@info", "perUser", message.author.id, 3600);
+        //await this.client.redis.placeCommandOnCooldown("discord", "me@info", "perUser", message.author.id, 3600);
 
         const plugUser = this.client.plug.getUser(userDB.id);
 
