@@ -1,5 +1,6 @@
 const Command = require("../base/Command.js");
 const { ROLE } = require("miniplug");
+const { fn, col } = require("sequelize");
 const { isNil } = require("lodash");
 
 class Me extends Command {
