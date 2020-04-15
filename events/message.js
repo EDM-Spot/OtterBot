@@ -52,7 +52,7 @@ module.exports = class {
 
     // Also good practice to ignore any message that does not start with our prefix,
     // which is set in the configuration file.
-    if (message.content.indexOf(settings.prefix) !== 0) return;
+    if (message.content.indexOf(settings.prefix) !== 0 && message.channel.id !== "695987344280649839") return;
 
     // Here we separate our "command" name, and our "arguments" for the command.
     // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
