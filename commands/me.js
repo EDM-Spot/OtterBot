@@ -16,11 +16,11 @@ class Me extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    //const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "me@info", "perUser", message.author.id);
+    const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "me@info", "perUser", message.author.id);
 
-    //if (cooldown != -2) {
-      //return;
-    //}
+    if (cooldown != -2) {
+      return;
+    }
 
     try {
       const userDB = await this.client.db.models.users.findOne({
@@ -31,7 +31,7 @@ class Me extends Command {
 
       if (!isNil(userDB)) {
 
-        //await this.client.redis.placeCommandOnCooldown("discord", "me@info", "perUser", message.author.id, 3600);
+        await this.client.redis.placeCommandOnCooldown("discord", "me@info", "perUser", message.author.id, 3600);
 
         const plugUser = await this.client.plug.getUser(userDB.id);
 
@@ -94,7 +94,7 @@ class Me extends Command {
           .setTitle(`Discord: ${message.author.tag}`)
           .setThumbnail(userImage)
           .addField('ID', userDB.id, true)
-          .addField('Joined Room', moment(userDB.createdAt).format('DD.MM.YYYY HH:mm'), true)
+          .addField('Joined Room', moment(userDB.createdAt).format('DD/MM/YYYY HH:mm'), true)
           .addField('\u200b', '\u200b', true)
           .addField('Props', userDB.props, true)
           .addField('Props Given', propsGiven, true)
