@@ -34,11 +34,11 @@ class Me extends Command {
 
         const propsGiven = await this.client.db.models.props.count({ where: { id: userDB.id } });
 
-        const playsCount = await bot.db.models.plays.count({
+        const playsCount = await this.client.db.models.plays.count({
           where: { dj: userDB.id, skipped: false }
         });
 
-        const songVotes = await bot.db.models.plays.findAll({
+        const songVotes = await this.client.db.models.plays.findAll({
           attributes: [
             [fn("SUM", col("plays.woots")
             ), "totalwoots"],
@@ -51,7 +51,7 @@ class Me extends Command {
           group: ["dj"]
         });
 
-        const songVotesMehs = await bot.db.models.plays.findAll({
+        const songVotesMehs = await this.client.db.models.plays.findAll({
           attributes: [
             [fn("SUM", col("plays.mehs")
             ), "totalmehs"]],
