@@ -15,8 +15,6 @@ class Me extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    const level = this.client.permlevel(message);
-    
     const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "me@info", "perUser", message.author.id);
 
     if (cooldown != -2 && level < 9) {
