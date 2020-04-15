@@ -65,16 +65,17 @@ class Me extends Command {
         });
 
         let color;
-        console.log(plugUser.role);
-        if (plugUser.role === ROLE.HOST) {
+        console.log(message.author.roles.cache.get('490618109347233804'));
+
+        if (message.author.roles.cache.get('490618109347233804')) {
           color = "#d1aa0d";
-        } else if (plugUser.role === ROLE.COHOST) {
-          color = "#d1aa0d";
-        } else if (plugUser.role === ROLE.MANAGER) {
+        } else if (message.author.roles.cache.get('485175393054097416')) {
           color = "#cc3333";
-        } else if (plugUser.role === ROLE.BOUNCER) {
+        } else if (message.author.roles.cache.get('485175078867304488')) {
           color = "#9b40e7";
-        } else if (plugUser.role === ROLE.DJ) {
+        } else if (message.author.roles.cache.get('485774995163971597')) {
+          color = "#9b40e7";
+        } else if (message.author.roles.cache.get('485174834448564224')) {
           color = "#33ccff";
         } else {
           color = "#b8b8b8";
