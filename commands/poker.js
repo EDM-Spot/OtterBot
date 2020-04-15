@@ -8,9 +8,10 @@ require("moment-timer");
 class Poker extends Command {
   constructor(client) {
     super(client, {
-      name: "p",
+      name: "poker",
       description: "Start a Texas Hold'em Poker Game",
-      usage: "['start', 'join', 'bet', 'call', 'check', 'fold', 'skip', 'allin']"
+      usage: "p ['start', 'join', 'bet', 'call', 'check', 'fold', 'skip', 'allin']",
+      aliases: ["p"]
     });
   }
 
