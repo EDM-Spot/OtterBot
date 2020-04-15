@@ -1,4 +1,5 @@
 const Command = require("../base/Command.js");
+const Discord = require("discord.js");
 const { ROLE } = require("miniplug");
 const { fn, col } = require("sequelize");
 const { isNil } = require("lodash");
