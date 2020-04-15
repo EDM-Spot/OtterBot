@@ -78,6 +78,7 @@ class PlugHelp extends Command {
     commands.forEach( c => {
       const cat = c.roleName.toProperCase();
       if (currentCategory !== cat) {
+        console.log(cat.length);
         output += `\u200b\n== ${cat} ==\n`;
         currentCategory = cat;
       }
