@@ -18,9 +18,13 @@ class Who extends Command {
     const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "who@info", "perUser", message.author.id);
 
     const discordMention = this.client.getUserFromMention(args[0]);
-    const idMention = await this.client.plug.getUser(args[0]);
+    let idMention;
 
-    if (!discordMention && !idMention) { return; }
+    if (!discordMention) {
+      idMention = await this.client.plug.getUser(args[0]);
+
+      if (!idMention) { return; }
+    }
 
     if (cooldown != -2) {
       return;
@@ -103,12 +107,10 @@ class Who extends Command {
           userImage = a.user.displayAvatarURL();
         }
 
-        console.log(a);
-
         const embed = new Discord.MessageEmbed()
           .setColor(color)
           .setAuthor(plugUser.username, a.user.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
-          .setTitle(`Discord: ${a.tag}`)
+          .setTitle(`Discord: ${a.user.tag}`)
           .setThumbnail(userImage)
           .addField('ID', userDB.id, true)
           .addField('Joined Room', moment(userDB.createdAt).format('DD/MM/YYYY HH:mm'), true)
