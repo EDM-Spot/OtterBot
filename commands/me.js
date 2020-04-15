@@ -65,7 +65,7 @@ class Me extends Command {
         });
 
         let color;
-
+        console.log(plugUser.role);
         if (plugUser.role === ROLE.HOST) {
           color = "#d1aa0d";
         } else if (plugUser.role === ROLE.COHOST) {
@@ -91,15 +91,14 @@ class Me extends Command {
         const embed = new Discord.MessageEmbed()
           .setColor(color)
           .setAuthor(plugUser.username, message.author.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
-          .setTitle(`Discord: @${message.author.username}`)
+          .setTitle(`Discord: ${message.author.tag}`)
           .setThumbnail(userImage)
           .addField('ID', userDB.id, true)
-          .addField('Joined Room', moment(userDB.createdAt, "DD.MM.YYYY HH:mm"), true)
-          .addField('\u200b', '\u200b')
+          .addField('Joined Room', moment(userDB.createdAt).format('DD.MM.YYYY HH:mm'), true)
+          .addField('\u200b', '\u200b', true)
           .addField('Props', userDB.props, true)
           .addField('Props Given', propsGiven, true)
           .addField('Songs Played', playsCount, true)
-          .addField('\u200b', '\u200b')
           .addField('<:plugGrab:486538625270677505>', songVotes[0].dataValues.totalgrabs, true)
           .addField('<:plugWoot:486538570715103252>', songVotes[0].dataValues.totalwoots, true)
           .addField('<:plugMeh:486538601044115478>', songVotesMehs[0].dataValues.totalmehs, true)
