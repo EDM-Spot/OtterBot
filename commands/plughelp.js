@@ -75,19 +75,20 @@ class PlugHelp extends Command {
     //const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
     let currentCategory = "";
     let output = "= Plug Room Command List =\n";
-    commands.forEach( c => {
+    commands.forEach(c => {
       const cat = c.roleName.toProperCase();
       if (currentCategory !== cat) {
-        console.log(cat.length);
         output += `\u200b\n== ${cat} ==\n`;
         currentCategory = cat;
       }
-      c.commands.forEach( d => {
+      c.commands.forEach(d => {
+        let abc = `${d.Names}${" ".repeat(31 - d.Names.length)} :: ${d.Parameters} :: ${d.Description}\n`;
+        console.log(abc.length)
         output += `${d.Names}${" ".repeat(31 - d.Names.length)} :: ${d.Parameters} :: ${d.Description}\n`;
       });
     });
 
-    message.channel.send(output, {code:"asciidoc", split: { char: "\u200b" }});
+    message.channel.send(output, { code: "asciidoc", split: { char: "\u200b" } });
   }
 }
 
