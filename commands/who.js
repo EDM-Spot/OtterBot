@@ -100,12 +100,14 @@ class Who extends Command {
         if (!isNil(userDB.badge)) {
           userImage = `https://edmspot.tk/public/images/badges/${userDB.badge}`;
         } else {
-          userImage = a.displayAvatarURL();
+          userImage = a.member.displayAvatarURL();
         }
+
+        console.log(a);
 
         const embed = new Discord.MessageEmbed()
           .setColor(color)
-          .setAuthor(plugUser.username, a.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
+          .setAuthor(plugUser.username, a.member.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
           .setTitle(`Discord: ${a.tag}`)
           .setThumbnail(userImage)
           .addField('ID', userDB.id, true)
