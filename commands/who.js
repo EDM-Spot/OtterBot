@@ -15,8 +15,6 @@ class Who extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    const level = this.client.permlevel(message);
-
     const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "who@info", "perUser", message.author.id);
 
     const discordMention = this.client.getUserFromMention(args[0]);
