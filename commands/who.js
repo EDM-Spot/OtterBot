@@ -114,7 +114,7 @@ class Who extends Command {
           .setThumbnail(userImage)
           .addField('ID', userDB.id, true)
           .addField('Joined Room', moment(userDB.createdAt).format('DD/MM/YYYY HH:mm'), true)
-          .addField('\u200b', '\u200b', true)
+          .addField('Joined Discord', moment(a.joinedTimestamp).format('DD/MM/YYYY HH:mm'), true)
           .addField('Props', userDB.props, true)
           .addField('Props Given', propsGiven, true)
           .addField('Songs Played', playsCount, true)

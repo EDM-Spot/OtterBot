@@ -10,7 +10,7 @@ class Poker extends Command {
     super(client, {
       name: "p",
       description: "Start a Texas Hold'em Poker Game",
-      usage: "['start', 'join', 'bet', 'check', 'fold', 'skip', 'allin']"
+      usage: "['start', 'join', 'bet', 'call', 'check', 'fold', 'skip', 'allin']"
     });
   }
 
@@ -20,7 +20,7 @@ class Poker extends Command {
       
       if (!args.length) { return; }
 
-      const params = ["start", "join", "bet", "check", "fold", "skip", "allin", "reset", "exit"];
+      const params = ["start", "join", "bet", "call", "check", "fold", "skip", "allin", "reset", "exit"];
       const param = `${args.shift()}`.toLowerCase();
 
       if (!params.includes(param)) {
