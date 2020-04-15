@@ -4,33 +4,48 @@ const { fn, col } = require("sequelize");
 const { isNil } = require("lodash");
 const moment = require("moment");
 
-class Me extends Command {
+class Who extends Command {
   constructor(client) {
     super(client, {
-      name: "me",
-      description: "Check your plug profile.",
-      usage: "me",
-      aliases: ["me"]
+      name: "who",
+      description: "Check someone plug profile.",
+      usage: "who @user|id",
+      aliases: ["who"]
     });
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "me@info", "perUser", message.author.id);
+    const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "who@info", "perUser", message.author.id);
+
+    const discordMention = this.client.getUserFromMention(args[0]);
+    const idMention = await this.client.plug.getUser(args[0]);
+
+    if (!discordMention && !idMention) { return; }
 
     if (cooldown != -2) {
       return;
     }
 
     try {
-      const userDB = await this.client.db.models.users.findOne({
-        where: {
-          discord: message.author.id,
-        },
-      });
+      let userDB;
+
+      if (discordMention) {
+        userDB = await this.client.db.models.users.findOne({
+          where: {
+            discord: discordMention.id,
+          },
+        });
+      } else {
+        userDB = await this.client.db.models.users.findOne({
+          where: {
+            id: idMention.id,
+          },
+        });
+      }
 
       if (!isNil(userDB)) {
 
-        await this.client.redis.placeCommandOnCooldown("discord", "me@info", "perUser", message.author.id, 3600);
+        await this.client.redis.placeCommandOnCooldown("discord", "who@info", "perUser", message.author.id, 3600);
 
         const plugUser = await this.client.plug.getUser(userDB.id);
 
@@ -64,7 +79,7 @@ class Me extends Command {
         });
 
         let color;
-        let a = await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id);
+        let a = await this.client.guilds.cache.get("485173051432894489").members.cache.get(userDB.discord);
 
         if (await a.roles.cache.get('490618109347233804')) {
           color = "#d1aa0d";
@@ -85,13 +100,13 @@ class Me extends Command {
         if (!isNil(userDB.badge)) {
           userImage = `https://edmspot.tk/public/images/badges/${userDB.badge}`;
         } else {
-          userImage = message.author.displayAvatarURL();
+          userImage = a.displayAvatarURL();
         }
 
         const embed = new Discord.MessageEmbed()
           .setColor(color)
-          .setAuthor(plugUser.username, message.author.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
-          .setTitle(`Discord: ${message.author.tag}`)
+          .setAuthor(plugUser.username, a.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
+          .setTitle(`Discord: ${a.tag}`)
           .setThumbnail(userImage)
           .addField('ID', userDB.id, true)
           .addField('Joined Room', moment(userDB.createdAt).format('DD/MM/YYYY HH:mm'), true)
@@ -107,7 +122,7 @@ class Me extends Command {
 
         return await message.channel.send({ embed });
       } else {
-        return await message.reply("Your Account isn't linked! Use -link <Plug ID>");
+        return await message.reply("This Account isn't linked!");
       }
     } catch (e) {
       console.log(e);
@@ -115,4 +130,4 @@ class Me extends Command {
   }
 }
 
-module.exports = Me;
+module.exports = Who;
