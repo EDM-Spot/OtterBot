@@ -37,6 +37,7 @@ class Help extends Command {
       sorted.forEach( c => {
         const cat = c.help.category.toProperCase();
         if (currentCategory !== cat) {
+          console.log(cat.length);
           output += `\u200b\n== ${cat} ==\n`;
           currentCategory = cat;
         }
