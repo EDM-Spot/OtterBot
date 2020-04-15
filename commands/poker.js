@@ -18,7 +18,7 @@ class Poker extends Command {
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
       //message.delete();
-      
+
       if (!args.length) { return; }
 
       const params = ["start", "join", "bet", "call", "check", "fold", "skip", "allin", "reset", "exit"];
@@ -28,7 +28,7 @@ class Poker extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 0;
+      const price = 2;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -63,20 +63,21 @@ class Poker extends Command {
           let startMessage = `A new Texas Hold'em Poker Game has been created. Entry Fee: ${price} Prop. \n`;
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
-          startMessage += "The game will start in 1 minute. Join the game with `-p join` \n";
+          startMessage += "The game will start in 5 minute. Join the game with `-p join` \n";
+          startMessage += "You can lose all your props! Be careful. \n";
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          this.client.plug.chat("Discord Texas Hold'em Poker will start in 1 minute in channel #" + message.channel.name + "!");
+          this.client.plug.chat("Discord Texas Hold'em Poker will start in 5 minute in channel #" + message.channel.name + "!");
           this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
           this.client.pokerUtil.running = true;
 
-          //new moment.duration(270000, "milliseconds").timer({loop: false, start: true}, async () => {
-          //message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
-          //});
+          new moment.duration(270000, "milliseconds").timer({ loop: false, start: true }, async () => {
+            message.channel.send("<@&512635547320188928> 30 Seconds left until start!");
+          });
 
-          new moment.duration(1, "minutes").timer({loop: false, start: true}, async () => {
+          new moment.duration(5, "minutes").timer({ loop: false, start: true }, async () => {
             if (this.client.pokerUtil.startingPlayers.size < this.client.pokerUtil.minPlayers) {
               message.channel.send(`Not enough players (${this.client.pokerUtil.minPlayers} required) to play this game.`);
               await this.client.pokerUtil.end();
@@ -121,7 +122,7 @@ class Poker extends Command {
           if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           }
-          
+
           const amount = parseInt(args.pop(), 10);
 
           if (isNaN(amount)) {
@@ -144,7 +145,7 @@ class Poker extends Command {
           if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           }
-          
+
           const amount = this.client.pokerUtil.previousBet;
 
           if (isNaN(amount)) {
@@ -184,7 +185,7 @@ class Poker extends Command {
           } else if (this.client.pokerUtil.currentPlayer.id != userID) {
             return message.reply("It's not your turn!");
           }
-          
+
           return this.client.pokerUtil.fold();
         }
         case "skip": {
@@ -213,7 +214,7 @@ class Poker extends Command {
             message.reply("You have 0 props.");
             return this.client.pokerUtil.exit();
           }
-          
+
           return this.client.pokerUtil.allIn();
         }
         case "exit": {
@@ -230,7 +231,7 @@ class Poker extends Command {
           if (this.client.pokerUtil.currentPlayer.id != userID) {
             return message.reply("It's not your turn!");
           }
-          
+
           return this.client.pokerUtil.exit();
         }
         case "reset": {

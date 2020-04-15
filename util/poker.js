@@ -81,10 +81,10 @@ module.exports = (client) => {
       this.roundBets = new Map();
       this.previousBets = [];
 
-      client.channels.cache.get(this.channel).send("<@&512635547320188928> 1 Minute left until next Round start!");
+      client.channels.cache.get(this.channel).send("<@&512635547320188928> 2 Minutes left until next Round start!");
       client.channels.cache.get(this.channel).send("Type `-p exit` if you want to leave the table!");
 
-      new moment.duration(1, "minutes").timer({ loop: false, start: true }, async () => {
+      new moment.duration(2, "minutes").timer({ loop: false, start: true }, async () => {
         if (this.startingPlayers.size < this.minPlayers) {
           client.channels.cache.get(this.channel).send(`Not enough players (${this.minPlayers} required) to continue this game.`);
           await this.end();
@@ -128,7 +128,7 @@ module.exports = (client) => {
           `**${this.currentPlayer.user.username}** has a balance of **${this.playerBalances.get(this.currentPlayer.id)}** Props`,
           "",
           `Type \`${prefix}p bet <amount>\` to bet.`,
-          `Type \`${prefix}p call\` to match the last bet. **Last Bet: ${this.previousBet} Props**`,
+          `Type \`${prefix}p call\` to match the last bet. **Last Bet: ${(this.previousBet === undefined) ? 0 : this.previousBet} Props**`,
           `Type \`${prefix}p check\` to check.`,
           `Type \`${prefix}p fold\` to fold.`,
           `Type \`${prefix}p allIn\` to go all-in.`,
@@ -223,8 +223,8 @@ module.exports = (client) => {
             `**${this.getPlayer(0).user.username}** wins **${this.tableMoney}** Props`
           ]);
 
-        //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: this.getPlayer(0).user.id }, defaults: { discord: this.getPlayer(0).user.id } });
-        //await inst.increment("props", { by: this.tableMoney });
+        const [inst] = await client.db.models.users.findOrCreate({ where: { discord: this.getPlayer(0).user.id }, defaults: { discord: this.getPlayer(0).user.id } });
+        await inst.increment("props", { by: this.tableMoney });
 
         const options = {};
 
@@ -275,10 +275,10 @@ module.exports = (client) => {
           `${winners.length.plural("They have", "Each winner has")} won **${payout}** Props`
         ]);
 
-      //for (const winner of winners) {
-        //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: winner.id }, defaults: { discord: winner.id } });
-        //await inst.increment("props", { by: payout });
-      //}
+      for (const winner of winners) {
+        const [inst] = await client.db.models.users.findOrCreate({ where: { discord: winner.id }, defaults: { discord: winner.id } });
+        await inst.increment("props", { by: payout });
+      }
 
       embed.addField("Hands", hands.map(hand => {
         const name = client.users.cache.get(hand.player).tag;
@@ -334,8 +334,8 @@ module.exports = (client) => {
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
-      //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
-      //await inst.decrement("props", { by: amount });
+      const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
+      await inst.decrement("props", { by: amount });
 
       return this.processNextTurn();
     }
@@ -401,8 +401,8 @@ module.exports = (client) => {
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
-      //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
-      //await inst.decrement("props", { by: props });
+      const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
+      await inst.decrement("props", { by: props });
 
       return this.processNextTurn();
     }
