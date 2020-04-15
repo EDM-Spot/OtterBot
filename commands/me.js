@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const { ROLE } = require("miniplug");
 const { fn, col } = require("sequelize");
 const { isNil } = require("lodash");
+const moment = require("moment");
 
 class Me extends Command {
   constructor(client) {
@@ -32,7 +33,7 @@ class Me extends Command {
 
         //await this.client.redis.placeCommandOnCooldown("discord", "me@info", "perUser", message.author.id, 3600);
 
-        const plugUser = this.client.plug.getUser(userDB.id);
+        const plugUser = await this.client.plug.getUser(userDB.id);
 
         const propsGiven = await this.client.db.models.props.count({ where: { id: userDB.id } });
 
@@ -90,10 +91,10 @@ class Me extends Command {
         const embed = new Discord.MessageEmbed()
           .setColor(color)
           .setAuthor(plugUser.username, message.author.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
-          .setTitle(`Discord: ${message.author}`)
+          .setTitle(`Discord: @${message.author.username}`)
           .setThumbnail(userImage)
           .addField('ID', userDB.id, true)
-          .addField('Joined Room', userDB.createdAt, true)
+          .addField('Joined Room', moment(userDB.createdAt, "DD.MM.YYYY HH:mm"), true)
           .addField('Props', userDB.props, true)
           .addField('Props Given', propsGiven, true)
           .addField('Songs Played', playsCount, true)
