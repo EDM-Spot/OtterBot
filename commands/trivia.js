@@ -23,7 +23,7 @@ class Trivia extends Command {
     const isWeekend = (day === 6) || (day === 7);
     const isDecember = (moment().month() === 11);
 
-    let price = "Costs 3 Prop.";
+    let price = "Costs 2 Props.";
     
     if (isWeekend) {
       price = "FREE Weekends enabled!";

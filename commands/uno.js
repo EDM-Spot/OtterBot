@@ -71,7 +71,21 @@ class Uno extends Command {
           this.client.unoUtil.addPlayer(message.author);
           await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id).roles.add("512635547320188928").catch(console.error);
 
-          let startMessage = `A new Uno Game has been created. Entry Fee: ${price} Prop. \n`;
+          const day = moment().isoWeekday();
+          const isWeekend = (day === 6) || (day === 7);
+          const isDecember = (moment().month() === 11);
+
+          let priceD = "2 Props.";
+
+          if (isWeekend) {
+            price = "FREE Weekends enabled!";
+          }
+
+          if (isDecember) {
+            price = "FREE December!";
+          }
+
+          let startMessage = `A new Uno Game has been created. Entry Fee: ${priceD} \n`;
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.unoUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 5 minute. Join the game with `-uno join` \n";

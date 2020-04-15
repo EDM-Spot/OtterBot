@@ -28,11 +28,11 @@ module.exports = function Util(bot) {
         songTitle = "undefined";
       }
 
-      const songOverPlayed = await bot.db.models.overplayedlist.findOne({ where: { cid: cid }});
-      
+      const songOverPlayed = await bot.db.models.overplayedlist.findOne({ where: { cid: cid } });
+
       if (isObject(songOverPlayed)) {
         const timePassed = bot.moment().diff(bot.moment(songOverPlayed.createdAt), "weeks");
-        
+
         if (timePassed <= 1) {
           return true;
         }
@@ -65,7 +65,7 @@ module.exports = function Util(bot) {
           }
         }
       }
-      
+
       let toSkip = 10;
 
       if (totalPlays >= 20) {
@@ -91,7 +91,7 @@ module.exports = function Util(bot) {
             cid: cid,
           },
         });
-        
+
         return true;
       }
 

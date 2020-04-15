@@ -25,7 +25,7 @@ module.exports = function Util(bot) {
         return;
       }
 
-      if (waitlist.length < 15) {
+      if (waitlist.length < 10) {
         return;
       }
 

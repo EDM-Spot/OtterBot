@@ -60,7 +60,21 @@ class Poker extends Command {
             return message.reply("There's a Game running already!");
           }
 
-          let startMessage = `A new Texas Hold'em Poker Game has been created. Entry Fee: ${price} Prop. \n`;
+          const day = moment().isoWeekday();
+          const isWeekend = (day === 6) || (day === 7);
+          const isDecember = (moment().month() === 11);
+
+          let price = "2 Props.";
+
+          if (isWeekend) {
+            price = "FREE Weekends enabled!";
+          }
+
+          if (isDecember) {
+            price = "FREE December!";
+          }
+
+          let startMessage = `A new Texas Hold'em Poker Game has been created. Entry Fee: ${priceD} \n`;
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 5 minute. Join the game with `-p join` \n";
