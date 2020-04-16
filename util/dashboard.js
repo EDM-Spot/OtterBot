@@ -97,9 +97,9 @@ module.exports = (client) => {
     callbackURL: client.config.dashboard.callbackURL,
     scope: ["identify", "guilds"]
   },
-  (accessToken, refreshToken, profile, done) => {
-    process.nextTick(() => done(null, profile));
-  }));
+    (accessToken, refreshToken, profile, done) => {
+      process.nextTick(() => done(null, profile));
+    }));
 
   // Session data, used for temporary storage of your visitor's session information.
   // the `secret` is in fact a "salt" for the data, and should not be shared publicly.
@@ -182,7 +182,7 @@ module.exports = (client) => {
     }
     next();
   },
-  passport.authenticate("discord"));
+    passport.authenticate("discord"));
 
   // Once the user returns from OAuth2, this endpoint gets called. 
   // Here we check if the user was already on the page and redirect them
@@ -208,13 +208,13 @@ module.exports = (client) => {
   });
 
   // Destroys the session to log out the user.
-  app.get("/logout", function(req, res) {
+  app.get("/logout", function (req, res) {
     req.session.destroy(() => {
       req.logout();
       res.redirect("/"); //Inside a callback… bulletproof!
     });
   });
-  
+
   /** REGULAR INFORMATION PAGES */
 
   // Index page. If the user is authenticated, it shows their info
@@ -282,7 +282,7 @@ module.exports = (client) => {
 
     renderTemplate(res, req, "overplayedlist.ejs", { instance });
   });
-  
+
   app.get("/songRank", async (req, res) => {
     const totalsongs = await client.db.models.plays.count({
       where: { skipped: false }
@@ -291,7 +291,7 @@ module.exports = (client) => {
     const totalWootsPoints = "(SUM(plays.woots) * 1.12)";
     const totalGrabsPoints = "(SUM(plays.grabs) * 1.2)";
     const totalMehsPoints = "(SUM(plays.mehs) * 1.35)";
-    
+
     const rank = await client.db.models.plays.findAll({
       attributes: ["author", "title",
         [literal(
@@ -587,22 +587,22 @@ module.exports = (client) => {
 
   // Get DJs list (without pagination)
   app.get("/api/djs", async (req, res) => {
-    const totalWootsPoints = "(SUM(plays.woots) * " + client.global.pointsWeight.woots + ")";
-    const totalGrabsPoints = "(SUM(plays.grabs) * " + client.global.pointsWeight.grabs + ")";
+    const totalWootsPoints = "(SUM(plays.woots) * " + "0.25" + ")";
+    const totalGrabsPoints = "(SUM(plays.grabs) * " + "1" + ")";
 
     const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
-    const totalMehsPoints = "(" + MehsPoints + " * " + client.global.pointsWeight.mehs + ")";
+    const totalMehsPoints = "((" + MehsPoints + " + 1) * " + "1" + ")";
 
-    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + client.global.pointsWeight.ban + ")";
+    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + "2" + ")";
 
-    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + client.global.pointsWeight.mute + ")";
+    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + "0.25" + ")";
 
-    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + client.global.pointsWeight.wlban + ")";
+    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + "1.5" + ")";
 
-    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
+    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 1000)";
 
-    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
-    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + client.global.pointsWeight.messages + ")";
+    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + "0.025" + ")";
+    const totalMessagesPoints = "((((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) + discord) * " + "0.05" + ")";
 
     const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") * 100) + 1)";
 
@@ -610,16 +610,17 @@ module.exports = (client) => {
       where: { skipped: false }
     });
 
-    const totalmehsongs = await client.db.models.plays.count({
-      where: {
-        skipped: true,
-        mehs: {
-          [Op.gt]: 4
-        }
-      }
-    });
+    const Songpoints = (mySongsPlayed / totalsongs) * 1000;
 
-    const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / (CAST(" + totalsongs + " as float) + CAST(" + totalmehsongs + " as float))) * 100)))";
+    const voteWootspoints = (totalWootsPoints / mySongsPlayed);
+    const voteGrabspoints = (totalGrabsPoints / mySongsPlayed);
+    const voteMehspoints = (totalMehsPoints / mySongsPlayed);
+
+    const votePoints = (voteWootspoints + voteGrabspoints) / voteMehspoints;
+
+    const totalpoints = ((Songpoints * votePoints) + propsGivenPoints + totalMessagesPoints) - (offlineDaysPoints + totalbans);
+
+    //const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / (CAST(" + totalsongs + " as float) + CAST(" + totalmehsongs + " as float))) * 100)))";
 
     const djRank = await client.db.models.plays.findAll({
       attributes: ["plays.dj",
@@ -633,7 +634,7 @@ module.exports = (client) => {
         [fn("COUNT", col("plays.cid")
         ), "playscount"],
         [literal(
-          "(SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL)"
+          "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + discord)"
         ), "totalmessages"],
         [literal(
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
@@ -646,7 +647,7 @@ module.exports = (client) => {
         ), "daysoffline"]],
       include: [{
         model: client.db.models.users,
-        attributes: ["username", "id", "last_seen", "points", "props"]
+        attributes: ["username", "id", "last_seen", "points", "discord", "props"]
       }],
       where: {
         skipped: false,
@@ -657,6 +658,77 @@ module.exports = (client) => {
       group: ["user.id", "plays.dj"],
       order: [[literal("totalpoints"), "DESC"]]
     });
+
+    // const totalWootsPoints = "(SUM(plays.woots) * " + client.global.pointsWeight.woots + ")";
+    // const totalGrabsPoints = "(SUM(plays.grabs) * " + client.global.pointsWeight.grabs + ")";
+
+    // const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
+    // const totalMehsPoints = "(" + MehsPoints + " * " + client.global.pointsWeight.mehs + ")";
+
+    // const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + client.global.pointsWeight.ban + ")";
+
+    // const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + client.global.pointsWeight.mute + ")";
+
+    // const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + client.global.pointsWeight.wlban + ")";
+
+    // const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
+
+    // const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
+    // const totalMessagesPoints = "((((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) + discord) * " + client.global.pointsWeight.messages + ")";
+
+    // const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") * 100) + 1)";
+
+    // const totalsongs = await client.db.models.plays.count({
+    //   where: { skipped: false }
+    // });
+
+    // const totalmehsongs = await client.db.models.plays.count({
+    //   where: {
+    //     skipped: true,
+    //     mehs: {
+    //       [Op.gt]: 4
+    //     }
+    //   }
+    // });
+
+    // const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / (CAST(" + totalsongs + " as float) + CAST(" + totalmehsongs + " as float))) * 100)))";
+
+    // const djRank = await client.db.models.plays.findAll({
+    //   attributes: ["plays.dj",
+    //     [fn("SUM", col("plays.woots")
+    //     ), "totalwoots"],
+    //     [literal(
+    //       "(SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj)"
+    //     ), "totalmehs"],
+    //     [fn("SUM", col("plays.grabs")
+    //     ), "totalgrabs"],
+    //     [fn("COUNT", col("plays.cid")
+    //     ), "playscount"],
+    //     [literal(
+    //       "((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + discord)"
+    //     ), "totalmessages"],
+    //     [literal(
+    //       "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
+    //     ), "propsgiven"],
+    //     [literal(
+    //       totalpoints
+    //     ), "totalpoints"],
+    //     [literal(
+    //       "(EXTRACT(DAY FROM current_date-last_seen))"
+    //     ), "daysoffline"]],
+    //   include: [{
+    //     model: client.db.models.users,
+    //     attributes: ["username", "id", "last_seen", "points", "discord", "props"]
+    //   }],
+    //   where: {
+    //     skipped: false,
+    //     dj: {
+    //       [Op.ne]: 40333310
+    //     }
+    //   },
+    //   group: ["user.id", "plays.dj"],
+    //   order: [[literal("totalpoints"), "DESC"]]
+    // });
 
     res.writeHead(200, { "Content-Type": "application/json" });
 
