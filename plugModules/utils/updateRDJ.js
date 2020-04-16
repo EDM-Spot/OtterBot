@@ -15,15 +15,6 @@ module.exports = function Util(bot) {
         where: { skipped: false }
       });
 
-      const playsmehcount = await bot.db.models.plays.count({
-        where: {
-          skipped: true,
-          mehs: {
-            [Op.gt]: 4
-          }
-        }
-      });
-
       const totalmessages = await bot.db.models.messages.count({
         where: { id: id, command: false, deleted_by: null }
       });
@@ -100,7 +91,17 @@ module.exports = function Util(bot) {
 
       const offlineDaysPoints = ((moment().diff(userDB.get("last_seen"), "days") * bot.global.pointsWeight.daysOffline) * 100) + 1;
 
-      const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / (totalsongs + playsmehcount)) * 100));
+      const Songpoints = (playscount / totalsongs) * 1000;
+
+      const voteWootspoints = (totalWootsPoints / playscount);
+      const voteGrabspoints = (totalGrabsPoints / playscount);
+      const voteMehspoints = (totalMehsPoints / playscount);
+
+      const votePoints = (voteWootspoints + voteGrabspoints) / voteMehspoints;
+
+      const points = ((Songpoints * votePoints) + propsGivenPoints + totalMessagesPoints) - (offlineDaysPoints + totalbans);
+
+      //const points = propsGivenPoints + totalMessagesPoints + ((((totalWootsPoints + totalGrabsPoints) / (totalMehsPoints + 1)) - (offlineDaysPoints + totalbans)) * ((playscount / (totalsongs + playsmehcount)) * 100));
 
       const role = "485174834448564224"; //bot.guilds.cache.get("485173051432894489").roles.find(r => r.name === "RDJ");
 

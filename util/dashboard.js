@@ -587,24 +587,24 @@ module.exports = (client) => {
 
   // Get DJs list (without pagination)
   app.get("/api/djs", async (req, res) => {
-    const totalWootsPoints = "(SUM(plays.woots) * " + "0.25" + ")";
-    const totalGrabsPoints = "(SUM(plays.grabs) * " + "1" + ")";
+    const totalWootsPoints = "(SUM(plays.woots) * " + client.global.pointsWeight.woots + ")";
+    const totalGrabsPoints = "(SUM(plays.grabs) * " + client.global.pointsWeight.grabs + ")";
 
     const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
-    const totalMehsPoints = "((" + MehsPoints + " + 1) * " + "1" + ")";
+    const totalMehsPoints = "((" + MehsPoints + " + 1) * " + client.global.pointsWeight.mehs + ")";
 
-    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + "4" + ")";
+    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + client.global.pointsWeight.ban + ")";
 
-    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + "2" + ")";
+    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + client.global.pointsWeight.mute + ")";
 
-    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + "8" + ")";
+    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + client.global.pointsWeight.wlban + ")";
 
     const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
-    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + "0.025" + ")";
-    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + "0.05" + ")";
+    const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + client.global.pointsWeight.propsGiven + ")";
+    const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + client.global.pointsWeight.messages + ")";
 
-    const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + "0.25" + ") * 100) + 1)";
+    const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + client.global.pointsWeight.daysOffline + ") * 100) + 1)";
 
     const totalsongs = await client.db.models.plays.count({
       where: { skipped: false }
@@ -647,7 +647,7 @@ module.exports = (client) => {
         ), "daysoffline"]],
       include: [{
         model: client.db.models.users,
-        attributes: ["username", "id", "last_seen", "points", "discord", "props"]
+        attributes: ["username", "id", "last_seen", "points", "props"]
       }],
       where: {
         skipped: false,

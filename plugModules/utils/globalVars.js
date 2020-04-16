@@ -7,15 +7,15 @@ module.exports = function Util(bot) {
       this.isHolidaySong = false;
 
       this.pointsWeight = {
-        woots: 1.12,
-        mehs: 1.35,
-        grabs: 1.2,
-        propsGiven: 0.023,
-        messages: 0.015,
-        ban: 1.9,
-        wlban: 1.1,
-        mute: 0.55,
-        daysOffline: 0.17
+        woots: 0.25,
+        mehs: 1,
+        grabs: 1,
+        propsGiven: 0.025,
+        messages: 0.05,
+        ban: 8,
+        wlban: 4,
+        mute: 2,
+        daysOffline: 0.25
       };
     }
   }

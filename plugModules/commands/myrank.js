@@ -12,40 +12,43 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       const id = rawData.uid;
 
-      const totalsongs = await bot.db.models.plays.count({
-        where: { skipped: false }
-      });
-
-      const totalmehsongs = await bot.db.models.plays.count({
-        where: {
-          skipped: true,
-          mehs: {
-            [Op.gt]: 4
-          }
-        }
-      });
-
+      const totalWootsPointsSQL = "(SUM(plays.woots) * " + bot.global.pointsWeight.woots + ")";
+      const totalGrabsPointsSQL = "(SUM(plays.grabs) * " + bot.global.pointsWeight.grabs + ")";
+  
+      const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
+      const totalMehsPointsSQL = "((" + MehsPoints + " + 1) * " + bot.global.pointsWeight.mehs + ")";
+  
       const bancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + bot.global.pointsWeight.ban + ")";
+  
       const mutecountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + bot.global.pointsWeight.mute + ")";
+  
       const wlbancountSQL = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + bot.global.pointsWeight.wlban + ")";
-      
+  
       const totalbansSQL = "((" + bancountSQL + " + " + mutecountSQL + " + " + wlbancountSQL + ") * 100)";
   
       const propsGivenPointsSQL = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + bot.global.pointsWeight.propsGiven + ")";
-      const totalMessagesPointsSQL = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + bot.global.pointsWeight.messages + ")";
-  
-      const totalWootsPointsSQL = "(SUM(plays.woots) * " + bot.global.pointsWeight.woots + ")";
-      const totalGrabsPointsSQL = "(SUM(plays.grabs) * " + bot.global.pointsWeight.grabs + ")";
-      
-      const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
-      const totalMehsPointsSQL = "(" + MehsPoints + " * " + bot.global.pointsWeight.mehs + ")";
+      const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + bot.global.pointsWeight.messages + ")";
   
       const offlineDaysPointsSQL = "(((EXTRACT(DAY FROM current_date-last_seen) * " + bot.global.pointsWeight.daysOffline + ") * 100) + 1)";
+  
+      const totalsongs = await bot.db.models.plays.count({
+        where: { skipped: false }
+      });
+  
+      const Songpoints = "(CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 1000";
+  
+      const voteWootspoints = "(" + totalWootsPointsSQL + " / CAST(COUNT(plays.cid) as float))";
+      const voteGrabspoints = "(" + totalGrabsPointsSQL + " / CAST(COUNT(plays.cid) as float))";
+      const voteMehspoints = "(" + totalMehsPointsSQL + " / CAST(COUNT(plays.cid) as float))";
+  
+      const votePoints = "(" + voteWootspoints + " + " + voteGrabspoints + ") / " + voteMehspoints;
+  
+      const totalpoints = "((" + Songpoints + " * " + votePoints + ") + " + propsGivenPointsSQL + " + " + totalMessagesPoints + ") - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")";
 
       const rankList = await bot.db.models.plays.findAll({
         attributes: ["plays.dj",
           [literal(
-            "ROW_NUMBER() OVER(ORDER BY (" + propsGivenPointsSQL + " + " + totalMessagesPointsSQL + " + ((((" + totalWootsPointsSQL + " + " + totalGrabsPointsSQL + ") / (" + totalMehsPointsSQL + " + 1)) - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")) * ((CAST(COUNT(plays.cid) as float) / (CAST(" + totalsongs + " as float) + CAST(" + totalmehsongs + " as float))) * 100))) DESC)"
+            "ROW_NUMBER() OVER(ORDER BY (((" + Songpoints + " * " + votePoints + ") + " + propsGivenPointsSQL + " + " + totalMessagesPoints + ") - (" + offlineDaysPointsSQL + " + " + totalbansSQL + ")) DESC)"
           ), "rank"],
           [literal(
             "plays.dj"
