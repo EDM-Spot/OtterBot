@@ -593,18 +593,18 @@ module.exports = (client) => {
     const MehsPoints = "((SELECT SUM(mehs) FROM plays a WHERE a.dj = plays.dj))";
     const totalMehsPoints = "((" + MehsPoints + " + 1) * " + "1" + ")";
 
-    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + "2" + ")";
+    const bancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'BAN') * " + "4" + ")";
 
-    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + "0.25" + ")";
+    const mutecount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'MUTE') * " + "2" + ")";
 
-    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + "1.5" + ")";
+    const wlbancount = "((SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj AND bans.type = 'WLBAN') * " + "8" + ")";
 
-    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 1000)";
+    const totalbans = "((" + bancount + " + " + mutecount + " + " + wlbancount + ") * 100)";
 
     const propsGivenPoints = "((SELECT COUNT(index) FROM props WHERE props.id = plays.dj) * " + "0.025" + ")";
     const totalMessagesPoints = "(((SELECT COUNT(messages.cid) FROM messages WHERE messages.id = plays.dj AND messages.command = false AND messages.deleted_by IS NULL) + points) * " + "0.05" + ")";
 
-    const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + "0.5" + ") * 100) + 1)";
+    const offlineDaysPoints = "(((EXTRACT(DAY FROM current_date-last_seen) * " + "0.25" + ") * 100) + 1)";
 
     const totalsongs = await client.db.models.plays.count({
       where: { skipped: false }
