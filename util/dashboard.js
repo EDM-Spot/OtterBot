@@ -610,15 +610,15 @@ module.exports = (client) => {
       where: { skipped: false }
     });
 
-    const Songpoints = (mySongsPlayed / totalsongs) * 1000;
+    const Songpoints = "((CAST(COUNT(plays.cid) as float) / " + totalsongs + ") * 1000";
 
-    const voteWootspoints = (totalWootsPoints / mySongsPlayed);
-    const voteGrabspoints = (totalGrabsPoints / mySongsPlayed);
-    const voteMehspoints = (totalMehsPoints / mySongsPlayed);
+    const voteWootspoints = "(" + totalWootsPoints + " / (CAST(COUNT(plays.cid) as float))";
+    const voteGrabspoints = "(" + totalGrabsPoints + " / (CAST(COUNT(plays.cid) as float))";
+    const voteMehspoints = "(" + totalMehsPoints + " / (CAST(COUNT(plays.cid) as float))";
 
-    const votePoints = (voteWootspoints + voteGrabspoints) / voteMehspoints;
+    const votePoints = "(" + voteWootspoints + " + " + voteGrabspoints + ") / " + voteMehspoints;
 
-    const totalpoints = ((Songpoints * votePoints) + propsGivenPoints + totalMessagesPoints) - (offlineDaysPoints + totalbans);
+    const totalpoints = "((" + Songpoints + " * " + votePoints + ") + " + propsGivenPoints + " + " + totalMessagesPoints + ") - (" + offlineDaysPoints + " + " + totalbans + ")";
 
     //const totalpoints = "(" + propsGivenPoints + " + " + totalMessagesPoints + " + ((((" + totalWootsPoints + " + " + totalGrabsPoints + ") / (" + totalMehsPoints + " + 1)) - (" + offlineDaysPoints + " + " + totalbans + ")) * ((CAST(COUNT(plays.cid) as float) / (CAST(" + totalsongs + " as float) + CAST(" + totalmehsongs + " as float))) * 100)))";
 
