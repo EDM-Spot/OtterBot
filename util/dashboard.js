@@ -612,9 +612,9 @@ module.exports = (client) => {
 
     const Songpoints = "(CAST(COUNT(plays.cid) as float) / CAST(" + totalsongs + " as float)) * 1000";
 
-    const voteWootspoints = "(" + totalWootsPoints + " / (CAST(COUNT(plays.cid) as float))";
-    const voteGrabspoints = "(" + totalGrabsPoints + " / (CAST(COUNT(plays.cid) as float))";
-    const voteMehspoints = "(" + totalMehsPoints + " / (CAST(COUNT(plays.cid) as float))";
+    const voteWootspoints = "(" + totalWootsPoints + " / CAST(COUNT(plays.cid) as float))";
+    const voteGrabspoints = "(" + totalGrabsPoints + " / CAST(COUNT(plays.cid) as float))";
+    const voteMehspoints = "(" + totalMehsPoints + " / CAST(COUNT(plays.cid) as float))";
 
     const votePoints = "(" + voteWootspoints + " + " + voteGrabspoints + ") / " + voteMehspoints;
 
