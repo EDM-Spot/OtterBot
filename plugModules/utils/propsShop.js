@@ -2,7 +2,7 @@ const { isNil } = require("lodash");
 const download = require("image-downloader");
 
 module.exports = function Util(bot) {
-  class API {
+  class PropsShop {
     constructor() {
 
     }
@@ -50,5 +50,5 @@ module.exports = function Util(bot) {
     }
   }
 
-  bot.shop = new API();
+  bot.shop = new PropsShop();
 };
