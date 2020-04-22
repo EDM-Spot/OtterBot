@@ -1,5 +1,5 @@
 const { isNil } = require("lodash");
-const fetch = require("node-fetch");
+const request = require("request-promise");
 
 module.exports = function Util(bot) {
   class API {
@@ -15,11 +15,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return fetch(this.catfactURL)
-        .then(res => res.json())
-        .then(body => body);
+      return request(this.catfactURL, options).then(body => body).catch((err) => {
+        console.warn("[!] Catfact API Error");
+        //console.error(err);
+      });
     }
-    async getUrban(text) {
+    getUrban(text) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -27,14 +28,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return await fetch(this.urbanURL + text)
-        .then(res => res.json())
-        .then(body => body).catch((err) => {
-          console.warn("[!] Urban API Error");
-          //console.error(err);
-        });
+      return request(this.urbanURL + text, options).then(body => body).catch((err) => {
+        console.warn("[!] Urban API Error");
+        //console.error(err);
+      });
     }
-    async getGiphy(text) {
+    getGiphy(text) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -42,14 +41,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${bot.config.giphy}&q=${text}&limit=10&offset=0&rating=G&lang=en`)
-        .then(res => res.json())
-        .then(body => body).catch((err) => {
-          console.warn("[!] Giphy API Error");
-          //console.error(err);
-        });
+      return request(`https://api.giphy.com/v1/gifs/search?api_key=${bot.config.giphy}&q=${text}&limit=10&offset=0&rating=G&lang=en`, options).then(body => body).catch((err) => {
+        console.warn("[!] Giphy API Error");
+        //console.error(err);
+      });
     }
-    async getSodas(user) {
+    getSodas(user) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -57,14 +54,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return await fetch(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`)
-        .then(res => res.json())
-        .then(body => body).catch((err) => {
-          console.warn("[!] Sodas API Error");
-          //console.error(err);
-        });
+      return request(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`, options).then(body => body).catch((err) => {
+        console.warn("[!] Sodas API Error");
+        //console.error(err);
+      });
     }
-    async getGenre(media) {
+    getGenre(media) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -74,8 +69,7 @@ module.exports = function Util(bot) {
 
       const title = media.title.replace(/\[.*?\]/g, "").trim();
 
-      return await fetch(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${bot.config.lastfm}&artist=${media.author}&track=${title}&autocorrect=1&format=json`)
-        .then(res => res.json())
+      return request(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${bot.config.lastfm}&artist=${media.author}&track=${title}&autocorrect=1&format=json`, options)
         .then(function (body) {
           const genres = [];
           let found = false;
