@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Get a Random Catfact.",
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
-      const catFact = await bot.api.getCatfact();
+      const catFact = bot.api.getCatfact();
       console.log("catFact1" + catFact);
 
       if (isNil(catFact)) return false;

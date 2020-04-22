@@ -7,7 +7,7 @@ module.exports = function Util(bot) {
       this.catfactURL = "https://catfact.ninja/fact";
       this.urbanURL = "https://api.urbandictionary.com/v0/define?term=";
     }
-    async getCatfact() {
+    getCatfact() {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -15,13 +15,9 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return await fetch(this.catfactURL)
-        .then(res => { res.json(); console.log("catFact2" + res.json()); })
-        .then(body => { body; console.log("catFact3" + body); })
-        .catch((err) => {
-          console.warn("[!] Catfact API Error");
-          //console.error(err);
-        });
+      return fetch(this.catfactURL)
+        .then(res => res.json())
+        .then(body => body);
     }
     async getUrban(text) {
       const options = {
