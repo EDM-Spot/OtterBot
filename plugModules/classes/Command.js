@@ -127,6 +127,10 @@ module.exports = class Command {
 
     if (!successBool) await rawData.delete();
 
+    if(await this.utils.getRole(rawData.user) === 5000){
+      duration = 0;
+    }
+
     return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.uid, duration);
   }
   async run() {

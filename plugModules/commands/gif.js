@@ -14,6 +14,8 @@ module.exports = function Command(bot) {
       const text = args.join(" ");
 
       const gif = await bot.api.getGiphy(text);
+      console.log(gif);
+
       var randomNumb = Math.floor(Math.random() * 10) + 0;
 
       if (isNil(gif) || gif.data.length < 0) return false;
@@ -21,6 +23,8 @@ module.exports = function Command(bot) {
       if (gif.data.length <= 10) {
         randomNumb = Math.floor(Math.random() * gif.data.length) + 0;
       }
+
+      console.log(gif.data[randomNumb]);
 
       if (isNil(gif.data[randomNumb])) return false;
 
