@@ -17,7 +17,7 @@ module.exports = function Util(bot) {
 
       return await fetch(this.catfactURL)
         .then(res => res.json())
-        .then(body => body).catch((err) => {
+        .catch((err) => {
           console.warn("[!] Catfact API Error");
           //console.error(err);
         });
