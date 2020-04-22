@@ -7,7 +7,7 @@ module.exports = function Util(bot) {
       this.catfactURL = "https://catfact.ninja/fact";
       this.urbanURL = "https://api.urbandictionary.com/v0/define?term=";
     }
-    getCatfact() {
+    async getCatfact() {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -20,7 +20,7 @@ module.exports = function Util(bot) {
         //console.error(err);
       });
     }
-    getUrban(text) {
+    async getUrban(text) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -33,7 +33,7 @@ module.exports = function Util(bot) {
         //console.error(err);
       });
     }
-    getGiphy(text) {
+    async getGiphy(text) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -46,7 +46,7 @@ module.exports = function Util(bot) {
         //console.error(err);
       });
     }
-    getSodas(user) {
+    async getSodas(user) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -59,7 +59,7 @@ module.exports = function Util(bot) {
         //console.error(err);
       });
     }
-    getGenre(media) {
+    async getGenre(media) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
