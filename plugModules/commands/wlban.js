@@ -17,10 +17,10 @@ module.exports = function Command(bot) {
       }
 
       const user = mentions[0];
-      
+
       const moderator = await rawData.getUser();
       const moderatorRole = await bot.utils.getRole(moderator);
-      
+
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
@@ -63,8 +63,7 @@ module.exports = function Command(bot) {
       if (timeSelected) {
         reason = args.slice(2).join(" ");
       }
-      else
-      {
+      else {
         reason = args.slice(1).join(" ");
       }
 
@@ -72,6 +71,13 @@ module.exports = function Command(bot) {
         this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }
+
+      await bot.plug.waitlistBan(user.id, apiDuration, WAITLIST_BAN_REASON.ATTITUDE);
+      this.reply(lang.moderation.effective, {
+        mod: rawData.un,
+        command: `!${name}`,
+        user: user.username,
+      });
 
       const embed = new Discord.MessageEmbed()
         //.setTitle("Title")
@@ -89,15 +95,9 @@ module.exports = function Command(bot) {
         .addField("Reason", reason, false);
       //.addBlankField(true);
 
-      bot.channels.cache.get("485173444330258454").send({embed});
-      bot.channels.cache.get("486637288923725824").send({embed});
+      bot.channels.cache.get("485173444330258454").send({ embed });
+      bot.channels.cache.get("486637288923725824").send({ embed });
 
-      await bot.plug.waitlistBan(user.id, apiDuration, WAITLIST_BAN_REASON.ATTITUDE);
-      this.reply(lang.moderation.effective, {
-        mod: rawData.un,
-        command: `!${name}`,
-        user: user.username,
-      });
       return true;
     },
   });

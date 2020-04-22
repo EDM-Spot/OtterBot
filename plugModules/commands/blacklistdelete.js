@@ -25,6 +25,9 @@ module.exports = function Command(bot) {
         const YouTubeMediaData = await bot.youtube.getMedia(cid);
         const fullTitle = get(YouTubeMediaData, "snippet.title");
 
+        await bot.db.models.blacklist.destroy({ where: { cid: cid } });
+        this.reply(lang.blacklist.deleted, {}, 6e4);
+
         const embed = new Discord.MessageEmbed()
           //.setTitle("Title")
           .setAuthor(fullTitle, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
@@ -40,8 +43,6 @@ module.exports = function Command(bot) {
 
         bot.channels.cache.get("486637288923725824").send({ embed });
 
-        await bot.db.models.blacklist.destroy({ where: { cid: cid } });
-        this.reply(lang.blacklist.deleted, {}, 6e4);
         return true;
       } else if (link.includes("soundcloud.com")) {
         const soundcloudMediaRaw = await bot.soundcloud.resolve(link);
@@ -61,6 +62,9 @@ module.exports = function Command(bot) {
           const SoundCloudMediaData = await bot.soundcloud.getTrack(soundcloudMedia.id);
           const fullTitle = SoundCloudMediaData.title;
 
+          await bot.db.models.blacklist.destroy({ where: { cid: `${soundcloudMedia.id}` } });
+          this.reply(lang.blacklist.deleted, {}, 6e4);
+
           const embed = new Discord.MessageEmbed()
             //.setTitle("Title")
             .setAuthor(fullTitle, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
@@ -76,8 +80,6 @@ module.exports = function Command(bot) {
 
           bot.channels.cache.get("486637288923725824").send({ embed });
 
-          await bot.db.models.blacklist.destroy({ where: { cid: `${soundcloudMedia.id}` } });
-          this.reply(lang.blacklist.deleted, {}, 6e4);
           return true;
         }
 

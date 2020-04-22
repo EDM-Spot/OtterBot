@@ -17,10 +17,10 @@ module.exports = function Command(bot) {
       }
 
       const user = mentions[0];
-      
+
       const moderator = await rawData.getUser();
       const moderatorRole = await bot.utils.getRole(moderator);
-      
+
       if (!isObject(user)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
@@ -59,8 +59,7 @@ module.exports = function Command(bot) {
       if (timeSelected) {
         reason = args.slice(2).join(" ");
       }
-      else
-      {
+      else {
         reason = args.slice(1).join(" ");
       }
 
@@ -68,25 +67,6 @@ module.exports = function Command(bot) {
         this.reply(lang.moderation.needReason, {}, 6e4);
         return false;
       }
-      
-      const embed = new Discord.MessageEmbed()
-      //.setTitle("Title")
-        .setAuthor(user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
-        .setColor(0xFF00FF)
-      //.setDescription("This is the main body of text, it can hold 2048 characters.")
-        .setFooter("By " + rawData.un)
-      //.setImage("http://i.imgur.com/yVpymuV.png")
-      //.setThumbnail("http://i.imgur.com/p2qNFag.png")
-        .setTimestamp()
-      //.addField("This is a field title, it can hold 256 characters")
-        .addField("ID", user.id, true)
-        .addField("Type", "CMD Ban", true)
-        .addField("Time", apiDuration, true)
-        .addField("Reason", reason, false);
-      //.addBlankField(true);
-
-      bot.channels.cache.get("485173444330258454").send({embed});
-      bot.channels.cache.get("486637288923725824").send({embed});
 
       await bot.db.models.cmdbans.findOrCreate({
         where: {
@@ -101,6 +81,26 @@ module.exports = function Command(bot) {
         command: `!${name}`,
         user: user.username,
       }, 6e4);
+
+      const embed = new Discord.MessageEmbed()
+        //.setTitle("Title")
+        .setAuthor(user.username, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
+        .setColor(0xFF00FF)
+        //.setDescription("This is the main body of text, it can hold 2048 characters.")
+        .setFooter("By " + rawData.un)
+        //.setImage("http://i.imgur.com/yVpymuV.png")
+        //.setThumbnail("http://i.imgur.com/p2qNFag.png")
+        .setTimestamp()
+        //.addField("This is a field title, it can hold 256 characters")
+        .addField("ID", user.id, true)
+        .addField("Type", "CMD Ban", true)
+        .addField("Time", apiDuration, true)
+        .addField("Reason", reason, false);
+      //.addBlankField(true);
+
+      bot.channels.cache.get("485173444330258454").send({ embed });
+      bot.channels.cache.get("486637288923725824").send({ embed });
+
       return false;
     },
   });

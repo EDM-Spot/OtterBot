@@ -15,7 +15,7 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) {
       //NEEDS MINIPLUG
       return;
-      
+
       const { id } = rawData.from;
 
       if (rawData.from.role >= ROOM_ROLE.BOUNCER) {
@@ -46,17 +46,17 @@ module.exports = function Command(bot) {
           const height = result.height;
 
           console.log(result);
-  
+
           if (width != 65 || height != 65) {
             this.reply(lang.eventShop.imageSize, {}, 6e4);
             return false;
           }
-  
+
           if (type != "jpg" && type != "jpeg" && type != "png" && type != "gif") {
             this.reply(lang.eventShop.imageType, {}, 6e4);
             return false;
           }
-  
+
           if (type === "gif" && rawData.from.role < ROOM_ROLE.RESIDENTDJ) {
             this.reply(lang.eventShop.imageRDJ, {}, 6e4);
             return false;
@@ -66,7 +66,7 @@ module.exports = function Command(bot) {
             this.reply(lang.eventShop.noCandies, {}, 6e4);
             return true;
           }
-  
+
           const options = {
             url: url,
             dest: `./dashboard/public/images/badges/${id}.${type}`
@@ -86,16 +86,16 @@ module.exports = function Command(bot) {
 
         await eventUser.decrement("currency", { by: 1500 });
 
+        await bot.plug.sendChat("Thanks for your Icon purchase!");
+
         const embed = new Discord.MessageEmbed()
           .setColor(0xFF00FF)
           .setFooter("By " + rawData.from.username)
           .setTimestamp()
           .addField("ID", rawData.from.id, true)
           .addField("EVENT", "Bought Icon", false);
-  
-        bot.channels.cache.get("486598639691497474").send({embed});
 
-        await bot.plug.sendChat("Thanks for your Icon purchase!");
+        bot.channels.cache.get("486598639691497474").send({ embed });
 
         return true;
       }
