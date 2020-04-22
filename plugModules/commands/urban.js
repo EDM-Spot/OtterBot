@@ -13,7 +13,7 @@ module.exports = function Command(bot) {
 
       const text = args.join(" ");
 
-      const urban = await bot.api.getUrban(text);
+      const urban = bot.api.getUrban(text);
 
       if (isNil(urban)) return false;
       if (isNil(urban.list[0])) return false;
