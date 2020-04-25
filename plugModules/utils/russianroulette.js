@@ -77,7 +77,7 @@ module.exports = function Util(bot) {
       const randomBool = Math.random() >= 0.5;
 
       const luckyshot = Math.floor(Math.random() * (waitlist.positionOf(victim) - 5)) + 5;
-      const unluckyshot = Math.floor(Math.random() * (waitlist.length - waitlist.positionOf(victim)) + waitlist.positionOf(victim) + 1);
+      const unluckyshot = Math.floor(Math.random() * (waitlist.length - waitlist.positionOf(victim)) + waitlist.positionOf(victim) + 2);
 
       if (randomBool) {
         bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
