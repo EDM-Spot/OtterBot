@@ -640,6 +640,9 @@ module.exports = (client) => {
           "(SELECT COUNT(index) FROM props WHERE props.id = plays.dj)"
         ), "propsgiven"],
         [literal(
+          "(SELECT COUNT(index) FROM bans WHERE bans.id = plays.dj)"
+        ), "bancount"],
+        [literal(
           totalpoints
         ), "totalpoints"],
         [literal(
