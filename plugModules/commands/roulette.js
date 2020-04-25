@@ -74,7 +74,7 @@ module.exports = function Command(bot) {
             return true;
           }
 
-          if (waitlist.length < 15) {
+          if (waitlist.length < 10) {
             this.reply(lang.roulette.invalidWaitlist, {}, 6e4);
             return false;
           }
