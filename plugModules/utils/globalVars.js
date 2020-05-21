@@ -15,7 +15,7 @@ module.exports = function Util(bot) {
         ban: 8,
         wlban: 4,
         mute: 2,
-        daysOffline: 0.25
+        daysOffline: 0.15
       };
     }
   }
