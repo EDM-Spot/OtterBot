@@ -39,7 +39,7 @@ module.exports = function Util(bot) {
       await this.start(duration, price);
 
       if (isWeekend  && !isDecember) {
-        bot.plug.chat(bot.utils.replace(bot.lang.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
+        bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
       }
 
       if (isDecember) {
