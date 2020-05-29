@@ -70,13 +70,13 @@
     "readline-sync": "1.4.10",
     "request": "2.88.2",
     "request-promise": "4.2.5",
-    "sequelize": "5.21.10",
+    "sequelize": "5.21.11",
     "slot-machine": "2.1.0",
     "sodium": "3.0.2",
     "ytdl-core-discord": "1.2.0"
   },
   "devDependencies": {
-    "eslint": "7.0.0",
+    "eslint": "7.1.0",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-react": "7.20.0"
   }

@@ -8,11 +8,6 @@ module.exports = function Util(bot) {
       if (isNil(cid)) return;
 
       const songHistory = await bot.db.models.plays.findAll({
-        where: {
-          createdAt: {
-            [Op.gte]: bot.moment().subtract(360, "minutes").toDate()
-          }
-        },
         order: [["createdAt", "DESC"]],
       });
 
