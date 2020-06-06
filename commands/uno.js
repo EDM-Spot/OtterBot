@@ -27,7 +27,7 @@ class Uno extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 2;
+      let price = 2;
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
