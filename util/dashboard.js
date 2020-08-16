@@ -129,9 +129,9 @@ module.exports = (client) => {
   app.use(
     helmet.contentSecurityPolicy({
       directives: {
-        defaultSrc: ["*", "unsafe-inline"],
-        scriptSrc: ["*", "unsafe-inline"],
-        styleSrc: ["*", "unsafe-inline"],
+        defaultSrc: ["*", "'unsafe-inline'"],
+        scriptSrc: ["*", "'unsafe-inline'"],
+        styleSrc: ["*", "'unsafe-inline'"],
         upgradeInsecureRequests: [],
       },  
     })
