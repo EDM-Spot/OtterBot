@@ -124,7 +124,7 @@ module.exports = (client) => {
   // Initializes passport and session.
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(helmet());
+  //app.use(helmet());
 
   // The domain name used in various endpoints to link between pages.
   app.locals.domain = client.config.dashboard.domain;
