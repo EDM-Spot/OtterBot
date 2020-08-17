@@ -21,6 +21,7 @@ module.exports = function MiniplugPluginsManager(bot) {
 
         return resolve();
       } catch (err) {
+        console.warn("miniplug Error!");
         return reject(err);
       }
     });

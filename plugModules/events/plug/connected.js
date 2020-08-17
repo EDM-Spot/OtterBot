@@ -32,16 +32,16 @@ module.exports = function Event(bot, filename, platform) {
         "Play Slot Machine with -slots 1-3 in Discord! https://discord.gg/QvvD8AC"
       ];
 
-      new moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
+      let randomText = new moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {
         var randomNumber = Math.floor(Math.random() * randomTimedText.length);
         bot.plug.chat(randomTimedText[randomNumber]);
       });
 
-      new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
+      let timeCover = new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
         await bot.utils.timeCover();
       });
 
-      new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
+      let randomRoulette = new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
         await bot.roulette.autoStart();
       });
 

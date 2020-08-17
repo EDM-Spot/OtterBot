@@ -137,7 +137,6 @@ module.exports = (client) => {
     })
   );
   
-
   // The domain name used in various endpoints to link between pages.
   app.locals.domain = client.config.dashboard.domain;
 
