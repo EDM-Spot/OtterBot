@@ -12,7 +12,7 @@ module.exports = function Util(bot) {
       const songHistory = await bot.db.models.plays.findAll({
         where: {
           createdAt: {
-            [Op.gte]: bot.moment().subtract(1, "months").toDate()
+            [Op.gte]: bot.moment().subtract(2, "months").toDate()
           },
           skipped: false
         },
@@ -53,7 +53,7 @@ module.exports = function Util(bot) {
             const currentTitle = songTitle.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
             const savedTitle = songHistory[i].title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
 
-            if (playedMonths <= 1) {
+            if (playedMonths <= 2) {
               if (songHistory[i].cid === cid) {
                 // Song Played | Same ID
                 playedCount++;
@@ -66,21 +66,21 @@ module.exports = function Util(bot) {
         }
       }
 
-      let toSkip = 10;
-
-      if (totalPlays >= 20) {
-        toSkip = 8;
+      let toSkip = 30;
+      
+      if (totalPlays >= 60) {
+        toSkip = 15;
       }
 
-      if (totalPlays >= 30) {
+      if (totalPlays >= 80) {
+        toSkip = 10;
+      }
+
+      if (totalPlays >= 100) {
         toSkip = 7;
       }
 
-      if (totalPlays >= 40) {
-        toSkip = 6;
-      }
-
-      if (totalPlays >= 50) {
+      if (totalPlays >= 150) {
         toSkip = 5;
       }
 
