@@ -118,7 +118,7 @@ module.exports = function Util(bot) {
           const userPoints = points + tolerance;
 
           if (((userPoints < 100 && playscount < 250) || (userPoints < 50 && playscount > 250)) || playscount < 150) {
-            await bot.plug.setRole(id, 1000);
+            await bot.plug.setRole(id, 0);
 
             if (!isNil(userDB.get("discord"))) {
               await bot.guilds.cache.get("485173051432894489").members.cache.get(userDB.get("discord")).roles.remove(role).catch(console.error);

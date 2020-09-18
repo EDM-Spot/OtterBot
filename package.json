@@ -73,7 +73,7 @@
     "sequelize": "6.3.5",
     "slot-machine": "2.1.0",
     "sodium": "3.0.2",
-    "ytdl-core-discord": "1.2.1"
+    "ytdl-core-discord": "1.2.2"
   },
   "devDependencies": {
     "eslint": "7.9.0",
