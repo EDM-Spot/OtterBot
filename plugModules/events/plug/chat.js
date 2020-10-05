@@ -13,7 +13,7 @@ module.exports = function Event(bot, platform) {
       const emoteRegex = /^\/(em|me)\s/;
       rawData.timestamp = Date.now();
 
-      const messageUser = rawData.getUser();
+      const messageUser = bot.plug.user(rawData.uid);
 
       //Anti-Spam
       try {
