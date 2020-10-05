@@ -78,7 +78,7 @@ module.exports = function Event(bot, filename, platform) {
         if (!isNil(bot.user)) {
           bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
             type: "LISTENING"
-          }).catch(function (error) {
+          }).catch(function(error) {
             console.warn("setActivity Error!");
             console.log(error);
           });

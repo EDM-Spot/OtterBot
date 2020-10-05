@@ -2,6 +2,7 @@ const { each, isNil } = require("lodash");
 const moment = require("moment");
 const Discord = require("discord.js");
 const { ROLE } = require("miniplug");
+const { Op } = require("sequelize");
 
 module.exports = function Event(bot, platform) {
   const event = {
@@ -11,6 +12,45 @@ module.exports = function Event(bot, platform) {
       const commandHandleRegex = /^(\/(em|me)\s)?!/;
       const emoteRegex = /^\/(em|me)\s/;
       rawData.timestamp = Date.now();
+
+      //Anti-Spam
+      try {
+        const messageHistory = await bot.db.models.messages.count({
+          where: {
+            createdAt: {
+              [Op.gte]: bot.moment().subtract(30, "seconds").toDate()
+            },
+            id: rawData.uid,
+            message: rawData.message
+          },
+          order: [["createdAt", "DESC"]],
+        });
+
+        switch (messageHistory) {
+          case (2):
+            await rawData.delete();
+            bot.plug.chat(`@${rawData.un}, Please refrain from spamming!`);
+
+            break;
+          case (3):
+            await rawData.delete();
+            bot.plug.chat(`@${rawData.un}, Please refrain from spamming! Last Warning.`);
+
+            break;
+          case (4):
+            await rawData.delete();
+            bot.plug.chat(`@${rawData.un}, .`);
+
+            break;
+          default:
+            break;
+        }
+
+      }
+      catch (err) {
+        console.warn(err);
+        console.log(rawData);
+      }
 
       const message = await bot.db.models.messages.create({
         id: rawData.uid,
