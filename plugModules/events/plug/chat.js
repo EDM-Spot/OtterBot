@@ -33,7 +33,7 @@ module.exports = function Event(bot, platform) {
         switch (messageHistory) {
           case (2):
             await rawData.delete();
-            bot.plug.chat(`@${rawData.un}, Please refrain from spamming!`);
+            bot.plug.chat(`@${rawData.un}, Please refrain from spamming! 30 Seconds.`);
 
             break;
           case (3):
@@ -55,18 +55,19 @@ module.exports = function Event(bot, platform) {
                 .addField("Message", rawData.message, false);
 
               bot.channels.cache.get("560408443094302760").send({ embed });
-              
+
               bot.plug.chat(`@${rawData.un}, A report was made on Discord.`);
+
+              break;
+            } else {
+              await messageUser.setRole(0);
+              await messageUser.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
+              await messageUser.setRole(role);
+
+              bot.plug.chat(`@${rawData.un}, You are muted for spamming.`);
+
               break;
             }
-            
-            bot.plug.chat(`@${rawData.un}, You are muted for spamming.`);
-
-            await messageUser.setRole(0);
-            await messageUser.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
-            await messageUser.setRole(role);
-
-            break;
           default:
             break;
         }
