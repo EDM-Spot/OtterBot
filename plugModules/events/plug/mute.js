@@ -1,4 +1,4 @@
-const { isObject } = require("lodash");
+const { isObject, isNil } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, platform) {

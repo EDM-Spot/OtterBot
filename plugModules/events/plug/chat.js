@@ -1,7 +1,7 @@
 const { each, isNil } = require("lodash");
 const moment = require("moment");
 const Discord = require("discord.js");
-const { ROLE } = require("miniplug");
+const { ROLE, MUTE_DURATION, MUTE_REASON } = require("miniplug");
 const { Op } = require("sequelize");
 
 module.exports = function Event(bot, platform) {
@@ -12,6 +12,8 @@ module.exports = function Event(bot, platform) {
       const commandHandleRegex = /^(\/(em|me)\s)?!/;
       const emoteRegex = /^\/(em|me)\s/;
       rawData.timestamp = Date.now();
+
+      const messageUser = rawData.getUser();
 
       //Anti-Spam
       try {
@@ -26,6 +28,8 @@ module.exports = function Event(bot, platform) {
           order: [["createdAt", "DESC"]],
         });
 
+        const { role } = messageUser;
+
         switch (messageHistory) {
           case (2):
             await rawData.delete();
@@ -39,13 +43,35 @@ module.exports = function Event(bot, platform) {
             break;
           case (4):
             await rawData.delete();
-            bot.plug.chat(`@${rawData.un}, .`);
+
+            if ((messageUser.role >= ROLE.BOUNCER && messageUser.role < ROLE.MANAGER) || messageUser.gRole >= ROLE.SITEMOD) {
+              const embed = new Discord.MessageEmbed()
+                .setAuthor(rawData.un, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
+                .setColor(0xFF00FF)
+                .setFooter("By OtterBot")
+                .setTimestamp()
+                .addField("ID", rawData.uid, true)
+                .addField("Warning", "Spamming", false)
+                .addField("Message", rawData.message, false);
+
+              bot.channels.cache.get("560408443094302760").send({ embed });
+              
+              bot.plug.chat(`@${rawData.un}, A report was made on Discord.`);
+              break;
+            }
+            
+            bot.plug.chat(`@${rawData.un}, You are muted for spamming.`);
+            
+            await messageUser.setRole(0);
+            await messageUser.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
+            await messageUser.setRole(role);
 
             break;
           default:
             break;
         }
 
+        if (messageHistory > 4) { await rawData.delete(); }
       }
       catch (err) {
         console.warn(err);
@@ -150,7 +176,7 @@ module.exports = function Event(bot, platform) {
       const dubtrack = /^(?=.*join)(?=.*dubtrack.fm)/i;
       const plug = /(plug\.dj\/)(?!edmspot\b|about\b|ba\b|forgot-password\b|founders\b|giftsub\/\d|jobs\b|legal\b|merch\b|partners\b|plot\b|privacy\b|purchase\b|subscribe\b|team\b|terms\b|press\b|_\/|@\/|!\/)(.+)/i;
 
-      if (rawData.role >= ROLE.DJ || rawData.gRole >= ROLE.SITEMOD) {
+      if (messageUser.role >= ROLE.DJ || messageUser.gRole >= ROLE.SITEMOD) {
         if (dubtrack.test(rawData.message) || plug.test(rawData.message)) {
           await rawData.delete();
           //await bot.plug.moderateBanUser(rawData.from.id, bot.plug.BAN_REASON.NEGATAIVE_ATTITUDE, bot.plug.BAN.PERMA);
