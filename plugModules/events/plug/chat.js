@@ -31,17 +31,17 @@ module.exports = function Event(bot, platform) {
         const { role } = messageUser;
 
         switch (messageHistory) {
-          case (2):
+          case (5):
             await rawData.delete();
             bot.plug.chat(`@${rawData.un}, Please refrain from spamming! 30 Seconds.`);
 
             break;
-          case (3):
+          case (6):
             await rawData.delete();
             bot.plug.chat(`@${rawData.un}, Please refrain from spamming! Last Warning.`);
 
             break;
-          case (4):
+          case (7):
             await rawData.delete();
 
             if (messageUser.role >= ROLE.BOUNCER || messageUser.gRole >= ROLE.SITEMOD) {
@@ -72,7 +72,7 @@ module.exports = function Event(bot, platform) {
             break;
         }
 
-        if (messageHistory > 4) { await rawData.delete(); }
+        if (messageHistory > 7) { await rawData.delete(); }
       }
       catch (err) {
         console.warn(err);
