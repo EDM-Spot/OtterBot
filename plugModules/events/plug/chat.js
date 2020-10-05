@@ -44,7 +44,7 @@ module.exports = function Event(bot, platform) {
           case (4):
             await rawData.delete();
 
-            if ((messageUser.role >= ROLE.BOUNCER && messageUser.role < ROLE.MANAGER) || messageUser.gRole >= ROLE.SITEMOD) {
+            if (messageUser.role >= ROLE.BOUNCER || messageUser.gRole >= ROLE.SITEMOD) {
               const embed = new Discord.MessageEmbed()
                 .setAuthor(rawData.un, "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/sign-ban-icon.png")
                 .setColor(0xFF00FF)
@@ -61,7 +61,7 @@ module.exports = function Event(bot, platform) {
             }
             
             bot.plug.chat(`@${rawData.un}, You are muted for spamming.`);
-            
+
             await messageUser.setRole(0);
             await messageUser.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
             await messageUser.setRole(role);
