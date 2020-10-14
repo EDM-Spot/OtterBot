@@ -97,7 +97,7 @@ module.exports = function Event(bot, platform) {
         console.log(rawData);
       }
 
-      if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(nigger)|(faggot)/ig.test(rawData.message)) {
+      if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(nigger)|(faggot)|(socket app)/ig.test(rawData.message)) {
         await rawData.delete();
         return;
       }
