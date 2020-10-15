@@ -54,10 +54,14 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return await request(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`, options).then(body => body).catch((err) => {
+      const a = await request(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`, options).then(body => body).catch((err) => {
         console.warn("[!] Sodas API Error");
         //console.error(err);
       });
+
+      console.log(a);
+
+      return a;
     }
     async getGenre(media) {
       const options = {
