@@ -1,4 +1,5 @@
 const { isNil } = require("lodash");
+const request = require("request-promise");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -13,7 +14,17 @@ module.exports = function Command(bot) {
 
       const text = args.join(" ");
 
-      const urban = await bot.api.getUrban(text);
+      const options = {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      };
+
+      const urban = await request("https://api.urbandictionary.com/v0/define?term=" + text, options).then(body => body).catch((err) => {
+        console.warn("[!] Urban API Error");
+        //console.error(err);
+      });
 
       if (isNil(urban)) return false;
       if (isNil(urban.list[0])) return false;

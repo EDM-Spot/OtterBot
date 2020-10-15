@@ -20,8 +20,6 @@ module.exports = function UtilsManager(bot) {
           /* eslint-disable import/no-dynamic-require */
           const Module = require(`${__dirname}/${name}`)(bot);
 
-          console.log(Module);
-
           modules.push(Module);
         });
 

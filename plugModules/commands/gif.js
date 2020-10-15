@@ -1,4 +1,5 @@
 const { isNil } = require("lodash");
+const request = require("request-promise");
 
 module.exports = function Command(bot) {
   bot.plugCommands.register({
@@ -13,7 +14,17 @@ module.exports = function Command(bot) {
 
       const text = args.join(" ");
 
-      const gif = await bot.api.getGiphy(text);
+      const options = {
+        headers: {
+          "User-Agent": "Request-Promise"
+        },
+        json: true
+      };
+
+      const gif = await request(`https://api.giphy.com/v1/gifs/search?api_key=${bot.config.giphy}&q=${text}&limit=10&offset=0&rating=G&lang=en`, options).then(body => body).catch((err) => {
+        console.warn("[!] Giphy API Error");
+        //console.error(err);
+      });
 
       var randomNumb = Math.floor(Math.random() * 10) + 0;
 
