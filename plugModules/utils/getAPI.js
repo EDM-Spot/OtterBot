@@ -7,7 +7,7 @@ module.exports = function Util(bot) {
       this.catfactURL = "https://catfact.ninja/fact";
       this.urbanURL = "https://api.urbandictionary.com/v0/define?term=";
     }
-    getCatfact() {
+    async getCatfact() {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -15,12 +15,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return request(this.catfactURL, options).then(body => body).catch((err) => {
+      return await request(this.catfactURL, options).then(body => body).catch((err) => {
         console.warn("[!] Catfact API Error");
         //console.error(err);
       });
     }
-    getUrban(text) {
+    async getUrban(text) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -28,12 +28,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return request(this.urbanURL + text, options).then(body => body).catch((err) => {
+      return await request(this.urbanURL + text, options).then(body => body).catch((err) => {
         console.warn("[!] Urban API Error");
         //console.error(err);
       });
     }
-    getGiphy(text) {
+    async getGiphy(text) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -41,12 +41,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return request(`https://api.giphy.com/v1/gifs/search?api_key=${bot.config.giphy}&q=${text}&limit=10&offset=0&rating=G&lang=en`, options).then(body => body).catch((err) => {
+      return await request(`https://api.giphy.com/v1/gifs/search?api_key=${bot.config.giphy}&q=${text}&limit=10&offset=0&rating=G&lang=en`, options).then(body => body).catch((err) => {
         console.warn("[!] Giphy API Error");
         //console.error(err);
       });
     }
-    getSodas(user) {
+    async getSodas(user) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -54,12 +54,12 @@ module.exports = function Util(bot) {
         json: true
       };
 
-      return request(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`, options).then(body => body).catch((err) => {
+      return await request(`https://api.icndb.com/jokes/random?firstName=${user}&lastName=&escape=javascript`, options).then(body => body).catch((err) => {
         console.warn("[!] Sodas API Error");
         //console.error(err);
       });
     }
-    getGenre(media) {
+    async getGenre(media) {
       const options = {
         headers: {
           "User-Agent": "Request-Promise"
@@ -69,7 +69,7 @@ module.exports = function Util(bot) {
 
       const title = media.title.replace(/\[.*?\]/g, "").trim();
 
-      return request(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${bot.config.lastfm}&artist=${media.author}&track=${title}&autocorrect=1&format=json`, options)
+      return await request(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${bot.config.lastfm}&artist=${media.author}&track=${title}&autocorrect=1&format=json`, options)
         .then(function (body) {
           const genres = [];
           let found = false;
