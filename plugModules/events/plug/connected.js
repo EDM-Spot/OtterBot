@@ -29,7 +29,7 @@ module.exports = function Event(bot, filename, platform) {
         "Link your account with discord to be able to play discord games and more! See how here: https://edmspot.tk/faq",
         "Think you can be a good addition to the staff? Apply here: https://tinyurl.com/edmspotstaffapp",
         "Start a Trivia Game with -triviapay 1-3 in Discord! https://discord.gg/QvvD8AC",
-        "Play Slot Machine with -slots 1-3 in Discord! https://discord.gg/QvvD8AC"
+        "Play Slot Machine with -slots 1-20 in Discord! https://discord.gg/QvvD8AC"
       ];
 
       let randomText = new moment.duration(90, "minutes").timer({loop: true, start: true}, async () => {

@@ -12,7 +12,7 @@
 // const [action, key, ...value] = args;
 const Command = require("../base/Command.js");
 
-class Set extends Command {
+class SetCMD extends Command {
   constructor(client) {
     super(client, {
       name: "set",
@@ -85,13 +85,10 @@ class Set extends Command {
     } else {
       // Otherwise, the default action is to return the whole configuration;
       const longestKey = Object.keys(settings).reduce((long, str) => Math.max(long, str.length), 0);
-      const array = [];
-      Object.entries(settings).forEach(([key, value]) => {
-        array.push(`${key}${" ".repeat(longestKey - key.length)} ::  ${value}`); 
-      });
+      const array = Object.entries(settings).map(([key, value]) => `${key}${" ".repeat(20 - key.length)}::  ${value}`);
       await message.channel.send(`= Current Guild Settings =\n${array.join("\n")}`, {code: "asciidoc"});
     }
   }
 }
 
-module.exports = Set;
+module.exports = SetCMD;
