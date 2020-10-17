@@ -455,7 +455,7 @@ module.exports = (client) => {
   });
 
   app.get("/dashboard", checkAuth, (req, res) => {
-    const perms = Discord.EvaluatedPermissions;
+    const perms = Discord.Permissions;
     renderTemplate(res, req, "dashboard.ejs", { perms });
   });
 
