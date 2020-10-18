@@ -369,6 +369,8 @@ module.exports = function Event(bot, filename, platform) {
           });
 
           bot.channels.cache.get("695987344280649839").send("**" + currentDJ.username + "** is now Playing: " + `${songAuthor} - ${songTitle}`);
+
+          bot.channels.cache.get("767362421877899295").setName(`${songAuthor} - ${songTitle}`);
         } catch (err) {
           console.warn("message.edit Error!");
           console.log(err);
