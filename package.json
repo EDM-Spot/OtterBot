@@ -46,7 +46,7 @@
     "gulp-sass": "4.1.0",
     "helmet": "4.1.1",
     "image-downloader": "4.0.1",
-    "ioredis": "4.19.1",
+    "ioredis": "4.19.2",
     "klaw": "3.0.0",
     "level-session-store": "2.2.0",
     "linear-promise-backoff-queue": "1.0.0",

@@ -1,6 +1,6 @@
 const { isNil, isNaN, isObject } = require("lodash");
 const { ROLE } = require("miniplug");
-const { Op, fn, col } = require("sequelize");
+const { fn, col } = require("sequelize");
 const moment = require("moment");
 
 module.exports = function Util(bot) {
@@ -121,7 +121,12 @@ module.exports = function Util(bot) {
             await bot.plug.setRole(id, 0);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.cache.get("485173051432894489").members.cache.get(userDB.get("discord")).roles.remove(role).catch(console.error);
+              try {
+                await bot.guilds.cache.get("485173051432894489").members.cache.get(userDB.get("discord")).roles.remove(role).catch(console.warn);
+              }
+              catch (err) {
+                console.log(err);
+              }
             }
 
             bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
@@ -135,7 +140,12 @@ module.exports = function Util(bot) {
             await bot.plug.setRole(id, 1000);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.cache.get("485173051432894489").members.cache.get(userDB.get("discord")).roles.add(role).catch(console.error);
+              try {
+                await bot.guilds.cache.get("485173051432894489").members.cache.get(userDB.get("discord")).roles.add(role).catch(console.warn);
+              }
+              catch (err) {
+                console.log(err);
+              }
             }
 
             bot.plug.chat(bot.utils.replace(bot.lang.rdjPromoted, {
@@ -160,14 +170,19 @@ module.exports = function Util(bot) {
             await user.setRole(0);
 
             if (!isNil(userDB.get("discord"))) {
-              await bot.guilds.cache.get("485173051432894489").members.cache.get(userDB.get("discord")).roles.remove(role).catch(console.error);
+              try {
+                await bot.guilds.cache.get("485173051432894489").members.cache.get(userDB.get("discord")).roles.remove(role).catch(console.warn);
+              }
+              catch (err) {
+                console.log(err);
+              }
             }
 
             await bot.plug.chat(bot.utils.replace(bot.lang.rdjDemoted, {
               user: offUser[0].username
             }));
           }
-        };
+        }
       }
 
       return true;
