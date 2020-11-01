@@ -1,7 +1,7 @@
 const { each, isNil } = require("lodash");
 const moment = require("moment");
 const Discord = require("discord.js");
-const { ROLE, MUTE_DURATION, MUTE_REASON } = require("miniplug");
+const { ROLE, MUTE_DURATION, MUTE_REASON, BAN_DURATION, BAN_REASON } = require("miniplug");
 const { Op } = require("sequelize");
 
 module.exports = function Event(bot, platform) {
@@ -97,8 +97,15 @@ module.exports = function Event(bot, platform) {
         console.log(rawData);
       }
 
-      if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(nigger)|(faggot)|(socket app)/ig.test(rawData.message)) {
+      if (/(skip)|(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(faggot)|(socket app)/ig.test(rawData.message)) {
         await rawData.delete();
+        return;
+      }
+
+      if (/(nigger)|(n i g g e r)|(kys)|(kill yourself)/ig.test(rawData.message)) {
+        await rawData.delete();
+
+        await messageUser.ban(BAN_DURATION.PERMA, BAN_REASON.SPAMMING);
         return;
       }
 
