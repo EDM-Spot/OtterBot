@@ -18,7 +18,7 @@ module.exports = function Command(bot) {
           return false;
         }
 
-        if (rawData.uid == dj.id) { return false; }
+        //if (rawData.uid == dj.id) { return false; }
 
         let songAuthor = null;
         let songTitle = null;

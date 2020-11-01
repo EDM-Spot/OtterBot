@@ -77,7 +77,7 @@ module.exports = function Util(bot) {
       const randomBool = Math.random() >= 0.5;
 
       const luckyshot = Math.floor(Math.random() * (waitlist.positionOf(victim) - 5)) + 5;
-      const unluckyshot = Math.floor(Math.random() * (waitlist.length - waitlist.positionOf(victim)) + waitlist.positionOf(victim) + 2);
+      const unluckyshot = Math.floor(Math.random() * (waitlist.length - waitlist.positionOf(victim)) + waitlist.positionOf(victim) + 1);
 
       if (randomBool) {
         bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
@@ -92,26 +92,12 @@ module.exports = function Util(bot) {
         }
 
         bot.queue.add(user, luckyshot);
-      }
-      else {
+      } else {
         bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
           user: user.username,
         }));
 
-        if (waitlist.positionOf(victim) === -1 && (user.role <= ROLE.BOUNCER && user.gRole < ROLE.SITEMOD)) {
-          if (user.role <= ROLE.BOUNCER && user.gRole < ROLE.SITEMOD) {
-            const { role } = user;
-
-            await user.setRole(0);
-            await user.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
-            await user.setRole(role);
-
-            this.chooseVictim(players.filter(player => player !== victim));
-            return;
-          }
-
-          await user.mute(MUTE_DURATION.SHORT, MUTE_REASON.VIOLATING_RULES);
-
+        if (waitlist.positionOf(victim) === -1) {
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }
