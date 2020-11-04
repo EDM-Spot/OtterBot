@@ -6,7 +6,7 @@ if (Number(process.version.slice(1).split(".")[0]) < 12) throw new Error("Node 1
 // Load up the discord.js library
 const Discord = require("discord.js");
 // Load up the miniplug library
-const miniplug = require('miniplug');
+const miniplug = require("miniplug");
 // We also load the rest of the things we need in this file:
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
@@ -99,15 +99,15 @@ class Bot extends Discord.Client {
     const member = client.guilds.cache.get("485173051432894489").members.cache.get(id);
     const settings = client.getSettings("485173051432894489");
 
-    const managerRole = guild.roles.find(r => r.name.toLowerCase() === settings.adminRole.toLowerCase());
-    const bouncerRole = guild.roles.find(r => r.name.toLowerCase() === settings.modRole.toLowerCase());
+    const managerRole = guild.roles.cache.find(r => r.name.toLowerCase() === settings.adminRole.toLowerCase());
+    const bouncerRole = guild.roles.cache.find(r => r.name.toLowerCase() === settings.modRole.toLowerCase());
 
     if (guild.client.appInfo.owner.id === id) return 10;
     if (client.config.admins.includes(id)) return 9;
     if (client.config.support.includes(id)) return 8;
     if (guild.owner.user.id === id) return 4;
-    if (member.roles.has(managerRole.id)) return 3;
-    if (member.roles.has(bouncerRole.id)) return 2;
+    if (member.roles.cache.has(managerRole.id)) return 3;
+    if (member.roles.cache.has(bouncerRole.id)) return 2;
     return 1;
   }
 
@@ -235,10 +235,10 @@ class Bot extends Discord.Client {
   getUserFromMention(mention) {
     if (!mention) return;
 
-    if (mention.startsWith('<@') && mention.endsWith('>')) {
+    if (mention.startsWith("<@") && mention.endsWith(">")) {
       mention = mention.slice(2, -1);
 
-      if (mention.startsWith('!')) {
+      if (mention.startsWith("!")) {
         mention = mention.slice(1);
       }
 
@@ -263,7 +263,7 @@ const init = async () => {
       email: client.config.plug.email,
       password: client.config.plug.password
     }).catch(() => {
-      console.warn('Failed to connect to plug!')
+      console.warn("Failed to connect to plug!");
     });
     console.info("[!] Plug Modules Loaded [!]");
   });
@@ -314,20 +314,20 @@ client.plug.on("disconnected", () => {
   reconnect();
 });
 
-let timeout = 0
+let timeout = 0;
 function reconnect() {
-  console.info('Trying to reconnect to plug...')
+  console.info("Trying to reconnect to plug...");
   client.plug.connect({
     email: client.config.plug.email,
     password: client.config.plug.password
   }).then(() => {
-    console.info('Reconnected to plug!')
+    console.info("Reconnected to plug!");
   }).catch(() => {
-    console.warn('Failed to reconnect to plug, trying again in', timeout, 'ms')
-    setTimeout(reconnect, timeout)
+    console.warn("Failed to reconnect to plug, trying again in", timeout, "ms");
+    setTimeout(reconnect, timeout);
   });
-  timeout += 1000 // 1 second
-};
+  timeout += 1000; // 1 second
+}
 
 /* MISCELANEOUS NON-CRITICAL FUNCTIONS */
 
@@ -339,14 +339,14 @@ function reconnect() {
 // <String>.toPropercase() returns a proper-cased string such as: 
 // "Mary had a little lamb".toProperCase() returns "Mary Had A Little Lamb"
 Object.defineProperty(String.prototype, "toProperCase", {
-  value: function () {
+  value: function() {
     return this.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
   }
 });
 // <Array>.random() returns a single random element from an array
 // [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
 Object.defineProperty(Array.prototype, "random", {
-  value: function () {
+  value: function() {
     return this[Math.floor(Math.random() * this.length)];
   }
 });
