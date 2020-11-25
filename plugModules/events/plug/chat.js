@@ -97,7 +97,7 @@ module.exports = function Event(bot, platform) {
         console.log(rawData);
       }
 
-      if (messageUser.role >= ROLE.BOUNCER) {
+      if (messageUser.role < ROLE.BOUNCER) {
         if (/(skip)/ig.test(rawData.message)) {
           await rawData.delete();
           return;
