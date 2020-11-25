@@ -97,7 +97,14 @@ module.exports = function Event(bot, platform) {
         console.log(rawData);
       }
 
-      if (/(skip)|(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(faggot)|(socket app)/ig.test(rawData.message)) {
+      if (messageUser.role >= ROLE.BOUNCER) {
+        if (/(skip)/ig.test(rawData.message)) {
+          await rawData.delete();
+          return;
+        }
+      }
+
+      if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(faggot)|(socket app)/ig.test(rawData.message)) {
         await rawData.delete();
         return;
       }
