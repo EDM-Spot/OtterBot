@@ -102,12 +102,6 @@ class Bot extends Discord.Client {
     const managerRole = guild.roles.cache.find(r => r.name.toLowerCase() === settings.adminRole.toLowerCase());
     const bouncerRole = guild.roles.cache.find(r => r.name.toLowerCase() === settings.modRole.toLowerCase());
 
-    console.log(guild.ownerID);
-    console.log(guild.owner.user.id);
-
-    console.log(guild.client.appInfo.owner.id);
-    console.log(client.config.ownerID);
-
     if (client.config.ownerID === id) return 10;
     if (client.config.admins.includes(id)) return 9;
     if (client.config.support.includes(id)) return 8;
