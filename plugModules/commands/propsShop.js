@@ -82,7 +82,7 @@ module.exports = function Command(bot) {
         }
 
         if (buyGift === "badge") {
-          const userMention = rawData.mentions[0];
+          const userMention = mentions[0];
 
           if (!isObject(userMention)) {	
             this.reply(lang.userNotFound, {}, 6e4);	
