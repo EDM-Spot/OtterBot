@@ -106,12 +106,11 @@ module.exports = function Command(bot) {
       
           const [inst] = await bot.db.models.users.findOrCreate({ where: { id: user.id }, defaults: { id: user.id } });
   
-          const badge = inst.get("badge");
+          //const badge = inst.get("badge");
 
-          if (!isNil(badge)) {
-            console.log("??????????");
-            return false;
-          }
+          //if (!isNil(badge)) {
+            //return false;
+          //}
   
           probe(url).then(async result => {
             const type = result.type;
