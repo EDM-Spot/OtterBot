@@ -11,6 +11,12 @@ module.exports = function Util(bot) {
         return;
       }
 
+      const user = bot.plug.user(id);
+      if(await this.utils.getRole(user) === 5000){
+        console.log("5000");
+        free = true;
+      }
+
       download.image(options).then(async ({ filename, image }) => { // eslint-disable-line no-unused-vars
         if (!free) {
           if (isNil(giftID)) {
