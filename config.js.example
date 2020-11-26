@@ -1,6 +1,7 @@
 const config = {
   // Bot Owner, level 10 by default. You do not need to supply the owner ID, as the bot
   // will pull this information directly from its application page.
+  "ownerID": "133976535823679489",
 
   // Bot Admins, level 9 by default. Array of user ID strings.
   "admins": [],
@@ -106,7 +107,7 @@ const config = {
       name: "Server Owner", 
       // Simple check, if the guild owner id matches the message author's ID, then it will return true.
       // Otherwise it will return false.
-      check: (message) => message.channel.type === "text" ? (message.guild.owner.user.id === message.author.id ? true : false) : false
+      check: (message) => message.channel.type === "text" ? (message.guild.ownerID === message.author.id ? true : false) : false
     },
 
     // Bot Support is a special inbetween level that has the equivalent of server owner access
@@ -130,7 +131,7 @@ const config = {
     { level: 10,
       name: "Bot Owner", 
       // Another simple check, compares the message author id to the one stored in the config file.
-      check: (message) => message.client.appInfo.owner.id === message.author.id
+      check: (message) => message.client.config.ownerID === message.author.id
     }
   ]
 };

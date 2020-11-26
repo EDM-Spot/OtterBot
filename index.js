@@ -83,10 +83,6 @@ class Bot extends Discord.Client {
 
     const permOrder = client.config.permLevels.slice(0).sort((p, c) => p.level < c.level ? 1 : -1);
 
-    console.log(permOrder);
-    console.log("//////////////////////////////");
-    console.log(message);
-
     while (permOrder.length) {
       const currentLevel = permOrder.shift();
       if (message.guild && currentLevel.guildOnly) continue;
@@ -106,10 +102,16 @@ class Bot extends Discord.Client {
     const managerRole = guild.roles.cache.find(r => r.name.toLowerCase() === settings.adminRole.toLowerCase());
     const bouncerRole = guild.roles.cache.find(r => r.name.toLowerCase() === settings.modRole.toLowerCase());
 
-    if (guild.client.appInfo.owner.id === id) return 10;
+    console.log(guild.ownerID);
+    console.log(guild.owner.user.id);
+
+    console.log(guild.client.appInfo.owner.id);
+    console.log(client.config.ownerID);
+
+    if (client.config.ownerID === id) return 10;
     if (client.config.admins.includes(id)) return 9;
     if (client.config.support.includes(id)) return 8;
-    if (guild.owner.user.id === id) return 4;
+    if (guild.ownerID === id) return 4;
     if (member.roles.cache.has(managerRole.id)) return 3;
     if (member.roles.cache.has(bouncerRole.id)) return 2;
     return 1;
