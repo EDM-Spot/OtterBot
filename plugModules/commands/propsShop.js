@@ -84,6 +84,11 @@ module.exports = function Command(bot) {
         if (buyGift === "badge") {
           const userMention = mentions[0];
 
+          if (!mentions.length || mentions.length >= 2) {
+            this.reply(lang.invalidUser, {}, 6e4);
+            return false;
+          }
+
           if (!isObject(userMention)) {	
             this.reply(lang.userNotFound, {}, 6e4);	
             return false;	
@@ -104,6 +109,7 @@ module.exports = function Command(bot) {
           const badge = inst.get("badge");
 
           if (!isNil(badge)) {
+            console.log("??????????");
             return false;
           }
   
