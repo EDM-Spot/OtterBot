@@ -23,7 +23,7 @@ module.exports = function Command(bot) {
 
       ///////////////////////////////////////////////////////////////////////////////////////////////USER SHOP
       if (args.length && buyType === "badge") {
-        const [inst] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
+        const [inst] = await bot.db.models.users.findOrCreate({ where: { id: id }, defaults: { id: id } });
 
         const props = inst.get("props");
         const badge = inst.get("badge");
@@ -134,10 +134,15 @@ module.exports = function Command(bot) {
               return false;
             }
 
-            const [buyer] = await bot.db.models.users.findOrCreate({ where: { id }, defaults: { id } });
+            const [buyer] = await bot.db.models.users.findOrCreate({ where: { id: id }, defaults: { id: id } });
+
+            console.log(buyer);
   
             const props = buyer.get("props");
             const buyerID = buyer.get("id");
+
+            console.log(buyerID);
+            console.log("&&&&&&&&&&&&&&&&&&&&&");
   
             if (props < 100) {
               this.reply(lang.propsShop.noProps, {}, 6e4);
@@ -149,7 +154,7 @@ module.exports = function Command(bot) {
               dest: `./dashboard/public/images/badges/${user.id}.${type}`
             };
   
-            await bot.shop.saveImage(user.id, options, type, false, buyerID);
+            await bot.shop.saveImage(user.id, options, type, false, id);
           });
   
           return true;
