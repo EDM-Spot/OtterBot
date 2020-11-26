@@ -11,7 +11,11 @@ module.exports = function Util(bot) {
         return;
       }
 
+      console.log(id);
+      console.log(giftID);
+
       const user = bot.plug.user(giftID);
+      console.log(user);
       if (await bot.utils.getRole(user) === 5000) {
         console.log("5000");
         free = true;
