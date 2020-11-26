@@ -104,12 +104,12 @@ module.exports = function Command(bot) {
             return false;
           }
       
-          const [inst] = await bot.db.models.users.findOrCreate({ where: { id: user.id }, defaults: { id: user.id } });
+          //const [inst] = await bot.db.models.users.findOrCreate({ where: { id: user.id }, defaults: { id: user.id } });
   
           //const badge = inst.get("badge");
 
           //if (!isNil(badge)) {
-            //return false;
+          //return false;
           //}
   
           probe(url).then(async result => {
