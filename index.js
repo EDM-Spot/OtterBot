@@ -83,6 +83,10 @@ class Bot extends Discord.Client {
 
     const permOrder = client.config.permLevels.slice(0).sort((p, c) => p.level < c.level ? 1 : -1);
 
+    console.log(permOrder);
+    console.log("//////////////////////////////");
+    console.log(message);
+
     while (permOrder.length) {
       const currentLevel = permOrder.shift();
       if (message.guild && currentLevel.guildOnly) continue;
