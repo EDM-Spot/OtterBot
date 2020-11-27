@@ -15,9 +15,9 @@ class UpdateRoles extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      const members = this.client.guilds.get("485173051432894489");
+      const members = this.client.guilds.cache.get("485173051432894489");
 
-      for (const member of members.members.cache) {
+      for (const member of members.members) {
         console.log("Checking " + member.username);
 
         const userDB = await this.client.db.models.users.findOne({
