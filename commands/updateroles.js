@@ -18,6 +18,8 @@ class UpdateRoles extends Command {
       const members = this.client.guilds.cache.get("485173051432894489").members.cache;
 
       for (var i = 0, len = members.length; i < len; i++) {
+        console.log("Checking " + members[i].user.username);
+
         const userDB = await this.client.db.models.users.findOne({
           where: {
             discord: members[i].user.id,
