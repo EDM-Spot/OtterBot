@@ -83,21 +83,21 @@ class Who extends Command {
         });
 
         let color;
-        let a = await this.client.guilds.cache.get("485173051432894489").members.cache.get(userDB.discord);
+        const a = await this.client.guilds.cache.get("485173051432894489").members.cache.get(userDB.discord);
 
         if (isNil(a)) {
           return await message.reply("User not in discord!");
         }
 
-        if (await a.roles.cache.get('490618109347233804')) {
+        if (await a.roles.cache.get("490618109347233804")) {
           color = "#d1aa0d";
-        } else if (await a.roles.cache.get('485175393054097416')) {
+        } else if (await a.roles.cache.get("485175393054097416")) {
           color = "#cc3333";
-        } else if (await a.roles.cache.get('485175078867304488')) {
+        } else if (await a.roles.cache.get("485175078867304488")) {
           color = "#9b40e7";
-        } else if (await a.roles.cache.get('485774995163971597')) {
+        } else if (await a.roles.cache.get("485774995163971597")) {
           color = "#9b40e7";
-        } else if (await a.roles.cache.get('485174834448564224')) {
+        } else if (await a.roles.cache.get("485174834448564224")) {
           color = "#33ccff";
         } else {
           color = "#b8b8b8";
@@ -116,15 +116,15 @@ class Who extends Command {
           .setAuthor(plugUser.username, a.user.displayAvatarURL(), `https://plug.dj/@/${plugUser.username}`)
           .setTitle(`Discord: ${a.user.tag}`)
           .setThumbnail(userImage)
-          .addField('ID', userDB.id, true)
-          .addField('Joined Room', moment(userDB.createdAt).format('DD/MM/YYYY HH:mm'), true)
-          .addField('Joined Discord', moment(a.joinedTimestamp).format('DD/MM/YYYY HH:mm'), true)
-          .addField('Props', userDB.props, true)
-          .addField('Props Given', propsGiven, true)
-          .addField('Songs Played', playsCount, true)
-          .addField('<:plugGrab:486538625270677505>', songVotes[0].dataValues.totalgrabs, true)
-          .addField('<:plugWoot:486538570715103252>', songVotes[0].dataValues.totalwoots, true)
-          .addField('<:plugMeh:486538601044115478>', songVotesMehs[0].dataValues.totalmehs, true)
+          .addField("ID", userDB.id, true)
+          .addField("Joined Room", moment(userDB.createdAt).format("DD/MM/YYYY HH:mm"), true)
+          .addField("Joined Discord", moment(a.joinedTimestamp).format("DD/MM/YYYY HH:mm"), true)
+          .addField("Props", userDB.props, true)
+          .addField("Props Given", propsGiven, true)
+          .addField("Songs Played", playsCount, true)
+          .addField("<:plugGrab:486538625270677505>", songVotes[0].dataValues.totalgrabs, true)
+          .addField("<:plugWoot:486538570715103252>", songVotes[0].dataValues.totalwoots, true)
+          .addField("<:plugMeh:486538601044115478>", songVotesMehs[0].dataValues.totalmehs, true)
           .setFooter("EDM Spot")
           .setTimestamp();
 
