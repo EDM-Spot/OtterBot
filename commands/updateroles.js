@@ -33,7 +33,7 @@ class UpdateRoles extends Command {
           const rdjRole = "485174834448564224";
           const plugUser = await this.client.plug.getUser(userDB.id);
 
-          if (member.user.roles.has(rdjRole)) {
+          if (member.roles.has(rdjRole)) {
             if (plugUser.role != ROLE.DJ) {
               await member.roles.remove(rdjRole).catch(console.log);
 
