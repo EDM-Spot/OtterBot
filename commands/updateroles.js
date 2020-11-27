@@ -15,7 +15,7 @@ class UpdateRoles extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      message.guild.members.cache.each(async member => {
+      message.guild.members.fetch().then(async member => {
         console.log("Checking " + member.user.username);
 
         const userDB = await this.client.db.models.users.findOne({
