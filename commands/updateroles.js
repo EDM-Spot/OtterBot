@@ -17,8 +17,8 @@ class UpdateRoles extends Command {
     try {
       const list = this.client.guilds.cache.get("485173051432894489");
 
-      list.members.cache.forEach(async function(member) {
-        const userDB = await this.client.db.models.users.findOne({
+      list.members.cache.forEach(async function(member, client) {
+        const userDB = await client.db.models.users.findOne({
           where: {
             discord: member.user.id,
           },
@@ -31,7 +31,7 @@ class UpdateRoles extends Command {
           console.log(member.user.username + " Account is linked with plug.dj!");
 
           const rdjRole = "485174834448564224";
-          const plugUser = await this.client.plug.getUser(userDB.id);
+          const plugUser = await client.plug.getUser(userDB.id);
 
           if (member.roles.has(rdjRole)) {
             if (plugUser.role != ROLE.DJ) {
