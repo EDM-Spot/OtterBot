@@ -17,7 +17,7 @@ class UpdateRoles extends Command {
     try {
       message.guild.members.cache.each(async member => {
         console.log("Checking " + member.user.username);
-        
+
         const userDB = await this.client.db.models.users.findOne({
           where: {
             discord: member.user.id,
@@ -26,22 +26,22 @@ class UpdateRoles extends Command {
 
         if (!isNil(userDB)) {
           const statusRole = "695994210603630633";
-          await member.roles.add(statusRole).catch(console.error);
+          await member.user.roles.add(statusRole).catch(console.error);
   
           console.log(member.user.username + " Account is linked with plug.dj!");
 
           const rdjRole = "485174834448564224";
           const plugUser = await this.client.plug.getUser(userDB.id);
 
-          if (member.roles.has(rdjRole)) {
+          if (member.user.roles.has(rdjRole)) {
             if (plugUser.role != ROLE.DJ) {
-              await member.roles.remove(rdjRole).catch(console.error);
+              await member.user.roles.remove(rdjRole).catch(console.error);
 
               console.log(member.user.username + " RDJ Role Removed!");
             }
           } else { 
             if (plugUser.role === ROLE.DJ) {
-              await member.roles.add(rdjRole).catch(console.error);
+              await member.user.roles.add(rdjRole).catch(console.error);
 
               console.log(member.user.username + " RDJ Role Added!");
             }
