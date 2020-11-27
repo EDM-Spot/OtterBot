@@ -18,7 +18,7 @@ class UpdateRoles extends Command {
       const members = this.client.guilds.cache.get("485173051432894489");
 
       for (const member of members.members.cache) {
-        console.log("Checking " + member.user.username);
+        console.log("Checking " + member.username);
 
         const userDB = await this.client.db.models.users.findOne({
           where: {
@@ -39,13 +39,13 @@ class UpdateRoles extends Command {
             if (plugUser.role != ROLE.DJ) {
               await member.roles.remove(rdjRole).catch(console.error);
 
-              console.log(member.user.username + " RDJ Role Removed!");
+              console.log(member.username + " RDJ Role Removed!");
             }
           } else { 
             if (plugUser.role === ROLE.DJ) {
               await member.roles.add(rdjRole).catch(console.error);
 
-              console.log(member.user.username + " RDJ Role Added!");
+              console.log(member.username + " RDJ Role Added!");
             }
           }
         }
