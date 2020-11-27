@@ -15,7 +15,7 @@ class UpdateRoles extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      const members = this.client.guilds.cache.get("485173051432894489");
+      const members = this.client.guilds.get("485173051432894489");
 
       for (const member of members.members.cache) {
         console.log("Checking " + member.username);
@@ -30,7 +30,7 @@ class UpdateRoles extends Command {
           const statusRole = "695994210603630633";
           await member.roles.add(statusRole).catch(console.error);
   
-          console.log(member.user.username + " Account is linked with plug.dj!");
+          console.log(member.username + " Account is linked with plug.dj!");
 
           const rdjRole = "485174834448564224";
           const plugUser = await this.client.plug.getUser(userDB.id);
