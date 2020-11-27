@@ -15,12 +15,9 @@ class UpdateRoles extends Command {
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
     try {
-      const members = this.client.guilds.cache.get("485173051432894489");
-      members.members.cache.forEach(member => console.log(member.user.username));
-
-      for (const member of members.members.cache) {
-        console.log("Checking " + member.username);
-
+      message.guild.members.cache.each(async member => {
+        console.log("Checking " + member.user.username);
+        
         const userDB = await this.client.db.models.users.findOne({
           where: {
             discord: member.user.id,
@@ -31,7 +28,7 @@ class UpdateRoles extends Command {
           const statusRole = "695994210603630633";
           await member.roles.add(statusRole).catch(console.error);
   
-          console.log(member.username + " Account is linked with plug.dj!");
+          console.log(member.user.username + " Account is linked with plug.dj!");
 
           const rdjRole = "485174834448564224";
           const plugUser = await this.client.plug.getUser(userDB.id);
@@ -40,17 +37,17 @@ class UpdateRoles extends Command {
             if (plugUser.role != ROLE.DJ) {
               await member.roles.remove(rdjRole).catch(console.error);
 
-              console.log(member.username + " RDJ Role Removed!");
+              console.log(member.user.username + " RDJ Role Removed!");
             }
           } else { 
             if (plugUser.role === ROLE.DJ) {
               await member.roles.add(rdjRole).catch(console.error);
 
-              console.log(member.username + " RDJ Role Added!");
+              console.log(member.user.username + " RDJ Role Added!");
             }
           }
         }
-      }
+      });
     } catch (e) {
       console.log(e);
     }
