@@ -24,6 +24,8 @@ class UpdateRoles extends Command {
           });
 
           if (!isNil(userDB)) {
+            console.log("Checking " + member.user.username);
+
             const statusRole = "695994210603630633";
 
             if (member.roles.has(statusRole)) {
