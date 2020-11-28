@@ -18,7 +18,7 @@ class UpdateRoles extends Command {
       let i = 0;
       members.forEach(async member => {
         try {
-          console.log("Checking " + i + "/" + members.length + " " + member.user.username);
+          console.log("Checking " + i + " " + member.user.username);
           i++;
 
           const userDB = await this.client.db.models.users.findOne({
