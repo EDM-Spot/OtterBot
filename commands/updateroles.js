@@ -26,7 +26,7 @@ class UpdateRoles extends Command {
 
         if (!isNil(userDB)) {
           const statusRole = "695994210603630633";
-          await member.roles.add(statusRole).catch(console.log);
+          await member.roles.add(statusRole).catch(console.error);
 
           console.log(member.user.username + " Account is linked with plug.dj!");
 
@@ -35,13 +35,13 @@ class UpdateRoles extends Command {
 
           if (member.roles.has(rdjRole)) {
             if (plugUser.role != ROLE.DJ) {
-              await member.roles.remove(rdjRole).catch(console.log);
+              await member.roles.remove(rdjRole).catch(console.error);
 
               console.log(member.user.username + " RDJ Role Removed!");
             }
           } else {
             if (plugUser.role === ROLE.DJ) {
-              await member.roles.add(rdjRole).catch(console.log);
+              await member.roles.add(rdjRole).catch(console.error);
 
               console.log(member.user.username + " RDJ Role Added!");
             }
@@ -49,8 +49,7 @@ class UpdateRoles extends Command {
         }
       }
       catch {
-        console.log("Failed to load");
-        console.log(member);
+        console.error("Failed to load");
       }
     }).catch(console.error);
   }
