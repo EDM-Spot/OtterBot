@@ -28,7 +28,7 @@ class Free extends Command {
       const isDecember = (moment().month() === 11);
 
       let props = 2;
-      let message = "You got your daily 2 props. Come back tomorrow for more free props!";
+      let returnMessage = "You got your daily 2 props. Come back tomorrow for more free props!";
 
       const userDB = await this.client.db.models.users.findOne({
         where: {
@@ -39,14 +39,14 @@ class Free extends Command {
       if (isDecember) {
         props = 10;
 
-        message = "<:christmasbells:784162299992735795> Merry Christmas! You got your daily 10 props. Come back tomorrow for more free props! <:christmasbells:784162299992735795>";
+        returnMessage = "<:christmasbells:784162299992735795> Merry Christmas! You got your daily 10 props. Come back tomorrow for more free props! <:christmasbells:784162299992735795>";
       }
 
       await this.client.db.models.users.increment("props", { by: props, where: { id: userDB.get("id") } });
 
       await this.client.redis.placeCommandOnCooldown("discord", "free@use", "perUser", message.author.id, 86400);
 
-      return await message.reply(message);
+      return await message.reply(returnMessage);
     } catch (e) {
       console.log(e);
     }
