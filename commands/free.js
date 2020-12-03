@@ -37,9 +37,7 @@ class Free extends Command {
         if (isDecember) {
           props = 10;
 
-          const bells = this.client.emojis.cache.get("784162299992735795");
-
-          returnMessage = `${bells} Merry Christmas! You got your daily 10 props. Come back tomorrow for more free props! ${bells}`;
+          returnMessage = "<:christmasbells:784171943146160168> Merry Christmas! You got your daily 10 props. Come back tomorrow for more free props! <:christmasbells:784171943146160168>";
         }
 
         await this.client.db.models.users.increment("props", { by: props, where: { id: userDB.get("id") } });
