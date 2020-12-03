@@ -37,7 +37,7 @@ class Free extends Command {
         if (isDecember) {
           props = 10;
 
-          returnMessage = "<:christmasbells:784171943146160168> Merry Christmas! You got your daily 10 props. Come back tomorrow for more free props! <:christmasbells:784171943146160168>";
+          returnMessage = "<:christmasbells:784162211266035752> Merry Christmas! You got your daily 10 props. Come back tomorrow for more free props! <:christmasbells:784162211266035752>";
         }
 
         await this.client.db.models.users.increment("props", { by: props, where: { id: userDB.get("id") } });
