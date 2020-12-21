@@ -24,9 +24,9 @@ module.exports = function Event(bot, filename, platform) {
 
       var randomTimedText = [
         "Join our Discord https://discord.gg/QvvD8AC",
-        "Don't forget to read our Rules https://edmspot.tk/rules",
-        "Want a custom Badge? See how here: https://edmspot.tk/faq",
-        "Link your account with discord to be able to play discord games and more! See how here: https://edmspot.tk/faq",
+        "Don't forget to read our Rules https://edmspot.ml/rules",
+        "Want a custom Badge? See how here: https://edmspot.ml/faq",
+        "Link your account with discord to be able to play discord games and more! See how here: https://edmspot.ml/faq",
         "Think you can be a good addition to the staff? Apply here: https://tinyurl.com/edmspotstaffapp",
         "Start a Trivia Game with -triviapay 1-3 in Discord! https://discord.gg/QvvD8AC",
         "Play Slot Machine with -slots 1-20 in Discord! https://discord.gg/QvvD8AC"

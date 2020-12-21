@@ -41,7 +41,7 @@ class TriviaPay extends Command {
       });
 
       if (isNil(userDB)) {
-        return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
+        return message.reply("You need to link your account first! Read how here: https://edmspot.ml/faq");
       }
 
       const userID = userDB.get("discord");
