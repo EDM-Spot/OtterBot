@@ -23,7 +23,7 @@
   "commands": {
     "default": "[!%%COMMAND%%] [%%USER%%] %%MESSAGE%%",
     "kill": "Shutting down.. :(",
-    "rules": "You can read the Rules here: https://edmspot.ml/rules %%MENTION%%",
+    "rules": "You can read the Rules here: https://edmspot.tk/rules %%MENTION%%",
     "rdj": "Read about the Resident DJ role here: https://git.io/fNzo0 %%MENTION%%",
     "waitlist": "How to queue a song: https://i.imgur.com/SdazrBO.png %%MENTION%%",
     "shush": "https://i.imgur.com/05NVq0h.png %%MENTION%%",
@@ -44,9 +44,9 @@
     "cantUnlock": "There are users waiting to be added so I cannot unlock the wait list right now.",
     "userNotFound": "The specified user was not found.",
     "invalidUser": "You specified an invalid user.",
-    "commands": "Command List: https://edmspot.ml/plugCommands %%MENTION%%",
+    "commands": "Command List: https://edmspot.tk/plugCommands %%MENTION%%",
     "noPromo": "",
-    "faq": "Frequently Asked Questions: https://edmspot.ml/faq %%MENTION%%",
+    "faq": "Frequently Asked Questions: https://edmspot.tk/faq %%MENTION%%",
     "mehRule": "The current song needs %%MEHS%% Mehs to be skipped or %%HSMEHS%% if it's Hardstyle/Hardcore!",
     "ping": {
       "ping": "Pong!",

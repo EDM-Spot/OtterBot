@@ -135,7 +135,7 @@ module.exports = (client) => {
         .setDescription(desc)
         .setFooter(`Decks: ${1} (${1 * 108} cards) | Remaining: ${this.deck.length} | Discarded: ${this.discard.length}`)
         .setImage(this.flipped.URL)
-        .setThumbnail('https://edmspot.ml/uno/logo.png')
+        .setThumbnail('https://edmspot.tk/uno/logo.png')
         .setTimestamp(moment(this.timeStarted));
 
       // {

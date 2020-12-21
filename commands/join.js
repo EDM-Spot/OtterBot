@@ -32,7 +32,7 @@ class Join extends Command {
       });
 
       if (isNil(userDB)) {
-        return message.reply("You need to link your account first! Read how here: https://edmspot.ml/faq");
+        return message.reply("You need to link your account first! Read how here: https://edmspot.tk/faq");
       }
 
       const userID = userDB.get("discord");
