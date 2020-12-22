@@ -27,7 +27,7 @@ module.exports = function Util(bot) {
         const setTemplate = template
           .replace(/\t/g, "")
           .replace(/.id-USERID/g, `.id-${id}`)
-          .replace(/%%BADGE%%/g, `https://edmspot.tk/public/images/badges/${badge}`);
+          .replace(/%%BADGE%%/g, `https://edmspot.ml/public/images/badges/${badge}`);
 
         completeFile += setTemplate;
       }
@@ -136,8 +136,8 @@ module.exports = function Util(bot) {
             .replace(/\t/g, "")
             .replace(/.id-USERID/g, `.id-${id}`)
             .replace(/%%USERID%%/g, `${id}`)
-            .replace(/%%ICONS%%/g, `https://edmspot.tk/public/images/icons/${id}.png`)
-            .replace(/%%ICONSV%%/g, `https://edmspot.tk/public/images/icons/${id}V.png`)
+            .replace(/%%ICONS%%/g, `https://edmspot.ml/public/images/icons/${id}.png`)
+            .replace(/%%ICONSV%%/g, `https://edmspot.ml/public/images/icons/${id}V.png`)
             .replace(/.id-USERID/g, `.id-${id}`)
             .replace(/%%CONTENT%%/g, `${content}`)
             .replace(/%%PADDINGL%%/g, `${padding}px`);

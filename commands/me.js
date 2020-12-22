@@ -80,10 +80,10 @@ class Me extends Command {
           color = "#b8b8b8";
         }
 
-        let userImage = `https://edmspot.tk/public/images/badges/${userDB.badge}`;
+        let userImage = `https://edmspot.ml/public/images/badges/${userDB.badge}`;
 
         if (!isNil(userDB.badge)) {
-          userImage = `https://edmspot.tk/public/images/badges/${userDB.badge}`;
+          userImage = `https://edmspot.ml/public/images/badges/${userDB.badge}`;
         } else {
           userImage = message.author.displayAvatarURL();
         }
