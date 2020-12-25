@@ -37,7 +37,7 @@ class Slots extends Command {
       const cooldown = await this.client.redis.getCommandOnCoolDown("discord", "slots@play", "perUser", message.author.id);
 
       if (cooldown != -2) {
-        return message.reply("Hold on! You already played Slots " + Math.floor((300 - cooldown) / 60) + " minute(s) ago, you must wait " + Math.ceil(cooldown / 60) + " minute(s) to play again.");
+        return message.reply("Hold on! You already played Slots " + Math.floor((10 - cooldown) / 60) + " second(s) ago, you must wait " + Math.ceil(cooldown / 10) + " second(s) to play again.");
       }
 
       const price = parseInt(args.pop(), 10);
