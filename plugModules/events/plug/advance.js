@@ -438,6 +438,23 @@ module.exports = function Event(bot, filename, platform) {
               plural: props > 1 ? "s" : "",
             }));
           }
+
+          //Xmas
+          const cooldown = await bot.redis.getCommandOnCoolDown("plug", "song@play", "perUser", lastDJ.id);
+
+          if (cooldown === -2) {
+            const xprops = 100;
+            
+            await instance.increment("props", { by: 100 });
+
+            bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
+              xprops,
+              user: lastDJ.username,
+              plural: xprops > 1 ? "s" : "",
+            }));
+            
+            await bot.redis.placeCommandOnCooldown("plug", "song@play", "perUser", lastDJ.id, 86400);
+          }
         }
 
         skipped = false;
