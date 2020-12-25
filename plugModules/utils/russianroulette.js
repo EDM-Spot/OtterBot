@@ -109,6 +109,7 @@ module.exports = function Util(bot) {
     }
     async sort() {
       if (this.players.length < 3) {
+        this.end();
         return bot.plug.chat(bot.lang.roulette.noplayers);
       }
 
