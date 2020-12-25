@@ -14,9 +14,9 @@ const symbols = [
   new SlotSymbol("clover", { display: "🍀", points: 3, weight: 35 }),
   new SlotSymbol("music", { display: "🎵", points: 3, weight: 30 }),
   new SlotSymbol("dj", { display: "🎧", points: 5, weight: 15 }),
-  new SlotSymbol("diamond", { display: "💎", points: 50, weight: 5 }),
-  new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 2}),
-  new SlotSymbol("wild", { display: "❔", points: 1, weight: 25, wildcard: true })
+  new SlotSymbol("diamond", { display: "💎", points: 50, weight: 10 }),
+  new SlotSymbol("jackpot", { display: "🃏", points: 3, weight: 3}),
+  new SlotSymbol("wild", { display: "❔", points: 1, weight: 30, wildcard: true })
 ];
 
 class Slots extends Command {
@@ -178,7 +178,7 @@ class Slots extends Command {
         message.channel.send("Congratulation!!! You won the JackPot!");
       }
 
-      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 300);
+      await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 10);
 
       return message.channel.send({ embed });
     } catch (e) {

@@ -170,9 +170,9 @@ module.exports = (client) => {
         return null;
       }
 
-      client.plug.chat("@" + plugUser.username + " Won the Discord Trivia! Moving to 3...");
+      client.plug.chat("@" + plugUser.username + " Won the Discord Trivia! Moving to 1...");
   
-      return client.queue.add(plugUser, 3);
+      return client.queue.add(plugUser, 1);
     }
   }
 

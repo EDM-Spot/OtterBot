@@ -74,10 +74,10 @@ module.exports = function Command(bot) {
             return true;
           }
 
-          if (waitlist.length < 20) {
-            this.reply(lang.russianroulette.invalidWaitlist, {}, 6e4);
-            return false;
-          }
+          //if (waitlist.length < 20) {
+            //this.reply(lang.russianroulette.invalidWaitlist, {}, 6e4);
+            //return false;
+          //}
 
           let duration = 120;
 

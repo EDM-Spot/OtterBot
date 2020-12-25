@@ -156,6 +156,10 @@ module.exports = function Util(bot) {
         return bot.plug.chat(bot.lang.roulette.noplayers);
       }
 
+      if (this.players.length < 3) {
+        return bot.plug.chat(bot.lang.roulette.noplayers);
+      }
+
       this.running = false;
 
       const alteredOdds = [];

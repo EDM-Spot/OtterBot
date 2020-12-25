@@ -108,6 +108,10 @@ module.exports = function Util(bot) {
       this.chooseVictim(players.filter(player => player !== victim));
     }
     async sort() {
+      if (this.players.length < 3) {
+        return bot.plug.chat(bot.lang.roulette.noplayers);
+      }
+
       this.running = false;
 
       const alteredOdds = this.players;
