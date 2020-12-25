@@ -441,17 +441,16 @@ module.exports = function Event(bot, filename, platform) {
 
           //Xmas
           const cooldown = await bot.redis.getCommandOnCoolDown("plug", "song@play", "perUser", lastDJ.id);
-          console.log(cooldown);
 
           if (cooldown === -2) {
-            const xprops = 100;
+            const props = 100;
 
             await instance.increment("props", { by: 100 });
 
             bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
-              xprops,
+              props,
               user: lastDJ.username,
-              plural: xprops > 1 ? "s" : "",
+              plural: props > 1 ? "s" : "",
             }));
             
             await bot.redis.placeCommandOnCooldown("plug", "song@play", "perUser", lastDJ.id, 864000);
