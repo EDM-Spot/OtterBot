@@ -441,6 +441,7 @@ module.exports = function Event(bot, filename, platform) {
 
           //Xmas
           const cooldown = await bot.redis.getCommandOnCoolDown("plug", "song@play", "perUser", lastDJ.id);
+          console.log(cooldown);
 
           if (cooldown === -2) {
             const xprops = 100;
