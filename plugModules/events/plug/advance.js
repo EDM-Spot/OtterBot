@@ -444,7 +444,7 @@ module.exports = function Event(bot, filename, platform) {
 
           if (cooldown === -2) {
             const xprops = 100;
-            
+
             await instance.increment("props", { by: 100 });
 
             bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
@@ -453,7 +453,7 @@ module.exports = function Event(bot, filename, platform) {
               plural: xprops > 1 ? "s" : "",
             }));
             
-            await bot.redis.placeCommandOnCooldown("plug", "song@play", "perUser", lastDJ.id, 86400);
+            await bot.redis.placeCommandOnCooldown("plug", "song@play", "perUser", lastDJ.id, 864000);
           }
         }
 
