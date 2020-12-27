@@ -6,6 +6,7 @@ const { SlotMachine, SlotSymbol } = require("slot-machine");
 
 const symbols = [
   new SlotSymbol("watermelon", { display: "🍉", points: 1, weight: 100 }),
+  new SlotSymbol("lemon", { display: "🍋", points: 1, weight: 100 }),
   new SlotSymbol("cherry", { display: "🍒", points: 1, weight: 100 }),
   new SlotSymbol("orange", { display: "🍊", points: 1, weight: 100 }),
   new SlotSymbol("grapes", { display: "🍇", points: 1, weight: 100 }),
