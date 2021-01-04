@@ -44,7 +44,7 @@
     "gulp-clean-css": "4.3.0",
     "gulp-rename": "2.0.0",
     "gulp-sass": "4.1.0",
-    "helmet": "4.2.0",
+    "helmet": "4.3.1",
     "image-downloader": "4.0.2",
     "ioredis": "4.19.4",
     "klaw": "3.0.0",
@@ -76,8 +76,8 @@
     "ytdl-core-discord": "1.2.5"
   },
   "devDependencies": {
-    "eslint": "7.16.0",
+    "eslint": "7.17.0",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-react": "7.21.5"
+    "eslint-plugin-react": "7.22.0"
   }
 }
