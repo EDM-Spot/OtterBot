@@ -67,6 +67,8 @@ module.exports = (client) => {
 
   app.use("/uno", express.static(path.resolve(`${__dirname}${path.sep}uno${path.sep}resources`)));
 
+  app.use("/public/images/badges", express.static(path.resolve(`${dataDir}${path.sep}public${path.sep}images`)));
+  app.use("/public/images/badges", express.static(path.resolve(`${dataDir}${path.sep}public${path.sep}images${path.sep}badges`)));
   app.use('/badges', express.static('public/images/badges'), serveIndex('public/images/badges', {'icons': true}));
 
   // These are... internal things related to passport. Honestly I have no clue either.
