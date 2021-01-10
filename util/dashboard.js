@@ -66,6 +66,9 @@ module.exports = (client) => {
 
   app.use("/uno", express.static(path.resolve(`${__dirname}${path.sep}uno${path.sep}resources`)));
 
+  app.use(express.static(__dirname + "/public/images/badges"));
+  app.use('/public/images/badges', serveIndex(__dirname + '/public/images/badges'));
+
   // These are... internal things related to passport. Honestly I have no clue either.
   // Just leave 'em there.
   passport.serializeUser((user, done) => {
@@ -174,7 +177,6 @@ module.exports = (client) => {
     };
     res.render(path.resolve(`${templateDir}${path.sep}${template}`), Object.assign(baseData, data));
   };
-
 
   /** PAGE ACTIONS RELATED TO SESSIONS */
 
