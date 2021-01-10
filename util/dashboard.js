@@ -62,12 +62,14 @@ module.exports = (client) => {
 
   // The public data directory, which is accessible from the *browser*. 
   // It contains all css, client javascript, and images needed for the site.
+  app.use('/', exp.static(__dirname + '/public'));
+  
   app.use("/public", express.static(path.resolve(`${dataDir}${path.sep}public`)));
 
   app.use("/uno", express.static(path.resolve(`${__dirname}${path.sep}uno${path.sep}resources`)));
-
-  app.use(express.static(__dirname + "/public/images/badges"));
-  app.use('/public/images/badges', serveIndex(__dirname + '/public/images/badges'));
+  
+  app.use('/badges', exp.static(__dirname + '/public/images/badges'));
+  app.use('/badges',exp.directory(__dirname + '/public/images/badges'));
 
   // These are... internal things related to passport. Honestly I have no clue either.
   // Just leave 'em there.
