@@ -14,7 +14,7 @@ module.exports = function Command(bot) {
       const user = users.filter(u => u.username.toLowerCase() === username.toLowerCase())[0] ||
 				users.filter(u => u.username.toLowerCase().trim() === username.toLowerCase().trim())[0];
 
-      this.reply(lang.rcs, { mention: user || "" }, 6e4);
+      this.reply(lang.rcs, { mention: user || "" });
       return true;
     },
   });

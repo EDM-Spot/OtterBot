@@ -10,14 +10,14 @@ module.exports = function Command(bot) {
     description: "Gives your positions in the waitlist.",
     async execute(rawData, { mentions }, lang) { // eslint-disable-line no-unused-vars
       if (!mentions.length || mentions.length >= 2) {
-        this.reply(lang.invalidUser, {}, 6e4);
+        this.reply(lang.invalidUser, {});
         return false;
       }
 
       const user = mentions[0];
 
       if (!isObject(user)) {
-        this.reply(lang.userNotFound, {}, 6e4);
+        this.reply(lang.userNotFound, {});
         return false;
       } else if (user.id === rawData.uid) {
         return false;
@@ -27,12 +27,12 @@ module.exports = function Command(bot) {
       const toUserPosition = bot.plug.waitlist().positionOf(user.id) + 1;
 
       if (userPosition < 1 || toUserPosition < 1) {
-        this.reply(lang.give.notInList, {}, 6e4);
+        this.reply(lang.give.notInList, {});
         return false;
       }
 
       if (userPosition > toUserPosition) {
-        this.reply(lang.give.behindPosition, {}, 6e4);
+        this.reply(lang.give.behindPosition, {});
         return false;
       }
 
@@ -42,7 +42,7 @@ module.exports = function Command(bot) {
       if (!isNil(userGiving) || !isNil(userHaveGives)) {
         await bot.redis.removeGivePosition(rawData.uid, user.id);
 
-        //this.reply(lang.give.cantGiveAgain, {}, 6e4);
+        //this.reply(lang.give.cantGiveAgain, {});
         //return false;
       }
 

@@ -38,17 +38,17 @@ module.exports = function Command(bot) {
           console.log(result);
   
           if (width != 65 || height != 65) {
-            this.reply(lang.propsShop.imageSize, {}, 6e4);
+            this.reply(lang.propsShop.imageSize, {});
             return false;
           }
   
           if (type != "jpg" && type != "jpeg" && type != "png" && type != "gif") {
-            this.reply(lang.propsShop.imageType, {}, 6e4);
+            this.reply(lang.propsShop.imageType, {});
             return false;
           }
   
           if (type === "gif" && await bot.utils.getRole(await rawData.getUser()) < ROLE.DJ) {
-            this.reply(lang.propsShop.imageRDJ, {}, 6e4);
+            this.reply(lang.propsShop.imageRDJ, {});
             return false;
           }
 
@@ -56,7 +56,7 @@ module.exports = function Command(bot) {
             free = true;
           } else {
             if (props < 100) {
-              this.reply(lang.propsShop.noProps, {}, 6e4);
+              this.reply(lang.propsShop.noProps, {});
               return true;
             }
           }
@@ -85,22 +85,22 @@ module.exports = function Command(bot) {
           const userMention = mentions[0];
 
           if (!mentions.length || mentions.length >= 2) {
-            this.reply(lang.invalidUser, {}, 6e4);
+            this.reply(lang.invalidUser, {});
             return false;
           }
 
           if (!isObject(userMention)) {	
-            this.reply(lang.userNotFound, {}, 6e4);	
+            this.reply(lang.userNotFound, {});	
             return false;	
           }	
 
           const user = bot.plug.user(userMention.id);
       
           if (!isObject(user)) {
-            this.reply(lang.userNotFound, {}, 6e4);
+            this.reply(lang.userNotFound, {});
             return false;
           } else if (user.id === rawData.uid) {
-            this.reply(lang.moderation.onSelf, { command: `!${name}` }, 6e4);
+            this.reply(lang.moderation.onSelf, { command: `!${name}` });
             return false;
           }
       
@@ -120,17 +120,17 @@ module.exports = function Command(bot) {
             console.log(result);
     
             if (width != 65 || height != 65) {
-              this.reply(lang.propsShop.imageSize, {}, 6e4);
+              this.reply(lang.propsShop.imageSize, {});
               return false;
             }
     
             if (type != "jpg" && type != "jpeg" && type != "png" && type != "gif") {
-              this.reply(lang.propsShop.imageType, {}, 6e4);
+              this.reply(lang.propsShop.imageType, {});
               return false;
             }
     
             if (type === "gif" && user.role < ROLE.DJ) {
-              this.reply(lang.propsShop.imageRDJ, {}, 6e4);
+              this.reply(lang.propsShop.imageRDJ, {});
               return false;
             }
 
@@ -140,7 +140,7 @@ module.exports = function Command(bot) {
             const buyerID = buyer.get("id");
   
             if (props < 100) {
-              this.reply(lang.propsShop.noProps, {}, 6e4);
+              this.reply(lang.propsShop.noProps, {});
               return true;
             }
     

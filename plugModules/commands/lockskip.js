@@ -19,7 +19,7 @@ module.exports = function Command(bot) {
           mod: rawData.un,
           command: `!${name}`,
           user: dj.username,
-        }, 6e4);
+        });
 
         const embed = new Discord.MessageEmbed()
           //.setTitle("Title")

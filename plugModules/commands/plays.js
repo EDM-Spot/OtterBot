@@ -14,7 +14,7 @@ module.exports = function Command(bot) {
         const dj = bot.plug.dj();
 
         if (!isObject(currentMedia)) {
-          this.reply(lang.plays.nothingPlaying, {}, 6e4);
+          this.reply(lang.plays.nothingPlaying, {});
           return false;
         }
 
@@ -55,7 +55,7 @@ module.exports = function Command(bot) {
         const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, currentMedia.media.cid);
 
         if (isNil(songHistory)) {
-          this.reply(lang.plays.neverPlayed, { which: lang.plays.current }, 6e4);
+          this.reply(lang.plays.neverPlayed, { which: lang.plays.current });
           return true;
         } else {
           if (!songHistory.maybe) {
@@ -67,7 +67,7 @@ module.exports = function Command(bot) {
               this.reply(lang.plays.lastPlaySkippedWas, {
                 which: lang.plays.current,
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-              }, 6e4);
+              });
               return true;
             }
 
@@ -75,7 +75,7 @@ module.exports = function Command(bot) {
               which: lang.plays.current,
               time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               count: playsCount,
-            }, 6e4);
+            });
             return true;
           } else {
             if (map(songHistory, "format")[0] === 1) {
@@ -83,7 +83,7 @@ module.exports = function Command(bot) {
                 which: lang.plays.current,
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-              }, 6e4);
+              });
               return true;
             }
           }
@@ -116,7 +116,7 @@ module.exports = function Command(bot) {
         const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, cid);
 
         if (isNil(songHistory)) {
-          this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
+          this.reply(lang.plays.neverPlayed, { which: lang.plays.specified });
           return true;
         } else {
           if (!songHistory.maybe) {
@@ -128,7 +128,7 @@ module.exports = function Command(bot) {
               this.reply(lang.plays.lastPlaySkippedWas, {
                 which: lang.plays.specified,
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-              }, 6e4);
+              });
               if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
               return true;
@@ -138,7 +138,7 @@ module.exports = function Command(bot) {
               which: lang.plays.specified,
               time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
               count: playsCount,
-            }, 6e4);
+            });
             if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
             return true;
@@ -148,7 +148,7 @@ module.exports = function Command(bot) {
                 which: lang.plays.specified,
                 cid: map(songHistory, "cid")[0],
                 time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-              }, 6e4);
+              });
               if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
               return true;
@@ -179,7 +179,7 @@ module.exports = function Command(bot) {
             const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, cid);
 
             if (isNil(songHistory)) {
-              this.reply(lang.plays.neverPlayed, { which: lang.plays.specified }, 6e4);
+              this.reply(lang.plays.neverPlayed, { which: lang.plays.specified });
               return true;
             } else {
               if (!songHistory.maybe) {
@@ -191,7 +191,7 @@ module.exports = function Command(bot) {
                   this.reply(lang.plays.lastPlaySkippedWas, {
                     which: lang.plays.specified,
                     time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-                  }, 6e4);
+                  });
                   if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
                   return true;
@@ -201,7 +201,7 @@ module.exports = function Command(bot) {
                   which: lang.plays.specified,
                   time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
                   count: playsCount,
-                }, 6e4);
+                });
                 if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
                 return true;
@@ -211,7 +211,7 @@ module.exports = function Command(bot) {
                     which: lang.plays.specified,
                     cid: map(songHistory, "cid")[0],
                     time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-                  }, 6e4);
+                  });
                   if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
 
                   return true;
@@ -224,7 +224,7 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      this.reply(lang.plays.invalidLink, {}, 6e4);
+      this.reply(lang.plays.invalidLink, {});
       return false;
     },
   });

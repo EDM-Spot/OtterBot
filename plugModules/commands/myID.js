@@ -9,7 +9,7 @@ module.exports = function Command(bot) {
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
       const id = rawData.uid;
 
-      this.reply(lang.myID, { id }, 6e4);
+      this.reply(lang.myID, { id });
       return true;
     },
   });

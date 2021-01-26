@@ -13,17 +13,17 @@ module.exports = function Command(bot) {
       const dj = bot.plug.dj();
 
       if (isObject(dj) && dj.id === rawData.uid) {
-        this.reply(lang.eta.isPlaying, {}, 6e4);
+        this.reply(lang.eta.isPlaying, {});
         return true;
       } else if (!waitlist.contains(rawData.uid)) {
-        this.reply(lang.eta.notInWaitList, {}, 6e4);
+        this.reply(lang.eta.notInWaitList, {});
         return false;
       }
 
       const position = waitlist.positionOf(rawData.uid);
 
       if (position === 0) {
-        this.reply(lang.eta.isNext, {}, 6e4);
+        this.reply(lang.eta.isNext, {});
         return true;
       }
 
@@ -31,7 +31,7 @@ module.exports = function Command(bot) {
       const minutes = (position * 4) % 60;
       const readable = `${hours ? `${hours}h${minutes ? `${minutes}m` : ''}` : `${minutes}m`}`;
 
-      this.reply(lang.eta.result, { eta: readable }, 6e4);
+      this.reply(lang.eta.result, { eta: readable });
       return true;
     },
   });

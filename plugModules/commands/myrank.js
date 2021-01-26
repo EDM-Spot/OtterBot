@@ -126,8 +126,8 @@ module.exports = function Command(bot) {
       const rank = bot.utils.numberWithCommas(inst[0].dataValues.rank);
       //const totalpoints = bot.utils.numberWithCommas(Math.round(points));
 
-      //this.reply(lang.myrank.result, { rank, totalpoints }, 6e4);
-      this.reply(lang.myrank.result, { rank }, 6e4);
+      //this.reply(lang.myrank.result, { rank, totalpoints });
+      this.reply(lang.myrank.result, { rank });
       return true;
     },
   });

@@ -14,7 +14,7 @@ module.exports = function Command(bot) {
       if (args.length && `${args.shift()}`.toLowerCase() === "given") {
         const props = await bot.db.models.props.count({ where: { id } });
 
-        this.reply(lang.myprops[props ? "given" : "noneGiven"], { props, plural: props > 1 ? "s" : "" }, 6e4);
+        this.reply(lang.myprops[props ? "given" : "noneGiven"], { props, plural: props > 1 ? "s" : "" });
         return true;
       }
 
@@ -26,12 +26,12 @@ module.exports = function Command(bot) {
       const props = bot.utils.numberWithCommas(inst[0][0].props);
 
       if (props <= 0) {
-        this.reply(lang.myprops.noProps, {}, 6e4);
+        this.reply(lang.myprops.noProps, {});
         return true;
       }
 
-      //this.reply(lang.myprops.result, { rank, props }, 6e4);
-      this.reply(lang.myprops.result, { props }, 6e4);
+      //this.reply(lang.myprops.result, { rank, props });
+      this.reply(lang.myprops.result, { props });
       return true;
     },
   });

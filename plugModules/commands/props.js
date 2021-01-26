@@ -46,13 +46,13 @@ module.exports = function Command(bot) {
       }
       
       if (!isObject(currentMedia)) {
-        this.reply(lang.props.nothingPlaying, {}, 6e4);
+        this.reply(lang.props.nothingPlaying, {});
         return false;
       } else if (isObject(dj) && dj.id === rawData.uid) {
-        this.reply(lang.props.propSelf, {}, 6e4);
+        this.reply(lang.props.propSelf, {});
         return true;
       } //else if (propsToGiveLeft == 0) {
-        //this.reply(lang.props.noPropsToGive, {}, 6e4);
+        //this.reply(lang.props.noPropsToGive, {});
         //return true;
       //}
       

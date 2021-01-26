@@ -33,12 +33,12 @@ module.exports = function Command(bot) {
       }
 
       if (byPosition < 1 || toPosition < 1) {
-        this.reply(lang.give.notInList, {}, 6e4);
+        this.reply(lang.give.notInList, {});
         return false;
       }
 
       if (byPosition > toPosition) {
-        this.reply(lang.give.behindPosition, {}, 6e4);
+        this.reply(lang.give.behindPosition, {});
         return false;
       }
 

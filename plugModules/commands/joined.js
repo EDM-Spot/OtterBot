@@ -20,7 +20,7 @@ module.exports = function Command(bot) {
         return false;
       }
 
-      this.reply(lang.joined, { joined: moment(joined).fromNow() }, 6e4);
+      this.reply(lang.joined, { joined: moment(joined).fromNow() });
       return true;
     },
   });

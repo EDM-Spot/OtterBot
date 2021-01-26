@@ -14,13 +14,13 @@ module.exports = function Command(bot) {
       const waitlist = bot.plug.waitlist();
       
       if (!await bot.roulette.check() && !await bot.russianRoulette.check()) {
-        this.reply(lang.join.noRoulette, {}, 6e4);
+        this.reply(lang.join.noRoulette, {});
         return true;
       } else if (isObject(dj) && dj.id === rawData.uid) {
-        this.reply(lang.join.isPlaying, {}, 6e4);
+        this.reply(lang.join.isPlaying, {});
         return true;
       } else if (waitlist.contains(rawData.uid) && waitlist.positionOf(rawData.uid) <= 4) {
-        this.reply(lang.join.closeToPlaying, {}, 6e4);
+        this.reply(lang.join.closeToPlaying, {});
         return true;
       }
 
@@ -35,7 +35,7 @@ module.exports = function Command(bot) {
 
         if (id != 4866676 || id != 26613571 || id != 41362497) {
           if (props < bot.roulette.price) {
-            this.reply(lang.join.noProps, {}, 6e4);
+            this.reply(lang.join.noProps, {});
             return true;
           }
 
@@ -55,7 +55,7 @@ module.exports = function Command(bot) {
 
         if (id != 4866676 || id != 26613571 || id != 41362497) {
           if (props < bot.russianRoulette.price) {
-            this.reply(lang.join.noProps, {}, 6e4);
+            this.reply(lang.join.noProps, {});
             return true;
           }
 

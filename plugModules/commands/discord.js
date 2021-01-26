@@ -7,7 +7,7 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Links the room Discord.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
-      this.reply(lang.discord, { }, 6e4);
+      this.reply(lang.discord, { });
       return true;
     },
   });

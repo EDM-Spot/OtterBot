@@ -20,7 +20,7 @@ module.exports = function Command(bot) {
         mention = `@${user}`;
       }
 
-      this.reply(lang.commands, { mention }, 6e4);
+      this.reply(lang.commands, { mention });
       return true;
     },
   });
