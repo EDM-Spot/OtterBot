@@ -50,7 +50,7 @@
     "klaw": "3.0.0",
     "level-session-store": "2.2.0",
     "linear-promise-backoff-queue": "1.0.0",
-    "lodash": "4.17.20",
+    "lodash": "4.17.21",
     "marked": "1.2.7",
     "memorystore": "1.6.4",
     "merge-img": "2.1.3",
