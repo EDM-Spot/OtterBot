@@ -55,7 +55,7 @@
     "memorystore": "1.6.4",
     "merge-img": "2.1.3",
     "miniplug": "2.0.3",
-    "moment": "2.29.1",
+    "moment": "2.29.2",
     "moment-duration-format": "2.3.2",
     "moment-random": "1.1.0",
     "moment-timer": "git+ssh://git@github.com/PrincessRTFM/moment-timer.git#instant-call-base",
