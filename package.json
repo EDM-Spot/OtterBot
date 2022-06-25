@@ -59,7 +59,7 @@
     "moment-duration-format": "2.3.2",
     "moment-random": "1.1.0",
     "moment-timer": "git+ssh://git@github.com/PrincessRTFM/moment-timer.git#instant-call-base",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "passport": "0.4.1",
     "passport-discord": "0.1.4",
     "pg": "8.5.1",
